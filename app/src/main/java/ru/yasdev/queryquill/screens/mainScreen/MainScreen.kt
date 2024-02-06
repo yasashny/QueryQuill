@@ -9,14 +9,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import ru.yasdev.queryquill.activity.MainActivityViewModel
 import ru.yasdev.queryquill.screens.httpRequestScreen.HttpRequestScreen
 import ru.yasdev.queryquill.screens.httpResponseScreen.HttpResponseScreen
 import ru.yasdev.queryquill.adaptive.ScreenState
+import ru.yasdev.queryquill.adaptive.TopAppBarState
 
 @Composable
-fun MainScreen(paddingValues: PaddingValues, screenState: ScreenState) {
+fun MainScreen(paddingValues: PaddingValues, screenState: ScreenState, mainActivityViewModel: MainActivityViewModel) {
     Surface(
         Modifier
             .padding(top = paddingValues.calculateTopPadding())
@@ -25,6 +29,7 @@ fun MainScreen(paddingValues: PaddingValues, screenState: ScreenState) {
 
         when(screenState){
             ScreenState.SINGLE_SCREEN ->{
+                mainActivityViewModel.changeTopAppBarState(TopAppBarState.SINGLE_SCREEN)
                 HttpRequestScreen(
                     modifier = Modifier
                         .fillMaxSize()
@@ -32,6 +37,7 @@ fun MainScreen(paddingValues: PaddingValues, screenState: ScreenState) {
                 )
             }
             ScreenState.ROW_SCREEN -> {
+                mainActivityViewModel.changeTopAppBarState(TopAppBarState.ROW_COLUMN_SCREEN)
                 Row {
 
                     HttpRequestScreen(
@@ -50,6 +56,7 @@ fun MainScreen(paddingValues: PaddingValues, screenState: ScreenState) {
                 }
             }
             ScreenState.COLUMN_SCREEN -> {
+                mainActivityViewModel.changeTopAppBarState(TopAppBarState.ROW_COLUMN_SCREEN)
                 Column {
 
                     HttpRequestScreen(

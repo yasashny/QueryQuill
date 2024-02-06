@@ -12,15 +12,17 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import ru.yasdev.queryquill.activity.MainActivityViewModel
 import ru.yasdev.queryquill.adaptive.ScreenState
+import ru.yasdev.queryquill.adaptive.TopAppBarState
 import ru.yasdev.queryquill.screens.httpResponseScreen.HttpResponseScreen
 import ru.yasdev.queryquill.screens.mainScreen.MainScreen
 
 @Composable
-fun MyNavHost(navController: NavHostController, paddingValues: PaddingValues, screenState: ScreenState){
+fun MyNavHost(navController: NavHostController, paddingValues: PaddingValues, screenState: ScreenState, mainActivityViewModel: MainActivityViewModel){
     NavHost(navController = navController, startDestination = MAIN_SCREEN) {
-        composable(MAIN_SCREEN) { MainScreen(paddingValues = paddingValues, screenState) }
-        composable(RESPONSE_SCREEN) { ResponseScreen(paddingValues = paddingValues, screenState, navController) }
+        composable(MAIN_SCREEN) { MainScreen(paddingValues = paddingValues, screenState, mainActivityViewModel) }
+        composable(RESPONSE_SCREEN) { ResponseScreen(paddingValues = paddingValues, screenState, navController, mainActivityViewModel) }
     }
 }
 
@@ -28,7 +30,7 @@ const val MAIN_SCREEN = "MainScreen"
 const val RESPONSE_SCREEN = "ResponseScreen"
 
 @Composable
-private fun ResponseScreen(paddingValues: PaddingValues, screenState: ScreenState, navController: NavController){
+private fun ResponseScreen(paddingValues: PaddingValues, screenState: ScreenState, navController: NavController, mainActivityViewModel: MainActivityViewModel){
     Surface(
         Modifier
             .padding(top = paddingValues.calculateTopPadding())
@@ -36,6 +38,7 @@ private fun ResponseScreen(paddingValues: PaddingValues, screenState: ScreenStat
     ) {
         when(screenState){
             ScreenState.SINGLE_SCREEN -> {
+                mainActivityViewModel.changeTopAppBarState(TopAppBarState.RESPONSE_SCREEN)
                 HttpResponseScreen(modifier = Modifier.fillMaxSize().background(Color.Cyan))
 
             }
