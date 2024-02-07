@@ -21,6 +21,7 @@ import ru.yasdev.queryquill.components.MyTopAppBar
 import ru.yasdev.queryquill.ui.theme.QueryQuillTheme
 import ru.yasdev.queryquill.adaptive.adaptiveScreenManager
 import ru.yasdev.queryquill.navigation.MyNavHost
+import ru.yasdev.queryquill.navigationDrawer.NavigationDrawer
 
 class MainActivity : ComponentActivity() {
 
@@ -29,18 +30,22 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             QueryQuillTheme {
-                val windowSizeClass = calculateWindowSizeClass(this)
-                val navController = rememberNavController()
-                val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-                val screenState = adaptiveScreenManager(windowSizeClass)
-                val mainActivityViewModel by viewModels<MainActivityViewModel>()
-                Scaffold(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-                    topBar = {
-                        MyTopAppBar(scrollBehavior = scrollBehavior, navController = navController, mainActivityViewModel)
-                    }) {
+                NavigationDrawer {
+                    val drawerState = it
+                    val windowSizeClass = calculateWindowSizeClass(this)
+                    val navController = rememberNavController()
+                    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+                    val screenState = adaptiveScreenManager(windowSizeClass)
+                    val mainActivityViewModel by viewModels<MainActivityViewModel>()
+                    Scaffold(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+                        topBar = {
+                            MyTopAppBar(scrollBehavior = scrollBehavior, navController = navController, mainActivityViewModel, drawerState = drawerState)
+                        }) {
 
-                    MyNavHost(navController = navController, paddingValues = it, screenState = screenState, mainActivityViewModel)
+                        MyNavHost(navController = navController, paddingValues = it, screenState = screenState, mainActivityViewModel)
+                    }
                 }
+
             }
         }
     }
