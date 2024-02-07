@@ -13,14 +13,17 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.yasdev.queryquill.activity.MainActivityViewModel
 import ru.yasdev.queryquill.screens.httpRequestScreen.HttpRequestScreen
 import ru.yasdev.queryquill.screens.httpResponseScreen.HttpResponseScreen
 import ru.yasdev.queryquill.adaptive.ScreenState
 import ru.yasdev.queryquill.adaptive.TopAppBarState
+import ru.yasdev.queryquill.screens.httpRequestScreen.HttpRequestScreenViewModel
+import ru.yasdev.queryquill.screens.httpResponseScreen.HttpResponseScreenViewModel
 
 @Composable
-fun MainScreen(paddingValues: PaddingValues, screenState: ScreenState, mainActivityViewModel: MainActivityViewModel) {
+fun MainScreen(paddingValues: PaddingValues, screenState: ScreenState, mainActivityViewModel: MainActivityViewModel, httpRequestScreenViewModel: HttpRequestScreenViewModel, httpResponseScreenViewModel: HttpResponseScreenViewModel) {
     Surface(
         Modifier
             .padding(top = paddingValues.calculateTopPadding())
@@ -33,7 +36,7 @@ fun MainScreen(paddingValues: PaddingValues, screenState: ScreenState, mainActiv
                 HttpRequestScreen(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Color.Blue)
+                        .background(Color.Blue), httpRequestScreenViewModel
                 )
             }
             ScreenState.ROW_SCREEN -> {
@@ -44,14 +47,14 @@ fun MainScreen(paddingValues: PaddingValues, screenState: ScreenState, mainActiv
                         modifier = Modifier
                             .fillMaxSize()
                             .weight(1f)
-                            .background(Color.Blue)
+                            .background(Color.Blue), httpRequestScreenViewModel
                     )
 
                     HttpResponseScreen(
                         modifier = Modifier
                             .fillMaxSize()
                             .weight(1f)
-                            .background(Color.Red)
+                            .background(Color.Red), httpResponseScreenViewModel
                     )
                 }
             }
@@ -63,7 +66,7 @@ fun MainScreen(paddingValues: PaddingValues, screenState: ScreenState, mainActiv
                         modifier = Modifier
                             .fillMaxSize()
                             .weight(1f)
-                            .background(Color.Blue)
+                            .background(Color.Blue), httpRequestScreenViewModel
                     )
 
 
@@ -71,7 +74,7 @@ fun MainScreen(paddingValues: PaddingValues, screenState: ScreenState, mainActiv
                         modifier = Modifier
                             .fillMaxSize()
                             .weight(1f)
-                            .background(Color.Red)
+                            .background(Color.Red), httpResponseScreenViewModel
                     )
                 }
             }

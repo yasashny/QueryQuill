@@ -15,14 +15,16 @@ import androidx.navigation.compose.composable
 import ru.yasdev.queryquill.activity.MainActivityViewModel
 import ru.yasdev.queryquill.adaptive.ScreenState
 import ru.yasdev.queryquill.adaptive.TopAppBarState
+import ru.yasdev.queryquill.screens.httpRequestScreen.HttpRequestScreenViewModel
 import ru.yasdev.queryquill.screens.httpResponseScreen.HttpResponseScreen
+import ru.yasdev.queryquill.screens.httpResponseScreen.HttpResponseScreenViewModel
 import ru.yasdev.queryquill.screens.mainScreen.MainScreen
 
 @Composable
-fun MyNavHost(navController: NavHostController, paddingValues: PaddingValues, screenState: ScreenState, mainActivityViewModel: MainActivityViewModel){
+fun MyNavHost(navController: NavHostController, paddingValues: PaddingValues, screenState: ScreenState, mainActivityViewModel: MainActivityViewModel, httpResponseScreenViewModel: HttpResponseScreenViewModel, httpRequestScreenViewModel: HttpRequestScreenViewModel){
     NavHost(navController = navController, startDestination = MAIN_SCREEN) {
-        composable(MAIN_SCREEN) { MainScreen(paddingValues = paddingValues, screenState, mainActivityViewModel) }
-        composable(RESPONSE_SCREEN) { ResponseScreen(paddingValues = paddingValues, screenState, navController, mainActivityViewModel) }
+        composable(MAIN_SCREEN) { MainScreen(paddingValues = paddingValues, screenState, mainActivityViewModel, httpRequestScreenViewModel, httpResponseScreenViewModel) }
+        composable(RESPONSE_SCREEN) { ResponseScreen(paddingValues = paddingValues, screenState, navController, mainActivityViewModel, httpResponseScreenViewModel) }
     }
 }
 
@@ -30,7 +32,7 @@ const val MAIN_SCREEN = "MainScreen"
 const val RESPONSE_SCREEN = "ResponseScreen"
 
 @Composable
-private fun ResponseScreen(paddingValues: PaddingValues, screenState: ScreenState, navController: NavController, mainActivityViewModel: MainActivityViewModel){
+private fun ResponseScreen(paddingValues: PaddingValues, screenState: ScreenState, navController: NavController, mainActivityViewModel: MainActivityViewModel, httpResponseScreenViewModel: HttpResponseScreenViewModel){
     Surface(
         Modifier
             .padding(top = paddingValues.calculateTopPadding())
@@ -39,7 +41,7 @@ private fun ResponseScreen(paddingValues: PaddingValues, screenState: ScreenStat
         when(screenState){
             ScreenState.SINGLE_SCREEN -> {
                 mainActivityViewModel.changeTopAppBarState(TopAppBarState.RESPONSE_SCREEN)
-                HttpResponseScreen(modifier = Modifier.fillMaxSize().background(Color.Cyan))
+                HttpResponseScreen(modifier = Modifier.fillMaxSize().background(Color.Cyan), httpResponseScreenViewModel = httpResponseScreenViewModel)
 
             }
             else -> navController.popBackStack()

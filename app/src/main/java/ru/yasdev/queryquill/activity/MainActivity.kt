@@ -22,6 +22,8 @@ import ru.yasdev.queryquill.ui.theme.QueryQuillTheme
 import ru.yasdev.queryquill.adaptive.adaptiveScreenManager
 import ru.yasdev.queryquill.navigation.MyNavHost
 import ru.yasdev.queryquill.navigationDrawer.NavigationDrawer
+import ru.yasdev.queryquill.screens.httpRequestScreen.HttpRequestScreenViewModel
+import ru.yasdev.queryquill.screens.httpResponseScreen.HttpResponseScreenViewModel
 
 class MainActivity : ComponentActivity() {
 
@@ -37,12 +39,14 @@ class MainActivity : ComponentActivity() {
                     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
                     val screenState = adaptiveScreenManager(windowSizeClass)
                     val mainActivityViewModel by viewModels<MainActivityViewModel>()
+                    val httpRequestScreenViewModel = koinViewModel<HttpRequestScreenViewModel>()
+                    val httpResponseScreenViewModel = koinViewModel<HttpResponseScreenViewModel>()
                     Scaffold(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
                         topBar = {
                             MyTopAppBar(scrollBehavior = scrollBehavior, navController = navController, mainActivityViewModel, drawerState = drawerState)
                         }) {
 
-                        MyNavHost(navController = navController, paddingValues = it, screenState = screenState, mainActivityViewModel)
+                        MyNavHost(navController = navController, paddingValues = it, screenState = screenState, mainActivityViewModel, httpResponseScreenViewModel, httpRequestScreenViewModel)
                     }
                 }
 
