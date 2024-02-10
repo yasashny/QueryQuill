@@ -4,30 +4,33 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.rememberNavController
 import org.koin.androidx.compose.koinViewModel
 import ru.yasdev.queryquill.components.MyTopAppBar
 import ru.yasdev.queryquill.ui.theme.QueryQuillTheme
 import ru.yasdev.queryquill.adaptive.adaptiveScreenManager
-import ru.yasdev.queryquill.navigation.MyNavHost
 import ru.yasdev.queryquill.navigationDrawer.NavigationDrawer
 import ru.yasdev.queryquill.screens.httpRequestScreen.HttpRequestScreenViewModel
 import ru.yasdev.queryquill.screens.httpResponseScreen.HttpResponseScreenViewModel
+import ru.yasdev.queryquill.screens.mainScreen.MainScreen
 
 class MainActivity : ComponentActivity() {
 
-    @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class)
+    @OptIn(
+        ExperimentalMaterial3Api::class,
+        ExperimentalMaterial3WindowSizeClassApi::class
+    )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -35,7 +38,6 @@ class MainActivity : ComponentActivity() {
                 NavigationDrawer {
                     val drawerState = it
                     val windowSizeClass = calculateWindowSizeClass(this)
-                    val navController = rememberNavController()
                     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
                     val screenState = adaptiveScreenManager(windowSizeClass)
                     val mainActivityViewModel by viewModels<MainActivityViewModel>()
@@ -43,10 +45,23 @@ class MainActivity : ComponentActivity() {
                     val httpResponseScreenViewModel = koinViewModel<HttpResponseScreenViewModel>()
                     Scaffold(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
                         topBar = {
-                            MyTopAppBar(scrollBehavior = scrollBehavior, navController = navController, mainActivityViewModel, drawerState = drawerState)
+                            MyTopAppBar(
+                                scrollBehavior = scrollBehavior,
+                                drawerState = drawerState
+                            )
                         }) {
+                        Surface(
+                            Modifier
+                                .padding(top = it.calculateTopPadding())
+                                .fillMaxSize()
+                        ) {
+                            MainScreen(
+                                screenState = screenState,
+                                requestVM = httpRequestScreenViewModel,
+                                responseVM = httpResponseScreenViewModel
+                            )
 
-                        MyNavHost(navController = navController, paddingValues = it, screenState = screenState, mainActivityViewModel, httpResponseScreenViewModel, httpRequestScreenViewModel)
+                        }
                     }
                 }
 
