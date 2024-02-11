@@ -5,7 +5,7 @@ import ru.yasdev.domain.lastRequest.LastRequestRepository
 import ru.yasdev.domain.utils.LastIdState
 
 class LastRequestRepositoryImpl(private val dataSource: LastRequestDataSource): LastRequestRepository {
-    override fun getLastRequestId(): Flow<Int?> {
+    override fun getLastRequestId(): Flow<LastIdState> {
         return dataSource.getId()
     }
 

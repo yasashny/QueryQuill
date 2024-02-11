@@ -5,7 +5,7 @@ import ru.yasdev.domain.utils.LastIdState
 
 interface LastRequestRepository {
 
-    fun getLastRequestId(): Flow<Int?>
+    fun getLastRequestId(): Flow<LastIdState>
     suspend fun saveLastRequestId(lastIdState: LastIdState)
 
 }
