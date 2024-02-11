@@ -8,10 +8,9 @@ import ru.yasdev.domain.requestsDb.models.RequestsListItemModel
 interface RequestsDbRepository {
 
     fun getListOfRequests(): Flow<List<RequestsListItemModel>>
-
-    fun getRequest(): Flow<RequestModel>
-    fun addRequest(model: AddRequestModel)
-    fun updateRequest(model: RequestModel)
-    fun deleteRequest(id: Int)
+    fun getRequest(id: Int): Flow<RequestModel>
+    suspend fun addRequest(model: AddRequestModel)
+    suspend fun updateRequest(model: RequestModel)
+    suspend fun deleteRequest(id: Int)
 
 }

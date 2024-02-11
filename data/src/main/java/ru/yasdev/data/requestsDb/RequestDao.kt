@@ -16,11 +16,11 @@ import ru.yasdev.domain.requestsDb.models.RequestsListItemModel
 interface RequestDao {
     @Upsert
     suspend fun insertRequest(request: Request)
-    @Delete
-    suspend fun deleteRequest(request: Request)
+    @Query("DELETE FROM Request WHERE id = :id")
+    suspend fun deleteRequest(id: Int)
     @Query("SELECT * FROM Request WHERE id = :id")
     fun getRequest(id: Int): Flow<RequestModel>
     @Query("SELECT id, label FROM Request")
-    fun getListOfRequests(): Flow<RequestsListItemModel>
+    fun getListOfRequests(): Flow<List<RequestsListItemModel>>
 
 }
