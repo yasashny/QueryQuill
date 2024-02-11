@@ -7,6 +7,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
@@ -23,9 +24,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import ru.yasdev.queryquill.activity.MainActivityViewModel
 
 @Composable
-fun NavigationDrawer(composable: @Composable (draverState: DrawerState) -> Unit) {
+fun NavigationDrawer(viewModel: MainActivityViewModel, composable: @Composable (draverState: DrawerState) -> Unit) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val items = listOf(Icons.Default.Favorite, Icons.Default.Face, Icons.Default.Email)
@@ -35,6 +37,9 @@ fun NavigationDrawer(composable: @Composable (draverState: DrawerState) -> Unit)
         drawerContent = {
             ModalDrawerSheet {
                 Spacer(Modifier.height(12.dp))
+                Button(onClick = {  }) {
+                    
+                }
                 items.forEach { item ->
                     NavigationDrawerItem(
                         icon = { Icon(item, contentDescription = null) },

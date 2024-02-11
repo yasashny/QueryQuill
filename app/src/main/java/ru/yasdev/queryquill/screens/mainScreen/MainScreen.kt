@@ -14,16 +14,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import ru.yasdev.queryquill.activity.MainActivityViewModel
 import ru.yasdev.queryquill.adaptive.ScreenState
 import ru.yasdev.queryquill.components.FancyIndicatorContainerTabs
-import ru.yasdev.queryquill.screens.httpRequestScreen.HttpRequestScreen
-import ru.yasdev.queryquill.screens.httpRequestScreen.HttpRequestScreenViewModel
-import ru.yasdev.queryquill.screens.httpResponseScreen.HttpResponseScreen
-import ru.yasdev.queryquill.screens.httpResponseScreen.HttpResponseScreenViewModel
+import ru.yasdev.queryquill.screens.requestScreens.RequestScreen
+import ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen.HttpRequestScreen
+import ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen.HttpRequestScreenViewModel
+import ru.yasdev.queryquill.screens.responseScreens.httpResponseScreen.HttpResponseScreen
+import ru.yasdev.queryquill.screens.responseScreens.httpResponseScreen.HttpResponseScreenViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MainScreen(screenState: ScreenState, requestVM: HttpRequestScreenViewModel, responseVM: HttpResponseScreenViewModel) {
+fun MainScreen(screenState: ScreenState, viewModel: MainActivityViewModel, responseVM: HttpResponseScreenViewModel) {
     when (screenState) {
         ScreenState.SINGLE_SCREEN -> {
             Column {
@@ -49,10 +51,10 @@ fun MainScreen(screenState: ScreenState, requestVM: HttpRequestScreenViewModel, 
                     .fillMaxWidth()
                     .weight(1f)) {
                     when(it){
-                        0 -> HttpRequestScreen(modifier = Modifier
+                        0 -> RequestScreen(modifier = Modifier
                             .fillMaxSize()
                             .background(Color.Blue),
-                            httpRequestScreenViewModel = requestVM)
+                            viewModel = viewModel)
                         1 -> HttpResponseScreen(modifier = Modifier
                             .fillMaxSize()
                             .weight(1f)
@@ -65,11 +67,11 @@ fun MainScreen(screenState: ScreenState, requestVM: HttpRequestScreenViewModel, 
 
         ScreenState.ROW_SCREEN -> {
             Row{
-                HttpRequestScreen(modifier = Modifier
+                RequestScreen(modifier = Modifier
                     .fillMaxSize()
                     .background(Color.Blue)
                     .weight(1f),
-                    httpRequestScreenViewModel = requestVM)
+                    viewModel = viewModel)
                 HttpResponseScreen(modifier = Modifier
                     .fillMaxSize()
                     .weight(1f)
@@ -81,11 +83,11 @@ fun MainScreen(screenState: ScreenState, requestVM: HttpRequestScreenViewModel, 
 
         ScreenState.COLUMN_SCREEN -> {
             Column {
-                HttpRequestScreen(modifier = Modifier
+                RequestScreen(modifier = Modifier
                     .fillMaxSize()
                     .background(Color.Blue)
                     .weight(1f),
-                    httpRequestScreenViewModel = requestVM)
+                    viewModel = viewModel)
                 HttpResponseScreen(modifier = Modifier
                     .fillMaxSize()
                     .weight(1f)

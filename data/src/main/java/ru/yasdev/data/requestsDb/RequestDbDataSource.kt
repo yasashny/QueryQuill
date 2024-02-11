@@ -11,13 +11,13 @@ import ru.yasdev.domain.requestsDb.models.RequestsListItemModel
 
 class RequestDbDataSource(context: Context) {
 
-    private val db by lazy {
+    private val db =
         Room.databaseBuilder(
             context,
             RequestDataBase::class.java,
             "request.db"
         ).build()
-    }
+
 
     fun getListOfRequests(): Flow<List<RequestsListItemModel>> {
         return db.dao.getListOfRequests()
@@ -27,8 +27,10 @@ class RequestDbDataSource(context: Context) {
         return db.dao.getRequest(id)
     }
 
-    suspend fun addRequest(model: AddRequestModel) {
-        db.dao.insertRequest(Request(label = model.label, test = "test"))
+    suspend fun addRequest(model: AddRequestModel): Flow<RequestModel> {
+        val id = db.dao.insertRequest(Request(label = model.label, test = "test"))
+        return getRequest(id.toInt())
+
     }
 
     suspend fun updateRequest(model: RequestModel) {

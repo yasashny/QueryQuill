@@ -9,7 +9,7 @@ interface RequestsDbRepository {
 
     fun getListOfRequests(): Flow<List<RequestsListItemModel>>
     fun getRequest(id: Int): Flow<RequestModel>
-    suspend fun addRequest(model: AddRequestModel)
+    suspend fun addRequest(model: AddRequestModel): Flow<RequestModel>
     suspend fun updateRequest(model: RequestModel)
     suspend fun deleteRequest(id: Int)
 

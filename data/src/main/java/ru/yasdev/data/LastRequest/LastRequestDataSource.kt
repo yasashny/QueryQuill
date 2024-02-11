@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import ru.yasdev.domain.utils.LastIdState
 
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "dataStore")
@@ -22,9 +23,9 @@ class LastRequestDataSource(val context: Context) {
         }
 
 
-    suspend fun saveId(id: Int){
+    suspend fun saveId(lastIdState: LastIdState){
         context.dataStore.edit {pref ->
-            pref[intPreferencesKey("LastId")] = id
+            pref[intPreferencesKey("LastId")] = lastIdState
         }
     }
 

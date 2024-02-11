@@ -21,8 +21,8 @@ import ru.yasdev.queryquill.components.MyTopAppBar
 import ru.yasdev.queryquill.ui.theme.QueryQuillTheme
 import ru.yasdev.queryquill.adaptive.adaptiveScreenManager
 import ru.yasdev.queryquill.navigationDrawer.NavigationDrawer
-import ru.yasdev.queryquill.screens.httpRequestScreen.HttpRequestScreenViewModel
-import ru.yasdev.queryquill.screens.httpResponseScreen.HttpResponseScreenViewModel
+import ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen.HttpRequestScreenViewModel
+import ru.yasdev.queryquill.screens.responseScreens.httpResponseScreen.HttpResponseScreenViewModel
 import ru.yasdev.queryquill.screens.mainScreen.MainScreen
 
 class MainActivity : ComponentActivity() {
@@ -34,14 +34,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val mainActivityViewModel = koinViewModel<MainActivityViewModel>()
             QueryQuillTheme {
-                NavigationDrawer {
+                NavigationDrawer(mainActivityViewModel) {
                     val drawerState = it
                     val windowSizeClass = calculateWindowSizeClass(this)
                     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
                     val screenState = adaptiveScreenManager(windowSizeClass)
-                    val mainActivityViewModel by viewModels<MainActivityViewModel>()
-                    val httpRequestScreenViewModel = koinViewModel<HttpRequestScreenViewModel>()
+
                     val httpResponseScreenViewModel = koinViewModel<HttpResponseScreenViewModel>()
                     Scaffold(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
                         topBar = {
@@ -57,7 +57,7 @@ class MainActivity : ComponentActivity() {
                         ) {
                             MainScreen(
                                 screenState = screenState,
-                                requestVM = httpRequestScreenViewModel,
+                                viewModel = mainActivityViewModel,
                                 responseVM = httpResponseScreenViewModel
                             )
 

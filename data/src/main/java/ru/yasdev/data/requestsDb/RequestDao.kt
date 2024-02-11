@@ -15,7 +15,7 @@ import ru.yasdev.domain.requestsDb.models.RequestsListItemModel
 @Dao
 interface RequestDao {
     @Upsert
-    suspend fun insertRequest(request: Request)
+    suspend fun insertRequest(request: Request) : Long
     @Query("DELETE FROM Request WHERE id = :id")
     suspend fun deleteRequest(id: Int)
     @Query("SELECT * FROM Request WHERE id = :id")

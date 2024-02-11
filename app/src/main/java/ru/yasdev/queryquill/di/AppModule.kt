@@ -1,11 +1,13 @@
 package ru.yasdev.queryquill.di
 
 import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
-import ru.yasdev.queryquill.screens.httpRequestScreen.HttpRequestScreenViewModel
-import ru.yasdev.queryquill.screens.httpResponseScreen.HttpResponseScreenViewModel
+import ru.yasdev.queryquill.activity.MainActivityViewModel
+import ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen.HttpRequestScreenViewModel
+import ru.yasdev.queryquill.screens.responseScreens.httpResponseScreen.HttpResponseScreenViewModel
 
 val appModule = module {
-    viewModel<HttpResponseScreenViewModel> { HttpResponseScreenViewModel() }
-    viewModel<HttpRequestScreenViewModel> { HttpRequestScreenViewModel() }
+    viewModelOf(::MainActivityViewModel)
+    viewModelOf(::HttpResponseScreenViewModel)
 }
