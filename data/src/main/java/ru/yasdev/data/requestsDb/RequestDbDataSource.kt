@@ -3,6 +3,7 @@ package ru.yasdev.data.requestsDb
 import android.content.Context
 import androidx.room.Room
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import ru.yasdev.data.requestsDb.models.Request
 import ru.yasdev.domain.requestsDb.models.AddRequestModel
@@ -24,12 +25,16 @@ class RequestDbDataSource(context: Context) {
     }
 
     fun getRequest(id: Int): Flow<RequestModel> {
-        return db.dao.getRequest(id)
+        return flow{
+            val model = db.dao.getRequest(id)
+            emit(model)
+        }
     }
 
-    suspend fun addRequest(model: AddRequestModel): Flow<RequestModel> {
+    suspend fun addRequest(model: AddRequestModel): RequestModel {
         val id = db.dao.insertRequest(Request(label = model.label, test = "test"))
-        return getRequest(id.toInt())
+        val request = getRequest(id.toInt()).first()
+        return request
 
     }
 

@@ -27,6 +27,8 @@ import ru.yasdev.queryquill.screens.mainScreen.MainScreen
 
 class MainActivity : ComponentActivity() {
 
+    private lateinit var mainActivityViewModel: MainActivityViewModel
+
     @OptIn(
         ExperimentalMaterial3Api::class,
         ExperimentalMaterial3WindowSizeClassApi::class
@@ -34,7 +36,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val mainActivityViewModel = koinViewModel<MainActivityViewModel>()
+            mainActivityViewModel = koinViewModel<MainActivityViewModel>()
             QueryQuillTheme {
                 NavigationDrawer(mainActivityViewModel) {
                     val drawerState = it
@@ -67,6 +69,11 @@ class MainActivity : ComponentActivity() {
 
             }
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mainActivityViewModel.save()
     }
 }
 

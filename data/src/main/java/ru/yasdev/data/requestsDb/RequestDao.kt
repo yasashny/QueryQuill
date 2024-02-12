@@ -19,7 +19,7 @@ interface RequestDao {
     @Query("DELETE FROM Request WHERE id = :id")
     suspend fun deleteRequest(id: Int)
     @Query("SELECT * FROM Request WHERE id = :id")
-    fun getRequest(id: Int): Flow<RequestModel>
+    suspend fun getRequest(id: Int): RequestModel
     @Query("SELECT id, label FROM Request")
     fun getListOfRequests(): Flow<List<RequestsListItemModel>>
 

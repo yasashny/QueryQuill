@@ -7,6 +7,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
@@ -35,7 +36,8 @@ class MainActivityViewModel(
     private val addRequestUseCase: AddRequestUseCase,
     private val deleteRequestUseCase: DeleteRequestUseCase,
     private val updateRequestUseCase: UpdateRequestUseCase,
-    private val saveLastRequestIdUseCase: SaveLastRequestIdUseCase
+    private val saveLastRequestIdUseCase: SaveLastRequestIdUseCase,
+    private val getLastRequestIdUseCase: GetLastRequestIdUseCase
     ): ViewModel() {
 
     private val _requestId = MutableStateFlow<LastIdState>(LastIdState.Loading)
@@ -50,35 +52,29 @@ class MainActivityViewModel(
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), LastIdState.Loading)
 
-    val listOfRequests = _requestId.flatMapLatest { id ->
-        when(id){
-            LastIdState.Loading -> getListOfRequestsUseCase.execute().flatMapLatest { list ->
-                flow { emit(ListOfRequestsState.ListOfRequests(list)) }
-            }
-            LastIdState.Null -> getListOfRequestsUseCase.execute().flatMapLatest { list ->
-                flow { emit(ListOfRequestsState.ListOfRequests(list)) }
-            }
-            is LastIdState.Id -> getListOfRequestsUseCase.execute().flatMapLatest { list ->
-                flow { emit(ListOfRequestsState.ListOfRequests(list)) }
-            }
-        }
-    }
+    val listOfRequests = getListOfRequestsUseCase.execute().flatMapLatest { list ->
+            flow{emit(ListOfRequestsState.ListOfRequests(list))}
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), ListOfRequestsState.Loading)
+
 
     val requestId = _requestId.asStateFlow()
 
     init {
         viewModelScope.launch {
-
+            getLastRequestIdUseCase.execute().collect{
+                _requestId.value = it
+            }
         }
     }
 
     fun onEvent(requestEvent: RequestEvent){
         when(requestEvent){
             is RequestEvent.AddRequest -> {
+                Log.d("GGG", "sdsda")
                 viewModelScope.launch {
-                    addRequestUseCase.execute(requestEvent.model).collect{
-                        _requestId.value = LastIdState.Id(it.id)
-                    }
+                    val newRequest = addRequestUseCase.execute(requestEvent.model)
+                    _requestId.value = LastIdState.Id(newRequest.id)
+
 
                 }
             }
@@ -95,13 +91,16 @@ class MainActivityViewModel(
                     updateRequestUseCase.execute(requestEvent.requestModel)
                 }
             }
-            RequestEvent.SaveLastId -> {
-                viewModelScope.launch{
-                    saveLastRequestIdUseCase.execute(_requestId.value)
-                }
-            }
+            is RequestEvent.UpdateId ->
+                _requestId.value = requestEvent.id
         }
 
+    }
+
+    fun save(){
+        viewModelScope.launch {
+            saveLastRequestIdUseCase.execute(requestId.value)
+        }
     }
 
 

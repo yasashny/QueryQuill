@@ -7,7 +7,7 @@ import ru.yasdev.domain.requestsDb.models.RequestModel
 
 class AddRequestUseCase(private val repository: RequestsDbRepository) {
 
-    suspend fun execute(model: AddRequestModel): Flow<RequestModel> {
+    suspend fun execute(model: AddRequestModel): RequestModel {
         return repository.addRequest(model)
     }
 }
