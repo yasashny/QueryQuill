@@ -26,6 +26,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.time.delay
 import ru.yasdev.domain.requestsDb.models.AddRequestModel
 import ru.yasdev.domain.utils.RequestState
 import ru.yasdev.domain.utils.ListOfRequestsState
@@ -64,9 +65,9 @@ fun NavigationDrawer(viewModel: MainActivityViewModel, composable: @Composable (
                                             label = { Text(item.label) },
                                             selected = requestId.id == item.id,
                                             onClick = {
-                                                viewModel.onEvent(RequestEvent.SetRequest(item.id))
-                                                scope.launch { drawerState.close()
 
+                                                scope.launch { drawerState.close()
+                                                    viewModel.onEvent(RequestEvent.SetRequest(item.id))
                                                 }
 
 

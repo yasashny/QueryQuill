@@ -74,7 +74,7 @@ class MainActivityViewModel(
         when(requestEvent){
             is RequestEvent.AddRequest -> {
                 viewModelScope.launch {
-                    _requestState.value = RequestState.Loading
+                    //_requestState.value = RequestState.Loading
                     val newRequest = addRequestUseCase.execute(requestEvent.model)
                     _requestModel.value = newRequest
                     _requestState.value = RequestState.Request
@@ -93,7 +93,7 @@ class MainActivityViewModel(
             }
             is RequestEvent.SetRequest -> {
                 viewModelScope.launch{
-                    _requestState.value = RequestState.Loading
+                    //_requestState.value = RequestState.Loading
                     if(requestState.value == RequestState.Request){
                         updateRequestUseCase.execute(requestModel.value)
                     }
