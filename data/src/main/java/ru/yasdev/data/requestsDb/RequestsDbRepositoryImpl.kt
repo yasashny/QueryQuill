@@ -11,7 +11,7 @@ class RequestsDbRepositoryImpl(private val requestsDbDataSource: RequestDbDataSo
         return requestsDbDataSource.getListOfRequests()
     }
 
-    override fun getRequest(id: Int): Flow<RequestModel> {
+    override suspend fun getRequest(id: Int): RequestModel {
         return requestsDbDataSource.getRequest(id)
     }
 

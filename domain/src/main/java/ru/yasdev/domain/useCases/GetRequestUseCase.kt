@@ -6,7 +6,7 @@ import ru.yasdev.domain.requestsDb.models.RequestModel
 
 class GetRequestUseCase(private val requestsDbRepository: RequestsDbRepository) {
 
-    fun execute(id: Int): Flow<RequestModel> {
+    suspend fun execute(id: Int): RequestModel {
         return requestsDbRepository.getRequest(id)
     }
 

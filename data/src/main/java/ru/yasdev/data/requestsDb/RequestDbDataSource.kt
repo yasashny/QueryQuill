@@ -24,16 +24,14 @@ class RequestDbDataSource(context: Context) {
         return db.dao.getListOfRequests()
     }
 
-    fun getRequest(id: Int): Flow<RequestModel> {
-        return flow{
-            val model = db.dao.getRequest(id)
-            emit(model)
-        }
+    suspend fun getRequest(id: Int): RequestModel {
+        val model = db.dao.getRequest(id)
+        return model
     }
 
     suspend fun addRequest(model: AddRequestModel): RequestModel {
         val id = db.dao.insertRequest(Request(label = model.label, test = "test"))
-        val request = getRequest(id.toInt()).first()
+        val request = getRequest(id.toInt())
         return request
 
     }

@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import ru.yasdev.queryquill.activity.MainActivityViewModel
 import ru.yasdev.queryquill.adaptive.ScreenState
 import ru.yasdev.queryquill.components.FancyIndicatorContainerTabs
+import ru.yasdev.queryquill.components.PrimaryTextTabs
 import ru.yasdev.queryquill.screens.requestScreens.RequestScreen
 import ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen.HttpRequestScreen
 import ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen.HttpRequestScreenViewModel
@@ -46,19 +47,18 @@ fun MainScreen(screenState: ScreenState, viewModel: MainActivityViewModel, respo
 
 
                 }
-                FancyIndicatorContainerTabs(tabsState)
+                //FancyIndicatorContainerTabs(tabsState)
+                PrimaryTextTabs(state = tabsState)
                 HorizontalPager(state = pagerState, modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)) {
                     when(it){
                         0 -> RequestScreen(modifier = Modifier
-                            .fillMaxSize()
-                            .background(Color.Blue),
+                            .fillMaxSize(),
                             viewModel = viewModel)
                         1 -> HttpResponseScreen(modifier = Modifier
                             .fillMaxSize()
-                            .weight(1f)
-                            .background(Color.Red),
+                            .weight(1f),
                             httpResponseScreenViewModel = responseVM)
                     }
                 }
@@ -69,13 +69,11 @@ fun MainScreen(screenState: ScreenState, viewModel: MainActivityViewModel, respo
             Row{
                 RequestScreen(modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.Blue)
                     .weight(1f),
                     viewModel = viewModel)
                 HttpResponseScreen(modifier = Modifier
                     .fillMaxSize()
                     .weight(1f)
-                    .background(Color.Red)
                     .weight(1f),
                     httpResponseScreenViewModel = responseVM)
             }
@@ -85,13 +83,11 @@ fun MainScreen(screenState: ScreenState, viewModel: MainActivityViewModel, respo
             Column {
                 RequestScreen(modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.Blue)
                     .weight(1f),
                     viewModel = viewModel)
                 HttpResponseScreen(modifier = Modifier
                     .fillMaxSize()
                     .weight(1f)
-                    .background(Color.Red)
                     .weight(1f),
                     httpResponseScreenViewModel = responseVM)
             }

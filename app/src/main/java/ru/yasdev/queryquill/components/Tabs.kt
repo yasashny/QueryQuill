@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabIndicatorScope
@@ -33,12 +34,36 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.text.style.LineHeightStyle
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
+
+
+
+
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun PrimaryTextTabs(state: MutableState<Int>) {
+    val titles = listOf("Request", "Response")
+    Column {
+        PrimaryTabRow(selectedTabIndex = state.value) {
+            titles.forEachIndexed { index, title ->
+                Tab(
+                    selected = state.value == index,
+                    onClick = { state.value = index },
+                    text = { Text(text = title, maxLines = 2, overflow = TextOverflow.Ellipsis) }
+                )
+            }
+        }
+    }
+}
+
+
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun FancyIndicatorContainerTabs(state: MutableState<Int>) {

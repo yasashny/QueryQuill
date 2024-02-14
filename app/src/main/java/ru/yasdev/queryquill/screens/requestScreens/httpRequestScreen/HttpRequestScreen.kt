@@ -1,5 +1,6 @@
 package ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,16 +23,14 @@ import kotlinx.coroutines.launch
 import ru.yasdev.queryquill.activity.MainActivityViewModel
 import java.util.concurrent.Flow
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun HttpRequestScreen(viewModel: MainActivityViewModel) {
 
 
         Row{
-            LazyColumn {
-                items(60) { index ->
-                    Text(text = "qqq $index")
-                }
-            }
+            val qqq = viewModel.requestModel.collectAsState().value.id.toString()
+            Text(text = qqq)
             Column {
                 val a = viewModel.counter.collectAsState()
                 Text(text = "firstScreen")

@@ -19,11 +19,7 @@ fun HttpResponseScreen(modifier: Modifier, httpResponseScreenViewModel: HttpResp
 
     Box(modifier = modifier) {
         Row{
-            LazyColumn {
-                items(60) { index ->
-                    Text(text = "qqq $index")
-                }
-            }
+
             Column {
                 val a = httpResponseScreenViewModel.counter.collectAsState()
                 Text(text = "firstScreen")

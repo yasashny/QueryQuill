@@ -9,6 +9,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -19,10 +20,10 @@ import ru.yasdev.queryquill.activity.MainActivityViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyTopAppBar(scrollBehavior: TopAppBarScrollBehavior, drawerState: DrawerState) {
-    CenterAlignedTopAppBar(
+    TopAppBar(
         title = {
             Text(
-                "TopAppBar", maxLines = 1, overflow = TextOverflow.Ellipsis
+                "QueryQuill", maxLines = 1, overflow = TextOverflow.Ellipsis
             )
         },
         navigationIcon = {
