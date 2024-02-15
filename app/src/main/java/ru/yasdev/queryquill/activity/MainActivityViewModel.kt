@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import ru.yasdev.domain.requestsDb.models.AddRequestModel
 import ru.yasdev.domain.requestsDb.models.RequestModel
 import ru.yasdev.domain.useCases.AddRequestUseCase
 import ru.yasdev.domain.useCases.DeleteRequestUseCase
@@ -93,12 +94,22 @@ class MainActivityViewModel(
             }
             is RequestEvent.SetRequest -> {
                 viewModelScope.launch{
-                    //_requestState.value = RequestState.Loading
-                    if(requestState.value == RequestState.Request){
-                        updateRequestUseCase.execute(requestModel.value)
+
+                    if (requestEvent.id == null){
+                        if(requestState.value == RequestState.Request){
+                            updateRequestUseCase.execute(requestModel.value)
+                        }
+                        _requestState.value = RequestState.Null
                     }
-                    _requestModel.value = getRequestUseCase.execute(requestEvent.id)
-                    _requestState.value = RequestState.Request
+                    else{
+                        //_requestState.value = RequestState.Loading
+                        if(requestState.value == RequestState.Request){
+                            updateRequestUseCase.execute(requestModel.value)
+                        }
+                        _requestModel.value = getRequestUseCase.execute(requestEvent.id)
+                        _requestState.value = RequestState.Request
+                    }
+
                 }
             }
         }
@@ -109,8 +120,12 @@ class MainActivityViewModel(
         viewModelScope.launch {
             if (requestState.value == RequestState.Request){
                 updateRequestUseCase.execute(requestModel.value)
+                saveLastRequestIdUseCase.execute(requestModel.value.id)
             }
+            else{
                 saveLastRequestIdUseCase.execute(null)
+            }
+
 
         }
     }

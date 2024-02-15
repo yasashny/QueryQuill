@@ -4,10 +4,12 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 import ru.yasdev.queryquill.activity.MainActivityViewModel
+import ru.yasdev.queryquill.screens.requestScreens.NewRequestScreenViewModel
 import ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen.HttpRequestScreenViewModel
 import ru.yasdev.queryquill.screens.responseScreens.httpResponseScreen.HttpResponseScreenViewModel
 
 val appModule = module {
     viewModelOf(::MainActivityViewModel)
     viewModelOf(::HttpResponseScreenViewModel)
+    viewModelOf(::NewRequestScreenViewModel)
 }

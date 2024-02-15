@@ -51,7 +51,7 @@ import kotlinx.coroutines.launch
 fun PrimaryTextTabs(state: MutableState<Int>) {
     val titles = listOf("Request", "Response")
     Column {
-        PrimaryTabRow(selectedTabIndex = state.value) {
+        PrimaryTabRow(selectedTabIndex = state.value, containerColor = MaterialTheme.colorScheme.surfaceContainer) {
             titles.forEachIndexed { index, title ->
                 Tab(
                     selected = state.value == index,

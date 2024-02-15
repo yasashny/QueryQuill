@@ -46,7 +46,12 @@ fun NavigationDrawer(viewModel: MainActivityViewModel, composable: @Composable (
         drawerContent = {
             ModalDrawerSheet {
                 Spacer(Modifier.height(12.dp))
-                Button(onClick = { viewModel.onEvent(RequestEvent.AddRequest(AddRequestModel("dufgdufhds"))) }) {
+                Button(onClick = {
+                    scope.launch { drawerState.close()
+                        viewModel.onEvent(RequestEvent.SetRequest(null))
+                    }
+
+                }) {
                     
                 }
 

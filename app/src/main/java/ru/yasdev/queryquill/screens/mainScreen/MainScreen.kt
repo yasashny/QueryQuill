@@ -12,8 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import kotlinx.coroutines.launch
 import ru.yasdev.queryquill.activity.MainActivityViewModel
 import ru.yasdev.queryquill.adaptive.ScreenState
 import ru.yasdev.queryquill.components.FancyIndicatorContainerTabs
@@ -36,9 +38,15 @@ fun MainScreen(screenState: ScreenState, viewModel: MainActivityViewModel, respo
                 val pagerState = rememberPagerState {
                     2
                 }
+                val scope = rememberCoroutineScope()
                 LaunchedEffect(key1 = tabsState.value){
 
-                    pagerState.animateScrollToPage(tabsState.value)
+                    scope.launch {
+                        pagerState.animateScrollToPage(tabsState.value)
+                    }
+
+
+
                 }
                 LaunchedEffect(key1 = pagerState.currentPage, key2 = pagerState.isScrollInProgress){
                     if (!pagerState.isScrollInProgress){

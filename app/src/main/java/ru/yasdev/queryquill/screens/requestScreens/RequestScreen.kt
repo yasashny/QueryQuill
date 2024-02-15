@@ -22,7 +22,7 @@ fun RequestScreen(modifier: Modifier, viewModel: MainActivityViewModel){
             Text(text = "Loadingggg")
         }
         else if (request == RequestState.Null){
-            NewRequestScreen(viewModel = viewModel)
+            NewRequestScreen(mainViewModel = viewModel)
         }
         else if (request == RequestState.Request){
             Text(text = qqq)

@@ -1,3 +1,3 @@
 package ru.yasdev.domain.requestsDb.models
 
-data class AddRequestModel(val label: String)
+data class AddRequestModel(var label: String)
