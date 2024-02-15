@@ -18,7 +18,6 @@ import androidx.compose.ui.graphics.Color
 import kotlinx.coroutines.launch
 import ru.yasdev.queryquill.activity.MainActivityViewModel
 import ru.yasdev.queryquill.adaptive.ScreenState
-import ru.yasdev.queryquill.components.FancyIndicatorContainerTabs
 import ru.yasdev.queryquill.components.PrimaryTextTabs
 import ru.yasdev.queryquill.screens.requestScreens.RequestScreen
 import ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen.HttpRequestScreen
@@ -32,31 +31,10 @@ fun MainScreen(screenState: ScreenState, viewModel: MainActivityViewModel, respo
     when (screenState) {
         ScreenState.SINGLE_SCREEN -> {
             Column {
-                val tabsState = remember {
-                    mutableStateOf(0)
-                }
-                val pagerState = rememberPagerState {
-                    2
-                }
-                val scope = rememberCoroutineScope()
-                LaunchedEffect(key1 = tabsState.value){
-
-                    scope.launch {
-                        pagerState.animateScrollToPage(tabsState.value)
-                    }
-
-
-
-                }
-                LaunchedEffect(key1 = pagerState.currentPage, key2 = pagerState.isScrollInProgress){
-                    if (!pagerState.isScrollInProgress){
-                        tabsState.value = pagerState.currentPage
-                    }
-
-
-                }
-                //FancyIndicatorContainerTabs(tabsState)
-                PrimaryTextTabs(state = tabsState)
+                val pagerState = rememberPagerState(
+                    pageCount = {2}
+                )
+                PrimaryTextTabs(pagerState = pagerState)
                 HorizontalPager(state = pagerState, modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)) {
