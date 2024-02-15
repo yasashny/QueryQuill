@@ -25,13 +25,13 @@ fun RequestScreen(modifier: Modifier, viewModel: MainActivityViewModel){
             NewRequestScreen(mainViewModel = viewModel)
         }
         else if (request == RequestState.Request){
-            Text(text = qqq)
+            HttpRequestScreen(viewModel = viewModel)
         }
         else{
             Text(text = "error")
         }
-
     }
+
     
 
 
