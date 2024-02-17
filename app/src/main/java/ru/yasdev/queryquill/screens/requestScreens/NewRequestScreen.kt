@@ -23,6 +23,7 @@ import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -57,13 +58,18 @@ fun NewRequestScreen(mainViewModel: MainActivityViewModel){
                 Text(text = "New Request",
                     Modifier
                         .fillMaxWidth()
-                        .padding(top = 15.dp, start = 15.dp), fontSize = MaterialTheme.typography.headlineSmall.fontSize, textAlign = TextAlign.Start)
-                OutlinedTextField(value = label, onValueChange = {l -> viewModel.changeNewRequestLabel(l)}, Modifier.align(
-                    Alignment.Start
-                ).padding(start = 15.dp, top = 5.dp), label = @Composable{ Text(text = "label")})
-                Button(onClick = { viewModel.addRequest(mainViewModel) }, modifier = Modifier.align(
-                    Alignment.End
-                ).padding(end = 15.dp, bottom = 15.dp, top = 10.dp)) {
+                        .padding(top = 15.dp), fontSize = MaterialTheme.typography.headlineSmall.fontSize, textAlign = TextAlign.Center)
+                OutlinedTextField(value = label, onValueChange = {l -> viewModel.changeNewRequestLabel(l)},
+                    Modifier
+                        .align(
+                            Alignment.CenterHorizontally
+                        )
+                        .padding(top = 15.dp), label = @Composable{ Text(text = "label")})
+                OutlinedButton(onClick = { viewModel.addRequest(mainViewModel) }, modifier = Modifier
+                    .align(
+                        Alignment.CenterHorizontally
+                    )
+                    .padding(bottom = 15.dp, top = 15.dp)) {
                     Text(text = "Add request")
             }
 

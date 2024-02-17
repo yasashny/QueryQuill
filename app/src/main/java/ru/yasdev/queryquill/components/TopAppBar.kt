@@ -1,8 +1,8 @@
 package ru.yasdev.queryquill.components
 
-
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -15,6 +15,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import kotlinx.coroutines.launch
 import ru.yasdev.queryquill.activity.MainActivityViewModel
@@ -38,7 +40,11 @@ fun MyTopAppBar(scrollBehavior: TopAppBarScrollBehavior, drawerState: DrawerStat
 
 
         },
-        actions = {},
+        actions = {
+            IconButton(onClick = {}) {
+                Icon(imageVector = Icons.Outlined.Edit, contentDescription = "Localized description")
+            }
+        },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer)
         //scrollBehavior = scrollBehavior

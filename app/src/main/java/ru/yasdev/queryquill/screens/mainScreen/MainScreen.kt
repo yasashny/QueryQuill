@@ -28,6 +28,7 @@ import ru.yasdev.queryquill.screens.responseScreens.httpResponseScreen.HttpRespo
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MainScreen(screenState: ScreenState, viewModel: MainActivityViewModel, responseVM: HttpResponseScreenViewModel) {
+
     when (screenState) {
         ScreenState.SINGLE_SCREEN -> {
             Column {

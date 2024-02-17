@@ -12,7 +12,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.PagerState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Send
+import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.SecondaryTabRow
@@ -61,10 +65,11 @@ fun PrimaryTextTabs(pagerState: PagerState) {
                     selected = pagerState.currentPage == index,
                     onClick = {
                            scope.launch{
-                               pagerState.animateScrollToPage(index)
+                               pagerState.scrollToPage(index)
                            }
                     },
-                    text = { Text(text = title, maxLines = 2, overflow = TextOverflow.Ellipsis) }
+                    text = { Text(text = title, maxLines = 2, overflow = TextOverflow.Ellipsis) },
+                    icon = { Icon(imageVector = Icons.AutoMirrored.Outlined.Send, contentDescription = "")}
                 )
             }
         }

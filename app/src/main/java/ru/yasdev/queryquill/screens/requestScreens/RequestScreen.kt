@@ -12,23 +12,23 @@ import ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen.HttpRequest
 
 @Composable
 fun RequestScreen(modifier: Modifier, viewModel: MainActivityViewModel){
-    viewModel.qqq()
 
     val request by viewModel.requestState.collectAsState(initial = RequestState.Loading)
-    val qqq = viewModel.requestModel.collectAsState().value.id.toString()
     Box(modifier = modifier){
 
-        if (request == RequestState.Loading){
-            Text(text = "Loadingggg")
-        }
-        else if (request == RequestState.Null){
-            NewRequestScreen(mainViewModel = viewModel)
-        }
-        else if (request == RequestState.Request){
-            HttpRequestScreen(viewModel = viewModel)
-        }
-        else{
-            Text(text = "error")
+        when (request) {
+            RequestState.Loading -> {
+                Text(text = "Loadingggg")
+            }
+            RequestState.Null -> {
+                NewRequestScreen(mainViewModel = viewModel)
+            }
+            RequestState.Request -> {
+                HttpRequestScreen(viewModel = viewModel)
+            }
+            else -> {
+                Text(text = "error")
+            }
         }
     }
 
