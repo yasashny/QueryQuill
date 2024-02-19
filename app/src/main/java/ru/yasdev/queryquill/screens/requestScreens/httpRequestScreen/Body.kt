@@ -1,20 +1,30 @@
 package ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import ru.yasdev.domain.utils.ListItem
+import ru.yasdev.queryquill.components.EditableList
 import ru.yasdev.queryquill.components.SegmentedButtonSingleSelect
 
 @Composable
@@ -39,7 +49,9 @@ fun Body(){
                     .fillMaxSize()
                     .padding(start = 15.dp, end = 15.dp, bottom = 15.dp))
             }
-            1 -> {}
+            1 -> {
+                EditableList(items = listOf(ListItem("qee", "dkhfjdsf"), ListItem("qee", "dkhfjdsf"), ListItem("qee", "dkhfjdsf")))
+            }
         }
 
     }
