@@ -5,6 +5,6 @@ import androidx.compose.runtime.Composable
 import ru.yasdev.queryquill.activity.MainActivityViewModel
 
 @Composable
-fun Auth(viewModel: MainActivityViewModel){
+fun Auth(viewModel: MainActivityViewModel) {
     Text(text = "Auth")
 }

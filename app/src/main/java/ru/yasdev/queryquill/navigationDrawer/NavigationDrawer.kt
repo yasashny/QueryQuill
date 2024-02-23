@@ -1,6 +1,5 @@
 package ru.yasdev.queryquill.navigationDrawer
 
-import android.util.Log
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -31,8 +30,11 @@ import ru.yasdev.queryquill.activity.MainActivityViewModel
 import ru.yasdev.queryquill.activity.RequestEvent
 
 @Composable
-fun NavigationDrawer(viewModel: MainActivityViewModel, composable: @Composable (draverState: DrawerState) -> Unit) {
-    Log.d("HHHHH", "ddddd")
+fun NavigationDrawer(
+    viewModel: MainActivityViewModel,
+    composable: @Composable (draverState: DrawerState) -> Unit
+) {
+
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val items by viewModel.listOfRequests.collectAsState(initial = ListOfRequestsState.Loading)
@@ -44,23 +46,26 @@ fun NavigationDrawer(viewModel: MainActivityViewModel, composable: @Composable (
             ModalDrawerSheet {
                 Spacer(Modifier.height(12.dp))
                 Button(onClick = {
-                    scope.launch { drawerState.close()
+                    scope.launch {
+                        drawerState.close()
                         viewModel.onEvent(RequestEvent.SetRequest(null))
                     }
 
                 }) {
-                    
+
                 }
 
-                when(items){
+                when (items) {
 
                     ListOfRequestsState.Loading -> {}
                     is ListOfRequestsState.ListOfRequests -> {
-                        when((items as ListOfRequestsState.ListOfRequests).list.size){
+                        when ((items as ListOfRequestsState.ListOfRequests).list.size) {
                             0 -> {
-                                Text(text = "Create new request")}
+                                Text(text = "Create new request")
+                            }
+
                             else -> {
-                                LazyColumn{
+                                LazyColumn {
                                     items((items as ListOfRequestsState.ListOfRequests).list) { item ->
                                         NavigationDrawerItem(
                                             //icon = { Icon(item, contentDescription = null) },
@@ -68,17 +73,25 @@ fun NavigationDrawer(viewModel: MainActivityViewModel, composable: @Composable (
                                             selected = requestId.id == item.id,
                                             onClick = {
 
-                                                scope.launch { drawerState.close()
+                                                scope.launch {
+                                                    drawerState.close()
                                                     viewModel.onEvent(RequestEvent.SetRequest(item.id))
                                                 }
 
 
-
-
                                             },
-                                            badge = { IconButton(onClick = { viewModel.onEvent(RequestEvent.DeleteRequest(item.id)) }) {
-                                                Icon(imageVector = Icons.Outlined.Delete, contentDescription = "sdsd")
-                                            }},
+                                            badge = {
+                                                IconButton(onClick = {
+                                                    viewModel.onEvent(
+                                                        RequestEvent.DeleteRequest(item.id)
+                                                    )
+                                                }) {
+                                                    Icon(
+                                                        imageVector = Icons.Outlined.Delete,
+                                                        contentDescription = "sdsd"
+                                                    )
+                                                }
+                                            },
                                             modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                                         )
                                     }
@@ -88,10 +101,6 @@ fun NavigationDrawer(viewModel: MainActivityViewModel, composable: @Composable (
 
 
                         }
-
-
-
-
 
 
                     }

@@ -7,7 +7,7 @@ import ru.yasdev.queryquill.activity.UpdateHttpRequestModel
 import ru.yasdev.queryquill.components.EditableList
 
 @Composable
-fun Header(viewModel: MainActivityViewModel){
+fun Header(viewModel: MainActivityViewModel) {
     val headers = viewModel.requestModel.collectAsState().value.header
     EditableList(items = headers, onValueChanged = {
         viewModel.updateHttpRequest(UpdateHttpRequestModel.Header(it))

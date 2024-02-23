@@ -21,30 +21,40 @@ import ru.yasdev.queryquill.components.EditableList
 import ru.yasdev.queryquill.components.SegmentedButtonSingleSelect
 
 @Composable
-fun Body(viewModel: MainActivityViewModel){
+fun Body(viewModel: MainActivityViewModel) {
     val body = viewModel.requestModel.collectAsState().value.body
     Column {
         val selectedIndex = remember { mutableStateOf(0) }
-        Row{
-            Box(contentAlignment = Alignment.Center, modifier = Modifier
-                .fillMaxWidth()
+        Row {
+            Box(
+                contentAlignment = Alignment.Center, modifier = Modifier
+                    .fillMaxWidth()
+                    //.background(MaterialTheme.colorScheme.surfaceContainer)
+                    .padding(bottom = 15.dp, top = 15.dp)
                 //.background(MaterialTheme.colorScheme.surfaceContainer)
-                .padding(bottom = 15.dp, top = 15.dp)
-                //.background(MaterialTheme.colorScheme.surfaceContainer)
-            ){
+            ) {
                 val options = listOf("Text", "Structured")
                 SegmentedButtonSingleSelect(selectedIndex, options)
             }
 
         }
-        when(selectedIndex.value){
+        when (selectedIndex.value) {
             0 -> {
-                OutlinedTextField(value = "", onValueChange = {}, label = @Composable{ Text(text = "Json/XML")}, modifier = Modifier
-                    .fillMaxSize()
-                    .padding(start = 15.dp, end = 15.dp, bottom = 15.dp))
+                OutlinedTextField(value = "",
+                    onValueChange = {},
+                    label = @Composable { Text(text = "Json/XML") },
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(start = 15.dp, end = 15.dp, bottom = 15.dp)
+                )
             }
+
             1 -> {
-                EditableList(items = listOf(ListItem("qee", "dkhfjdsf"), ListItem("qee", "dkhfjdsf"), ListItem("qee", "dkhfjdsf")), onValueChanged = {})
+                EditableList(items = listOf(
+                    ListItem("qee", "dkhfjdsf"),
+                    ListItem("qee", "dkhfjdsf"),
+                    ListItem("qee", "dkhfjdsf")
+                ), onValueChanged = {})
             }
         }
 

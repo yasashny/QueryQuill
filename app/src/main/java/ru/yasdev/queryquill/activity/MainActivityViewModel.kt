@@ -26,44 +26,43 @@ import ru.yasdev.domain.requestsDb.states.ListOfRequestsState
 @OptIn(ExperimentalCoroutinesApi::class)
 class MainActivityViewModel(
     private val getRequestUseCase: GetRequestUseCase,
-    private val getListOfRequestsUseCase: GetListOfRequestsUseCase,
+    getListOfRequestsUseCase: GetListOfRequestsUseCase,
     private val addRequestUseCase: AddRequestUseCase,
     private val deleteRequestUseCase: DeleteRequestUseCase,
     private val updateRequestUseCase: UpdateRequestUseCase,
     private val saveLastRequestIdUseCase: SaveLastRequestIdUseCase,
     private val getLastRequestIdUseCase: GetLastRequestIdUseCase
-    ): ViewModel() {
+) : ViewModel() {
 
     private val _requestState = MutableStateFlow<RequestState>(RequestState.Loading)
 
-//    val request = _requestState.flatMapLatest { id ->
-//        when(id){
-//            RequestState.Loading -> flow { emit(RequestStateqqqqqqq.Loading) }
-//            RequestState.Null -> flow { emit(RequestStateqqqqqqq.NullRequest) }
-//            is RequestState.Id -> getRequestUseCase.execute(id.id).flatMapLatest { requestModel ->
-//                flow { emit(RequestStateqqqqqqq.Request(requestModel)) }
-//            }
-//        }
-//    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), RequestState.Loading)
-
     val requestState = _requestState.asStateFlow()
 
-    private val _requestModel = MutableStateFlow(RequestModel(-1, "-1", Body.Text(""), header = emptyList(), query = emptyList(), type = HttpType.GET, url = ""))
+    private val _requestModel = MutableStateFlow(
+        RequestModel(
+            -1,
+            "-1",
+            Body.Text(""),
+            header = emptyList(),
+            query = emptyList(),
+            type = HttpType.GET,
+            url = ""
+        )
+    )
     val requestModel = _requestModel.asStateFlow()
 
     val listOfRequests = getListOfRequestsUseCase.execute().flatMapLatest { list ->
-            flow{emit(ListOfRequestsState.ListOfRequests(list))}
-        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), ListOfRequestsState.Loading)
+        flow { emit(ListOfRequestsState.ListOfRequests(list)) }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), ListOfRequestsState.Loading)
 
     init {
         viewModelScope.launch {
-            getLastRequestIdUseCase.execute().collect{
-                if (it == null){
+            getLastRequestIdUseCase.execute().collect {
+                if (it == null) {
                     _requestState.value = RequestState.Null
-                }
-                else{
+                } else {
                     val request = getRequestUseCase.execute(it)
-                    _requestModel.value= request
+                    _requestModel.value = request
                     _requestState.value = RequestState.Request
 
                 }
@@ -71,8 +70,8 @@ class MainActivityViewModel(
         }
     }
 
-    fun onEvent(requestEvent: RequestEvent){
-        when(requestEvent){
+    fun onEvent(requestEvent: RequestEvent) {
+        when (requestEvent) {
             is RequestEvent.AddRequest -> {
                 viewModelScope.launch {
                     //_requestState.value = RequestState.Loading
@@ -81,10 +80,11 @@ class MainActivityViewModel(
                     _requestState.value = RequestState.Request
                 }
             }
-            is RequestEvent.DeleteRequest -> {
-                viewModelScope.launch{
 
-                    if(requestEvent.id == requestModel.value.id){
+            is RequestEvent.DeleteRequest -> {
+                viewModelScope.launch {
+
+                    if (requestEvent.id == requestModel.value.id) {
                         _requestState.value = RequestState.Null
                     }
                     deleteRequestUseCase.execute(requestEvent.id)
@@ -92,18 +92,18 @@ class MainActivityViewModel(
 
                 }
             }
-            is RequestEvent.SetRequest -> {
-                viewModelScope.launch{
 
-                    if (requestEvent.id == null){
-                        if(requestState.value == RequestState.Request){
+            is RequestEvent.SetRequest -> {
+                viewModelScope.launch {
+
+                    if (requestEvent.id == null) {
+                        if (requestState.value == RequestState.Request) {
                             updateRequestUseCase.execute(requestModel.value)
                         }
                         _requestState.value = RequestState.Null
-                    }
-                    else{
+                    } else {
                         //_requestState.value = RequestState.Loading
-                        if(requestState.value == RequestState.Request){
+                        if (requestState.value == RequestState.Request) {
                             updateRequestUseCase.execute(requestModel.value)
                         }
                         _requestModel.value = getRequestUseCase.execute(requestEvent.id)
@@ -116,54 +116,43 @@ class MainActivityViewModel(
 
     }
 
-    fun updateHttpRequest(updateHttpRequestModel: UpdateHttpRequestModel){
-        when(updateHttpRequestModel){
-            is UpdateHttpRequestModel.Body -> {_requestModel.value = _requestModel.value.copy(body = updateHttpRequestModel.body)}
-            is UpdateHttpRequestModel.Header -> {_requestModel.value = _requestModel.value.copy(header = updateHttpRequestModel.header)}
-            is UpdateHttpRequestModel.Query -> {_requestModel.value = _requestModel.value.copy(query = updateHttpRequestModel.query)}
-            is UpdateHttpRequestModel.Type -> {_requestModel.value = _requestModel.value.copy(type = updateHttpRequestModel.type)}
-            is UpdateHttpRequestModel.Url -> {_requestModel.value = _requestModel.value.copy(url = updateHttpRequestModel.url)}
+    fun updateHttpRequest(updateHttpRequestModel: UpdateHttpRequestModel) {
+        when (updateHttpRequestModel) {
+            is UpdateHttpRequestModel.Body -> {
+                _requestModel.value = _requestModel.value.copy(body = updateHttpRequestModel.body)
+            }
+
+            is UpdateHttpRequestModel.Header -> {
+                _requestModel.value =
+                    _requestModel.value.copy(header = updateHttpRequestModel.header)
+            }
+
+            is UpdateHttpRequestModel.Query -> {
+                _requestModel.value = _requestModel.value.copy(query = updateHttpRequestModel.query)
+            }
+
+            is UpdateHttpRequestModel.Type -> {
+                _requestModel.value = _requestModel.value.copy(type = updateHttpRequestModel.type)
+            }
+
+            is UpdateHttpRequestModel.Url -> {
+                _requestModel.value = _requestModel.value.copy(url = updateHttpRequestModel.url)
+            }
         }
     }
 
-    fun save(){
+    fun save() {
         viewModelScope.launch {
-            if (requestState.value == RequestState.Request){
+            if (requestState.value == RequestState.Request) {
                 updateRequestUseCase.execute(requestModel.value)
                 saveLastRequestIdUseCase.execute(requestModel.value.id)
-            }
-            else{
+            } else {
                 saveLastRequestIdUseCase.execute(null)
             }
 
 
         }
     }
-
-
-
-
-
-
-
-
-    private val _counter = MutableStateFlow("")
-    val counter = _counter.asStateFlow()
-
-    fun incrementCounter(text: String) {
-        _counter.value = text
-    }
-
-    fun qqq(){
-//        viewModelScope.launch {
-//            listOfRequests.collect(){
-//                Log.d("Hello", it.toString())
-//            }
-//
-//        }
-
-    }
-
 
 
 }

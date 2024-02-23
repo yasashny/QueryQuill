@@ -56,10 +56,11 @@ fun HttpRequestScreen(viewModel: MainActivityViewModel) {
     val url = viewModel.requestModel.collectAsState().value.url
     val type = viewModel.requestModel.collectAsState().value.type.name
     Scaffold(floatingActionButton = {
-        ExtendedFloatingActionButton(onClick = { /*TODO*/ }, icon = { Icon(
-            imageVector = Icons.AutoMirrored.Outlined.Send,
-            contentDescription = ""
-        )}, text = { Text(text = "Send request")}, modifier = Modifier.padding(end = 15.dp))
+        ExtendedFloatingActionButton(onClick = { /*TODO*/ }, icon = {
+            Icon(
+                imageVector = Icons.AutoMirrored.Outlined.Send, contentDescription = ""
+            )
+        }, text = { Text(text = "Send request") }, modifier = Modifier.padding(end = 15.dp))
     }) {
         Column {
             Row(
@@ -67,72 +68,105 @@ fun HttpRequestScreen(viewModel: MainActivityViewModel) {
                     //.background(MaterialTheme.colorScheme.surfaceContainer)
                     .padding(15.dp)
                 //.background(MaterialTheme.colorScheme.surfaceContainer)
-            ){
+            ) {
                 DynamicSelectTextField(
-                    selectedValue = type,
-                    options = listOf(HttpType.GET.name, HttpType.POST.name, HttpType.PUT.name, HttpType.PATCH.name, HttpType.OPTIONS.name, HttpType.DELETE.name, HttpType.HEAD.name),
-                    label = "Type",
-                    onValueChangedEvent = {
-                        when(it){
-                            HttpType.GET.name -> {viewModel.updateHttpRequest(UpdateHttpRequestModel.Type(HttpType.GET))}
-                            HttpType.POST.name -> {viewModel.updateHttpRequest(UpdateHttpRequestModel.Type(HttpType.POST))}
-                            HttpType.PUT.name -> {viewModel.updateHttpRequest(UpdateHttpRequestModel.Type(HttpType.PUT))}
-                            HttpType.PATCH.name -> {viewModel.updateHttpRequest(UpdateHttpRequestModel.Type(HttpType.PATCH))}
-                            HttpType.DELETE.name -> {viewModel.updateHttpRequest(UpdateHttpRequestModel.Type(HttpType.DELETE))}
-                            HttpType.OPTIONS.name -> {viewModel.updateHttpRequest(UpdateHttpRequestModel.Type(HttpType.OPTIONS))}
-                            HttpType.HEAD.name -> {viewModel.updateHttpRequest(UpdateHttpRequestModel.Type(HttpType.HEAD))}
+                    selectedValue = type, options = listOf(
+                        HttpType.GET.name,
+                        HttpType.POST.name,
+                        HttpType.PUT.name,
+                        HttpType.PATCH.name,
+                        HttpType.OPTIONS.name,
+                        HttpType.DELETE.name,
+                        HttpType.HEAD.name
+                    ), label = "Type", onValueChangedEvent = {
+                        when (it) {
+                            HttpType.GET.name -> {
+                                viewModel.updateHttpRequest(UpdateHttpRequestModel.Type(HttpType.GET))
+                            }
+
+                            HttpType.POST.name -> {
+                                viewModel.updateHttpRequest(UpdateHttpRequestModel.Type(HttpType.POST))
+                            }
+
+                            HttpType.PUT.name -> {
+                                viewModel.updateHttpRequest(UpdateHttpRequestModel.Type(HttpType.PUT))
+                            }
+
+                            HttpType.PATCH.name -> {
+                                viewModel.updateHttpRequest(UpdateHttpRequestModel.Type(HttpType.PATCH))
+                            }
+
+                            HttpType.DELETE.name -> {
+                                viewModel.updateHttpRequest(UpdateHttpRequestModel.Type(HttpType.DELETE))
+                            }
+
+                            HttpType.OPTIONS.name -> {
+                                viewModel.updateHttpRequest(UpdateHttpRequestModel.Type(HttpType.OPTIONS))
+                            }
+
+                            HttpType.HEAD.name -> {
+                                viewModel.updateHttpRequest(UpdateHttpRequestModel.Type(HttpType.HEAD))
+                            }
                         }
-                        }, modifier = Modifier.weight(1f)
+                    }, modifier = Modifier.weight(1f)
                 )
 
-                OutlinedTextField(value = url, onValueChange = {viewModel.updateHttpRequest(UpdateHttpRequestModel.Url(it))}, label = @Composable{ Text(text = "Url")}, modifier = Modifier
-                    .weight(2f)
-                    .padding(start = 15.dp))
+                OutlinedTextField(
+                    value = url,
+                    onValueChange = { viewModel.updateHttpRequest(UpdateHttpRequestModel.Url(it)) },
+                    label = @Composable { Text(text = "Url") },
+                    modifier = Modifier
+                        .weight(2f)
+                        .padding(start = 15.dp)
+                )
             }
             val selectedIndex = remember { mutableStateOf(0) }
-            Row{
-                Box(contentAlignment = Alignment.Center, modifier = Modifier
-                    .fillMaxWidth()
+            Row {
+                Box(
+                    contentAlignment = Alignment.Center, modifier = Modifier
+                        .fillMaxWidth()
+                        //.background(MaterialTheme.colorScheme.surfaceContainer)
+                        .padding(bottom = 15.dp)
                     //.background(MaterialTheme.colorScheme.surfaceContainer)
-                    .padding(bottom = 15.dp)
-                    //.background(MaterialTheme.colorScheme.surfaceContainer)
-                ){
+                ) {
                     val options = listOf("Body", "Auth", "Header", "Query")
                     SegmentedButtonSingleSelect(selectedIndex, options)
                 }
 
             }
-            Box (
+            Box(
                 Modifier
                     .fillMaxWidth()
                     .height(1.dp)
-                    .background(MaterialTheme.colorScheme.outlineVariant))
+                    .background(MaterialTheme.colorScheme.outlineVariant)
+            )
 
-            Box(modifier = Modifier.fillMaxSize()){
-                when(selectedIndex.value){
+            Box(modifier = Modifier.fillMaxSize()) {
+                when (selectedIndex.value) {
                     0 -> {
-                        Body(viewModel)}
+                        Body(viewModel)
+                    }
+
                     1 -> {
-                        Auth(viewModel)}
+                        Auth(viewModel)
+                    }
+
                     2 -> {
-                        Header(viewModel)}
+                        Header(viewModel)
+                    }
+
                     3 -> {
-                        Query(viewModel)}
+                        Query(viewModel)
+                    }
                 }
             }
-
-
-
 
 
         }
 
 
-
-
     }
-    }
-
+}
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -147,12 +181,9 @@ fun DynamicSelectTextField(
     var expanded by remember { mutableStateOf(false) }
 
     ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = !expanded },
-        modifier = modifier
+        expanded = expanded, onExpandedChange = { expanded = !expanded }, modifier = modifier
     ) {
-        OutlinedTextField(
-            readOnly = true,
+        OutlinedTextField(readOnly = true,
             value = selectedValue,
             onValueChange = {},
             label = { Text(text = label) },
@@ -167,13 +198,10 @@ fun DynamicSelectTextField(
 
         ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             options.forEach { option: String ->
-                DropdownMenuItem(
-                    text = { Text(text = option) },
-                    onClick = {
-                        expanded = false
-                        onValueChangedEvent(option)
-                    }
-                )
+                DropdownMenuItem(text = { Text(text = option) }, onClick = {
+                    expanded = false
+                    onValueChangedEvent(option)
+                })
             }
         }
     }
@@ -191,27 +219,21 @@ fun DynamicSelectTab(
     var expanded by remember { mutableStateOf(false) }
 
     ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = !expanded },
-        modifier = modifier
+        expanded = expanded, onExpandedChange = { expanded = !expanded }, modifier = modifier
     ) {
-        FilterChip(selected = true, onClick = { /*TODO*/ }, label = { "djfkdjf" },
-            trailingIcon = {
-                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
-            },
-            modifier = Modifier
-                .menuAnchor()
-                .fillMaxWidth())
+        FilterChip(selected = true, onClick = { /*TODO*/ }, label = { "djfkdjf" }, trailingIcon = {
+            ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+        }, modifier = Modifier
+            .menuAnchor()
+            .fillMaxWidth()
+        )
 
         ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             options.forEach { option: String ->
-                DropdownMenuItem(
-                    text = { Text(text = option) },
-                    onClick = {
-                        expanded = false
-                        onValueChangedEvent(option)
-                    }
-                )
+                DropdownMenuItem(text = { Text(text = option) }, onClick = {
+                    expanded = false
+                    onValueChangedEvent(option)
+                })
             }
         }
     }
@@ -221,8 +243,7 @@ fun DynamicSelectTab(
 @Composable
 fun FilterChipSample() {
     var selected by remember { mutableStateOf(false) }
-    FilterChip(
-        selected = selected,
+    FilterChip(selected = selected,
         onClick = { selected = !selected },
         label = { Text("Filter chip") },
         leadingIcon = if (selected) {
@@ -235,6 +256,5 @@ fun FilterChipSample() {
             }
         } else {
             null
-        }
-    )
+        })
 }

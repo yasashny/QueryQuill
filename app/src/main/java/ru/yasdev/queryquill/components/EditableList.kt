@@ -24,60 +24,49 @@ fun EditableList(items: List<ListItem>, onValueChanged: (items: List<ListItem>) 
 
     LazyColumn {
         itemsIndexed(items) { index, item ->
-            EditableListItem(
-                text = item,
-                onTextChanged = { newText ->
-                    onValueChanged(items.toMutableList().also{
-                        it[index] = newText
-                    })
-                    onValueChanged(items.toMutableList().also {
-                        it[index] = newText
-                    })
-                    if (index == items.size - 1){
-                        Log.d("q", "q")
-                        onValueChanged(items.toMutableList().apply { add(ListItem("", "")) })
-                    }
-                },
-                deleteItem = {
-                    onValueChanged(items.toMutableList().apply { removeAt(index) })
-                    }
-            )
+            EditableListItem(text = item, onTextChanged = { newText ->
+                onValueChanged(items.toMutableList().also {
+                    it[index] = newText
+                })
+                onValueChanged(items.toMutableList().also {
+                    it[index] = newText
+                })
+                if (index == items.size - 1) {
+                    Log.d("q", "q")
+                    onValueChanged(items.toMutableList().apply { add(ListItem("", "")) })
+                }
+            }, deleteItem = {
+                onValueChanged(items.toMutableList().apply { removeAt(index) })
+            })
         }
     }
 }
 
 @Composable
 fun EditableListItem(
-    text: ListItem,
-    onTextChanged: (ListItem) -> Unit,
-    deleteItem: () -> Unit
+    text: ListItem, onTextChanged: (ListItem) -> Unit, deleteItem: () -> Unit
 ) {
     var item by remember { mutableStateOf(text) }
 
     Row {
         OutlinedTextField(
-            value = item.name,
-            onValueChange = {
+            value = item.name, onValueChange = {
                 item = ListItem(it, item.value)
                 onTextChanged(item)
-            },
-            modifier = Modifier
+            }, modifier = Modifier
                 .padding(start = 15.dp, top = 15.dp)
                 .weight(1f)
         )
-        OutlinedTextField(
-            value = item.value,
-            trailingIcon = { IconButton(onClick = { deleteItem() }, enabled = text != ListItem("", "")) {
+        OutlinedTextField(value = item.value, trailingIcon = {
+            IconButton(onClick = { deleteItem() }, enabled = text != ListItem("", "")) {
                 Icon(imageVector = Icons.Outlined.Delete, contentDescription = "")
             }
-            },
-            onValueChange = {
-                item = ListItem(item.name, it)
-                onTextChanged(item)
-            },
-            modifier = Modifier
-                .padding(start = 15.dp, end = 15.dp, top = 15.dp)
-                .weight(2f)
+        }, onValueChange = {
+            item = ListItem(item.name, it)
+            onTextChanged(item)
+        }, modifier = Modifier
+            .padding(start = 15.dp, end = 15.dp, top = 15.dp)
+            .weight(2f)
         )
     }
 
