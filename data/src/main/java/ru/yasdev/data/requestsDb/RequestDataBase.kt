@@ -2,13 +2,15 @@ package ru.yasdev.data.requestsDb
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import ru.yasdev.data.requestsDb.models.Request
+import androidx.room.TypeConverters
+import ru.yasdev.data.requestsDb.models.DataRequestModel
 
 @Database(
-    entities = [Request::class],
+    entities = [DataRequestModel::class],
     version = 1
 )
-abstract class RequestDataBase: RoomDatabase() {
+@TypeConverters(Converters::class)
+abstract class RequestDataBase : RoomDatabase() {
 
     abstract val dao: RequestDao
 }

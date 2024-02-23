@@ -1,6 +1,5 @@
 package ru.yasdev.queryquill.activity
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -11,7 +10,8 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import ru.yasdev.domain.requestsDb.models.AddRequestModel
+import ru.yasdev.domain.requestsDb.models.Body
+import ru.yasdev.domain.requestsDb.models.HttpType
 import ru.yasdev.domain.requestsDb.models.RequestModel
 import ru.yasdev.domain.useCases.AddRequestUseCase
 import ru.yasdev.domain.useCases.DeleteRequestUseCase
@@ -20,8 +20,8 @@ import ru.yasdev.domain.useCases.GetListOfRequestsUseCase
 import ru.yasdev.domain.useCases.GetRequestUseCase
 import ru.yasdev.domain.useCases.SaveLastRequestIdUseCase
 import ru.yasdev.domain.useCases.UpdateRequestUseCase
-import ru.yasdev.domain.utils.RequestState
-import ru.yasdev.domain.utils.ListOfRequestsState
+import ru.yasdev.domain.requestsDb.states.RequestState
+import ru.yasdev.domain.requestsDb.states.ListOfRequestsState
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class MainActivityViewModel(
@@ -48,7 +48,7 @@ class MainActivityViewModel(
 
     val requestState = _requestState.asStateFlow()
 
-    private val _requestModel = MutableStateFlow<RequestModel>(RequestModel(-1, "-1", "-1"))
+    private val _requestModel = MutableStateFlow(RequestModel(-1, "-1", Body.Text(""), header = emptyList(), query = emptyList(), type = HttpType.GET, url = ""))
     val requestModel = _requestModel.asStateFlow()
 
     val listOfRequests = getListOfRequestsUseCase.execute().flatMapLatest { list ->
@@ -114,6 +114,16 @@ class MainActivityViewModel(
             }
         }
 
+    }
+
+    fun updateHttpRequest(updateHttpRequestModel: UpdateHttpRequestModel){
+        when(updateHttpRequestModel){
+            is UpdateHttpRequestModel.Body -> {_requestModel.value = _requestModel.value.copy(body = updateHttpRequestModel.body)}
+            is UpdateHttpRequestModel.Header -> {_requestModel.value = _requestModel.value.copy(header = updateHttpRequestModel.header)}
+            is UpdateHttpRequestModel.Query -> {_requestModel.value = _requestModel.value.copy(query = updateHttpRequestModel.query)}
+            is UpdateHttpRequestModel.Type -> {_requestModel.value = _requestModel.value.copy(type = updateHttpRequestModel.type)}
+            is UpdateHttpRequestModel.Url -> {_requestModel.value = _requestModel.value.copy(url = updateHttpRequestModel.url)}
+        }
     }
 
     fun save(){

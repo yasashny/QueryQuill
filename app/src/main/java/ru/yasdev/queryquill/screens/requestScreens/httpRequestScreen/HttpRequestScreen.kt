@@ -36,6 +36,7 @@ import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,14 +44,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import ru.yasdev.domain.requestsDb.models.HttpType
 import ru.yasdev.queryquill.activity.MainActivityViewModel
+import ru.yasdev.queryquill.activity.UpdateHttpRequestModel
 import ru.yasdev.queryquill.components.SegmentedButtonSingleSelect
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("StateFlowValueCalledInComposition", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HttpRequestScreen(viewModel: MainActivityViewModel) {
-
+    val url = viewModel.requestModel.collectAsState().value.url
+    val type = viewModel.requestModel.collectAsState().value.type.name
     Scaffold(floatingActionButton = {
         ExtendedFloatingActionButton(onClick = { /*TODO*/ }, icon = { Icon(
             imageVector = Icons.AutoMirrored.Outlined.Send,
@@ -65,13 +69,23 @@ fun HttpRequestScreen(viewModel: MainActivityViewModel) {
                 //.background(MaterialTheme.colorScheme.surfaceContainer)
             ){
                 DynamicSelectTextField(
-                    selectedValue = "GET",
-                    options = listOf("GET", "POST"),
+                    selectedValue = type,
+                    options = listOf(HttpType.GET.name, HttpType.POST.name, HttpType.PUT.name, HttpType.PATCH.name, HttpType.OPTIONS.name, HttpType.DELETE.name, HttpType.HEAD.name),
                     label = "Type",
-                    onValueChangedEvent = {}, modifier = Modifier.weight(1f)
+                    onValueChangedEvent = {
+                        when(it){
+                            HttpType.GET.name -> {viewModel.updateHttpRequest(UpdateHttpRequestModel.Type(HttpType.GET))}
+                            HttpType.POST.name -> {viewModel.updateHttpRequest(UpdateHttpRequestModel.Type(HttpType.POST))}
+                            HttpType.PUT.name -> {viewModel.updateHttpRequest(UpdateHttpRequestModel.Type(HttpType.PUT))}
+                            HttpType.PATCH.name -> {viewModel.updateHttpRequest(UpdateHttpRequestModel.Type(HttpType.PATCH))}
+                            HttpType.DELETE.name -> {viewModel.updateHttpRequest(UpdateHttpRequestModel.Type(HttpType.DELETE))}
+                            HttpType.OPTIONS.name -> {viewModel.updateHttpRequest(UpdateHttpRequestModel.Type(HttpType.OPTIONS))}
+                            HttpType.HEAD.name -> {viewModel.updateHttpRequest(UpdateHttpRequestModel.Type(HttpType.HEAD))}
+                        }
+                        }, modifier = Modifier.weight(1f)
                 )
 
-                OutlinedTextField(value = "", onValueChange = {}, label = @Composable{ Text(text = "Url")}, modifier = Modifier
+                OutlinedTextField(value = url, onValueChange = {viewModel.updateHttpRequest(UpdateHttpRequestModel.Url(it))}, label = @Composable{ Text(text = "Url")}, modifier = Modifier
                     .weight(2f)
                     .padding(start = 15.dp))
             }
@@ -97,13 +111,13 @@ fun HttpRequestScreen(viewModel: MainActivityViewModel) {
             Box(modifier = Modifier.fillMaxSize()){
                 when(selectedIndex.value){
                     0 -> {
-                        Body()}
+                        Body(viewModel)}
                     1 -> {
-                        Auth()}
+                        Auth(viewModel)}
                     2 -> {
-                        Header()}
+                        Header(viewModel)}
                     3 -> {
-                        Query()}
+                        Query(viewModel)}
                 }
             }
 

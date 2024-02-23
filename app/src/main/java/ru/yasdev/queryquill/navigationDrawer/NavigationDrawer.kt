@@ -26,10 +26,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.time.delay
-import ru.yasdev.domain.requestsDb.models.AddRequestModel
-import ru.yasdev.domain.utils.RequestState
-import ru.yasdev.domain.utils.ListOfRequestsState
+import ru.yasdev.domain.requestsDb.states.ListOfRequestsState
 import ru.yasdev.queryquill.activity.MainActivityViewModel
 import ru.yasdev.queryquill.activity.RequestEvent
 
@@ -64,7 +61,7 @@ fun NavigationDrawer(viewModel: MainActivityViewModel, composable: @Composable (
                                 Text(text = "Create new request")}
                             else -> {
                                 LazyColumn{
-                                    items((items as ListOfRequestsState.ListOfRequests).list) {item ->
+                                    items((items as ListOfRequestsState.ListOfRequests).list) { item ->
                                         NavigationDrawerItem(
                                             //icon = { Icon(item, contentDescription = null) },
                                             label = { Text(item.label) },

@@ -6,7 +6,8 @@ import ru.yasdev.domain.requestsDb.models.AddRequestModel
 import ru.yasdev.domain.requestsDb.models.RequestModel
 import ru.yasdev.domain.requestsDb.models.RequestsListItemModel
 
-class RequestsDbRepositoryImpl(private val requestsDbDataSource: RequestDbDataSource): RequestsDbRepository {
+class RequestsDbRepositoryImpl(private val requestsDbDataSource: RequestDbDataSource) :
+    RequestsDbRepository {
     override fun getListOfRequests(): Flow<List<RequestsListItemModel>> {
         return requestsDbDataSource.getListOfRequests()
     }

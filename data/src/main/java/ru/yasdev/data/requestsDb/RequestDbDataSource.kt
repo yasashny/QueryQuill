@@ -3,12 +3,13 @@ package ru.yasdev.data.requestsDb
 import android.content.Context
 import androidx.room.Room
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
-import ru.yasdev.data.requestsDb.models.Request
+import ru.yasdev.data.requestsDb.models.DataRequestModel
 import ru.yasdev.domain.requestsDb.models.AddRequestModel
+import ru.yasdev.domain.requestsDb.models.Body
+import ru.yasdev.domain.requestsDb.models.HttpType
 import ru.yasdev.domain.requestsDb.models.RequestModel
 import ru.yasdev.domain.requestsDb.models.RequestsListItemModel
+import ru.yasdev.domain.requestsDb.models.ListItem
 
 class RequestDbDataSource(context: Context) {
 
@@ -25,19 +26,42 @@ class RequestDbDataSource(context: Context) {
     }
 
     suspend fun getRequest(id: Int): RequestModel {
-        val model = db.dao.getRequest(id)
-        return model
+        val dataModel = db.dao.getRequest(id)
+        return RequestModel(
+            id = dataModel.id,
+            label = dataModel.label,
+            body = dataModel.body,
+            header = dataModel.header,
+            query = dataModel.query,
+            type = dataModel.type,
+            url = dataModel.url
+        )
     }
 
     suspend fun addRequest(model: AddRequestModel): RequestModel {
-        val id = db.dao.insertRequest(Request(label = model.label, test = "test"))
-        val request = getRequest(id.toInt())
-        return request
+        val id = db.dao.insertRequest(
+            DataRequestModel(
+                label = model.label, body = Body.Text(""), header = listOf(
+                    ListItem("", "")
+                ), query = emptyList(), type = HttpType.GET, url = ""
+            )
+        )
+        return getRequest(id.toInt())
 
     }
 
     suspend fun updateRequest(model: RequestModel) {
-        db.dao.insertRequest(Request(id = model.id, label = model.label, test = model.test))
+        db.dao.insertRequest(
+            DataRequestModel(
+                id = model.id,
+                label = model.label,
+                body = model.body,
+                header = model.header,
+                query = model.query,
+                type = model.type,
+                url = model.url
+            )
+        )
     }
 
     suspend fun deleteRequest(id: Int) {

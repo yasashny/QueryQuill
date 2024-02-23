@@ -17,27 +17,30 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ru.yasdev.domain.utils.ListItem
+import ru.yasdev.domain.requestsDb.models.ListItem
 
 @Composable
-fun EditableList(items: List<ListItem>) {
-    var editedItems by remember { mutableStateOf(items) }
+fun EditableList(items: List<ListItem>, onValueChanged: (items: List<ListItem>) -> Unit) {
 
     LazyColumn {
-        itemsIndexed(editedItems) { index, item ->
+        itemsIndexed(items) { index, item ->
             EditableListItem(
                 text = item,
                 onTextChanged = { newText ->
-                    editedItems = editedItems.toMutableList().also {
+                    onValueChanged(items.toMutableList().also{
                         it[index] = newText
-                    }
-                    if (index == editedItems.size - 1){
+                    })
+                    onValueChanged(items.toMutableList().also {
+                        it[index] = newText
+                    })
+                    if (index == items.size - 1){
                         Log.d("q", "q")
-                        editedItems = editedItems.toMutableList().apply { add(ListItem("", "")) }
+                        onValueChanged(items.toMutableList().apply { add(ListItem("", "")) })
                     }
-                    Log.d("sdsds", editedItems.toString())
                 },
-                deleteItem = {editedItems = editedItems.toMutableList().apply { removeAt(index) }}
+                deleteItem = {
+                    onValueChanged(items.toMutableList().apply { removeAt(index) })
+                    }
             )
         }
     }

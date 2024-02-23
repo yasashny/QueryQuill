@@ -5,7 +5,7 @@ import ru.yasdev.domain.requestsDb.models.RequestModel
 
 class UpdateRequestUseCase(private val repository: RequestsDbRepository) {
 
-    suspend fun execute(model: RequestModel){
+    suspend fun execute(model: RequestModel) {
         repository.updateRequest(model)
     }
 

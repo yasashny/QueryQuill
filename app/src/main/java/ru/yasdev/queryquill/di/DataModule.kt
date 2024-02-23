@@ -3,8 +3,8 @@ package ru.yasdev.queryquill.di
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
-import ru.yasdev.data.LastRequest.LastRequestDataSource
-import ru.yasdev.data.LastRequest.LastRequestRepositoryImpl
+import ru.yasdev.data.lastRequest.LastRequestDataSource
+import ru.yasdev.data.lastRequest.LastRequestRepositoryImpl
 import ru.yasdev.data.requestsDb.RequestDbDataSource
 import ru.yasdev.data.requestsDb.RequestsDbRepositoryImpl
 import ru.yasdev.domain.lastRequest.LastRequestRepository
