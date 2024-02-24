@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
                     Scaffold(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
                         topBar = {
                             MyTopAppBar(
-                                scrollBehavior = scrollBehavior, drawerState = drawerState, label = requestModel.label
+                                scrollBehavior = scrollBehavior, drawerState = drawerState, label = requestModel.label, updateRequest = mainActivityViewModel::updateHttpRequest
                             )
                         }) {
                         Surface(

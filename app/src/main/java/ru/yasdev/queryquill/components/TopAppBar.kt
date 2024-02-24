@@ -13,13 +13,21 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.text.style.TextOverflow
 import kotlinx.coroutines.launch
+import ru.yasdev.queryquill.activity.UpdateHttpRequestModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyTopAppBar(scrollBehavior: TopAppBarScrollBehavior, drawerState: DrawerState, label: String) {
+fun MyTopAppBar(
+    scrollBehavior: TopAppBarScrollBehavior,
+    drawerState: DrawerState,
+    label: String,
+    updateRequest: (UpdateHttpRequestModel) -> Unit
+) {
     TopAppBar(title = {
         Text(
             label, maxLines = 1, overflow = TextOverflow.Ellipsis
@@ -34,7 +42,22 @@ fun MyTopAppBar(scrollBehavior: TopAppBarScrollBehavior, drawerState: DrawerStat
 
 
     }, actions = {
-        IconButton(onClick = {}) {
+        val openDialog = remember {
+            mutableStateOf(false)
+        }
+        val flag = remember {
+            mutableStateOf<String?>(null)
+        }
+        if (flag.value != null){
+            updateRequest(UpdateHttpRequestModel.Label(flag.value as String))
+            flag.value = null
+        }
+        if (openDialog.value){
+            ChangeLabelAlertDialog(openDialog, flag)
+        }
+        IconButton(onClick = {
+            openDialog.value = true
+        }) {
             Icon(
                 imageVector = Icons.Outlined.Edit, contentDescription = "Localized description"
             )

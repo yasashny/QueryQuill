@@ -140,7 +140,8 @@ class MainActivityViewModel(
                 _requestModel.value = _requestModel.value.copy(url = updateHttpRequestModel.url)
             }
             is UpdateHttpRequestModel.Label -> {
-
+                _requestModel.value = _requestModel.value.copy(label = updateHttpRequestModel.label)
+                save()
             }
         }
     }
