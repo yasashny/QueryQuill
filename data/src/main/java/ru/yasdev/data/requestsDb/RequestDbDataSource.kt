@@ -7,6 +7,7 @@ import ru.yasdev.data.requestsDb.models.DataRequestModel
 import ru.yasdev.domain.requestsDb.models.AddRequestModel
 import ru.yasdev.domain.requestsDb.models.Body
 import ru.yasdev.domain.requestsDb.models.HttpType
+import ru.yasdev.domain.requestsDb.models.ImmutableList
 import ru.yasdev.domain.requestsDb.models.RequestModel
 import ru.yasdev.domain.requestsDb.models.RequestsListItemModel
 import ru.yasdev.domain.requestsDb.models.ListItem
@@ -31,8 +32,8 @@ class RequestDbDataSource(context: Context) {
             id = dataModel.id,
             label = dataModel.label,
             body = dataModel.body,
-            header = dataModel.header,
-            query = dataModel.query,
+            header = ImmutableList( dataModel.header),
+            query = ImmutableList(dataModel.query),
             type = dataModel.type,
             url = dataModel.url
         )
@@ -56,8 +57,8 @@ class RequestDbDataSource(context: Context) {
                 id = model.id,
                 label = model.label,
                 body = model.body,
-                header = model.header,
-                query = model.query,
+                header = model.header.list,
+                query = model.query.list,
                 type = model.type,
                 url = model.url
             )

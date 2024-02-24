@@ -13,7 +13,7 @@ fun Header(requestModel: RequestModel,
            updateRequest: KFunction1<UpdateHttpRequestModel, Unit>
 ) {
 
-    EditableList(items = requestModel.header, onValueChanged = {
+    EditableList(items = requestModel.header.list, onValueChanged = {
         updateRequest(UpdateHttpRequestModel.Header(it))
     })
 }

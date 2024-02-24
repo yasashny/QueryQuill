@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import ru.yasdev.domain.requestsDb.models.Body
 import ru.yasdev.domain.requestsDb.models.HttpType
+import ru.yasdev.domain.requestsDb.models.ImmutableList
 import ru.yasdev.domain.requestsDb.models.RequestModel
 import ru.yasdev.domain.useCases.AddRequestUseCase
 import ru.yasdev.domain.useCases.DeleteRequestUseCase
@@ -43,8 +44,8 @@ class MainActivityViewModel(
             -1,
             "-1",
             Body.Text(""),
-            header = emptyList(),
-            query = emptyList(),
+            header = ImmutableList( emptyList()),
+            query = ImmutableList(emptyList()),
             type = HttpType.GET,
             url = ""
         )
@@ -124,11 +125,11 @@ class MainActivityViewModel(
 
             is UpdateHttpRequestModel.Header -> {
                 _requestModel.value =
-                    _requestModel.value.copy(header = updateHttpRequestModel.header)
+                    _requestModel.value.copy(header = ImmutableList(updateHttpRequestModel.header))
             }
 
             is UpdateHttpRequestModel.Query -> {
-                _requestModel.value = _requestModel.value.copy(query = updateHttpRequestModel.query)
+                _requestModel.value = _requestModel.value.copy(query = ImmutableList(updateHttpRequestModel.query))
             }
 
             is UpdateHttpRequestModel.Type -> {

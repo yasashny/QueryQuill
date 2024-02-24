@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import ru.yasdev.domain.requestsDb.models.RequestModel
 import ru.yasdev.domain.requestsDb.states.RequestState
-import ru.yasdev.queryquill.activity.MainActivityViewModel
 import ru.yasdev.queryquill.activity.RequestEvent
 import ru.yasdev.queryquill.activity.UpdateHttpRequestModel
 import ru.yasdev.queryquill.adaptive.ScreenState
@@ -30,8 +29,6 @@ fun MainScreen(
     requestState: RequestState,
     updateRequest: KFunction1<UpdateHttpRequestModel, Unit>,
     onEvent: KFunction1<RequestEvent, Unit>
-
-
 ) {
 
     when (screenState) {

@@ -10,6 +10,7 @@ import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,49 +25,53 @@ fun EditableList(items: List<ListItem>, onValueChanged: (items: List<ListItem>) 
 
     LazyColumn {
         itemsIndexed(items) { index, item ->
-            EditableListItem(text = item, onTextChanged = { newText ->
-                onValueChanged(items.toMutableList().also {
-                    it[index] = newText
-                })
-                onValueChanged(items.toMutableList().also {
-                    it[index] = newText
-                })
+            EditableListItem(listItem = item, onTextChanged = { listItem ->
+                val updatedItems = items.toMutableList()
+                updatedItems[index] = listItem
+                onValueChanged(updatedItems)
                 if (index == items.size - 1) {
-                    Log.d("q", "q")
-                    onValueChanged(items.toMutableList().apply { add(ListItem("", "")) })
+                    val newItemList = updatedItems.toMutableList()
+                    newItemList.add(ListItem("", ""))
+                    onValueChanged(newItemList)
                 }
             }, deleteItem = {
-                onValueChanged(items.toMutableList().apply { removeAt(index) })
-            })
+                val updatedItems = items.toMutableList()
+                updatedItems.removeAt(index)
+                onValueChanged(updatedItems)
+            },
+                deleteButtonEnabled = {if (items.size - 1 == index) false else true })
+
+
         }
     }
 }
 
 @Composable
 fun EditableListItem(
-    text: ListItem, onTextChanged: (ListItem) -> Unit, deleteItem: () -> Unit
+    listItem: ListItem, onTextChanged: (ListItem) -> Unit, deleteItem: () -> Unit, deleteButtonEnabled: () -> Boolean
 ) {
-    var item by remember { mutableStateOf(text) }
 
     Row {
         OutlinedTextField(
-            value = item.name, onValueChange = {
-                item = ListItem(it, item.value)
-                onTextChanged(item)
-            }, modifier = Modifier
+            value = listItem.name, onValueChange = {
+                onTextChanged(ListItem(it, listItem.value))
+            },
+            label = { Text(text = "Name")}
+            , modifier = Modifier
                 .padding(start = 15.dp, top = 15.dp)
                 .weight(1f)
         )
-        OutlinedTextField(value = item.value, trailingIcon = {
-            IconButton(onClick = { deleteItem() }, enabled = text != ListItem("", "")) {
+        OutlinedTextField(value = listItem.value, trailingIcon = {
+            IconButton(onClick = { deleteItem() }, enabled = deleteButtonEnabled()) {
                 Icon(imageVector = Icons.Outlined.Delete, contentDescription = "")
             }
         }, onValueChange = {
-            item = ListItem(item.name, it)
-            onTextChanged(item)
-        }, modifier = Modifier
-            .padding(start = 15.dp, end = 15.dp, top = 15.dp)
-            .weight(2f)
+            onTextChanged(ListItem(listItem.name, it))
+        },
+            label = { Text(text = "Value")}
+            , modifier = Modifier
+                .padding(start = 15.dp, end = 15.dp, top = 15.dp)
+                .weight(2f)
         )
     }
 
