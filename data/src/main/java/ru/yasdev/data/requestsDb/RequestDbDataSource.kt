@@ -44,7 +44,7 @@ class RequestDbDataSource(context: Context) {
             DataRequestModel(
                 label = model.label, body = Body.Text(""), header = listOf(
                     ListItem("", "")
-                ), query = emptyList(), type = HttpType.GET, url = ""
+                ), query = listOf(ListItem("", "")), type = HttpType.GET, url = ""
             )
         )
         return getRequest(id.toInt())

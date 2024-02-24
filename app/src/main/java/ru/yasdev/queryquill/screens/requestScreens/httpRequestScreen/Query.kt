@@ -12,5 +12,7 @@ import kotlin.reflect.KFunction1
 fun Query(requestModel: RequestModel,
           updateRequest: KFunction1<UpdateHttpRequestModel, Unit>
 ){
-    EditableList(items = listOf(ListItem("qqq", "qqq")), onValueChanged = {})
+    EditableList(items = requestModel.query.list, onValueChanged = {
+        updateRequest(UpdateHttpRequestModel.Query(it))
+    })
 }
