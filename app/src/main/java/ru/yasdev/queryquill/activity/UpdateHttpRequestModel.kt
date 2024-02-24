@@ -9,4 +9,5 @@ sealed interface UpdateHttpRequestModel {
     data class Query(val query: List<ListItem>) : UpdateHttpRequestModel
     data class Type(val type: HttpType) : UpdateHttpRequestModel
     data class Url(val url: String) : UpdateHttpRequestModel
+    data class Label(val label: String): UpdateHttpRequestModel
 }
