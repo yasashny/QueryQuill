@@ -24,10 +24,9 @@ fun RequestScreen(
 ) {
 
     Box(modifier = modifier) {
-
         when (requestState) {
             RequestState.Loading -> {
-                Text(text = "Loadingggg")
+                LoadingScreen()
             }
 
             RequestState.Null -> {

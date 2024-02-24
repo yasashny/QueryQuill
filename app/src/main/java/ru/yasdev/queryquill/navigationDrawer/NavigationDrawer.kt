@@ -1,21 +1,30 @@
 package ru.yasdev.queryquill.navigationDrawer
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -23,6 +32,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import ru.yasdev.domain.requestsDb.states.ListOfRequestsState
@@ -44,16 +54,41 @@ fun NavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
+
+
                 Spacer(Modifier.height(12.dp))
-                Button(onClick = {
-                    scope.launch {
-                        drawerState.close()
-                        viewModel.onEvent(RequestEvent.SetRequest(null))
+                Row {
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(imageVector = Icons.Outlined.Settings, contentDescription = "")
                     }
+                    OutlinedButton(
+                        onClick = {
+                            scope.launch {
+                                drawerState.close()
+                                viewModel.onEvent(RequestEvent.SetRequest(null))
+                            }
 
-                }) {
+                        },
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 15.dp)
+                            .height(50.dp)
+                    ) {
+                            Text(text = "New request", fontSize = MaterialTheme.typography.titleMedium.fontSize, modifier = Modifier.padding(end = 15.dp))
+                            Icon(imageVector = Icons.Outlined.Add, contentDescription = "")
 
+
+                    }
                 }
+
+                Spacer(Modifier.height(12.dp))
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .height(1.dp)
+                        .background(MaterialTheme.colorScheme.outlineVariant)
+                )
+                Spacer(Modifier.height(12.dp))
 
                 when (items) {
 
