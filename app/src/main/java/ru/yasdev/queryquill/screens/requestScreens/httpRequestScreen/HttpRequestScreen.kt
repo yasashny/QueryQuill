@@ -45,16 +45,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ru.yasdev.domain.requestsDb.models.HttpType
+import ru.yasdev.domain.requestsDb.models.RequestModel
 import ru.yasdev.queryquill.activity.MainActivityViewModel
 import ru.yasdev.queryquill.activity.UpdateHttpRequestModel
 import ru.yasdev.queryquill.components.SegmentedButtonSingleSelect
+import kotlin.reflect.KFunction1
 
-@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("StateFlowValueCalledInComposition", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun HttpRequestScreen(viewModel: MainActivityViewModel) {
-    val url = viewModel.requestModel.collectAsState().value.url
-    val type = viewModel.requestModel.collectAsState().value.type.name
+fun HttpRequestScreen(requestModel: RequestModel,
+                      updateRequest: KFunction1<UpdateHttpRequestModel, Unit>,) {
     Scaffold(floatingActionButton = {
         ExtendedFloatingActionButton(onClick = { /*TODO*/ }, icon = {
             Icon(
@@ -70,7 +70,7 @@ fun HttpRequestScreen(viewModel: MainActivityViewModel) {
                 //.background(MaterialTheme.colorScheme.surfaceContainer)
             ) {
                 DynamicSelectTextField(
-                    selectedValue = type, options = listOf(
+                    selectedValue = requestModel.type.name, options = listOf(
                         HttpType.GET.name,
                         HttpType.POST.name,
                         HttpType.PUT.name,
@@ -80,40 +80,20 @@ fun HttpRequestScreen(viewModel: MainActivityViewModel) {
                         HttpType.HEAD.name
                     ), label = "Type", onValueChangedEvent = {
                         when (it) {
-                            HttpType.GET.name -> {
-                                viewModel.updateHttpRequest(UpdateHttpRequestModel.Type(HttpType.GET))
-                            }
-
-                            HttpType.POST.name -> {
-                                viewModel.updateHttpRequest(UpdateHttpRequestModel.Type(HttpType.POST))
-                            }
-
-                            HttpType.PUT.name -> {
-                                viewModel.updateHttpRequest(UpdateHttpRequestModel.Type(HttpType.PUT))
-                            }
-
-                            HttpType.PATCH.name -> {
-                                viewModel.updateHttpRequest(UpdateHttpRequestModel.Type(HttpType.PATCH))
-                            }
-
-                            HttpType.DELETE.name -> {
-                                viewModel.updateHttpRequest(UpdateHttpRequestModel.Type(HttpType.DELETE))
-                            }
-
-                            HttpType.OPTIONS.name -> {
-                                viewModel.updateHttpRequest(UpdateHttpRequestModel.Type(HttpType.OPTIONS))
-                            }
-
-                            HttpType.HEAD.name -> {
-                                viewModel.updateHttpRequest(UpdateHttpRequestModel.Type(HttpType.HEAD))
-                            }
+                            HttpType.GET.name -> { updateRequest(UpdateHttpRequestModel.Type(HttpType.GET)) }
+                            HttpType.POST.name -> { updateRequest(UpdateHttpRequestModel.Type(HttpType.POST)) }
+                            HttpType.PUT.name -> { updateRequest(UpdateHttpRequestModel.Type(HttpType.PUT)) }
+                            HttpType.PATCH.name -> { updateRequest(UpdateHttpRequestModel.Type(HttpType.PATCH)) }
+                            HttpType.DELETE.name -> { updateRequest(UpdateHttpRequestModel.Type(HttpType.DELETE)) }
+                            HttpType.OPTIONS.name -> { updateRequest(UpdateHttpRequestModel.Type(HttpType.OPTIONS)) }
+                            HttpType.HEAD.name -> { updateRequest(UpdateHttpRequestModel.Type(HttpType.HEAD)) }
                         }
                     }, modifier = Modifier.weight(1f)
                 )
 
                 OutlinedTextField(
-                    value = url,
-                    onValueChange = { viewModel.updateHttpRequest(UpdateHttpRequestModel.Url(it)) },
+                    value = requestModel.url,
+                    onValueChange = { updateRequest(UpdateHttpRequestModel.Url(it)) },
                     label = @Composable { Text(text = "Url") },
                     modifier = Modifier
                         .weight(2f)
@@ -144,19 +124,19 @@ fun HttpRequestScreen(viewModel: MainActivityViewModel) {
             Box(modifier = Modifier.fillMaxSize()) {
                 when (selectedIndex.value) {
                     0 -> {
-                        Body(viewModel)
+                        Body(requestModel, updateRequest)
                     }
 
                     1 -> {
-                        Auth(viewModel)
+                        Auth(requestModel, updateRequest)
                     }
 
                     2 -> {
-                        Header(viewModel)
+                        Header(requestModel, updateRequest)
                     }
 
                     3 -> {
-                        Query(viewModel)
+                        Query(requestModel, updateRequest)
                     }
                 }
             }
@@ -207,54 +187,5 @@ fun DynamicSelectTextField(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DynamicSelectTab(
-    selectedValue: String,
-    options: List<String>,
-    label: String,
-    onValueChangedEvent: (String) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    var expanded by remember { mutableStateOf(false) }
-
-    ExposedDropdownMenuBox(
-        expanded = expanded, onExpandedChange = { expanded = !expanded }, modifier = modifier
-    ) {
-        FilterChip(selected = true, onClick = { /*TODO*/ }, label = { "djfkdjf" }, trailingIcon = {
-            ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
-        }, modifier = Modifier
-            .menuAnchor()
-            .fillMaxWidth()
-        )
-
-        ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            options.forEach { option: String ->
-                DropdownMenuItem(text = { Text(text = option) }, onClick = {
-                    expanded = false
-                    onValueChangedEvent(option)
-                })
-            }
-        }
-    }
-}
 
 
-@Composable
-fun FilterChipSample() {
-    var selected by remember { mutableStateOf(false) }
-    FilterChip(selected = selected,
-        onClick = { selected = !selected },
-        label = { Text("Filter chip") },
-        leadingIcon = if (selected) {
-            {
-                Icon(
-                    imageVector = Icons.Filled.Done,
-                    contentDescription = "Localized Description",
-                    modifier = Modifier.size(FilterChipDefaults.IconSize)
-                )
-            }
-        } else {
-            null
-        })
-}

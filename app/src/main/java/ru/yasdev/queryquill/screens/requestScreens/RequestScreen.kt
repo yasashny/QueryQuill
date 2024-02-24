@@ -6,27 +6,36 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import ru.yasdev.domain.requestsDb.models.RequestModel
 import ru.yasdev.domain.requestsDb.states.RequestState
 import ru.yasdev.queryquill.activity.MainActivityViewModel
+import ru.yasdev.queryquill.activity.RequestEvent
+import ru.yasdev.queryquill.activity.UpdateHttpRequestModel
 import ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen.HttpRequestScreen
+import kotlin.reflect.KFunction1
 
 @Composable
-fun RequestScreen(modifier: Modifier, viewModel: MainActivityViewModel) {
+fun RequestScreen(
+    modifier: Modifier,
+    requestModel: RequestModel,
+    requestState: RequestState,
+    updateRequest: KFunction1<UpdateHttpRequestModel, Unit>,
+    onEvent: KFunction1<RequestEvent, Unit>
+) {
 
-    val request by viewModel.requestState.collectAsState(initial = RequestState.Loading)
     Box(modifier = modifier) {
 
-        when (request) {
+        when (requestState) {
             RequestState.Loading -> {
                 Text(text = "Loadingggg")
             }
 
             RequestState.Null -> {
-                NewRequestScreen(mainViewModel = viewModel)
+                NewRequestScreen(onEvent)
             }
 
             RequestState.Request -> {
-                HttpRequestScreen(viewModel = viewModel)
+                HttpRequestScreen(requestModel = requestModel, updateRequest = updateRequest)
             }
 
             else -> {

@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import ru.yasdev.domain.requestsDb.models.AddRequestModel
-import ru.yasdev.queryquill.activity.MainActivityViewModel
 import ru.yasdev.queryquill.activity.RequestEvent
+import kotlin.reflect.KFunction1
 
 class NewRequestScreenViewModel: ViewModel() {
 
@@ -16,7 +16,7 @@ class NewRequestScreenViewModel: ViewModel() {
         _label.value = label
     }
 
-    fun addRequest(viewModel: MainActivityViewModel){
-        viewModel.onEvent(RequestEvent.AddRequest(AddRequestModel(label.value)))
+    fun addRequest(onEvent: KFunction1<RequestEvent, Unit>){
+        onEvent(RequestEvent.AddRequest(AddRequestModel(label.value)))
     }
 }

@@ -9,19 +9,29 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import ru.yasdev.domain.requestsDb.models.RequestModel
+import ru.yasdev.domain.requestsDb.states.RequestState
 import ru.yasdev.queryquill.activity.MainActivityViewModel
+import ru.yasdev.queryquill.activity.RequestEvent
+import ru.yasdev.queryquill.activity.UpdateHttpRequestModel
 import ru.yasdev.queryquill.adaptive.ScreenState
 import ru.yasdev.queryquill.components.PrimaryTextTabs
 import ru.yasdev.queryquill.screens.requestScreens.RequestScreen
 import ru.yasdev.queryquill.screens.responseScreens.httpResponseScreen.HttpResponseScreen
 import ru.yasdev.queryquill.screens.responseScreens.httpResponseScreen.HttpResponseScreenViewModel
+import kotlin.reflect.KFunction1
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MainScreen(
     screenState: ScreenState,
-    viewModel: MainActivityViewModel,
-    responseVM: HttpResponseScreenViewModel
+    responseVM: HttpResponseScreenViewModel,
+    requestModel: RequestModel,
+    requestState: RequestState,
+    updateRequest: KFunction1<UpdateHttpRequestModel, Unit>,
+    onEvent: KFunction1<RequestEvent, Unit>
+
+
 ) {
 
     when (screenState) {
@@ -36,7 +46,11 @@ fun MainScreen(
                 ) {
                     when (it) {
                         0 -> RequestScreen(
-                            modifier = Modifier.fillMaxSize(), viewModel = viewModel
+                            modifier = Modifier.fillMaxSize(),
+                            requestModel = requestModel,
+                            requestState = requestState,
+                            updateRequest = updateRequest,
+                            onEvent = onEvent
                         )
 
                         1 -> HttpResponseScreen(
@@ -55,7 +69,11 @@ fun MainScreen(
                 RequestScreen(
                     modifier = Modifier
                         .fillMaxSize()
-                        .weight(1f), viewModel = viewModel
+                        .weight(1f),
+                    requestModel = requestModel,
+                    requestState = requestState,
+                    updateRequest = updateRequest,
+                    onEvent = onEvent
                 )
                 HttpResponseScreen(
                     modifier = Modifier
@@ -72,7 +90,11 @@ fun MainScreen(
                 RequestScreen(
                     modifier = Modifier
                         .fillMaxSize()
-                        .weight(1f), viewModel = viewModel
+                        .weight(1f),
+                    requestModel = requestModel,
+                    requestState = requestState,
+                    updateRequest = updateRequest,
+                    onEvent = onEvent
                 )
                 HttpResponseScreen(
                     modifier = Modifier

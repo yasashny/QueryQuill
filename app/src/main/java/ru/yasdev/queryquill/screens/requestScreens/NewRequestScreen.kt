@@ -19,10 +19,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.koinViewModel
-import ru.yasdev.queryquill.activity.MainActivityViewModel
+import ru.yasdev.queryquill.activity.RequestEvent
+import kotlin.reflect.KFunction1
 
 @Composable
-fun NewRequestScreen(mainViewModel: MainActivityViewModel) {
+fun NewRequestScreen(onEvent: KFunction1<RequestEvent, Unit>) {
     val viewModel = koinViewModel<NewRequestScreenViewModel>()
 
     Box(
@@ -55,7 +56,7 @@ fun NewRequestScreen(mainViewModel: MainActivityViewModel) {
                         .padding(top = 15.dp),
                     label = @Composable { Text(text = "label") })
                 OutlinedButton(
-                    onClick = { viewModel.addRequest(mainViewModel) }, modifier = Modifier
+                    onClick = { viewModel.addRequest(onEvent) }, modifier = Modifier
                         .align(
                             Alignment.CenterHorizontally
                         )

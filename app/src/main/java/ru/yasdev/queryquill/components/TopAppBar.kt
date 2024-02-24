@@ -19,10 +19,10 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyTopAppBar(scrollBehavior: TopAppBarScrollBehavior, drawerState: DrawerState) {
+fun MyTopAppBar(scrollBehavior: TopAppBarScrollBehavior, drawerState: DrawerState, label: String) {
     TopAppBar(title = {
         Text(
-            "QueryQuill", maxLines = 1, overflow = TextOverflow.Ellipsis
+            label, maxLines = 1, overflow = TextOverflow.Ellipsis
         )
     }, navigationIcon = {
 

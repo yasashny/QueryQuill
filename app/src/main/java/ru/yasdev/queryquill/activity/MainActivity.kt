@@ -11,9 +11,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import org.koin.androidx.compose.koinViewModel
+import ru.yasdev.domain.requestsDb.states.RequestState
 import ru.yasdev.queryquill.components.MyTopAppBar
 import ru.yasdev.queryquill.ui.theme.QueryQuillTheme
 import ru.yasdev.queryquill.adaptive.adaptiveScreenManager
@@ -32,6 +35,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             mainActivityViewModel = koinViewModel<MainActivityViewModel>()
+            val requestModel by mainActivityViewModel.requestModel.collectAsState()
+            val requestState by mainActivityViewModel.requestState.collectAsState()
             QueryQuillTheme {
                 NavigationDrawer(mainActivityViewModel) { drawerState ->
                     val windowSizeClass = calculateWindowSizeClass(this)
@@ -42,7 +47,7 @@ class MainActivity : ComponentActivity() {
                     Scaffold(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
                         topBar = {
                             MyTopAppBar(
-                                scrollBehavior = scrollBehavior, drawerState = drawerState
+                                scrollBehavior = scrollBehavior, drawerState = drawerState, label = requestModel.label
                             )
                         }) {
                         Surface(
@@ -52,8 +57,12 @@ class MainActivity : ComponentActivity() {
                         ) {
                             MainScreen(
                                 screenState = screenState,
-                                viewModel = mainActivityViewModel,
-                                responseVM = httpResponseScreenViewModel
+                                responseVM = httpResponseScreenViewModel,
+                                requestModel = requestModel,
+                                requestState = requestState,
+                                updateRequest = mainActivityViewModel::updateHttpRequest,
+                                onEvent = mainActivityViewModel::onEvent
+
                             )
 
                         }

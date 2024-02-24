@@ -16,13 +16,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ru.yasdev.domain.requestsDb.models.ListItem
+import ru.yasdev.domain.requestsDb.models.RequestModel
 import ru.yasdev.queryquill.activity.MainActivityViewModel
+import ru.yasdev.queryquill.activity.UpdateHttpRequestModel
 import ru.yasdev.queryquill.components.EditableList
 import ru.yasdev.queryquill.components.SegmentedButtonSingleSelect
+import kotlin.reflect.KFunction1
 
 @Composable
-fun Body(viewModel: MainActivityViewModel) {
-    val body = viewModel.requestModel.collectAsState().value.body
+fun Body(requestModel: RequestModel,
+         updateRequest: KFunction1<UpdateHttpRequestModel, Unit>
+) {
     Column {
         val selectedIndex = remember { mutableStateOf(0) }
         Row {
