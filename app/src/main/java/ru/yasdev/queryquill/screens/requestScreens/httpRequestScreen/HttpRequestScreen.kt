@@ -9,34 +9,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Send
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Send
-import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,7 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ru.yasdev.domain.requestsDb.models.HttpType
 import ru.yasdev.domain.requestsDb.models.RequestModel
-import ru.yasdev.queryquill.activity.MainActivityViewModel
 import ru.yasdev.queryquill.activity.UpdateHttpRequestModel
 import ru.yasdev.queryquill.components.SegmentedButtonSingleSelect
 import kotlin.reflect.KFunction1
@@ -110,7 +95,7 @@ fun HttpRequestScreen(requestModel: RequestModel,
                     //.background(MaterialTheme.colorScheme.surfaceContainer)
                 ) {
                     val options = listOf("Body", "Auth", "Header", "Query")
-                    SegmentedButtonSingleSelect(selectedIndex, options)
+                    SegmentedButtonSingleSelect(selectedIndex, options, onClick = {selectedIndex.value = it})
                 }
 
             }
@@ -124,7 +109,7 @@ fun HttpRequestScreen(requestModel: RequestModel,
             Box(modifier = Modifier.fillMaxSize()) {
                 when (selectedIndex.value) {
                     0 -> {
-                        Body(requestModel, updateRequest)
+                        BodyScreen(requestModel, updateRequest)
                     }
 
                     1 -> {

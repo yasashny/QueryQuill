@@ -10,12 +10,12 @@ import androidx.compose.runtime.MutableState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SegmentedButtonSingleSelect(selectedIndex: MutableState<Int>, options: List<String>) {
+fun SegmentedButtonSingleSelect(selectedIndex: MutableState<Int>, options: List<String>, onClick: (Int) -> Unit) {
     SingleChoiceSegmentedButtonRow {
         options.forEachIndexed { index, label ->
             SegmentedButton(
                 shape = SegmentedButtonDefaults.itemShape(index = index, count = options.size),
-                onClick = { selectedIndex.value = index },
+                onClick = { onClick(index) },
                 selected = index == selectedIndex.value
             ) {
                 Text(label)
