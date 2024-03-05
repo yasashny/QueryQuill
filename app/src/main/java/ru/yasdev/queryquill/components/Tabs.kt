@@ -39,6 +39,7 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.Measurable
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,9 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-
-
-
+import ru.yasdev.queryquill.R
 
 
 @Composable
@@ -69,7 +68,21 @@ fun PrimaryTextTabs(pagerState: PagerState) {
                            }
                     },
                     text = { Text(text = title, maxLines = 2, overflow = TextOverflow.Ellipsis) },
-                    icon = { Icon(imageVector = Icons.AutoMirrored.Outlined.Send, contentDescription = "")}
+                    icon = {
+                        if (index == 0) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_north_24),
+                                contentDescription = ""
+                            )
+                        }
+                        else{
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_south_24),
+                                contentDescription = ""
+                            )
+                        }
+                    }
+
                 )
             }
         }
