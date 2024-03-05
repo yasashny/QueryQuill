@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.text.style.TextOverflow
 import kotlinx.coroutines.launch
+import ru.yasdev.domain.requestsDb.states.RequestState
 import ru.yasdev.queryquill.activity.UpdateHttpRequestModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -26,12 +27,21 @@ fun MyTopAppBar(
     scrollBehavior: TopAppBarScrollBehavior,
     drawerState: DrawerState,
     label: String,
-    updateRequest: (UpdateHttpRequestModel) -> Unit
+    updateRequest: (UpdateHttpRequestModel) -> Unit,
+    requestState: RequestState
 ) {
     TopAppBar(title = {
-        Text(
-            label, maxLines = 1, overflow = TextOverflow.Ellipsis
-        )
+        if( requestState == RequestState.Request){
+            Text(
+                label, maxLines = 1, overflow = TextOverflow.Ellipsis
+            )
+        }
+        else{
+            Text(
+                "QueryQuill", maxLines = 1, overflow = TextOverflow.Ellipsis
+            )
+        }
+
     }, navigationIcon = {
 
         val scope = rememberCoroutineScope()
@@ -55,13 +65,26 @@ fun MyTopAppBar(
         if (openDialog.value){
             ChangeLabelAlertDialog(openDialog, flag)
         }
-        IconButton(onClick = {
-            openDialog.value = true
-        }) {
-            Icon(
-                imageVector = Icons.Outlined.Edit, contentDescription = "Localized description"
-            )
+        if (requestState == RequestState.Request){
+            IconButton(onClick = {
+                openDialog.value = true
+            }) {
+                Icon(
+                    imageVector = Icons.Outlined.Edit, contentDescription = "Localized description"
+                )
+            }
         }
+        else{
+            IconButton(onClick = {
+                openDialog.value = true
+            },
+                enabled = false) {
+                Icon(
+                    imageVector = Icons.Outlined.Edit, contentDescription = "Localized description"
+                )
+            }
+        }
+
     }, colors = TopAppBarDefaults.topAppBarColors(
         containerColor = MaterialTheme.colorScheme.surfaceContainer
     )

@@ -42,7 +42,7 @@ class MainActivityViewModel(
     private val _requestModel = MutableStateFlow(
         RequestModel(
             -1,
-            "-1",
+            "",
             Body.Text(""),
             header = ImmutableList( emptyList()),
             query = ImmutableList(emptyList()),
@@ -74,6 +74,9 @@ class MainActivityViewModel(
     fun onEvent(requestEvent: RequestEvent) {
         when (requestEvent) {
             is RequestEvent.AddRequest -> {
+                //---
+                _requestState.value = RequestState.Loading
+                //---
                 viewModelScope.launch {
                     //_requestState.value = RequestState.Loading
                     val newRequest = addRequestUseCase.execute(requestEvent.model)
@@ -96,6 +99,9 @@ class MainActivityViewModel(
 
             is RequestEvent.SetRequest -> {
                 viewModelScope.launch {
+                    //---
+                    _requestState.value = RequestState.Loading
+                    //---
 
                     if (requestEvent.id == null) {
                         if (requestState.value == RequestState.Request) {
