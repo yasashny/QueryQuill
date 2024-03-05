@@ -45,7 +45,7 @@ fun HttpRequestScreen(requestModel: RequestModel,
             Icon(
                 imageVector = Icons.AutoMirrored.Outlined.Send, contentDescription = ""
             )
-        }, text = { Text(text = "Send request") }, modifier = Modifier.padding(end = 15.dp))
+        }, text = { Text(text = "Send request") })
     }) {
         Column {
             Row(
