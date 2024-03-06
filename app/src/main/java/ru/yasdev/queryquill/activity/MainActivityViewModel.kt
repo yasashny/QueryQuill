@@ -75,7 +75,7 @@ class MainActivityViewModel(
         when (requestEvent) {
             is RequestEvent.AddRequest -> {
                 //---
-                _requestState.value = RequestState.Loading
+                //_requestState.value = RequestState.Loading
                 //---
                 viewModelScope.launch {
                     //_requestState.value = RequestState.Loading
@@ -100,7 +100,7 @@ class MainActivityViewModel(
             is RequestEvent.SetRequest -> {
                 viewModelScope.launch {
                     //---
-                    _requestState.value = RequestState.Loading
+                    //_requestState.value = RequestState.Loading
                     //---
 
                     if (requestEvent.id == null) {
