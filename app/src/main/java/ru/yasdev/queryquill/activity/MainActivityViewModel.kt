@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import ru.yasdev.domain.requestsDb.models.Auth
 import ru.yasdev.domain.requestsDb.models.Body
 import ru.yasdev.domain.requestsDb.models.HttpType
 import ru.yasdev.domain.requestsDb.models.ImmutableList
@@ -47,7 +48,8 @@ class MainActivityViewModel(
             header = ImmutableList( emptyList()),
             query = ImmutableList(emptyList()),
             type = HttpType.GET,
-            url = ""
+            url = "",
+            auth = Auth.NoAuth
         )
     )
     val requestModel = _requestModel.asStateFlow()
@@ -148,6 +150,9 @@ class MainActivityViewModel(
             is UpdateHttpRequestModel.Label -> {
                 _requestModel.value = _requestModel.value.copy(label = updateHttpRequestModel.label)
                 save()
+            }
+            is UpdateHttpRequestModel.Auth -> {
+                _requestModel.value = _requestModel.value.copy(auth = updateHttpRequestModel.auth)
             }
         }
     }

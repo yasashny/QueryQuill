@@ -5,6 +5,7 @@ import androidx.room.Room
 import kotlinx.coroutines.flow.Flow
 import ru.yasdev.data.requestsDb.models.DataRequestModel
 import ru.yasdev.domain.requestsDb.models.AddRequestModel
+import ru.yasdev.domain.requestsDb.models.Auth
 import ru.yasdev.domain.requestsDb.models.Body
 import ru.yasdev.domain.requestsDb.models.HttpType
 import ru.yasdev.domain.requestsDb.models.ImmutableList
@@ -35,7 +36,8 @@ class RequestDbDataSource(context: Context) {
             header = ImmutableList( dataModel.header),
             query = ImmutableList(dataModel.query),
             type = dataModel.type,
-            url = dataModel.url
+            url = dataModel.url,
+            auth = dataModel.auth
         )
     }
 
@@ -44,7 +46,7 @@ class RequestDbDataSource(context: Context) {
             DataRequestModel(
                 label = model.label, body = Body.Text(""), header = listOf(
                     ListItem("", "")
-                ), query = listOf(ListItem("", "")), type = HttpType.GET, url = ""
+                ), query = listOf(ListItem("", "")), type = HttpType.GET, url = "", auth = Auth.NoAuth
             )
         )
         return getRequest(id.toInt())
@@ -60,7 +62,8 @@ class RequestDbDataSource(context: Context) {
                 header = model.header.list,
                 query = model.query.list,
                 type = model.type,
-                url = model.url
+                url = model.url,
+                auth = model.auth
             )
         )
     }

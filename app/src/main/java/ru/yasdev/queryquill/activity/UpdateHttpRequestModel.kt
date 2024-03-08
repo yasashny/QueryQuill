@@ -1,5 +1,6 @@
 package ru.yasdev.queryquill.activity
 
+import ru.yasdev.domain.requestsDb.models.Auth
 import ru.yasdev.domain.requestsDb.models.HttpType
 import ru.yasdev.domain.requestsDb.models.ListItem
 
@@ -10,4 +11,5 @@ sealed interface UpdateHttpRequestModel {
     data class Type(val type: HttpType) : UpdateHttpRequestModel
     data class Url(val url: String) : UpdateHttpRequestModel
     data class Label(val label: String): UpdateHttpRequestModel
+    data class Auth(val auth: ru.yasdev.domain.requestsDb.models.Auth): UpdateHttpRequestModel
 }

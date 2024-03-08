@@ -2,6 +2,7 @@ package ru.yasdev.data.requestsDb.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import ru.yasdev.domain.requestsDb.models.Auth
 import ru.yasdev.domain.requestsDb.models.Body
 import ru.yasdev.domain.requestsDb.models.HttpType
 import ru.yasdev.domain.requestsDb.models.ListItem
@@ -14,6 +15,7 @@ data class DataRequestModel(
     val body: Body,
     val header: List<ListItem>,
     val query: List<ListItem>,
+    val auth: Auth,
     val type: HttpType,
     val url: String
 )

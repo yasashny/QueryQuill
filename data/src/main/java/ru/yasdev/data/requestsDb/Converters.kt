@@ -2,8 +2,10 @@ package ru.yasdev.data.requestsDb
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
+import ru.yasdev.domain.requestsDb.models.Auth
 import ru.yasdev.domain.requestsDb.models.Body
 import ru.yasdev.domain.requestsDb.models.HttpType
 import ru.yasdev.domain.requestsDb.models.ListItem
@@ -60,5 +62,33 @@ object Converters {
     @TypeConverter
     fun httpTypeToString(httpType: HttpType): String {
         return httpType.name
+    }
+@TypeConverter
+    @JvmStatic
+    fun fromAuth(auth: Auth): String {
+        val jsonObject = JsonObject()
+        when (auth) {
+            is Auth.NoAuth -> jsonObject.addProperty("type", "NoAuth")
+            is Auth.Basic -> {
+                jsonObject.addProperty("type", "Basic")
+                jsonObject.addProperty("userName", auth.userName)
+                jsonObject.addProperty("password", auth.password)
+            }
+        }
+        return gson.toJson(jsonObject)
+    }
+@TypeConverter
+    @JvmStatic
+    fun toAuth(value: String): Auth {
+        val jsonObject = JsonParser.parseString(value).asJsonObject
+        return when (jsonObject.get("type").asString) {
+            "NoAuth" -> Auth.NoAuth
+            "Basic" -> {
+                val userName = jsonObject.get("userName").asString
+                val password = jsonObject.get("password").asString
+                Auth.Basic(userName, password)
+            }
+            else -> throw IllegalArgumentException("Unknown Auth type")
+        }
     }
 }

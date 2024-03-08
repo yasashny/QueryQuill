@@ -8,6 +8,7 @@ data class RequestModel(
     val body: Body,
     val header: ImmutableList,
     val query: ImmutableList,
+    val auth: Auth,
     val type: HttpType,
     val url: String
 )
