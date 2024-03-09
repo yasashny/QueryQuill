@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import ru.yasdev.domain.requestsDb.models.Body
 import ru.yasdev.domain.requestsDb.models.HttpType
 import ru.yasdev.domain.requestsDb.models.RequestModel
 import ru.yasdev.queryquill.activity.UpdateHttpRequestModel
@@ -43,8 +44,16 @@ fun HttpRequestScreen(requestModel: RequestModel,
         }, text = { Text(text = "Send request") })
     }) {
         val httpRequestHeaderState = remember { mutableStateOf(0) }
-        val bodyState = remember { mutableStateOf(0) }
         val authState = remember { mutableStateOf(0) }
+        val bodyState = remember {
+            mutableStateOf(when(requestModel.body){
+                Body.NoBody -> {0}
+                is Body.Text-> {1}
+                is Body.FormUrlEncoded -> {2}
+                Body.MultipartForm -> {3}
+                Body.BinaryFile -> {4}
+            })
+        }
         LazyColumn {
             item { HttpRequestHeader(requestModel, updateRequest, httpRequestHeaderState) }
             when (httpRequestHeaderState.value) {

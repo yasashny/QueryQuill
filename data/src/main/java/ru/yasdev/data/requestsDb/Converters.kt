@@ -18,17 +18,16 @@ object Converters {
     fun fromBody(body: Body): String {
         return gson.toJson(body)
     }
-
     @TypeConverter
     fun toBody(value: String): Body {
         val textType = object : TypeToken<Body.Text>() {}.type
-        val structuredType = object : TypeToken<Body.Structured>() {}.type
+        val formUrlEncodedType = object : TypeToken<Body.FormUrlEncoded>() {}.type
 
         val jsonObject = JsonParser.parseString(value).asJsonObject
-        return if (jsonObject.has("text")) {
-            gson.fromJson(value, textType)
-        } else {
-            gson.fromJson(value, structuredType)
+        return when {
+            jsonObject.has("text") -> gson.fromJson(value, textType)
+            jsonObject.has("list") -> gson.fromJson(value, formUrlEncodedType)
+            else -> Body.NoBody
         }
     }
 

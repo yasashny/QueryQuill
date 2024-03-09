@@ -13,12 +13,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 
 @Composable
-fun BodyScreenAlertDialog(flag: MutableState<Boolean>, openDialog: MutableState<Boolean>) {
+fun BodyScreenAlertDialog(isChangeBodyState: MutableState<Pair<Boolean, Int>>,
+                          openDialog: MutableState<Pair<Boolean, Int>>) {
 
-    if (openDialog.value) {
+    if (openDialog.value.first) {
         AlertDialog(
             onDismissRequest = {
-                openDialog.value = false
+                openDialog.value = Pair(false, openDialog.value.second)
             },
             title = {
                 Text(text = "Switch Body Type?")
@@ -29,8 +30,8 @@ fun BodyScreenAlertDialog(flag: MutableState<Boolean>, openDialog: MutableState<
             confirmButton = {
                 TextButton(
                     onClick = {
-                        flag.value = true
-                        openDialog.value = false
+                        isChangeBodyState.value = Pair(true, openDialog.value.second)
+                        openDialog.value = Pair(false, openDialog.value.second)
                     }
                 ) {
                     Text("Ok")
@@ -39,7 +40,7 @@ fun BodyScreenAlertDialog(flag: MutableState<Boolean>, openDialog: MutableState<
             dismissButton = {
                 TextButton(
                     onClick = {
-                        openDialog.value = false
+                        openDialog.value = Pair(false, openDialog.value.second)
                     }
                 ) {
                     Text("Cancel")

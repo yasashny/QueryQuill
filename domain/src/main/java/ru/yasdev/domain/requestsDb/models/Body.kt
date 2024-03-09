@@ -4,8 +4,11 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 sealed interface Body {
-    @Immutable
+
     data class Text(val text: String) : Body
-    @Immutable
-    data class Structured(val list: List<ListItem>) : Body
+    data object MultipartForm: Body
+    data class FormUrlEncoded(val list: List<ListItem>): Body
+    data object BinaryFile: Body
+    data object NoBody: Body
+
 }

@@ -20,6 +20,7 @@ import ru.yasdev.domain.requestsDb.models.ListItem
 import ru.yasdev.domain.requestsDb.models.RequestModel
 import ru.yasdev.queryquill.activity.UpdateHttpRequestModel
 import ru.yasdev.queryquill.components.BodyScreenAlertDialog
+import ru.yasdev.queryquill.components.ChipGroupSingleLine
 import ru.yasdev.queryquill.components.editableList
 import ru.yasdev.queryquill.components.SegmentedButtonSingleSelect
 import kotlin.reflect.KFunction1
@@ -30,52 +31,51 @@ fun LazyListScope.bodyScreen(
     updateRequest: KFunction1<UpdateHttpRequestModel, Unit>,
     bodyState: MutableState<Int>
 ) {
-    when (requestModel.body) {
-        is Body.Text -> {
-            bodyState.value = 0
-        }
-
-        is Body.Structured -> {
-            bodyState.value = 1
-        }
+    when(requestModel.body){
+        Body.NoBody -> {bodyState.value = 0}
+        is Body.Text -> {bodyState.value = 1}
+        is Body.FormUrlEncoded -> {bodyState.value = 2}
+        Body.MultipartForm -> {bodyState.value = 3}
+        Body.BinaryFile -> {bodyState.value = 4}
     }
+
     item {
         Row {
             Box(
                 contentAlignment = Alignment.Center, modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 15.dp, top = 15.dp)
+                    .padding(start = 25.dp, bottom = 15.dp, top = 15.dp)
             ) {
-                val options = listOf("Text", "Structured")
+                val options = listOf("No body", "Text", "Form Url Encoded", "Multiplatform", "Binary file")
                 val openDialog = remember {
-                    mutableStateOf(false)
+                    mutableStateOf(Pair(false, 0))
                 }
                 val isChangeBodyState = remember {
-                    mutableStateOf(false)
+                    mutableStateOf(Pair(false, 0))
                 }
-                if (openDialog.value) {
+                if (openDialog.value.first) {
                     BodyScreenAlertDialog(isChangeBodyState, openDialog)
                 }
-                if (isChangeBodyState.value) {
-                    changeBodyType(requestModel = requestModel, updateRequest = updateRequest)
-                    isChangeBodyState.value = false
+                if (isChangeBodyState.value.first) {
+                    changeBodyType(updateRequest = updateRequest, isChangeBodyState.value.second)
+                    isChangeBodyState.value = Pair(false, isChangeBodyState.value.second)
                 }
-                SegmentedButtonSingleSelect(selectedIndex = bodyState, options = options) {
-                    if (bodyState.value != it) {
+                ChipGroupSingleLine(selectedIndex = bodyState, options = options) {index ->
+                    if (bodyState.value != index) {
                         when (requestModel.body) {
                             is Body.Text -> {
                                 if ((requestModel.body as Body.Text).text == "") {
                                     changeBodyType(
-                                        requestModel = requestModel,
-                                        updateRequest = updateRequest
+                                        updateRequest = updateRequest,
+                                        index
                                     )
                                 } else {
-                                    openDialog.value = true
+                                    openDialog.value = Pair(true, index)
                                 }
                             }
 
-                            is Body.Structured -> {
-                                if ((requestModel.body as Body.Structured).list == listOf(
+                            is Body.FormUrlEncoded -> {
+                                if ((requestModel.body as Body.FormUrlEncoded).list == listOf(
                                         ListItem(
                                             "",
                                             ""
@@ -83,12 +83,30 @@ fun LazyListScope.bodyScreen(
                                     )
                                 ) {
                                     changeBodyType(
-                                        requestModel = requestModel,
-                                        updateRequest = updateRequest
+                                        updateRequest = updateRequest,
+                                        index
                                     )
                                 } else {
-                                    openDialog.value = true
+                                    openDialog.value = Pair(true, index)
                                 }
+                            }
+                            is Body.NoBody -> {
+                                changeBodyType(
+                                    updateRequest = updateRequest,
+                                    index
+                                )
+                            }
+                            is Body.MultipartForm -> {
+                                changeBodyType(
+                                    updateRequest = updateRequest,
+                                    index
+                                )
+                            }
+                            is Body.BinaryFile -> {
+                                changeBodyType(
+                                    updateRequest = updateRequest,
+                                    index
+                                )
                             }
                         }
 
@@ -101,41 +119,41 @@ fun LazyListScope.bodyScreen(
         }
     }
 
-    when (bodyState.value) {
-        0 -> {
-            when (requestModel.body) {
-                is Body.Text -> {
-                    item {
-                        OutlinedTextField(
-                            value = (requestModel.body as Body.Text).text,
-                            onValueChange = { updateRequest(UpdateHttpRequestModel.Body(Body.Text(it))) },
-                            label = @Composable { Text(text = "Json/XML") },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 15.dp, end = 15.dp, bottom = 15.dp)
-                                .heightIn(min = 150.dp)
-                        )
-                    }
+    when (requestModel.body) {
+        is Body.Text -> {
+            item {
+                OutlinedTextField(
+                    value = (requestModel.body as Body.Text).text,
+                    onValueChange = { updateRequest(UpdateHttpRequestModel.Body(Body.Text(it))) },
+                    label = @Composable { Text(text = "Json/XML") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 15.dp, end = 15.dp, bottom = 15.dp)
+                        .heightIn(min = 150.dp)
+                )
+            }
+        }
 
-                }
+        is Body.FormUrlEncoded -> {
+            editableList(
+                items = (requestModel.body as Body.FormUrlEncoded).list,
+                onValueChanged = {
+                    updateRequest(UpdateHttpRequestModel.Body(Body.FormUrlEncoded(it)))
+                })
+        }
+        Body.NoBody -> {
 
-                is Body.Structured -> {}
+        }
+        Body.MultipartForm -> {
+            item {
+                Text(text = "MultipartForm")
             }
 
         }
-
-        1 -> {
-            when (requestModel.body) {
-                is Body.Text -> {}
-                is Body.Structured -> {
-                    editableList(
-                        items = (requestModel.body as Body.Structured).list,
-                        onValueChanged = {
-                            updateRequest(UpdateHttpRequestModel.Body(Body.Structured(it)))
-                        })
-                }
+        Body.BinaryFile -> {
+            item {
+                Text(text = "BinaryFile")
             }
-
         }
     }
 
@@ -143,16 +161,24 @@ fun LazyListScope.bodyScreen(
 }
 
 private fun changeBodyType(
-    requestModel: RequestModel,
-    updateRequest: KFunction1<UpdateHttpRequestModel, Unit>
+    updateRequest: KFunction1<UpdateHttpRequestModel, Unit>,
+    index: Int
 ) {
-    when (requestModel.body) {
-        is Body.Text -> {
-            updateRequest(UpdateHttpRequestModel.Body(Body.Structured(listOf(ListItem("", "")))))
+    when (index) {
+        0 -> {
+            updateRequest(UpdateHttpRequestModel.Body(Body.NoBody))
         }
-
-        is Body.Structured -> {
+        1 -> {
             updateRequest(UpdateHttpRequestModel.Body(Body.Text("")))
+        }
+        2 -> {
+            updateRequest(UpdateHttpRequestModel.Body(Body.FormUrlEncoded(listOf(ListItem("", "")))))
+        }
+        3 -> {
+            updateRequest(UpdateHttpRequestModel.Body(Body.MultipartForm))
+        }
+        4 -> {
+            updateRequest(UpdateHttpRequestModel.Body(Body.BinaryFile))
         }
     }
 }
