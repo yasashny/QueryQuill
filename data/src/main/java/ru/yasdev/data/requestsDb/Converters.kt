@@ -1,5 +1,6 @@
 package ru.yasdev.data.requestsDb
 
+import android.net.Uri
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.JsonObject
@@ -16,18 +17,29 @@ object Converters {
     @TypeConverter
     @JvmStatic
     fun fromBody(body: Body): String {
-        return gson.toJson(body)
+        return when (body) {
+            is Body.Text -> gson.toJson(body)
+            is Body.FormUrlEncoded -> gson.toJson(body)
+            is Body.BinaryFile -> gson.toJson(body.uri.toString())
+            is Body.MultipartForm -> gson.toJson(body)
+            is Body.NoBody -> gson.toJson(body)
+        }
     }
     @TypeConverter
+    @JvmStatic
     fun toBody(value: String): Body {
-        val textType = object : TypeToken<Body.Text>() {}.type
-        val formUrlEncodedType = object : TypeToken<Body.FormUrlEncoded>() {}.type
-
-        val jsonObject = JsonParser.parseString(value).asJsonObject
-        return when {
-            jsonObject.has("text") -> gson.fromJson(value, textType)
-            jsonObject.has("list") -> gson.fromJson(value, formUrlEncodedType)
-            else -> Body.NoBody
+        try {
+            val jsonObject = JsonParser.parseString(value).asJsonObject
+            return when {
+                jsonObject.has("text") -> gson.fromJson(value, object : TypeToken<Body.Text>() {}.type)
+                jsonObject.has("list") -> gson.fromJson(value, object : TypeToken<Body.FormUrlEncoded>() {}.type)
+                jsonObject.has("multipart") -> Body.MultipartForm
+                jsonObject.has("noBody") -> Body.NoBody
+                else -> throw IllegalArgumentException("Unknown JSON format for Body")
+            }
+        }catch (e: Exception){
+            val resValue = value.replace("\"", "")
+            return Body.BinaryFile(Uri.parse(resValue).normalizeScheme())
         }
     }
 

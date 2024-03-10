@@ -51,7 +51,7 @@ fun HttpRequestScreen(requestModel: RequestModel,
                 is Body.Text-> {1}
                 is Body.FormUrlEncoded -> {2}
                 Body.MultipartForm -> {3}
-                Body.BinaryFile -> {4}
+                is Body.BinaryFile -> {4}
             })
         }
         LazyColumn {
