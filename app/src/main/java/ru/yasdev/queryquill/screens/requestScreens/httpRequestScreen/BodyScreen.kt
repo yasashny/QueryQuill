@@ -1,8 +1,9 @@
 package ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen
 
-import android.content.Context
+import android.content.ContentResolver
 import android.content.Intent
 import android.net.Uri
+import android.provider.OpenableColumns
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
@@ -11,7 +12,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toFile
 import ru.yasdev.domain.requestsDb.models.Body
 import ru.yasdev.domain.requestsDb.models.ListItem
 import ru.yasdev.domain.requestsDb.models.RequestModel
@@ -29,10 +36,6 @@ import ru.yasdev.queryquill.activity.UpdateHttpRequestModel
 import ru.yasdev.queryquill.components.BodyScreenAlertDialog
 import ru.yasdev.queryquill.components.ChipGroupSingleLine
 import ru.yasdev.queryquill.components.editableList
-import ru.yasdev.queryquill.components.SegmentedButtonSingleSelect
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStreamReader
 import kotlin.reflect.KFunction1
 
 
@@ -184,6 +187,7 @@ fun LazyListScope.bodyScreen(
         is Body.BinaryFile -> {
 
             item {
+
                 val cxt = LocalContext.current
                 val getContent = rememberLauncherForActivityResult(
                     contract = ActivityResultContracts.OpenDocument(),
@@ -196,20 +200,34 @@ fun LazyListScope.bodyScreen(
                             updateRequest(UpdateHttpRequestModel.Body(Body.BinaryFile(selectedUri)))
                         }
                     })
-                Button(onClick = { getContent.launch(arrayOf("application/vnd.openxmlformats-officedocument.wordprocessingml.document")) }) {
-                    Text("Selected File: ${(requestModel.body as Body.BinaryFile).uri.path}")
+                
+                OutlinedCard(
+                    Modifier
+                        .padding(start = 15.dp, end = 15.dp)
+                        .fillMaxWidth()) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            modifier = Modifier
+                                .padding(15.dp)
+                                .weight(1f),
+                            text = if ((requestModel.body as Body.BinaryFile).uri == Uri.EMPTY) {
+                                "No file selected"
+                            } else {
+                                queryName(LocalContext.current.contentResolver, (requestModel.body as Body.BinaryFile).uri)
+                            },
+                        )
+                        IconButton(modifier = Modifier, onClick = { updateRequest(UpdateHttpRequestModel.Body(Body.BinaryFile(
+                            Uri.EMPTY))) }, enabled = (requestModel.body as Body.BinaryFile).uri != Uri.EMPTY) {
+                            Icon(imageVector = Icons.Outlined.Delete, contentDescription = "")
+                        }
+                    }
+
+                }
+
+                OutlinedButton(modifier = Modifier.padding(15.dp), onClick = { getContent.launch(arrayOf("*/*")) }) {
+                    Text("Selected File")
                 }
             }
-//--------------------------------SAMPLE---------------------------------------------------------
-            item {
-                val flag = remember { mutableStateOf(false) }
-                Button(onClick = { flag.value = true }) {}
-                Text(text = (requestModel.body as Body.BinaryFile).uri.toString())
-                if (flag.value){
-                    readTextFromUri(uri = (requestModel.body as Body.BinaryFile).uri, context = LocalContext.current)
-                }
-            }
-//--------------------------------SAMPLE---------------------------------------------------------
         }
     }
 
@@ -254,21 +272,11 @@ private fun changeBodyType(
     }
 }
 
-
-//------------------SAMPLE----------------------------
-@Composable
-@Throws(IOException::class)
-private fun readTextFromUri(uri: Uri, context: Context) {
-    val stringBuilder = StringBuilder()
-    context.contentResolver.openInputStream(uri)?.use { inputStream ->
-        BufferedReader(InputStreamReader(inputStream)).use { reader ->
-            var line: String? = reader.readLine()
-            while (line != null) {
-                stringBuilder.append(line)
-                line = reader.readLine()
-            }
-        }
-    }
-    Text(text = stringBuilder.toString())
+private fun queryName(resolver: ContentResolver, uri: Uri): String {
+    val returnCursor = resolver.query(uri, null, null, null, null)!!
+    val nameIndex: Int = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+    returnCursor.moveToFirst()
+    val name: String = returnCursor.getString(nameIndex)
+    returnCursor.close()
+    return name
 }
-//--------------------SAMPLE--------------------------
