@@ -24,7 +24,7 @@ fun ChipGroupSingleLine(selectedIndex: MutableState<Int>, options: List<String>,
         Row(modifier = Modifier.horizontalScroll(rememberScrollState())) {
             options.forEachIndexed { index, label ->
                 InputChip(
-                    modifier = Modifier.padding(horizontal = 4.dp),
+                    modifier = if(index == 0){Modifier.padding(start = 29.dp, end = 4.dp)}else{Modifier.padding(horizontal = 4.dp)},
                     onClick = { onClick(index) },
                     label = { Text(label) },
                     selected = index == selectedIndex.value,

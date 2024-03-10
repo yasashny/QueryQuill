@@ -71,7 +71,7 @@ fun LazyListScope.bodyScreen(
             Box(
                 contentAlignment = Alignment.Center, modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 25.dp, bottom = 15.dp, top = 15.dp)
+                    .padding(bottom = 15.dp, top = 15.dp)
             ) {
                 val options =
                     listOf("No body", "Text", "Form Url Encoded", "Multiplatform", "Binary file")
