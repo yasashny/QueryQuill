@@ -134,10 +134,16 @@ fun LazyListScope.bodyScreen(
                             }
 
                             is Body.BinaryFile -> {
-                                changeBodyType(
-                                    updateRequest = updateRequest,
-                                    index
-                                )
+                                if ((requestModel.body as Body.BinaryFile).uri == Uri.EMPTY){
+                                    changeBodyType(
+                                        updateRequest = updateRequest,
+                                        index
+                                    )
+                                }
+                                else{
+                                    openDialog.value = Pair(true, index)
+                                }
+
                             }
                         }
 
