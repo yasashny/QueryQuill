@@ -1,14 +1,21 @@
 package ru.yasdev.queryquill.screens.mainScreen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import ru.yasdev.domain.requestsDb.models.RequestModel
 import ru.yasdev.domain.requestsDb.states.RequestState
 import ru.yasdev.queryquill.activity.RequestEvent
@@ -72,10 +79,15 @@ fun MainScreen(
                     updateRequest = updateRequest,
                     onEvent = onEvent
                 )
+                Box(
+                    Modifier
+                        .fillMaxHeight()
+                        .width(1.dp)
+                        .background(MaterialTheme.colorScheme.outlineVariant)
+                )
                 HttpResponseScreen(
                     modifier = Modifier
                         .fillMaxSize()
-                        .weight(1f)
                         .weight(1f),
                     httpResponseScreenViewModel = responseVM
                 )
