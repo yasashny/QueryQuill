@@ -105,10 +105,15 @@ fun MainScreen(
                     updateRequest = updateRequest,
                     onEvent = onEvent
                 )
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .height(1.dp)
+                        .background(MaterialTheme.colorScheme.outlineVariant)
+                )
                 HttpResponseScreen(
                     modifier = Modifier
                         .fillMaxSize()
-                        .weight(1f)
                         .weight(1f),
                     httpResponseScreenViewModel = responseVM
                 )
