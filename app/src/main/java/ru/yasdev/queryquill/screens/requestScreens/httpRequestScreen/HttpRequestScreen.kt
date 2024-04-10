@@ -30,6 +30,7 @@ import ru.yasdev.domain.requestsDb.models.RequestModel
 import ru.yasdev.queryquill.activity.UpdateHttpRequestModel
 import ru.yasdev.queryquill.components.DynamicSelectTextField
 import ru.yasdev.queryquill.components.SegmentedButtonSingleSelect
+import ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen.body.bodyScreen
 import kotlin.reflect.KFunction1
 
 @SuppressLint("StateFlowValueCalledInComposition", "UnusedMaterial3ScaffoldPaddingParameter")
@@ -57,7 +58,7 @@ fun HttpRequestScreen(requestModel: RequestModel,
         LazyColumn {
             item { HttpRequestHeader(requestModel, updateRequest, httpRequestHeaderState) }
             when (httpRequestHeaderState.value) {
-                0 -> { bodyScreen(requestModel, updateRequest, bodyState) }
+                0 -> { bodyScreen(requestModel.bodyState, updateRequest) }
 
                 1 -> { authScreen(requestModel, updateRequest, authState) }
 

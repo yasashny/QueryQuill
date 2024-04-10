@@ -11,10 +11,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import ru.yasdev.domain.requestsDb.models.BodyState
+import ru.yasdev.queryquill.activity.UpdateHttpRequestModel
+import kotlin.reflect.KFunction1
 
 @Composable
-fun BodyScreenAlertDialog(isChangeBodyState: MutableState<Pair<Boolean, Int>>,
-                          openDialog: MutableState<Pair<Boolean, Int>>) {
+fun BodyScreenAlertDialog(openDialog: MutableState<Pair<Boolean, BodyState>>,
+                          updateRequest: KFunction1<UpdateHttpRequestModel, Unit>
+) {
 
     if (openDialog.value.first) {
         AlertDialog(
@@ -30,7 +34,7 @@ fun BodyScreenAlertDialog(isChangeBodyState: MutableState<Pair<Boolean, Int>>,
             confirmButton = {
                 TextButton(
                     onClick = {
-                        isChangeBodyState.value = Pair(true, openDialog.value.second)
+                        updateRequest(UpdateHttpRequestModel.Body(openDialog.value.second))
                         openDialog.value = Pair(false, openDialog.value.second)
                     }
                 ) {

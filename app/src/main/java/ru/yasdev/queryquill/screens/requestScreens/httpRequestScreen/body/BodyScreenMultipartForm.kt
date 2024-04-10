@@ -1,4 +1,4 @@
-package ru.yasdev.queryquill.components
+package ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen.body
 
 import android.content.Intent
 import android.net.Uri
@@ -34,9 +34,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import ru.yasdev.domain.requestsDb.models.KeyValue
 import ru.yasdev.domain.requestsDb.models.MultipartFormState
-import ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen.queryName
+import ru.yasdev.queryquill.utils.fileNameByUri
 
-fun LazyListScope.multipartFormList(
+
+fun LazyListScope.bodyScreenMultipartForm(
     items: List<MultipartFormState>,
     onValueChanged: (items: List<MultipartFormState>) -> Unit
 ) {
@@ -84,10 +85,7 @@ fun MultipartFormListItem(
                     .weight(1f)
             ) {
                 OutlinedTextField(readOnly = true,
-                    value = when(multipartFormState){
-                        is MultipartFormState.File -> "FILE"
-                        is MultipartFormState.Text -> "TEXT"
-                    },
+                    value = multipartFormState.name,
                     onValueChange = {},
                     label = { Text(text = "Type") },
                     trailingIcon = {
@@ -154,7 +152,7 @@ fun MultipartFormListItem(
                             text = if (multipartFormState.uri == Uri.EMPTY) {
                                 "No file selected"
                             } else {
-                                queryName(LocalContext.current.contentResolver, multipartFormState.uri)
+                                fileNameByUri(LocalContext.current.contentResolver, multipartFormState.uri)
                             },
                         )
                         IconButton(modifier = Modifier, onClick = { onTextChanged(
