@@ -50,7 +50,7 @@ fun HttpRequestScreen(requestModel: RequestModel,
                 Body.NoBody -> {0}
                 is Body.Text-> {1}
                 is Body.FormUrlEncoded -> {2}
-                Body.MultipartForm -> {3}
+                is Body.MultipartForm -> {3}
                 is Body.BinaryFile -> {4}
             })
         }

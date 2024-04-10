@@ -28,14 +28,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toFile
 import ru.yasdev.domain.requestsDb.models.Body
 import ru.yasdev.domain.requestsDb.models.ListItem
+import ru.yasdev.domain.requestsDb.models.MultipartFormState
 import ru.yasdev.domain.requestsDb.models.RequestModel
 import ru.yasdev.queryquill.activity.UpdateHttpRequestModel
 import ru.yasdev.queryquill.components.BodyScreenAlertDialog
 import ru.yasdev.queryquill.components.ChipGroupSingleLine
 import ru.yasdev.queryquill.components.editableList
+import ru.yasdev.queryquill.components.multipartFormList
 import kotlin.reflect.KFunction1
 
 
@@ -57,7 +58,7 @@ fun LazyListScope.bodyScreen(
             bodyState.value = 2
         }
 
-        Body.MultipartForm -> {
+        is Body.MultipartForm -> {
             bodyState.value = 3
         }
 
@@ -172,6 +173,7 @@ fun LazyListScope.bodyScreen(
         }
 
         is Body.FormUrlEncoded -> {
+            println("HJKKKKKKKKKKKKKKKKK")
             editableList(
                 items = (requestModel.body as Body.FormUrlEncoded).list,
                 onValueChanged = {
@@ -183,10 +185,13 @@ fun LazyListScope.bodyScreen(
 
         }
 
-        Body.MultipartForm -> {
-            item {
-                Text(text = "MultipartForm")
-            }
+        is Body.MultipartForm -> {
+            multipartFormList(
+                items = (requestModel.body as Body.MultipartForm).multipart,
+                onValueChanged = {
+                    updateRequest(UpdateHttpRequestModel.Body(Body.MultipartForm(it)))
+                }
+            )
 
         }
 
@@ -269,7 +274,9 @@ private fun changeBodyType(
         }
 
         3 -> {
-            updateRequest(UpdateHttpRequestModel.Body(Body.MultipartForm))
+            updateRequest(UpdateHttpRequestModel.Body(Body.MultipartForm(listOf(MultipartFormState.Text(
+                ListItem("", "")
+            )))))
         }
 
         4 -> {
@@ -278,7 +285,7 @@ private fun changeBodyType(
     }
 }
 
-private fun queryName(resolver: ContentResolver, uri: Uri): String {
+fun queryName(resolver: ContentResolver, uri: Uri): String {
     val returnCursor = resolver.query(uri, null, null, null, null)!!
     val nameIndex: Int = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
     returnCursor.moveToFirst()

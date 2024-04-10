@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    kotlin("plugin.serialization") version "1.9.23"
 }
 
 android {
@@ -42,4 +43,5 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation(platform("androidx.compose:compose-bom:2023.08.00"))
     implementation("androidx.compose.ui:ui")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 }
