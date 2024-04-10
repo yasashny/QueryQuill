@@ -1,28 +1,40 @@
 [versions]
 activityCompose = "1.8.2"
+appcompat = "1.6.1"
 composeBom = "2024.04.00"
 coreKtx = "1.12.0"
+datastorePreferences = "1.0.0"
 espressoCore = "3.5.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 koinAndroidxCompose = "3.5.3"
 kotlinxCoroutinesAndroid = "1.7.3"
+kotlinxSerializationJson = "1.6.0"
+ktorClientOkhttp = "2.3.9"
 lifecycleRuntimeKtx = "2.7.0"
+material = "1.11.0"
 material3Android = "1.2.1"
 material3WindowSizeClass = "1.2.1"
 navigationCompose = "2.7.7"
 roomVersion = "2.6.1"
+androidApplicationPlugin = "8.2.2"
 
 [libraries]
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
+datastore = { module = "androidx.datastore:datastore", version.ref = "datastorePreferences" }
+datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
 ext-junit = { module = "androidx.test.ext:junit", version.ref = "junitVersion" }
 junit = { module = "junit:junit", version.ref = "junit" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinAndroidxCompose" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktorClientOkhttp" }
 lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+material = { module = "com.google.android.material:material", version.ref = "material" }
 material3 = { module = "androidx.compose.material3:material3" }
 material3-android = { module = "androidx.compose.material3:material3-android", version.ref = "material3Android" }
 material3-window-size-classs = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "material3WindowSizeClass" }
@@ -38,3 +50,4 @@ ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 
 [plugins]
+android-application = { id = "com.android.application", version.ref = "androidApplicationPlugin" }

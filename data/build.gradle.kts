@@ -40,35 +40,27 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.11.0")
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
-    implementation("androidx.datastore:datastore:1.0.0")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    implementation(libs.core.ktx)
+    implementation(libs.appcompat)
+    implementation(libs.material)
+    implementation(libs.datastore.preferences)
+    implementation(libs.datastore)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.espresso.core)
 
-    implementation("io.ktor:ktor-client-okhttp:2.3.9")
+    //Ktor
+    implementation(libs.ktor.client.okhttp)
 
-//    val room_version = "2.6.1"
-//    implementation("androidx.room:room-runtime:$room_version")
-//    kapt("androidx.room:room-compiler:$room_version")
-//    implementation("androidx.room:room-ktx:$room_version")
+    //Room
+    implementation(libs.room.runtime)
+    annotationProcessor(libs.room.compiler)
+    ksp(libs.room.compiler)
+    implementation(libs.room.ktx)
 
-    val room_version = "2.6.1"
+    //Serialization
+    implementation(libs.kotlinx.serialization.json)
 
-    implementation("androidx.room:room-runtime:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
-
-
-    // To use Kotlin Symbol Processing (KSP)
-    ksp("androidx.room:room-compiler:$room_version")
-
-    // optional - Kotlin Extensions and Coroutines support for Room
-    implementation("androidx.room:room-ktx:$room_version")
-
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
-
+    
     implementation(project(":domain"))
 }

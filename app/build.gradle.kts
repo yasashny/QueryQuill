@@ -1,8 +1,7 @@
 plugins {
-    id("com.android.application")
+    alias(libs.plugins.android.application)
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
-    id("androidx.room")
 }
 
 android {
@@ -49,9 +48,6 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-    room {
-        schemaDirectory("$projectDir/schemas")
-    }
 }
 
 
@@ -75,12 +71,6 @@ dependencies {
     androidTestImplementation(libs.ui.test.junit4)
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
-
-    //Room
-    implementation(libs.room.runtime)
-    annotationProcessor(libs.room.compiler)
-    ksp(libs.room.compiler)
-    implementation(libs.room.ktx)
 
     //Coroutines
     implementation(libs.kotlinx.coroutines.android)
