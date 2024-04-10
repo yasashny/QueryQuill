@@ -1,9 +1,9 @@
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
-    id("com.google.devtools.ksp")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.google.devtools.ksp)
+    alias(libs.plugins.androidx.room)
     kotlin("plugin.serialization") version "1.9.23"
-    id("androidx.room")
 }
 
 android {
@@ -61,6 +61,6 @@ dependencies {
     //Serialization
     implementation(libs.kotlinx.serialization.json)
 
-    
+
     implementation(project(":domain"))
 }

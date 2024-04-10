@@ -14,3 +14,4 @@
 .externalNativeBuild
 .cxx
 local.properties
+/data/schemas/ru.yasdev.data.requestsDb.RequestDataBase/1.json

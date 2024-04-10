@@ -18,6 +18,9 @@ material3WindowSizeClass = "1.2.1"
 navigationCompose = "2.7.7"
 roomVersion = "2.6.1"
 androidApplicationPlugin = "8.2.2"
+kotlinVersion = "1.9.23"
+androidLibraryVersion = "8.2.2"
+kspVersion = "1.9.23-1.0.19"
 
 [libraries]
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
@@ -51,3 +54,7 @@ ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidApplicationPlugin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinVersion" }
+android-library = { id = "com.android.library", version.ref = "androidLibraryVersion" }
+google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "kspVersion" }
+androidx-room = { id = "androidx.room", version.ref = "roomVersion" }
