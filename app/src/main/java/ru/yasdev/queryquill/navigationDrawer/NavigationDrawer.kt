@@ -35,7 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import ru.yasdev.domain.requestsDb.states.ListOfRequestsState
+import ru.yasdev.queryquill.screens.requestScreens.states.ListOfRequestsState
 import ru.yasdev.queryquill.activity.MainActivityViewModel
 import ru.yasdev.queryquill.activity.RequestEvent
 

@@ -4,8 +4,8 @@ import androidx.room.TypeConverter
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
-import ru.yasdev.domain.requestsDb.models.Auth
-import ru.yasdev.domain.requestsDb.models.Body
+import ru.yasdev.domain.requestsDb.models.AuthState
+import ru.yasdev.domain.requestsDb.models.BodyState
 import ru.yasdev.domain.requestsDb.models.HttpType
 import ru.yasdev.domain.requestsDb.models.KeyValue
 import ru.yasdev.domain.requestsDb.models.MultipartFormState
@@ -24,36 +24,36 @@ object Converters {
                 MultipartFormState.File.serializer(),
             )
             polymorphic(
-                Auth::class, Auth.NoAuth::class, Auth.NoAuth.serializer()
+                AuthState::class, AuthState.NoAuth::class, AuthState.NoAuth.serializer()
             )
             polymorphic(
-                Auth::class, Auth.Basic::class, Auth.Basic.serializer()
+                AuthState::class, AuthState.Basic::class, AuthState.Basic.serializer()
             )
             polymorphic(
-                Body::class, Body.Text::class, Body.Text.serializer()
+                BodyState::class, BodyState.Text::class, BodyState.Text.serializer()
             )
             polymorphic(
-                Body::class, Body.MultipartForm::class, Body.MultipartForm.serializer()
+                BodyState::class, BodyState.MultipartForm::class, BodyState.MultipartForm.serializer()
             )
             polymorphic(
-                Body::class, Body.FormUrlEncoded::class, Body.FormUrlEncoded.serializer()
+                BodyState::class, BodyState.FormUrlEncoded::class, BodyState.FormUrlEncoded.serializer()
             )
             polymorphic(
-                Body::class, Body.BinaryFile::class, Body.BinaryFile.serializer()
+                BodyState::class, BodyState.BinaryFile::class, BodyState.BinaryFile.serializer()
             )
             polymorphic(
-                Body::class, Body.NoBody::class, Body.NoBody.serializer()
+                BodyState::class, BodyState.NoBody::class, BodyState.NoBody.serializer()
             )
         }
     }
 
     @TypeConverter
     @JvmStatic
-    fun fromBody(body: Body): String = jsonSerializer.encodeToString(body)
+    fun fromBody(bodyState: BodyState): String = jsonSerializer.encodeToString(bodyState)
 
     @TypeConverter
     @JvmStatic
-    fun toBody(value: String): Body = jsonSerializer.decodeFromString<Body>(value)
+    fun toBody(value: String): BodyState = jsonSerializer.decodeFromString<BodyState>(value)
 
     @TypeConverter
     @JvmStatic
@@ -73,11 +73,11 @@ object Converters {
 
     @TypeConverter
     @JvmStatic
-    fun fromAuth(auth: Auth): String = jsonSerializer.encodeToString(auth)
+    fun fromAuth(authState: AuthState): String = jsonSerializer.encodeToString(authState)
 
     @TypeConverter
     @JvmStatic
-    fun toAuth(value: String): Auth = jsonSerializer.decodeFromString<Auth>(value)
+    fun toAuth(value: String): AuthState = jsonSerializer.decodeFromString<AuthState>(value)
 
 }
 

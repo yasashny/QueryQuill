@@ -1,4 +1,4 @@
-package ru.yasdev.domain.requestsDb.states
+package ru.yasdev.queryquill.screens.requestScreens.states
 
 import ru.yasdev.domain.requestsDb.models.RequestsListItemModel
 

@@ -11,7 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ru.yasdev.domain.requestsDb.models.Auth
+import ru.yasdev.domain.requestsDb.models.AuthState
 import ru.yasdev.domain.requestsDb.models.RequestModel
 import ru.yasdev.queryquill.activity.UpdateHttpRequestModel
 import ru.yasdev.queryquill.components.AuthScreenAlertDialog
@@ -25,11 +25,11 @@ fun LazyListScope.authScreen(
     authState: MutableState<Int>
 ) {
     when (requestModel.auth) {
-        Auth.NoAuth -> {
+        AuthState.NoAuth -> {
             authState.value = 0
         }
 
-        is Auth.Basic -> {
+        is AuthState.Basic -> {
             authState.value = 1
         }
     }
@@ -55,12 +55,12 @@ fun LazyListScope.authScreen(
             ChipGroupSingleLine(selectedIndex = authState, options = options) { index ->
                 if (authState.value != index) {
                     when (requestModel.auth) {
-                        Auth.NoAuth -> {
+                        AuthState.NoAuth -> {
                             changeAuthType(updateRequest, index)
                         }
 
-                        is Auth.Basic -> {
-                            if (((requestModel.auth as Auth.Basic).password == "") and ((requestModel.auth as Auth.Basic).userName == "")) {
+                        is AuthState.Basic -> {
+                            if (((requestModel.auth as AuthState.Basic).password == "") and ((requestModel.auth as AuthState.Basic).userName == "")) {
                                 changeAuthType(updateRequest, index)
                             } else {
                                 openDialog.value = Pair(true, index)
@@ -75,17 +75,17 @@ fun LazyListScope.authScreen(
 
     when (requestModel.auth) {
 
-        Auth.NoAuth -> {}
-        is Auth.Basic -> {
+        AuthState.NoAuth -> {}
+        is AuthState.Basic -> {
             item {
 
                 OutlinedTextField(
-                    value = (requestModel.auth as Auth.Basic).userName, onValueChange = {
+                    value = (requestModel.auth as AuthState.Basic).userName, onValueChange = {
                         updateRequest(
                             UpdateHttpRequestModel.Auth(
-                                Auth.Basic(
+                                AuthState.Basic(
                                     it,
-                                    (requestModel.auth as Auth.Basic).password
+                                    (requestModel.auth as AuthState.Basic).password
                                 )
                             )
                         )
@@ -98,11 +98,11 @@ fun LazyListScope.authScreen(
             }
             item {
                 OutlinedTextField(
-                    value = (requestModel.auth as Auth.Basic).password, onValueChange = {
+                    value = (requestModel.auth as AuthState.Basic).password, onValueChange = {
                         updateRequest(
                             UpdateHttpRequestModel.Auth(
-                                Auth.Basic(
-                                    (requestModel.auth as Auth.Basic).userName,
+                                AuthState.Basic(
+                                    (requestModel.auth as AuthState.Basic).userName,
                                     it
                                 )
                             )
@@ -125,11 +125,11 @@ private fun changeAuthType(
 ) {
     when (index) {
         0 -> {
-            updateRequest(UpdateHttpRequestModel.Auth(Auth.NoAuth))
+            updateRequest(UpdateHttpRequestModel.Auth(AuthState.NoAuth))
         }
 
         1 -> {
-            updateRequest(UpdateHttpRequestModel.Auth(Auth.Basic("", "")))
+            updateRequest(UpdateHttpRequestModel.Auth(AuthState.Basic("", "")))
         }
 
     }

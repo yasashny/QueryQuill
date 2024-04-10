@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import ru.yasdev.domain.requestsDb.models.Auth
-import ru.yasdev.domain.requestsDb.models.Body
+import ru.yasdev.domain.requestsDb.models.AuthState
+import ru.yasdev.domain.requestsDb.models.BodyState
 import ru.yasdev.domain.requestsDb.models.HttpType
 import ru.yasdev.domain.requestsDb.models.ImmutableList
 import ru.yasdev.domain.requestsDb.models.RequestModel
@@ -22,8 +22,8 @@ import ru.yasdev.domain.useCases.GetListOfRequestsUseCase
 import ru.yasdev.domain.useCases.GetRequestUseCase
 import ru.yasdev.domain.useCases.SaveLastRequestIdUseCase
 import ru.yasdev.domain.useCases.UpdateRequestUseCase
-import ru.yasdev.domain.requestsDb.states.RequestState
-import ru.yasdev.domain.requestsDb.states.ListOfRequestsState
+import ru.yasdev.queryquill.screens.requestScreens.states.RequestState
+import ru.yasdev.queryquill.screens.requestScreens.states.ListOfRequestsState
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class MainActivityViewModel(
@@ -44,12 +44,12 @@ class MainActivityViewModel(
         RequestModel(
             -1,
             "",
-            Body.Text(""),
+            BodyState.Text(""),
             header = ImmutableList( emptyList()),
             query = ImmutableList(emptyList()),
             type = HttpType.GET,
             url = "",
-            auth = Auth.NoAuth
+            auth = AuthState.NoAuth
         )
     )
     val requestModel = _requestModel.asStateFlow()
@@ -128,7 +128,7 @@ class MainActivityViewModel(
     fun updateHttpRequest(updateHttpRequestModel: UpdateHttpRequestModel) {
         when (updateHttpRequestModel) {
             is UpdateHttpRequestModel.Body -> {
-                _requestModel.value = _requestModel.value.copy(body = updateHttpRequestModel.body)
+                _requestModel.value = _requestModel.value.copy(bodyState = updateHttpRequestModel.bodyState)
             }
 
             is UpdateHttpRequestModel.Header -> {
@@ -152,7 +152,7 @@ class MainActivityViewModel(
                 save()
             }
             is UpdateHttpRequestModel.Auth -> {
-                _requestModel.value = _requestModel.value.copy(auth = updateHttpRequestModel.auth)
+                _requestModel.value = _requestModel.value.copy(auth = updateHttpRequestModel.authState)
             }
         }
     }

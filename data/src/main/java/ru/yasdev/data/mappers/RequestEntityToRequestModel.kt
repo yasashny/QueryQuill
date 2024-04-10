@@ -8,11 +8,11 @@ fun RequestEntity.toRequestModel(): RequestModel {
     return RequestModel(
         id = id,
         label = label,
-        body = body,
+        bodyState = bodyState,
         header = ImmutableList(header),
         query = ImmutableList(query),
         type = type,
         url = url,
-        auth = auth
+        auth = authState
     )
 }

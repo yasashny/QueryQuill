@@ -17,7 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ru.yasdev.domain.requestsDb.models.RequestModel
-import ru.yasdev.domain.requestsDb.states.RequestState
+import ru.yasdev.queryquill.screens.requestScreens.states.RequestState
 import ru.yasdev.queryquill.activity.RequestEvent
 import ru.yasdev.queryquill.activity.UpdateHttpRequestModel
 import ru.yasdev.queryquill.adaptive.ScreenState

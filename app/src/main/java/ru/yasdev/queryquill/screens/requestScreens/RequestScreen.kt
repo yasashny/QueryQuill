@@ -7,7 +7,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import ru.yasdev.domain.requestsDb.models.RequestModel
-import ru.yasdev.domain.requestsDb.states.RequestState
+import ru.yasdev.queryquill.screens.requestScreens.states.RequestState
 import ru.yasdev.queryquill.activity.MainActivityViewModel
 import ru.yasdev.queryquill.activity.RequestEvent
 import ru.yasdev.queryquill.activity.UpdateHttpRequestModel

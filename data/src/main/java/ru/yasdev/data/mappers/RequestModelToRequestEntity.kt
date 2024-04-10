@@ -7,11 +7,11 @@ fun RequestModel.toRequestEntity(): RequestEntity {
     return RequestEntity(
         id = id,
         label = label,
-        body = body,
+        bodyState = bodyState,
         header = header.list,
         query = query.list,
         type = type,
         url = url,
-        auth = auth
+        authState = auth
     )
 }

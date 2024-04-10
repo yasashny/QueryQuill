@@ -28,7 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import ru.yasdev.domain.requestsDb.models.Body
+import ru.yasdev.domain.requestsDb.models.BodyState
 import ru.yasdev.domain.requestsDb.models.KeyValue
 import ru.yasdev.domain.requestsDb.models.MultipartFormState
 import ru.yasdev.domain.requestsDb.models.RequestModel
@@ -45,24 +45,24 @@ fun LazyListScope.bodyScreen(
     updateRequest: KFunction1<UpdateHttpRequestModel, Unit>,
     bodyState: MutableState<Int>
 ) {
-    when (requestModel.body) {
-        Body.NoBody -> {
+    when (requestModel.bodyState) {
+        BodyState.NoBody -> {
             bodyState.value = 0
         }
 
-        is Body.Text -> {
+        is BodyState.Text -> {
             bodyState.value = 1
         }
 
-        is Body.FormUrlEncoded -> {
+        is BodyState.FormUrlEncoded -> {
             bodyState.value = 2
         }
 
-        is Body.MultipartForm -> {
+        is BodyState.MultipartForm -> {
             bodyState.value = 3
         }
 
-        is Body.BinaryFile -> {
+        is BodyState.BinaryFile -> {
             bodyState.value = 4
         }
     }
@@ -91,9 +91,9 @@ fun LazyListScope.bodyScreen(
                 }
                 ChipGroupSingleLine(selectedIndex = bodyState, options = options) { index ->
                     if (bodyState.value != index) {
-                        when (requestModel.body) {
-                            is Body.Text -> {
-                                if ((requestModel.body as Body.Text).text == "") {
+                        when (requestModel.bodyState) {
+                            is BodyState.Text -> {
+                                if ((requestModel.bodyState as BodyState.Text).text == "") {
                                     changeBodyType(
                                         updateRequest = updateRequest,
                                         index
@@ -103,8 +103,8 @@ fun LazyListScope.bodyScreen(
                                 }
                             }
 
-                            is Body.FormUrlEncoded -> {
-                                if ((requestModel.body as Body.FormUrlEncoded).list == listOf(
+                            is BodyState.FormUrlEncoded -> {
+                                if ((requestModel.bodyState as BodyState.FormUrlEncoded).list == listOf(
                                         KeyValue(
                                             "",
                                             ""
@@ -120,22 +120,22 @@ fun LazyListScope.bodyScreen(
                                 }
                             }
 
-                            is Body.NoBody -> {
+                            is BodyState.NoBody -> {
                                 changeBodyType(
                                     updateRequest = updateRequest,
                                     index
                                 )
                             }
 
-                            is Body.MultipartForm -> {
+                            is BodyState.MultipartForm -> {
                                 changeBodyType(
                                     updateRequest = updateRequest,
                                     index
                                 )
                             }
 
-                            is Body.BinaryFile -> {
-                                if ((requestModel.body as Body.BinaryFile).uri == Uri.EMPTY){
+                            is BodyState.BinaryFile -> {
+                                if ((requestModel.bodyState as BodyState.BinaryFile).uri == Uri.EMPTY){
                                     changeBodyType(
                                         updateRequest = updateRequest,
                                         index
@@ -157,12 +157,12 @@ fun LazyListScope.bodyScreen(
         }
     }
 
-    when (requestModel.body) {
-        is Body.Text -> {
+    when (requestModel.bodyState) {
+        is BodyState.Text -> {
             item {
                 OutlinedTextField(
-                    value = (requestModel.body as Body.Text).text,
-                    onValueChange = { updateRequest(UpdateHttpRequestModel.Body(Body.Text(it))) },
+                    value = (requestModel.bodyState as BodyState.Text).text,
+                    onValueChange = { updateRequest(UpdateHttpRequestModel.Body(BodyState.Text(it))) },
                     label = @Composable { Text(text = "Json/XML") },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -172,30 +172,30 @@ fun LazyListScope.bodyScreen(
             }
         }
 
-        is Body.FormUrlEncoded -> {
+        is BodyState.FormUrlEncoded -> {
             println("HJKKKKKKKKKKKKKKKKK")
             editableList(
-                items = (requestModel.body as Body.FormUrlEncoded).list,
+                items = (requestModel.bodyState as BodyState.FormUrlEncoded).list,
                 onValueChanged = {
-                    updateRequest(UpdateHttpRequestModel.Body(Body.FormUrlEncoded(it)))
+                    updateRequest(UpdateHttpRequestModel.Body(BodyState.FormUrlEncoded(it)))
                 })
         }
 
-        Body.NoBody -> {
+        BodyState.NoBody -> {
 
         }
 
-        is Body.MultipartForm -> {
+        is BodyState.MultipartForm -> {
             multipartFormList(
-                items = (requestModel.body as Body.MultipartForm).multipart,
+                items = (requestModel.bodyState as BodyState.MultipartForm).multipart,
                 onValueChanged = {
-                    updateRequest(UpdateHttpRequestModel.Body(Body.MultipartForm(it)))
+                    updateRequest(UpdateHttpRequestModel.Body(BodyState.MultipartForm(it)))
                 }
             )
 
         }
 
-        is Body.BinaryFile -> {
+        is BodyState.BinaryFile -> {
 
             item {
 
@@ -208,7 +208,7 @@ fun LazyListScope.bodyScreen(
                             val takeFlags: Int = Intent.FLAG_GRANT_READ_URI_PERMISSION or
                                     Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                             contentResolver.takePersistableUriPermission(selectedUri, takeFlags)
-                            updateRequest(UpdateHttpRequestModel.Body(Body.BinaryFile(selectedUri)))
+                            updateRequest(UpdateHttpRequestModel.Body(BodyState.BinaryFile(selectedUri)))
                         }
                     })
                 
@@ -221,14 +221,14 @@ fun LazyListScope.bodyScreen(
                             modifier = Modifier
                                 .padding(15.dp)
                                 .weight(1f),
-                            text = if ((requestModel.body as Body.BinaryFile).uri == Uri.EMPTY) {
+                            text = if ((requestModel.bodyState as BodyState.BinaryFile).uri == Uri.EMPTY) {
                                 "No file selected"
                             } else {
-                                queryName(LocalContext.current.contentResolver, (requestModel.body as Body.BinaryFile).uri)
+                                queryName(LocalContext.current.contentResolver, (requestModel.bodyState as BodyState.BinaryFile).uri)
                             },
                         )
-                        IconButton(modifier = Modifier, onClick = { updateRequest(UpdateHttpRequestModel.Body(Body.BinaryFile(
-                            Uri.EMPTY))) }, enabled = (requestModel.body as Body.BinaryFile).uri != Uri.EMPTY) {
+                        IconButton(modifier = Modifier, onClick = { updateRequest(UpdateHttpRequestModel.Body(BodyState.BinaryFile(
+                            Uri.EMPTY))) }, enabled = (requestModel.bodyState as BodyState.BinaryFile).uri != Uri.EMPTY) {
                             Icon(imageVector = Icons.Outlined.Delete, contentDescription = "")
                         }
                     }
@@ -251,17 +251,17 @@ private fun changeBodyType(
 ) {
     when (index) {
         0 -> {
-            updateRequest(UpdateHttpRequestModel.Body(Body.NoBody))
+            updateRequest(UpdateHttpRequestModel.Body(BodyState.NoBody))
         }
 
         1 -> {
-            updateRequest(UpdateHttpRequestModel.Body(Body.Text("")))
+            updateRequest(UpdateHttpRequestModel.Body(BodyState.Text("")))
         }
 
         2 -> {
             updateRequest(
                 UpdateHttpRequestModel.Body(
-                    Body.FormUrlEncoded(
+                    BodyState.FormUrlEncoded(
                         listOf(
                             KeyValue(
                                 "",
@@ -274,13 +274,13 @@ private fun changeBodyType(
         }
 
         3 -> {
-            updateRequest(UpdateHttpRequestModel.Body(Body.MultipartForm(listOf(MultipartFormState.Text(
+            updateRequest(UpdateHttpRequestModel.Body(BodyState.MultipartForm(listOf(MultipartFormState.Text(
                 KeyValue("", "")
             )))))
         }
 
         4 -> {
-            updateRequest(UpdateHttpRequestModel.Body(Body.BinaryFile(Uri.EMPTY)))
+            updateRequest(UpdateHttpRequestModel.Body(BodyState.BinaryFile(Uri.EMPTY)))
         }
     }
 }

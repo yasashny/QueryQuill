@@ -18,7 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.text.style.TextOverflow
 import kotlinx.coroutines.launch
-import ru.yasdev.domain.requestsDb.states.RequestState
+import ru.yasdev.queryquill.screens.requestScreens.states.RequestState
 import ru.yasdev.queryquill.activity.UpdateHttpRequestModel
 
 @OptIn(ExperimentalMaterial3Api::class)
