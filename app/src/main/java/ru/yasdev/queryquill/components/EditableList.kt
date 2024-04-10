@@ -13,21 +13,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ru.yasdev.domain.requestsDb.models.ListItem
+import ru.yasdev.domain.requestsDb.models.KeyValue
 
 
 fun LazyListScope.editableList(
-    items: List<ListItem>,
-    onValueChanged: (items: List<ListItem>) -> Unit
+    items: List<KeyValue>,
+    onValueChanged: (items: List<KeyValue>) -> Unit
 ) {
     itemsIndexed(items) { index, item ->
-        EditableListItem(listItem = item, onTextChanged = { listItem ->
+        EditableListItem(keyValue = item, onTextChanged = { listItem ->
             val updatedItems = items.toMutableList()
             updatedItems[index] = listItem
             onValueChanged(updatedItems)
             if (index == items.size - 1) {
                 val newItemList = updatedItems.toMutableList()
-                newItemList.add(ListItem("", ""))
+                newItemList.add(KeyValue("", ""))
                 onValueChanged(newItemList)
             }
         }, deleteItem = {
@@ -44,27 +44,27 @@ fun LazyListScope.editableList(
 
 @Composable
 fun EditableListItem(
-    listItem: ListItem,
-    onTextChanged: (ListItem) -> Unit,
+    keyValue: KeyValue,
+    onTextChanged: (KeyValue) -> Unit,
     deleteItem: () -> Unit,
     deleteButtonEnabled: () -> Boolean
 ) {
 
     Row {
         OutlinedTextField(
-            value = listItem.name, onValueChange = {
-                onTextChanged(ListItem(it, listItem.value))
+            value = keyValue.key, onValueChange = {
+                onTextChanged(KeyValue(it, keyValue.value))
             },
             label = { Text(text = "Name") }, modifier = Modifier
                 .padding(start = 15.dp, top = 15.dp)
                 .weight(1f)
         )
-        OutlinedTextField(value = listItem.value, trailingIcon = {
+        OutlinedTextField(value = keyValue.value, trailingIcon = {
             IconButton(onClick = { deleteItem() }, enabled = deleteButtonEnabled()) {
                 Icon(imageVector = Icons.Outlined.Delete, contentDescription = "")
             }
         }, onValueChange = {
-            onTextChanged(ListItem(listItem.name, it))
+            onTextChanged(KeyValue(keyValue.key, it))
         },
             label = { Text(text = "Value") }, modifier = Modifier
                 .padding(start = 15.dp, end = 15.dp, top = 15.dp)

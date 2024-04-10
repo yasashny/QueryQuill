@@ -13,4 +13,4 @@ data class RequestModel(
     val url: String
 )
 @Immutable
-data class ImmutableList(val list: List<ListItem>)
+data class ImmutableList(val list: List<KeyValue>)

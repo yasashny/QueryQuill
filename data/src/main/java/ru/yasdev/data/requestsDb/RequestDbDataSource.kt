@@ -3,24 +3,17 @@ package ru.yasdev.data.requestsDb
 import android.content.Context
 import androidx.room.Room
 import kotlinx.coroutines.flow.Flow
-import ru.yasdev.data.requestsDb.models.DataRequestModel
+import ru.yasdev.data.mappers.toRequestEntity
+import ru.yasdev.data.mappers.toRequestModel
 import ru.yasdev.domain.requestsDb.models.AddRequestModel
-import ru.yasdev.domain.requestsDb.models.Auth
-import ru.yasdev.domain.requestsDb.models.Body
-import ru.yasdev.domain.requestsDb.models.HttpType
-import ru.yasdev.domain.requestsDb.models.ImmutableList
 import ru.yasdev.domain.requestsDb.models.RequestModel
 import ru.yasdev.domain.requestsDb.models.RequestsListItemModel
-import ru.yasdev.domain.requestsDb.models.ListItem
 
 class RequestDbDataSource(context: Context) {
 
-    private val db =
-        Room.databaseBuilder(
-            context,
-            RequestDataBase::class.java,
-            "request.db"
-        ).build()
+    private val db = Room.databaseBuilder(
+        context, RequestDataBase::class.java, "request.db"
+    ).build()
 
 
     fun getListOfRequests(): Flow<List<RequestsListItemModel>> {
@@ -28,26 +21,13 @@ class RequestDbDataSource(context: Context) {
     }
 
     suspend fun getRequest(id: Int): RequestModel {
-        val dataModel = db.dao.getRequest(id)
-        return RequestModel(
-            id = dataModel.id,
-            label = dataModel.label,
-            body = dataModel.body,
-            header = ImmutableList( dataModel.header),
-            query = ImmutableList(dataModel.query),
-            type = dataModel.type,
-            url = dataModel.url,
-            auth = dataModel.auth
-        )
+        val requestEntity = db.dao.getRequest(id)
+        return requestEntity.toRequestModel()
     }
 
     suspend fun addRequest(model: AddRequestModel): RequestModel {
         val id = db.dao.insertRequest(
-            DataRequestModel(
-                label = model.label, body = Body.Text(""), header = listOf(
-                    ListItem("", "")
-                ), query = listOf(ListItem("", "")), type = HttpType.GET, url = "", auth = Auth.NoAuth
-            )
+            model.toRequestEntity()
         )
         return getRequest(id.toInt())
 
@@ -55,16 +35,7 @@ class RequestDbDataSource(context: Context) {
 
     suspend fun updateRequest(model: RequestModel) {
         db.dao.insertRequest(
-            DataRequestModel(
-                id = model.id,
-                label = model.label,
-                body = model.body,
-                header = model.header.list,
-                query = model.query.list,
-                type = model.type,
-                url = model.url,
-                auth = model.auth
-            )
+            model.toRequestEntity()
         )
     }
 

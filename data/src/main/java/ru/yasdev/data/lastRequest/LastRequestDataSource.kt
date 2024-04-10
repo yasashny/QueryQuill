@@ -10,15 +10,17 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
+class LastRequestDataSource(private val context: Context) {
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "dataStore")
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "dataStore")
 
-class LastRequestDataSource(val context: Context) {
+    private val id = "LastId"
+    private val nullString = "null"
 
     fun getId() = flow {
         context.dataStore.data.map { pref ->
-            val preferences = pref[stringPreferencesKey("LastId")]
-            if ((preferences == "null") or (preferences == null)) {
+            val preferences = pref[stringPreferencesKey(id)]
+            if ((preferences == nullString) or (preferences == null)) {
                 emit(null)
             } else {
                 if (preferences != null) {
@@ -26,27 +28,22 @@ class LastRequestDataSource(val context: Context) {
                 }
             }
         }.collect()
-
     }
-
 
     suspend fun saveId(id: Int?) {
 
         when (id) {
             null -> {
                 context.dataStore.edit { pref ->
-                    pref[stringPreferencesKey("LastId")] = "null"
+                    pref[stringPreferencesKey(this.id)] = nullString
                 }
             }
-
             else -> {
                 context.dataStore.edit { pref ->
-                    pref[stringPreferencesKey("LastId")] = id.toString()
+                    pref[stringPreferencesKey(this.id)] = id.toString()
                 }
             }
         }
-
     }
-
 }
 

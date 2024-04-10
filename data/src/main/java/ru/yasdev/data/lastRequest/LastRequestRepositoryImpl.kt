@@ -13,5 +13,4 @@ class LastRequestRepositoryImpl(private val dataSource: LastRequestDataSource) :
         dataSource.saveId(id)
     }
 
-
 }

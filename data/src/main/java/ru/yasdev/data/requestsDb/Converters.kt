@@ -7,7 +7,7 @@ import kotlinx.serialization.modules.SerializersModule
 import ru.yasdev.domain.requestsDb.models.Auth
 import ru.yasdev.domain.requestsDb.models.Body
 import ru.yasdev.domain.requestsDb.models.HttpType
-import ru.yasdev.domain.requestsDb.models.ListItem
+import ru.yasdev.domain.requestsDb.models.KeyValue
 import ru.yasdev.domain.requestsDb.models.MultipartFormState
 
 object Converters {
@@ -57,14 +57,16 @@ object Converters {
 
     @TypeConverter
     @JvmStatic
-    fun fromListItemList(list: List<ListItem>): String = jsonSerializer.encodeToString(list)
+    fun fromListItemList(list: List<KeyValue>): String = jsonSerializer.encodeToString(list)
 
     @TypeConverter
     @JvmStatic
-    fun toListItemList(value: String): List<ListItem> = jsonSerializer.decodeFromString<List<ListItem>>(value)
+    fun toListItemList(value: String): List<KeyValue> =
+        jsonSerializer.decodeFromString<List<KeyValue>>(value)
 
     @TypeConverter
-    fun httpTypeFromString(value: String): HttpType = jsonSerializer.decodeFromString<HttpType>(value)
+    fun httpTypeFromString(value: String): HttpType =
+        jsonSerializer.decodeFromString<HttpType>(value)
 
     @TypeConverter
     fun httpTypeToString(httpType: HttpType): String = jsonSerializer.encodeToString(httpType)

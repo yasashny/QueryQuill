@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed interface MultipartFormState {
     @Serializable
-    data class Text(val listItem: ListItem): MultipartFormState
+    data class Text(val keyValue: KeyValue): MultipartFormState
 
     @Serializable
     data class File(val uri: @Serializable(UriAsLongSerializer::class) Uri): MultipartFormState

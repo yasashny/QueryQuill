@@ -29,7 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import ru.yasdev.domain.requestsDb.models.Body
-import ru.yasdev.domain.requestsDb.models.ListItem
+import ru.yasdev.domain.requestsDb.models.KeyValue
 import ru.yasdev.domain.requestsDb.models.MultipartFormState
 import ru.yasdev.domain.requestsDb.models.RequestModel
 import ru.yasdev.queryquill.activity.UpdateHttpRequestModel
@@ -105,7 +105,7 @@ fun LazyListScope.bodyScreen(
 
                             is Body.FormUrlEncoded -> {
                                 if ((requestModel.body as Body.FormUrlEncoded).list == listOf(
-                                        ListItem(
+                                        KeyValue(
                                             "",
                                             ""
                                         )
@@ -263,7 +263,7 @@ private fun changeBodyType(
                 UpdateHttpRequestModel.Body(
                     Body.FormUrlEncoded(
                         listOf(
-                            ListItem(
+                            KeyValue(
                                 "",
                                 ""
                             )
@@ -275,7 +275,7 @@ private fun changeBodyType(
 
         3 -> {
             updateRequest(UpdateHttpRequestModel.Body(Body.MultipartForm(listOf(MultipartFormState.Text(
-                ListItem("", "")
+                KeyValue("", "")
             )))))
         }
 

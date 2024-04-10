@@ -5,4 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Immutable
 @Serializable
-data class ListItem(val name: String, val value: String)
+data class KeyValue(val key: String, val value: String) {
+    companion object {
+        fun empty(): KeyValue = KeyValue("", "")
+    }
+}

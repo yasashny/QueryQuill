@@ -32,10 +32,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import ru.yasdev.domain.requestsDb.models.Body
-import ru.yasdev.domain.requestsDb.models.ListItem
+import ru.yasdev.domain.requestsDb.models.KeyValue
 import ru.yasdev.domain.requestsDb.models.MultipartFormState
-import ru.yasdev.queryquill.activity.UpdateHttpRequestModel
 import ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen.queryName
 
 fun LazyListScope.multipartFormList(
@@ -49,7 +47,7 @@ fun LazyListScope.multipartFormList(
             onValueChanged(updatedItems)
             if ((index == items.size - 1) and flag) {
                 val newItemList = updatedItems.toMutableList()
-                newItemList.add(MultipartFormState.Text(ListItem("", "")))
+                newItemList.add(MultipartFormState.Text(KeyValue("", "")))
                 onValueChanged(newItemList)
             }
         }, deleteItem = {
@@ -109,7 +107,7 @@ fun MultipartFormListItem(
                             when(multipartFormState){
                                 is MultipartFormState.File -> {
                                     if(option != "FILE"){
-                                        onTextChanged(MultipartFormState.Text(ListItem("", "")), false)
+                                        onTextChanged(MultipartFormState.Text(KeyValue("", "")), false)
                                     }
                                 }
                                 is MultipartFormState.Text -> {
@@ -174,15 +172,15 @@ fun MultipartFormListItem(
             is MultipartFormState.Text -> {
                 Row {
                     OutlinedTextField(
-                        value = multipartFormState.listItem.name, onValueChange = {
-                            onTextChanged(MultipartFormState.Text(ListItem(it, multipartFormState.listItem.value)), true)
+                        value = multipartFormState.keyValue.key, onValueChange = {
+                            onTextChanged(MultipartFormState.Text(KeyValue(it, multipartFormState.keyValue.value)), true)
                         },
                         label = { Text(text = "Name") }, modifier = Modifier
                             .padding(start = 15.dp, top = 15.dp, bottom = 15.dp)
                             .weight(1f)
                     )
-                    OutlinedTextField(value = multipartFormState.listItem.value, onValueChange = {
-                        onTextChanged(MultipartFormState.Text(ListItem(multipartFormState.listItem.name, it)), true)
+                    OutlinedTextField(value = multipartFormState.keyValue.value, onValueChange = {
+                        onTextChanged(MultipartFormState.Text(KeyValue(multipartFormState.keyValue.key, it)), true)
                     },
                         label = { Text(text = "Value") }, modifier = Modifier
                             .padding(15.dp)

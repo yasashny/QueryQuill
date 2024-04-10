@@ -9,11 +9,8 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import kotlinx.serialization.json.Json
-import org.json.JSONArray
 
 @Serializable
 @Immutable
@@ -26,7 +23,7 @@ sealed interface Body {
         Body
 
     @Serializable
-    data class FormUrlEncoded(val list: List<ListItem>) : Body
+    data class FormUrlEncoded(val list: List<KeyValue>) : Body
 
     @Serializable
     data class BinaryFile(val uri: @Serializable(UriAsLongSerializer::class) Uri) : Body
