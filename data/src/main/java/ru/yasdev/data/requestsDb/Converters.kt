@@ -20,8 +20,8 @@ object Converters {
             )
             polymorphic(
                 MultipartFormState::class,
-                MultipartFormState.File::class,
-                MultipartFormState.File.serializer(),
+                MultipartFormState.BinaryFile::class,
+                MultipartFormState.BinaryFile.serializer(),
             )
             polymorphic(
                 AuthState::class, AuthState.NoAuth::class, AuthState.NoAuth.serializer()

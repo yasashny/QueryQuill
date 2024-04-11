@@ -5,17 +5,34 @@ import kotlinx.serialization.Serializable
 import ru.yasdev.domain.requestsDb.serializers.UriAsStringSerializer
 
 @Serializable
-sealed interface MultipartFormState {
-    val name: String
+sealed interface MultipartFormState: BasicState {
+    override val name: String
     @Serializable
     data class Text(val keyValue: KeyValue) : MultipartFormState{
         override val name: String
             get() = "TEXT"
+        companion object{
+            fun default(): Text{
+                return Text(KeyValue.empty())
+            }
+        }
     }
 
     @Serializable
-    data class File(val uri: @Serializable(UriAsStringSerializer::class) Uri) : MultipartFormState{
+    data class BinaryFile(val uri: @Serializable(UriAsStringSerializer::class) Uri) : MultipartFormState{
         override val name: String
             get() = "FILE"
+        companion object{
+            fun default(): BinaryFile{
+                return BinaryFile(Uri.EMPTY)
+            }
+        }
+    }
+
+    override fun isDefault(): Boolean {
+        return when(this){
+            is BinaryFile -> this == BinaryFile.default()
+            is Text -> this == Text.default()
+        }
     }
 }

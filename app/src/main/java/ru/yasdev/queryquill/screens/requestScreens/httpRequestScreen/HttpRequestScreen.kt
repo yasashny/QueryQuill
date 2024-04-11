@@ -36,8 +36,9 @@ import kotlin.reflect.KFunction1
 
 @SuppressLint("StateFlowValueCalledInComposition", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun HttpRequestScreen(requestModel: RequestModel,
-                      updateRequest: KFunction1<UpdateHttpRequestModel, Unit>) {
+fun HttpRequestScreen(
+    requestModel: RequestModel, updateRequest: KFunction1<UpdateHttpRequestModel, Unit>
+) {
     Scaffold(floatingActionButton = {
         ExtendedFloatingActionButton(onClick = { /*TODO*/ }, icon = {
             Icon(
@@ -49,20 +50,32 @@ fun HttpRequestScreen(requestModel: RequestModel,
         LazyColumn {
             item { HttpRequestHeader(requestModel, updateRequest, httpRequestHeaderState) }
             when (httpRequestHeaderState.value) {
-                0 -> { bodyScreen(requestModel.bodyState){bodyState ->
-                    updateRequest(UpdateHttpRequestModel.Body(bodyState))
-                } }
+                0 -> {
+                    bodyScreen(requestModel.bodyState) { bodyState ->
+                        updateRequest(UpdateHttpRequestModel.Body(bodyState))
+                    }
+                }
 
-                1 -> { authScreen(requestModel.auth){authState ->
-                    updateRequest(UpdateHttpRequestModel.Auth(authState))
-                } }
+                1 -> {
+                    authScreen(requestModel.auth) { authState ->
+                        updateRequest(UpdateHttpRequestModel.Auth(authState))
+                    }
+                }
 
-                2 -> { headerScreen(requestModel, updateRequest) }
+                2 -> {
+                    headerScreen(requestModel, updateRequest)
+                }
 
-                3 -> { queryScreen(requestModel, updateRequest) }
+                3 -> {
+                    queryScreen(requestModel, updateRequest)
+                }
             }
-            item { 
-                Spacer(modifier = Modifier.height(150.dp).fillMaxWidth())
+            item {
+                Spacer(
+                    modifier = Modifier
+                        .height(150.dp)
+                        .fillMaxWidth()
+                )
             }
         }
     }
@@ -78,26 +91,18 @@ private fun HttpRequestHeader(
         Modifier.padding(15.dp)
     ) {
         DynamicSelectTextField(
-            selectedValue = requestModel.type.name, options = listOf(
-                HttpType.GET.name,
-                HttpType.POST.name,
-                HttpType.PUT.name,
-                HttpType.PATCH.name,
-                HttpType.OPTIONS.name,
-                HttpType.DELETE.name,
-                HttpType.HEAD.name
-            ), label = "Type", onValueChangedEvent = {
-                when (it) {
-                    HttpType.GET.name -> { updateRequest(UpdateHttpRequestModel.Type(HttpType.GET)) }
-                    HttpType.POST.name -> { updateRequest(UpdateHttpRequestModel.Type(HttpType.POST)) }
-                    HttpType.PUT.name -> { updateRequest(UpdateHttpRequestModel.Type(HttpType.PUT)) }
-                    HttpType.PATCH.name -> { updateRequest(UpdateHttpRequestModel.Type(HttpType.PATCH)) }
-                    HttpType.DELETE.name -> { updateRequest(UpdateHttpRequestModel.Type(HttpType.DELETE)) }
-                    HttpType.OPTIONS.name -> { updateRequest(UpdateHttpRequestModel.Type(HttpType.OPTIONS)) }
-                    HttpType.HEAD.name -> { updateRequest(UpdateHttpRequestModel.Type(HttpType.HEAD)) }
-                }
-            }, modifier = Modifier.weight(1f)
-        )
+            selectedValue = requestModel.type, options = listOf(
+                HttpType.GET,
+                HttpType.POST,
+                HttpType.PUT,
+                HttpType.PATCH,
+                HttpType.OPTIONS,
+                HttpType.DELETE,
+                HttpType.HEAD
+            ), label = "Type", modifier = Modifier.weight(1f)
+        ) { httpType ->
+            updateRequest(UpdateHttpRequestModel.Type(httpType))
+        }
         OutlinedTextField(
             value = requestModel.url,
             onValueChange = { updateRequest(UpdateHttpRequestModel.Url(it)) },
@@ -109,12 +114,13 @@ private fun HttpRequestHeader(
     }
     Row {
         Box(
-            contentAlignment = Alignment.Center, modifier = Modifier
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 15.dp)
         ) {
             val options = listOf("Body", "Auth", "Header", "Query")
-            SegmentedButtonSingleSelect(headerState, options, onClick = {headerState.value = it})
+            SegmentedButtonSingleSelect(headerState, options, onClick = { headerState.value = it })
         }
 
     }

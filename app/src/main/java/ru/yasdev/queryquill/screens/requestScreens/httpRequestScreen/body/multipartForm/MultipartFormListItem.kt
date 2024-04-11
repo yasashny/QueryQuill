@@ -10,35 +10,29 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import ru.yasdev.domain.requestsDb.models.BodyState
 import ru.yasdev.domain.requestsDb.models.KeyValue
 import ru.yasdev.domain.requestsDb.models.MultipartFormState
+import ru.yasdev.domain.requestsDb.models.MultipartFormType
+import ru.yasdev.queryquill.components.DynamicSelectTextField
 import ru.yasdev.queryquill.utils.fileNameByUri
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun MultipartFormListItem(
     multipartFormState: MultipartFormState,
-    onTextChanged: (MultipartFormState, flag: Boolean) -> Unit,
+    onTextChanged: (newState: MultipartFormState, isAddNewElement: Boolean) -> Unit,
     deleteItem: () -> Unit,
     deleteButtonEnabled: () -> Boolean
 ) {
@@ -47,52 +41,27 @@ fun MultipartFormListItem(
             .fillMaxWidth()
             .padding(start = 15.dp, end = 15.dp, bottom = 15.dp)
     ) {
-        var expanded by remember { mutableStateOf(false) }
         Row(
             Modifier
                 .fillMaxWidth()
                 .padding(start = 15.dp, top = 15.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            ExposedDropdownMenuBox(
-                expanded = expanded,
-                onExpandedChange = { expanded = !expanded },
-                Modifier
-                    .width(200.dp)
-                    .weight(1f)
-            ) {
-                OutlinedTextField(readOnly = true,
-                    value = multipartFormState.name,
-                    onValueChange = {},
-                    label = { Text(text = "Type") },
-                    trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
-                    },
-                    colors = OutlinedTextFieldDefaults.colors(),
-                    modifier = Modifier
-                        .menuAnchor()
-                        .fillMaxWidth()
-                )
-                ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-                    val options = listOf("TEXT", "FILE")
-                    options.forEach { option: String ->
-                        DropdownMenuItem(text = { Text(text = option) }, onClick = {
-                            expanded = false
-                            when (multipartFormState) {
-                                is MultipartFormState.File -> {
-                                    if (option != "FILE") {
-                                        onTextChanged(
-                                            MultipartFormState.Text(KeyValue("", "")), false
-                                        )
-                                    }
-                                }
-                                is MultipartFormState.Text -> {
-                                    if (option != "TEXT") {
-                                        onTextChanged(MultipartFormState.File(Uri.EMPTY), false)
-                                    }
-                                }
-                            }
-                        })
+            DynamicSelectTextField(
+                selectedValue = when (multipartFormState) {
+                    is MultipartFormState.BinaryFile -> MultipartFormType.FILE
+                    is MultipartFormState.Text -> MultipartFormType.TEXT
+                }, options = listOf(
+                    MultipartFormType.FILE,
+                    MultipartFormType.TEXT
+                ), label = "Type", modifier = Modifier.weight(1f).width(200.dp)
+            ) {multipartFormType ->
+                when(multipartFormType){
+                    MultipartFormType.TEXT -> {
+                        onTextChanged(MultipartFormState.Text.default(), false )
+                    }
+                    MultipartFormType.FILE -> {
+                        onTextChanged(MultipartFormState.BinaryFile.default(), false)
                     }
                 }
             }
@@ -101,12 +70,11 @@ fun MultipartFormListItem(
                 enabled = deleteButtonEnabled(),
                 modifier = Modifier.padding(horizontal = 15.dp)
             ) {
-                Icon(imageVector = Icons.Outlined.Delete, contentDescription = "")
+                Icon(imageVector = Icons.Outlined.Delete, contentDescription = null)
             }
         }
-
         when (multipartFormState) {
-            is MultipartFormState.File -> {
+            is MultipartFormState.BinaryFile -> {
                 val cxt = LocalContext.current
                 val getContent =
                     rememberLauncherForActivityResult(contract = ActivityResultContracts.OpenDocument(),
@@ -116,7 +84,7 @@ fun MultipartFormListItem(
                                 val takeFlags: Int =
                                     Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                                 contentResolver.takePersistableUriPermission(selectedUri, takeFlags)
-                                onTextChanged(MultipartFormState.File(selectedUri), true)
+                                onTextChanged(MultipartFormState.BinaryFile(selectedUri), true)
                             }
                         })
 
@@ -140,7 +108,7 @@ fun MultipartFormListItem(
                         )
                         IconButton(modifier = Modifier, onClick = {
                             onTextChanged(
-                                MultipartFormState.File(Uri.EMPTY), true
+                                MultipartFormState.BinaryFile(Uri.EMPTY), true
                             )
                         }, enabled = multipartFormState.uri != Uri.EMPTY) {
                             Icon(imageVector = Icons.Outlined.Delete, contentDescription = "")

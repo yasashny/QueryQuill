@@ -17,20 +17,21 @@ import androidx.compose.ui.Modifier
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DynamicSelectTextField(
-    selectedValue: String,
-    options: List<String>,
+fun <T : Enum<T>> DynamicSelectTextField(
+    selectedValue: T,
+    options: List<T>,
     label: String,
-    onValueChangedEvent: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier,
+    onValueChangedEvent: (T) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
 
     ExposedDropdownMenuBox(
         expanded = expanded, onExpandedChange = { expanded = !expanded }, modifier = modifier
     ) {
-        OutlinedTextField(readOnly = true,
-            value = selectedValue,
+        OutlinedTextField(
+            readOnly = true,
+            value = selectedValue.name,
             onValueChange = {},
             label = { Text(text = label) },
             trailingIcon = {
@@ -41,12 +42,13 @@ fun DynamicSelectTextField(
                 .menuAnchor()
                 .fillMaxWidth()
         )
-
         ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            options.forEach { option: String ->
-                DropdownMenuItem(text = { Text(text = option) }, onClick = {
+            options.forEach { option ->
+                DropdownMenuItem(text = { Text(text = option.name) }, onClick = {
                     expanded = false
-                    onValueChangedEvent(option)
+                    if(selectedValue != option){
+                        onValueChangedEvent(option)
+                    }
                 })
             }
         }

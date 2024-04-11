@@ -77,7 +77,7 @@ fun LazyListScope.bodyScreen(
 
         is BodyState.BinaryFile -> {
             item {
-                BodyScreenBinaryFile(bodyState = bodyState, updateRequest)
+                BinaryFileElement(currentState = bodyState, updateRequest)
             }
         }
     }

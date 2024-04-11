@@ -23,8 +23,8 @@ import ru.yasdev.domain.requestsDb.models.BodyState
 import ru.yasdev.queryquill.utils.fileNameByUri
 
 @Composable
-fun BodyScreenBinaryFile(
-    bodyState: BodyState.BinaryFile, updateRequest: (BodyState.BinaryFile) -> Unit
+fun BinaryFileElement(
+    currentState: BodyState.BinaryFile, updateRequest: (BodyState.BinaryFile) -> Unit
 ) {
     val context = LocalContext.current
     val getContent = rememberLauncherForActivityResult(
@@ -48,17 +48,17 @@ fun BodyScreenBinaryFile(
                 modifier = Modifier
                     .padding(15.dp)
                     .weight(1f),
-                text = if (bodyState.uri == Uri.EMPTY) {
+                text = if (currentState.uri == Uri.EMPTY) {
                     "No file selected"
                 } else {
-                    fileNameByUri(LocalContext.current.contentResolver, bodyState.uri)
+                    fileNameByUri(LocalContext.current.contentResolver, currentState.uri)
                 },
             )
             IconButton(modifier = Modifier, onClick = {
                 updateRequest(
                     BodyState.BinaryFile.default()
                 )
-            }, enabled = bodyState.uri != Uri.EMPTY) {
+            }, enabled = currentState.uri != Uri.EMPTY) {
                 Icon(imageVector = Icons.Outlined.Delete, contentDescription = "")
             }
         }
