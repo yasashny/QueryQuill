@@ -19,12 +19,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import ru.yasdev.domain.requestsDb.models.BodyState
+import ru.yasdev.domain.requestsDb.models.BasicBinaryFile
 import ru.yasdev.queryquill.utils.fileNameByUri
 
 @Composable
 fun BinaryFileElement(
-    currentState: BodyState.BinaryFile, updateRequest: (BodyState.BinaryFile) -> Unit
+    currentState: BasicBinaryFile, updateRequest: (selectedUri: Uri) -> Unit
 ) {
     val context = LocalContext.current
     val getContent = rememberLauncherForActivityResult(
@@ -35,12 +35,12 @@ fun BinaryFileElement(
                 val takeFlags: Int =
                     Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                 contentResolver.takePersistableUriPermission(selectedUri, takeFlags)
-                updateRequest(BodyState.BinaryFile(selectedUri))
+                updateRequest(selectedUri)
             }
         })
     OutlinedCard(
         Modifier
-            .padding(start = 15.dp, end = 15.dp)
+            .padding(start = 15.dp, end = 15.dp, top = 15.dp)
             .fillMaxWidth()
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -56,7 +56,7 @@ fun BinaryFileElement(
             )
             IconButton(modifier = Modifier, onClick = {
                 updateRequest(
-                    BodyState.BinaryFile.default()
+                    Uri.EMPTY
                 )
             }, enabled = currentState.uri != Uri.EMPTY) {
                 Icon(imageVector = Icons.Outlined.Delete, contentDescription = "")

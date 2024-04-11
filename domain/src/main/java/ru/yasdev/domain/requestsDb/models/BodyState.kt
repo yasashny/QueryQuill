@@ -44,7 +44,7 @@ sealed interface BodyState: BasicState {
     }
 
     @Serializable
-    data class BinaryFile(val uri: @Serializable(UriAsStringSerializer::class) Uri) : BodyState{
+    data class BinaryFile(override val uri: @Serializable(UriAsStringSerializer::class) Uri) : BodyState, BasicBinaryFile(){
         override val name: String
             get() = "Binary File"
         companion object{

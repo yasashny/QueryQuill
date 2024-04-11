@@ -19,7 +19,7 @@ sealed interface MultipartFormState: BasicState {
     }
 
     @Serializable
-    data class BinaryFile(val uri: @Serializable(UriAsStringSerializer::class) Uri) : MultipartFormState{
+    data class BinaryFile(override val uri: @Serializable(UriAsStringSerializer::class) Uri) : MultipartFormState, BasicBinaryFile(){
         override val name: String
             get() = "FILE"
         companion object{
