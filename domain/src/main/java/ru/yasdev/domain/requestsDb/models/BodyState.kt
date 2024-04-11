@@ -7,9 +7,9 @@ import ru.yasdev.domain.requestsDb.serializers.UriAsStringSerializer
 
 @Serializable
 @Immutable
-sealed interface BodyState {
+sealed interface BodyState: BasicState {
 
-    val name: String
+    override val name: String
     @Serializable
     data class Text(val text: String) : BodyState{
         override val name: String
@@ -60,7 +60,7 @@ sealed interface BodyState {
             get() = "No Body"
     }
 
-    fun isDefault(): Boolean {
+    override fun isDefault(): Boolean {
         return when (this) {
             is Text -> this == Text.default()
             is MultipartForm -> this == MultipartForm.default()

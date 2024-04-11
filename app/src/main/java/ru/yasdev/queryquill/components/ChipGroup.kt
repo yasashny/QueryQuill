@@ -1,4 +1,4 @@
-package ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen.body
+package ru.yasdev.queryquill.components
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
@@ -16,37 +16,36 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ru.yasdev.domain.requestsDb.models.BodyState
+import ru.yasdev.domain.requestsDb.models.BasicState
 
 @Composable
-fun BodyChipGroup(bodyState: BodyState, onClick: (BodyState) -> Unit) {
+fun ChipGroup(
+    currentState: BasicState,
+    options: List<BasicState>,
+    onClick: (BasicState) -> Unit
+) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Row(modifier = Modifier.horizontalScroll(rememberScrollState())) {
-            val options = listOf(
-                BodyState.NoBody,
-                BodyState.Text.default(),
-                BodyState.FormUrlEncoded.default(),
-                BodyState.MultipartForm.default(),
-                BodyState.BinaryFile.default()
-            )
             options.forEachIndexed { index, chipState ->
-                InputChip(modifier = if (index == 0) {
-                    Modifier.padding(start = 29.dp, end = 4.dp)
-                } else {
-                    Modifier.padding(horizontal = 4.dp)
-                },
+                InputChip(
+                    modifier = if (index == 0) {
+                        Modifier.padding(start = 29.dp, end = 4.dp)
+                    } else {
+                        Modifier.padding(horizontal = 4.dp)
+                    },
                     onClick = { onClick(chipState) },
                     label = { Text(chipState.name) },
-                    selected = bodyState::class == chipState::class,
+                    selected = currentState::class == chipState::class,
                     leadingIcon = {
-                        if (bodyState::class == chipState::class) {
+                        if (currentState::class == chipState::class) {
                             Icon(
                                 imageVector = Icons.Filled.Done,
                                 contentDescription = null,
                                 modifier = Modifier.size(FilterChipDefaults.IconSize)
                             )
                         }
-                    })
+                    }
+                )
             }
         }
     }

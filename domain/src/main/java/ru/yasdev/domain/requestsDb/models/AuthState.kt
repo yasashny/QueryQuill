@@ -3,8 +3,8 @@ package ru.yasdev.domain.requestsDb.models
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed interface AuthState {
-    val name: String
+sealed interface AuthState : BasicState {
+    override val name: String
     @Serializable
     data object NoAuth : AuthState{
         override val name: String
@@ -22,7 +22,7 @@ sealed interface AuthState {
         }
     }
 
-    fun isDefault(): Boolean {
+    override fun isDefault(): Boolean {
         return when (this) {
             is Basic -> this == Basic.default()
             NoAuth -> true

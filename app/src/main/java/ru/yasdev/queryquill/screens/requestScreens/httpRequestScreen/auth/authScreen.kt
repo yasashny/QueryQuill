@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ru.yasdev.domain.requestsDb.models.AuthState
 import ru.yasdev.queryquill.components.AuthScreenAlertDialog
+import ru.yasdev.queryquill.components.ChipGroup
 
 
 fun LazyListScope.authScreen(
@@ -32,13 +33,15 @@ fun LazyListScope.authScreen(
                 if (openDialog.value.first) {
                     AuthScreenAlertDialog(openDialog, updateRequest)
                 }
-                AuthChipGroup(authState = authState) { chipState ->
-                    if(authState::class != chipState::class){
+                ChipGroup(currentState = authState, options = listOf(
+                    AuthState.NoAuth, AuthState.Basic.default()
+                )) {newState ->
+                    if(authState::class != newState::class){
                         if(authState.isDefault()){
-                            updateRequest(chipState)
+                            updateRequest(newState as AuthState)
                         }
                         else{
-                            openDialog.value = Pair(true, chipState)
+                            openDialog.value = Pair(true, newState as AuthState)
                         }
                     }
                 }

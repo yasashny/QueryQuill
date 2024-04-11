@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ru.yasdev.domain.requestsDb.models.BodyState
 import ru.yasdev.queryquill.components.BodyScreenAlertDialog
+import ru.yasdev.queryquill.components.ChipGroup
 import ru.yasdev.queryquill.components.editableList
 import ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen.body.multipartForm.bodyScreenMultipartForm
 
@@ -33,12 +34,20 @@ fun LazyListScope.bodyScreen(
                 if (openDialog.value.first) {
                     BodyScreenAlertDialog(openDialog, updateRequest)
                 }
-                BodyChipGroup(bodyState = bodyState) { chipState ->
-                    if (bodyState::class != chipState::class) {
+                ChipGroup(
+                    currentState = bodyState, options = listOf(
+                        BodyState.NoBody,
+                        BodyState.Text.default(),
+                        BodyState.FormUrlEncoded.default(),
+                        BodyState.MultipartForm.default(),
+                        BodyState.BinaryFile.default()
+                    )
+                ) { newState ->
+                    if (bodyState::class != newState::class) {
                         if (bodyState.isDefault()) {
-                            updateRequest(chipState)
+                            updateRequest(newState as BodyState)
                         } else {
-                            openDialog.value = Pair(true, chipState)
+                            openDialog.value = Pair(true, newState as BodyState)
                         }
                     }
                 }
