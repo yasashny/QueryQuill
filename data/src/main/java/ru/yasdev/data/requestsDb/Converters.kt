@@ -4,11 +4,11 @@ import androidx.room.TypeConverter
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
-import ru.yasdev.domain.requestsDb.models.AuthState
-import ru.yasdev.domain.requestsDb.models.BodyState
 import ru.yasdev.domain.requestsDb.models.HttpType
 import ru.yasdev.domain.requestsDb.models.KeyValue
-import ru.yasdev.domain.requestsDb.models.MultipartFormState
+import ru.yasdev.domain.requestsDb.states.AuthState
+import ru.yasdev.domain.requestsDb.states.BodyState
+import ru.yasdev.domain.requestsDb.states.MultipartFormState
 
 object Converters {
     private val jsonSerializer = Json {

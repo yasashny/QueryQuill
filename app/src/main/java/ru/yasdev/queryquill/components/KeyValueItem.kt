@@ -19,10 +19,10 @@ import ru.yasdev.domain.requestsDb.models.KeyValue
 fun KeyValueItem(
     keyValue: KeyValue,
     onTextChanged: (KeyValue) -> Unit,
+    modifier: Modifier = Modifier,
     deleteItem: () -> Unit = {},
     deleteButtonEnabled: () -> Boolean = {false},
-    isDeleteButtonVisible: Boolean = true,
-    modifier: Modifier = Modifier
+    isDeleteButtonVisible: Boolean = true
 ) {
     Box(modifier = modifier){
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -36,7 +36,7 @@ fun KeyValueItem(
             OutlinedTextField(value = keyValue.value, trailingIcon = {
                 if(isDeleteButtonVisible){
                     IconButton(onClick = { deleteItem() }, enabled = deleteButtonEnabled()) {
-                        Icon(imageVector = Icons.Outlined.Delete, contentDescription = "")
+                        Icon(imageVector = Icons.Outlined.Delete, contentDescription = null)
                     }
                 }
             }, onValueChange = {
@@ -48,8 +48,4 @@ fun KeyValueItem(
             )
         }
     }
-
-
-
-
 }

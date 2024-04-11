@@ -10,15 +10,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ru.yasdev.domain.requestsDb.models.AuthState
-import ru.yasdev.domain.requestsDb.models.BasicState
+import ru.yasdev.domain.requestsDb.states.AuthState
+import ru.yasdev.domain.requestsDb.states.BasicState
 import ru.yasdev.queryquill.components.ChangeTypeAlertDialog
 import ru.yasdev.queryquill.components.ChipGroup
 
 
 fun LazyListScope.authScreen(
-    authState: AuthState,
-    updateRequest: (AuthState) -> Unit
+    authState: AuthState, updateRequest: (AuthState) -> Unit
 ) {
     item {
         Row {
@@ -32,18 +31,19 @@ fun LazyListScope.authScreen(
                     mutableStateOf(Pair(false, authState as BasicState))
                 }
                 if (openDialog.value.first) {
-                    ChangeTypeAlertDialog(openDialog, title = "auth"){basicState ->
+                    ChangeTypeAlertDialog(openDialog, title = "auth") { basicState ->
                         updateRequest(basicState as AuthState)
                     }
                 }
-                ChipGroup(currentState = authState, options = listOf(
-                    AuthState.NoAuth, AuthState.Basic.default()
-                )) {newState ->
-                    if(authState::class != newState::class){
-                        if(authState.isDefault()){
+                ChipGroup(
+                    currentState = authState, options = listOf(
+                        AuthState.NoAuth, AuthState.Basic.default()
+                    )
+                ) { newState ->
+                    if (authState::class != newState::class) {
+                        if (authState.isDefault()) {
                             updateRequest(newState as AuthState)
-                        }
-                        else{
+                        } else {
                             openDialog.value = Pair(true, newState as AuthState)
                         }
                     }

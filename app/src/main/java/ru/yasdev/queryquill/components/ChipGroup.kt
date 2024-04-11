@@ -16,7 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ru.yasdev.domain.requestsDb.models.BasicState
+import ru.yasdev.domain.requestsDb.states.BasicState
 
 @Composable
 fun ChipGroup(

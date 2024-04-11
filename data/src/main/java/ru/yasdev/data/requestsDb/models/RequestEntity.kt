@@ -2,10 +2,10 @@ package ru.yasdev.data.requestsDb.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import ru.yasdev.domain.requestsDb.models.AuthState
-import ru.yasdev.domain.requestsDb.models.BodyState
 import ru.yasdev.domain.requestsDb.models.HttpType
 import ru.yasdev.domain.requestsDb.models.KeyValue
+import ru.yasdev.domain.requestsDb.states.AuthState
+import ru.yasdev.domain.requestsDb.states.BodyState
 
 @Entity
 data class RequestEntity(

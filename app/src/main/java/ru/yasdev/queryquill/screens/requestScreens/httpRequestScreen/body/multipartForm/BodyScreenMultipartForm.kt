@@ -2,9 +2,9 @@ package ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen.body.multi
 
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
-import ru.yasdev.domain.requestsDb.models.BodyState
 import ru.yasdev.domain.requestsDb.models.KeyValue
-import ru.yasdev.domain.requestsDb.models.MultipartFormState
+import ru.yasdev.domain.requestsDb.states.BodyState
+import ru.yasdev.domain.requestsDb.states.MultipartFormState
 
 
 fun LazyListScope.bodyScreenMultipartForm(

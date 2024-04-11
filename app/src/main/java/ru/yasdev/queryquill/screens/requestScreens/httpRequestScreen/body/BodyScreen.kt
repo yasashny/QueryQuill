@@ -10,12 +10,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ru.yasdev.domain.requestsDb.models.BasicState
-import ru.yasdev.domain.requestsDb.models.BodyState
+import ru.yasdev.domain.requestsDb.states.BasicState
+import ru.yasdev.domain.requestsDb.states.BodyState
+import ru.yasdev.queryquill.components.BinaryFileElement
 import ru.yasdev.queryquill.components.ChangeTypeAlertDialog
 import ru.yasdev.queryquill.components.ChipGroup
 import ru.yasdev.queryquill.components.editableList
 import ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen.body.multipartForm.bodyScreenMultipartForm
+import ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen.body.text.BodyScreenText
 
 
 fun LazyListScope.bodyScreen(

@@ -19,7 +19,7 @@ fun LazyListScope.editableList(
             updateRequest(updatedItems)
             if (index == items.size - 1) {
                 val newItemList = updatedItems.toMutableList()
-                newItemList.add(KeyValue("", ""))
+                newItemList.add(KeyValue.empty())
                 updateRequest(newItemList)
             }
         }, deleteItem = {
@@ -29,8 +29,5 @@ fun LazyListScope.editableList(
         },
             deleteButtonEnabled = { items.size - 1 != index },
             modifier = Modifier.padding(start = 15.dp, top = 15.dp, end = 15.dp))
-
-
     }
-
 }

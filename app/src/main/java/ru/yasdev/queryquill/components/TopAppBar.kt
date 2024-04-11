@@ -11,32 +11,29 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.text.style.TextOverflow
 import kotlinx.coroutines.launch
-import ru.yasdev.queryquill.screens.requestScreens.states.RequestState
-import ru.yasdev.queryquill.activity.UpdateHttpRequestModel
+import ru.yasdev.queryquill.screens.requestScreens.viewModel.RequestState
+import ru.yasdev.queryquill.screens.requestScreens.viewModel.UpdateHttpRequestModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyTopAppBar(
-    scrollBehavior: TopAppBarScrollBehavior,
     drawerState: DrawerState,
     label: String,
     updateRequest: (UpdateHttpRequestModel) -> Unit,
     requestState: RequestState
 ) {
     TopAppBar(title = {
-        if( requestState == RequestState.Request){
+        if (requestState == RequestState.Request) {
             Text(
                 label, maxLines = 1, overflow = TextOverflow.Ellipsis
             )
-        }
-        else{
+        } else {
             Text(
                 "QueryQuill", maxLines = 1, overflow = TextOverflow.Ellipsis
             )
@@ -47,7 +44,7 @@ fun MyTopAppBar(
         val scope = rememberCoroutineScope()
 
         IconButton(onClick = { scope.launch { drawerState.open() } }) {
-            Icon(imageVector = Icons.Filled.Menu, contentDescription = "Localized description")
+            Icon(imageVector = Icons.Filled.Menu, contentDescription = null)
         }
 
 
@@ -58,29 +55,29 @@ fun MyTopAppBar(
         val flag = remember {
             mutableStateOf<String?>(null)
         }
-        if (flag.value != null){
+        if (flag.value != null) {
             updateRequest(UpdateHttpRequestModel.Label(flag.value as String))
             flag.value = null
         }
-        if (openDialog.value){
+        if (openDialog.value) {
             ChangeLabelAlertDialog(openDialog, flag)
         }
-        if (requestState == RequestState.Request){
+        if (requestState == RequestState.Request) {
             IconButton(onClick = {
                 openDialog.value = true
             }) {
                 Icon(
-                    imageVector = Icons.Outlined.Edit, contentDescription = "Localized description"
+                    imageVector = Icons.Outlined.Edit, contentDescription = null
                 )
             }
-        }
-        else{
-            IconButton(onClick = {
-                openDialog.value = true
-            },
-                enabled = false) {
+        } else {
+            IconButton(
+                onClick = {
+                    openDialog.value = true
+                }, enabled = false
+            ) {
                 Icon(
-                    imageVector = Icons.Outlined.Edit, contentDescription = "Localized description"
+                    imageVector = Icons.Outlined.Edit, contentDescription = null
                 )
             }
         }
@@ -88,6 +85,5 @@ fun MyTopAppBar(
     }, colors = TopAppBarDefaults.topAppBarColors(
         containerColor = MaterialTheme.colorScheme.surfaceContainer
     )
-        //scrollBehavior = scrollBehavior
     )
 }

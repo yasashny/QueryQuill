@@ -5,7 +5,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import ru.yasdev.domain.requestsDb.models.BasicState
+import ru.yasdev.domain.requestsDb.states.BasicState
 
 @Composable
 fun ChangeTypeAlertDialog(

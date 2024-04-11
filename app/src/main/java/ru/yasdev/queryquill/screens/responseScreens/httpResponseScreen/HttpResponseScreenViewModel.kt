@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class HttpResponseScreenViewModel: ViewModel() {
+class HttpResponseScreenViewModel : ViewModel() {
 
     private val _counter = MutableStateFlow("")
     val counter = _counter.asStateFlow()

@@ -1,10 +1,10 @@
 package ru.yasdev.data.requestsDb
 
 import kotlinx.coroutines.flow.Flow
-import ru.yasdev.domain.requestsDb.RequestsDbRepository
 import ru.yasdev.domain.requestsDb.models.AddRequestModel
 import ru.yasdev.domain.requestsDb.models.RequestModel
 import ru.yasdev.domain.requestsDb.models.RequestsListItemModel
+import ru.yasdev.domain.requestsDb.repositories.RequestsDbRepository
 
 class RequestsDbRepositoryImpl(private val requestsDbDataSource: RequestDbDataSource) :
     RequestsDbRepository {

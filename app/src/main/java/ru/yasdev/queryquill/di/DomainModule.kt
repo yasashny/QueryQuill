@@ -3,13 +3,13 @@ package ru.yasdev.queryquill.di
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
-import ru.yasdev.domain.useCases.AddRequestUseCase
-import ru.yasdev.domain.useCases.DeleteRequestUseCase
-import ru.yasdev.domain.useCases.GetLastRequestIdUseCase
-import ru.yasdev.domain.useCases.GetListOfRequestsUseCase
-import ru.yasdev.domain.useCases.GetRequestUseCase
-import ru.yasdev.domain.useCases.SaveLastRequestIdUseCase
-import ru.yasdev.domain.useCases.UpdateRequestUseCase
+import ru.yasdev.domain.lastRequest.useCases.GetLastRequestIdUseCase
+import ru.yasdev.domain.lastRequest.useCases.SaveLastRequestIdUseCase
+import ru.yasdev.domain.requestsDb.useCases.AddRequestUseCase
+import ru.yasdev.domain.requestsDb.useCases.DeleteRequestUseCase
+import ru.yasdev.domain.requestsDb.useCases.GetListOfRequestsUseCase
+import ru.yasdev.domain.requestsDb.useCases.GetRequestUseCase
+import ru.yasdev.domain.requestsDb.useCases.UpdateRequestUseCase
 
 val domainModule = module {
     factoryOf(::AddRequestUseCase) { bind<AddRequestUseCase>() }

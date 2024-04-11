@@ -5,50 +5,48 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import org.koin.androidx.compose.koinViewModel
-import ru.yasdev.queryquill.components.MyTopAppBar
-import ru.yasdev.queryquill.ui.theme.QueryQuillTheme
 import ru.yasdev.queryquill.adaptive.adaptiveScreenManager
+import ru.yasdev.queryquill.components.MyTopAppBar
 import ru.yasdev.queryquill.navigationDrawer.NavigationDrawer
-import ru.yasdev.queryquill.screens.responseScreens.httpResponseScreen.HttpResponseScreenViewModel
 import ru.yasdev.queryquill.screens.mainScreen.MainScreen
+import ru.yasdev.queryquill.screens.requestScreens.viewModel.RequestViewModel
+import ru.yasdev.queryquill.screens.responseScreens.httpResponseScreen.HttpResponseScreenViewModel
+import ru.yasdev.queryquill.ui.theme.QueryQuillTheme
 
 class MainActivity : ComponentActivity() {
 
-    private lateinit var mainActivityViewModel: MainActivityViewModel
+    private lateinit var requestViewModel: RequestViewModel
 
     @OptIn(
-        ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class
+        ExperimentalMaterial3WindowSizeClassApi::class
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            mainActivityViewModel = koinViewModel<MainActivityViewModel>()
-            val requestModel by mainActivityViewModel.requestModel.collectAsState()
-            val requestState by mainActivityViewModel.requestState.collectAsState()
+            requestViewModel = koinViewModel<RequestViewModel>()
+            val requestModel by requestViewModel.requestModel.collectAsState()
+            val requestState by requestViewModel.requestState.collectAsState()
             QueryQuillTheme {
-                NavigationDrawer(mainActivityViewModel) { drawerState ->
+                NavigationDrawer(requestViewModel) { drawerState ->
                     val windowSizeClass = calculateWindowSizeClass(this)
-                    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
                     val screenState = adaptiveScreenManager(windowSizeClass)
-
                     val httpResponseScreenViewModel = koinViewModel<HttpResponseScreenViewModel>()
-                    Scaffold(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-                        topBar = {
-                            MyTopAppBar(
-                                scrollBehavior = scrollBehavior, drawerState = drawerState, label = requestModel.label, updateRequest = mainActivityViewModel::updateHttpRequest, requestState = requestState
-                            )
-                        }) {
+                    Scaffold(topBar = {
+                        MyTopAppBar(
+                            drawerState = drawerState,
+                            label = requestModel.label,
+                            updateRequest = requestViewModel::updateHttpRequest,
+                            requestState = requestState
+                        )
+                    }) {
                         Surface(
                             Modifier
                                 .padding(top = it.calculateTopPadding())
@@ -59,21 +57,18 @@ class MainActivity : ComponentActivity() {
                                 responseVM = httpResponseScreenViewModel,
                                 requestModel = requestModel,
                                 requestState = requestState,
-                                updateRequest = mainActivityViewModel::updateHttpRequest,
-                                onEvent = mainActivityViewModel::onEvent
-
+                                updateRequest = requestViewModel::updateHttpRequest,
+                                onEvent = requestViewModel::onEvent
                             )
-
                         }
                     }
                 }
-
             }
         }
     }
 
     override fun onPause() {
         super.onPause()
-        mainActivityViewModel.save()
+        requestViewModel.saveLastRequest()
     }
 }

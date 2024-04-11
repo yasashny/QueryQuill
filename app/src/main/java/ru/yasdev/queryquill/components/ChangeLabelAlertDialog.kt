@@ -32,13 +32,10 @@ fun ChangeLabelAlertDialog(openDialog: MutableState<Boolean>, flag: MutableState
     var newLabel by remember {
         mutableStateOf("")
     }
-
     if (openDialog.value) {
-        BasicAlertDialog(
-            onDismissRequest = {
-                openDialog.value = false
-            }
-        ) {
+        BasicAlertDialog(onDismissRequest = {
+            openDialog.value = false
+        }) {
             Surface(
                 modifier = Modifier
                     .wrapContentWidth()
@@ -47,28 +44,31 @@ fun ChangeLabelAlertDialog(openDialog: MutableState<Boolean>, flag: MutableState
                 tonalElevation = AlertDialogDefaults.TonalElevation
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text(text = "Change Label", fontSize = MaterialTheme.typography.headlineSmall.fontSize)
+                    Text(
+                        text = "Change Label",
+                        fontSize = MaterialTheme.typography.headlineSmall.fontSize
+                    )
                     Spacer(modifier = Modifier.height(24.dp))
-                    OutlinedTextField(value = newLabel, onValueChange = {newLabel = it}, label = { Text(text = "Label")})
+                    OutlinedTextField(value = newLabel,
+                        onValueChange = { newLabel = it },
+                        label = { Text(text = "Label") })
                     Spacer(modifier = Modifier.height(24.dp))
-                    Row(horizontalArrangement = Arrangement.End, modifier = Modifier.align(Alignment.End)){
-                        TextButton(
-                            onClick = {
-                                openDialog.value = false
-                            }
-                        ) {
+                    Row(
+                        horizontalArrangement = Arrangement.End,
+                        modifier = Modifier.align(Alignment.End)
+                    ) {
+                        TextButton(onClick = {
+                            openDialog.value = false
+                        }) {
                             Text("Cancel")
                         }
-                        TextButton(
-                            onClick = {
-                                flag.value = newLabel
-                                openDialog.value = false
-                            }
-                        ) {
+                        TextButton(onClick = {
+                            flag.value = newLabel
+                            openDialog.value = false
+                        }) {
                             Text("Change label")
                         }
                     }
-
                 }
             }
         }

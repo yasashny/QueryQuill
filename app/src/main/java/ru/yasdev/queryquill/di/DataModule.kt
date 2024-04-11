@@ -7,8 +7,8 @@ import ru.yasdev.data.lastRequest.LastRequestDataSource
 import ru.yasdev.data.lastRequest.LastRequestRepositoryImpl
 import ru.yasdev.data.requestsDb.RequestDbDataSource
 import ru.yasdev.data.requestsDb.RequestsDbRepositoryImpl
-import ru.yasdev.domain.lastRequest.LastRequestRepository
-import ru.yasdev.domain.requestsDb.RequestsDbRepository
+import ru.yasdev.domain.lastRequest.repositories.LastRequestRepository
+import ru.yasdev.domain.requestsDb.repositories.RequestsDbRepository
 
 val dataModule = module {
     singleOf(::LastRequestRepositoryImpl) { bind<LastRequestRepository>() }

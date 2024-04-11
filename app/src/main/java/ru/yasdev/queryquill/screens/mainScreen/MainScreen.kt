@@ -17,12 +17,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ru.yasdev.domain.requestsDb.models.RequestModel
-import ru.yasdev.queryquill.screens.requestScreens.states.RequestState
-import ru.yasdev.queryquill.activity.RequestEvent
-import ru.yasdev.queryquill.activity.UpdateHttpRequestModel
 import ru.yasdev.queryquill.adaptive.ScreenState
 import ru.yasdev.queryquill.components.PrimaryTextTabs
 import ru.yasdev.queryquill.screens.requestScreens.RequestScreen
+import ru.yasdev.queryquill.screens.requestScreens.viewModel.RequestEvent
+import ru.yasdev.queryquill.screens.requestScreens.viewModel.RequestState
+import ru.yasdev.queryquill.screens.requestScreens.viewModel.UpdateHttpRequestModel
 import ru.yasdev.queryquill.screens.responseScreens.httpResponseScreen.HttpResponseScreen
 import ru.yasdev.queryquill.screens.responseScreens.httpResponseScreen.HttpResponseScreenViewModel
 import kotlin.reflect.KFunction1
@@ -37,7 +37,6 @@ fun MainScreen(
     updateRequest: KFunction1<UpdateHttpRequestModel, Unit>,
     onEvent: KFunction1<RequestEvent, Unit>
 ) {
-
     when (screenState) {
         ScreenState.SINGLE_SCREEN -> {
             Column {
@@ -119,6 +118,5 @@ fun MainScreen(
                 )
             }
         }
-
     }
 }

@@ -1,7 +1,7 @@
 package ru.yasdev.data.lastRequest
 
 import kotlinx.coroutines.flow.Flow
-import ru.yasdev.domain.lastRequest.LastRequestRepository
+import ru.yasdev.domain.lastRequest.repositories.LastRequestRepository
 
 class LastRequestRepositoryImpl(private val dataSource: LastRequestDataSource) :
     LastRequestRepository {

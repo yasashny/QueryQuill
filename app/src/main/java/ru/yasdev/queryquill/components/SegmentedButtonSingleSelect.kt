@@ -7,18 +7,23 @@ import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen.requestScreenHeader.HttpRequestHeaderState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SegmentedButtonSingleSelect(selectedIndex: MutableState<Int>, options: List<String>, onClick: (Int) -> Unit) {
+fun SegmentedButtonSingleSelect(
+    selectedIndex: MutableState<HttpRequestHeaderState>,
+    options: List<HttpRequestHeaderState>,
+    onClick: (HttpRequestHeaderState) -> Unit
+) {
     SingleChoiceSegmentedButtonRow {
-        options.forEachIndexed { index, label ->
+        options.forEachIndexed { index, element ->
             SegmentedButton(
                 shape = SegmentedButtonDefaults.itemShape(index = index, count = options.size),
-                onClick = { onClick(index) },
-                selected = index == selectedIndex.value
+                onClick = { onClick(element) },
+                selected = element == selectedIndex.value
             ) {
-                Text(label)
+                Text(element.title)
             }
         }
     }

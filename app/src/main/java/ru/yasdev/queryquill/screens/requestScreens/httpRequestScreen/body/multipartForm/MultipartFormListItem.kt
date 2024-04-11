@@ -13,11 +13,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ru.yasdev.domain.requestsDb.models.MultipartFormState
 import ru.yasdev.domain.requestsDb.models.MultipartFormType
+import ru.yasdev.domain.requestsDb.states.MultipartFormState
+import ru.yasdev.queryquill.components.BinaryFileElement
 import ru.yasdev.queryquill.components.DynamicSelectTextField
 import ru.yasdev.queryquill.components.KeyValueItem
-import ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen.body.BinaryFileElement
 
 
 @Composable
