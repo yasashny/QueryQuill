@@ -11,7 +11,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ru.yasdev.domain.requestsDb.models.AuthState
-import ru.yasdev.queryquill.components.AuthScreenAlertDialog
+import ru.yasdev.domain.requestsDb.models.BasicState
+import ru.yasdev.queryquill.components.ChangeTypeAlertDialog
 import ru.yasdev.queryquill.components.ChipGroup
 
 
@@ -28,10 +29,12 @@ fun LazyListScope.authScreen(
                     .padding(bottom = 15.dp, top = 15.dp)
             ) {
                 val openDialog = remember {
-                    mutableStateOf(Pair(false, authState))
+                    mutableStateOf(Pair(false, authState as BasicState))
                 }
                 if (openDialog.value.first) {
-                    AuthScreenAlertDialog(openDialog, updateRequest)
+                    ChangeTypeAlertDialog(openDialog, title = "auth"){basicState ->
+                        updateRequest(basicState as AuthState)
+                    }
                 }
                 ChipGroup(currentState = authState, options = listOf(
                     AuthState.NoAuth, AuthState.Basic.default()

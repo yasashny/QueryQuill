@@ -5,20 +5,21 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import ru.yasdev.domain.requestsDb.models.AuthState
+import ru.yasdev.domain.requestsDb.models.BasicState
 
 @Composable
-fun AuthScreenAlertDialog(
-    openDialog: MutableState<Pair<Boolean, AuthState>>,
-    updateRequest: (AuthState) -> Unit
+fun ChangeTypeAlertDialog(
+    openDialog: MutableState<Pair<Boolean, BasicState>>,
+    title: String,
+    updateRequest: (BasicState) -> Unit
 ) {
     if (openDialog.value.first) {
         AlertDialog(onDismissRequest = {
             openDialog.value = Pair(false, openDialog.value.second)
         }, title = {
-            Text(text = "Switch Auth Type?")
+            Text(text = "Switch $title Type?")
         }, text = {
-            Text(text = "Current auth will be lost. Are you sure you want to continue?")
+            Text(text = "Current $title will be lost. Are you sure you want to continue?")
         }, confirmButton = {
             TextButton(onClick = {
                 updateRequest(openDialog.value.second)

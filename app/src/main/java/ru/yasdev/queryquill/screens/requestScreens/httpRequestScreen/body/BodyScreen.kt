@@ -10,8 +10,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import ru.yasdev.domain.requestsDb.models.BasicState
 import ru.yasdev.domain.requestsDb.models.BodyState
-import ru.yasdev.queryquill.components.BodyScreenAlertDialog
+import ru.yasdev.queryquill.components.ChangeTypeAlertDialog
 import ru.yasdev.queryquill.components.ChipGroup
 import ru.yasdev.queryquill.components.editableList
 import ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen.body.multipartForm.bodyScreenMultipartForm
@@ -29,10 +30,12 @@ fun LazyListScope.bodyScreen(
                     .padding(bottom = 15.dp, top = 15.dp)
             ) {
                 val openDialog = remember {
-                    mutableStateOf(Pair(false, bodyState))
+                    mutableStateOf(Pair(false, bodyState as BasicState))
                 }
                 if (openDialog.value.first) {
-                    BodyScreenAlertDialog(openDialog, updateRequest)
+                    ChangeTypeAlertDialog(openDialog, title = "body"){basicState ->
+                        updateRequest(basicState as BodyState)
+                    }
                 }
                 ChipGroup(
                     currentState = bodyState, options = listOf(
