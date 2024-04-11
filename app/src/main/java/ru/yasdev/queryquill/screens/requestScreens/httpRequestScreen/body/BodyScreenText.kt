@@ -9,16 +9,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ru.yasdev.domain.requestsDb.models.BodyState
-import ru.yasdev.queryquill.activity.UpdateHttpRequestModel
-import kotlin.reflect.KFunction1
 
 @Composable
 fun BodyScreenText(
-    bodyState: BodyState.Text, updateRequest: KFunction1<UpdateHttpRequestModel, Unit>
+    bodyState: BodyState.Text, updateRequest: (BodyState.Text) -> Unit
 ) {
     OutlinedTextField(
         value = bodyState.text,
-        onValueChange = { updateRequest(UpdateHttpRequestModel.Body(BodyState.Text(it))) },
+        onValueChange = { text ->
+            updateRequest(BodyState.Text(text))
+        },
         label = @Composable { Text(text = "Json/XML") },
         modifier = Modifier
             .fillMaxWidth()

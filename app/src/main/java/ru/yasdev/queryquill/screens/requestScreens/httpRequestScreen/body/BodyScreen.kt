@@ -11,14 +11,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ru.yasdev.domain.requestsDb.models.BodyState
-import ru.yasdev.queryquill.activity.UpdateHttpRequestModel
 import ru.yasdev.queryquill.components.BodyScreenAlertDialog
 import ru.yasdev.queryquill.components.editableList
-import kotlin.reflect.KFunction1
+import ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen.body.multipartForm.bodyScreenMultipartForm
 
 
 fun LazyListScope.bodyScreen(
-    bodyState: BodyState, updateRequest: KFunction1<UpdateHttpRequestModel, Unit>
+    bodyState: BodyState, updateRequest: (BodyState) -> Unit
 ) {
     item {
         Row {
@@ -34,12 +33,12 @@ fun LazyListScope.bodyScreen(
                 if (openDialog.value.first) {
                     BodyScreenAlertDialog(openDialog, updateRequest)
                 }
-                BodyChipGroup(bodyState = bodyState) {
-                    if (bodyState::class != it::class) {
+                BodyChipGroup(bodyState = bodyState) { chipState ->
+                    if (bodyState::class != chipState::class) {
                         if (bodyState.isDefault()) {
-                            updateRequest(UpdateHttpRequestModel.Body(it))
+                            updateRequest(chipState)
                         } else {
-                            openDialog.value = Pair(true, it)
+                            openDialog.value = Pair(true, chipState)
                         }
                     }
                 }
@@ -54,21 +53,19 @@ fun LazyListScope.bodyScreen(
         }
 
         is BodyState.FormUrlEncoded -> {
-            editableList(items = bodyState.list, onValueChanged = {
-                updateRequest(UpdateHttpRequestModel.Body(BodyState.FormUrlEncoded(it)))
-            })
+            editableList(items = bodyState.list) { keyValueList ->
+                updateRequest(BodyState.FormUrlEncoded(keyValueList))
+            }
         }
 
         BodyState.NoBody -> {}
         is BodyState.MultipartForm -> {
-            bodyScreenMultipartForm(items = bodyState.multipart) {
-                updateRequest(UpdateHttpRequestModel.Body(BodyState.MultipartForm(it)))
-            }
+            bodyScreenMultipartForm(items = bodyState.multipart, updateRequest)
         }
 
         is BodyState.BinaryFile -> {
             item {
-                BodyScreenBinaryFile(bodyState = bodyState, updateRequest = updateRequest)
+                BodyScreenBinaryFile(bodyState = bodyState, updateRequest)
             }
         }
     }

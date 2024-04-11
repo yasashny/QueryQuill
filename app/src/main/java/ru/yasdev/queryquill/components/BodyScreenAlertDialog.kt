@@ -1,23 +1,15 @@
 package ru.yasdev.queryquill.components
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import ru.yasdev.domain.requestsDb.models.BodyState
-import ru.yasdev.queryquill.activity.UpdateHttpRequestModel
-import kotlin.reflect.KFunction1
 
 @Composable
 fun BodyScreenAlertDialog(openDialog: MutableState<Pair<Boolean, BodyState>>,
-                          updateRequest: KFunction1<UpdateHttpRequestModel, Unit>
+                          updateRequest: (BodyState) -> Unit
 ) {
 
     if (openDialog.value.first) {
@@ -34,7 +26,7 @@ fun BodyScreenAlertDialog(openDialog: MutableState<Pair<Boolean, BodyState>>,
             confirmButton = {
                 TextButton(
                     onClick = {
-                        updateRequest(UpdateHttpRequestModel.Body(openDialog.value.second))
+                        updateRequest(openDialog.value.second)
                         openDialog.value = Pair(false, openDialog.value.second)
                     }
                 ) {

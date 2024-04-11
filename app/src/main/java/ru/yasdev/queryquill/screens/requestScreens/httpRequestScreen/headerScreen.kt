@@ -7,10 +7,10 @@ import ru.yasdev.queryquill.components.editableList
 import kotlin.reflect.KFunction1
 
 
-fun LazyListScope.headerScreen(requestModel: RequestModel,
-                               updateRequest: KFunction1<UpdateHttpRequestModel, Unit>
+fun LazyListScope.headerScreen(
+    requestModel: RequestModel, updateRequest: KFunction1<UpdateHttpRequestModel, Unit>
 ) {
-    editableList(items = requestModel.header.list, onValueChanged = {
-        updateRequest(UpdateHttpRequestModel.Header(it))
-    })
+    editableList(items = requestModel.header.list){keyValueList ->
+        updateRequest(UpdateHttpRequestModel.Header(keyValueList))
+    }
 }

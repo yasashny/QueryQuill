@@ -20,13 +20,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import ru.yasdev.domain.requestsDb.models.BodyState
-import ru.yasdev.queryquill.activity.UpdateHttpRequestModel
 import ru.yasdev.queryquill.utils.fileNameByUri
-import kotlin.reflect.KFunction1
 
 @Composable
 fun BodyScreenBinaryFile(
-    bodyState: BodyState.BinaryFile, updateRequest: KFunction1<UpdateHttpRequestModel, Unit>
+    bodyState: BodyState.BinaryFile, updateRequest: (BodyState.BinaryFile) -> Unit
 ) {
     val context = LocalContext.current
     val getContent = rememberLauncherForActivityResult(
@@ -37,7 +35,7 @@ fun BodyScreenBinaryFile(
                 val takeFlags: Int =
                     Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                 contentResolver.takePersistableUriPermission(selectedUri, takeFlags)
-                updateRequest(UpdateHttpRequestModel.Body(BodyState.BinaryFile(selectedUri)))
+                updateRequest(BodyState.BinaryFile(selectedUri))
             }
         })
     OutlinedCard(
@@ -58,9 +56,7 @@ fun BodyScreenBinaryFile(
             )
             IconButton(modifier = Modifier, onClick = {
                 updateRequest(
-                    UpdateHttpRequestModel.Body(
-                        BodyState.BinaryFile.default()
-                    )
+                    BodyState.BinaryFile.default()
                 )
             }, enabled = bodyState.uri != Uri.EMPTY) {
                 Icon(imageVector = Icons.Outlined.Delete, contentDescription = "")

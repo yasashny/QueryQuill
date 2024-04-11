@@ -30,6 +30,7 @@ import ru.yasdev.domain.requestsDb.models.RequestModel
 import ru.yasdev.queryquill.activity.UpdateHttpRequestModel
 import ru.yasdev.queryquill.components.DynamicSelectTextField
 import ru.yasdev.queryquill.components.SegmentedButtonSingleSelect
+import ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen.auth.authScreen
 import ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen.body.bodyScreen
 import kotlin.reflect.KFunction1
 
@@ -45,22 +46,16 @@ fun HttpRequestScreen(requestModel: RequestModel,
         }, text = { Text(text = "Send request") })
     }) {
         val httpRequestHeaderState = remember { mutableStateOf(0) }
-        val authState = remember { mutableStateOf(0) }
-        val bodyState = remember {
-            mutableStateOf(when(requestModel.bodyState){
-                BodyState.NoBody -> {0}
-                is BodyState.Text-> {1}
-                is BodyState.FormUrlEncoded -> {2}
-                is BodyState.MultipartForm -> {3}
-                is BodyState.BinaryFile -> {4}
-            })
-        }
         LazyColumn {
             item { HttpRequestHeader(requestModel, updateRequest, httpRequestHeaderState) }
             when (httpRequestHeaderState.value) {
-                0 -> { bodyScreen(requestModel.bodyState, updateRequest) }
+                0 -> { bodyScreen(requestModel.bodyState){bodyState ->
+                    updateRequest(UpdateHttpRequestModel.Body(bodyState))
+                } }
 
-                1 -> { authScreen(requestModel, updateRequest, authState) }
+                1 -> { authScreen(requestModel.auth){authState ->
+                    updateRequest(UpdateHttpRequestModel.Auth(authState))
+                } }
 
                 2 -> { headerScreen(requestModel, updateRequest) }
 

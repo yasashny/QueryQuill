@@ -1,4 +1,4 @@
-package ru.yasdev.queryquill.components
+package ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen.auth
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
@@ -13,32 +13,36 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.InputChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import ru.yasdev.domain.requestsDb.models.AuthState
 
 @Composable
-fun ChipGroupSingleLine(selectedIndex: MutableState<Int>, options: List<String>, onClick: (Int) -> Unit) {
+fun AuthChipGroup(authState: AuthState, onClick: (AuthState) -> Unit) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Row(modifier = Modifier.horizontalScroll(rememberScrollState())) {
-            options.forEachIndexed { index, label ->
-                InputChip(
-                    modifier = if(index == 0){Modifier.padding(start = 29.dp, end = 4.dp)}else{Modifier.padding(horizontal = 4.dp)},
-                    onClick = { onClick(index) },
-                    label = { Text(label) },
-                    selected = index == selectedIndex.value,
+            val options = listOf(
+                AuthState.NoAuth, AuthState.Basic.default()
+            )
+            options.forEachIndexed { index, chipState ->
+                InputChip(modifier = if (index == 0) {
+                    Modifier.padding(start = 29.dp, end = 4.dp)
+                } else {
+                    Modifier.padding(horizontal = 4.dp)
+                },
+                    onClick = { onClick(chipState) },
+                    label = { Text(chipState.name) },
+                    selected = authState::class == chipState::class,
                     leadingIcon = {
-                        if (index == selectedIndex.value){
+                        if (authState::class == chipState::class) {
                             Icon(
                                 imageVector = Icons.Filled.Done,
                                 contentDescription = "Localized Description",
                                 modifier = Modifier.size(FilterChipDefaults.IconSize)
                             )
                         }
-
-                    }
-                )
+                    })
             }
         }
     }

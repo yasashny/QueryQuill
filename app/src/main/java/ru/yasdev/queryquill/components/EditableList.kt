@@ -18,22 +18,22 @@ import ru.yasdev.domain.requestsDb.models.KeyValue
 
 fun LazyListScope.editableList(
     items: List<KeyValue>,
-    onValueChanged: (items: List<KeyValue>) -> Unit
+    updateRequest: (items: List<KeyValue>) -> Unit
 ) {
     itemsIndexed(items) { index, item ->
         EditableListItem(keyValue = item, onTextChanged = { listItem ->
             val updatedItems = items.toMutableList()
             updatedItems[index] = listItem
-            onValueChanged(updatedItems)
+            updateRequest(updatedItems)
             if (index == items.size - 1) {
                 val newItemList = updatedItems.toMutableList()
                 newItemList.add(KeyValue("", ""))
-                onValueChanged(newItemList)
+                updateRequest(newItemList)
             }
         }, deleteItem = {
             val updatedItems = items.toMutableList()
             updatedItems.removeAt(index)
-            onValueChanged(updatedItems)
+            updateRequest(updatedItems)
         },
             deleteButtonEnabled = { items.size - 1 != index })
 

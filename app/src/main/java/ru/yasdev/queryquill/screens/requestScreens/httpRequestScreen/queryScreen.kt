@@ -10,7 +10,7 @@ import kotlin.reflect.KFunction1
 fun LazyListScope.queryScreen(requestModel: RequestModel,
                               updateRequest: KFunction1<UpdateHttpRequestModel, Unit>
 ){
-    editableList(items = requestModel.query.list, onValueChanged = {
-        updateRequest(UpdateHttpRequestModel.Query(it))
-    })
+    editableList(items = requestModel.query.list){keyValueList ->
+        updateRequest(UpdateHttpRequestModel.Query(keyValueList))
+    }
 }
