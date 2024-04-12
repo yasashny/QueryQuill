@@ -29,10 +29,10 @@ import ru.yasdev.queryquill.screens.requestScreens.viewModel.UpdateHttpRequestMo
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HttpRequestScreen(
-    requestModel: RequestModel, updateRequest: (UpdateHttpRequestModel) -> Unit
+    requestModel: RequestModel, updateRequest: (UpdateHttpRequestModel) -> Unit, sendRequest: (RequestModel) -> Unit
 ) {
     Scaffold(floatingActionButton = {
-        ExtendedFloatingActionButton(onClick = { /*TODO*/ }, icon = {
+        ExtendedFloatingActionButton(onClick = { sendRequest(requestModel) }, icon = {
             Icon(
                 imageVector = Icons.AutoMirrored.Outlined.Send, contentDescription = ""
             )

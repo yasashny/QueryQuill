@@ -53,7 +53,8 @@ fun MainScreen(
                             requestModel = requestModel,
                             requestState = requestState,
                             updateRequest = updateRequest,
-                            onEvent = onEvent
+                            onEvent = onEvent,
+                            sendRequest = responseVM::sendRequest
                         )
 
                         1 -> HttpResponseScreen(
@@ -76,7 +77,8 @@ fun MainScreen(
                     requestModel = requestModel,
                     requestState = requestState,
                     updateRequest = updateRequest,
-                    onEvent = onEvent
+                    onEvent = onEvent,
+                    sendRequest = responseVM::sendRequest
                 )
                 Box(
                     Modifier
@@ -102,7 +104,8 @@ fun MainScreen(
                     requestModel = requestModel,
                     requestState = requestState,
                     updateRequest = updateRequest,
-                    onEvent = onEvent
+                    onEvent = onEvent,
+                    sendRequest = responseVM::sendRequest
                 )
                 Box(
                     Modifier

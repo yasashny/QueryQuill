@@ -17,7 +17,8 @@ fun RequestScreen(
     requestModel: RequestModel,
     requestState: RequestState,
     updateRequest: (UpdateHttpRequestModel) -> Unit,
-    onEvent: (RequestEvent) -> Unit
+    onEvent: (RequestEvent) -> Unit,
+    sendRequest: (RequestModel) -> Unit
 ) {
     Box(modifier = modifier) {
         when (requestState) {
@@ -32,7 +33,7 @@ fun RequestScreen(
             }
 
             RequestState.Request -> {
-                HttpRequestScreen(requestModel = requestModel, updateRequest = updateRequest)
+                HttpRequestScreen(requestModel = requestModel, updateRequest = updateRequest, sendRequest = sendRequest)
             }
         }
     }

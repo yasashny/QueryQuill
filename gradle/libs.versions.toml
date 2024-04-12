@@ -10,7 +10,7 @@ junitVersion = "1.1.5"
 koinAndroidxCompose = "3.5.3"
 kotlinxCoroutinesAndroid = "1.7.3"
 kotlinxSerializationJson = "1.6.0"
-ktorClientOkhttp = "2.3.9"
+ktorClientCIO = "2.3.10"
 lifecycleRuntimeKtx = "2.7.0"
 material = "1.11.0"
 material3Android = "1.2.1"
@@ -35,7 +35,9 @@ junit = { module = "junit:junit", version.ref = "junit" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinAndroidxCompose" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
-ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktorClientOkhttp" }
+ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktorClientCIO" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorClientCIO" }
+ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktorClientCIO" }
 lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
 material3 = { module = "androidx.compose.material3:material3" }
