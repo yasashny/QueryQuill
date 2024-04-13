@@ -79,20 +79,13 @@ class SendRequestDataSource(private val client: HttpClient, private val context:
                                 when (multipartState) {
                                     is MultipartFormState.BinaryFile -> {
                                         if (multipartState.uri != Uri.EMPTY) {
-                                            append("description", fileFromContentUri(
+                                            append(multipartState.title, fileFromContentUri(
                                                 context = context, multipartState.uri
                                             ).readBytes(), Headers.build {
                                                 append(
-                                                    HttpHeaders.ContentType, try {
-                                                        ContentType.fromFilePath(
-                                                            fileNameByUri(
-                                                                context.contentResolver,
-                                                                multipartState.uri
-                                                            )
-                                                        ).first().toString()
-                                                    } catch (e: Exception) {
-                                                        "not_defined"
-                                                    }
+                                                    HttpHeaders.ContentType,
+                                                    ContentType.fromFilePath(fileNameByUri(context.contentResolver, multipartState.uri))
+                                                        .firstOrNull()?.toString() ?: ContentType.Application.OctetStream.toString()
                                                 )
                                                 append(
                                                     HttpHeaders.ContentDisposition,
@@ -117,7 +110,7 @@ class SendRequestDataSource(private val client: HttpClient, private val context:
                                     }
                                 }
                             }
-                        }, boundary = "--QUERY-QUILL-BOUNDARY"
+                        }, boundary = "QUERY-QUILL-BOUNDARY"
                     )
                 }
 

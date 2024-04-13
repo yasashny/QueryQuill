@@ -22,14 +22,14 @@ sealed interface MultipartFormState : BasicState {
     }
 
     @Serializable
-    data class BinaryFile(override val uri: @Serializable(UriAsStringSerializer::class) Uri) :
+    data class BinaryFile(override val uri: @Serializable(UriAsStringSerializer::class) Uri, val title: String) :
         MultipartFormState, BasicBinaryFile() {
         override val name: String
             get() = "FILE"
 
         companion object {
             fun default(): BinaryFile {
-                return BinaryFile(Uri.EMPTY)
+                return BinaryFile(Uri.EMPTY, "")
             }
         }
     }
