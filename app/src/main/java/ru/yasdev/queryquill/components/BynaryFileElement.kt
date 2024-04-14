@@ -24,7 +24,7 @@ import ru.yasdev.queryquill.utils.fileNameByUri
 
 @Composable
 fun BinaryFileElement(
-    currentState: BasicBinaryFile, updateRequest: (selectedUri: Uri) -> Unit
+    currentState: BasicBinaryFile, updateRequest: (selectedUri: Uri, fileName: String) -> Unit
 ) {
     val context = LocalContext.current
     val getContent = rememberLauncherForActivityResult(
@@ -35,7 +35,7 @@ fun BinaryFileElement(
                 val takeFlags: Int =
                     Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                 contentResolver.takePersistableUriPermission(selectedUri, takeFlags)
-                updateRequest(selectedUri)
+                updateRequest(selectedUri, fileNameByUri(context.contentResolver, selectedUri))
             }
         })
     OutlinedCard(
@@ -51,12 +51,13 @@ fun BinaryFileElement(
                 text = if (currentState.uri == Uri.EMPTY) {
                     "No file selected"
                 } else {
-                    fileNameByUri(LocalContext.current.contentResolver, currentState.uri)
+                    currentState.fileName
                 },
             )
             IconButton(modifier = Modifier, onClick = {
                 updateRequest(
-                    Uri.EMPTY
+                    Uri.EMPTY,
+                    ""
                 )
             }, enabled = currentState.uri != Uri.EMPTY) {
                 Icon(imageVector = Icons.Outlined.Delete, contentDescription = "")

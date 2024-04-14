@@ -1,6 +1,6 @@
 package ru.yasdev.data.mappers
 
-import ru.yasdev.data.requestsDb.models.RequestEntity
+import ru.yasdev.data.local.models.RequestEntity
 import ru.yasdev.domain.requestsDb.models.AddRequestModel
 import ru.yasdev.domain.requestsDb.models.HttpType
 import ru.yasdev.domain.requestsDb.models.KeyValue

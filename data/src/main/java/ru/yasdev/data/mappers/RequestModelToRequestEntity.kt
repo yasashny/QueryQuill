@@ -1,6 +1,6 @@
 package ru.yasdev.data.mappers
 
-import ru.yasdev.data.requestsDb.models.RequestEntity
+import ru.yasdev.data.local.models.RequestEntity
 import ru.yasdev.domain.requestsDb.models.RequestModel
 
 fun RequestModel.toRequestEntity(): RequestEntity {

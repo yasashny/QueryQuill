@@ -1,8 +1,8 @@
 package ru.yasdev.domain.requestsDb.useCases
 
-import ru.yasdev.domain.requestsDb.repositories.RequestsDbRepository
+import ru.yasdev.domain.requestsDb.repositories.LocalDbRepository
 
-class DeleteRequestUseCase(private val repository: RequestsDbRepository) {
+class DeleteRequestUseCase(private val repository: LocalDbRepository) {
 
     suspend fun execute(id: Int) {
         repository.deleteRequest(id)

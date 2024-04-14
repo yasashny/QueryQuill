@@ -1,10 +1,10 @@
-package ru.yasdev.data.requestsDb
+package ru.yasdev.data.local
 
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
-import ru.yasdev.data.requestsDb.models.RequestEntity
+import ru.yasdev.data.local.models.RequestEntity
 import ru.yasdev.domain.requestsDb.models.RequestsListItemModel
 
 @Dao

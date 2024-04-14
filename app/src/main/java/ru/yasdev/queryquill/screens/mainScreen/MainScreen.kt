@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ru.yasdev.domain.requestsDb.models.RequestModel
+import ru.yasdev.domain.sendRequest.ResponseModel
 import ru.yasdev.queryquill.adaptive.ScreenState
 import ru.yasdev.queryquill.components.PrimaryTextTabs
 import ru.yasdev.queryquill.screens.requestScreens.RequestScreen
@@ -24,18 +25,18 @@ import ru.yasdev.queryquill.screens.requestScreens.viewModel.RequestEvent
 import ru.yasdev.queryquill.screens.requestScreens.viewModel.RequestState
 import ru.yasdev.queryquill.screens.requestScreens.viewModel.UpdateHttpRequestModel
 import ru.yasdev.queryquill.screens.responseScreens.httpResponseScreen.HttpResponseScreen
-import ru.yasdev.queryquill.screens.responseScreens.httpResponseScreen.HttpResponseScreenViewModel
 import kotlin.reflect.KFunction1
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MainScreen(
     screenState: ScreenState,
-    responseVM: HttpResponseScreenViewModel,
     requestModel: RequestModel,
     requestState: RequestState,
     updateRequest: KFunction1<UpdateHttpRequestModel, Unit>,
-    onEvent: KFunction1<RequestEvent, Unit>
+    sendRequest: suspend (RequestModel) -> Unit,
+    onEvent: KFunction1<RequestEvent, Unit>,
+    responseState: ResponseModel
 ) {
     when (screenState) {
         ScreenState.SINGLE_SCREEN -> {
@@ -54,14 +55,15 @@ fun MainScreen(
                             requestState = requestState,
                             updateRequest = updateRequest,
                             onEvent = onEvent,
-                            sendRequest = responseVM::sendRequest
+                            sendRequest = sendRequest,
+                            pagerState = pagerState
                         )
 
                         1 -> HttpResponseScreen(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .weight(1f),
-                            httpResponseScreenViewModel = responseVM
+                            responseState = responseState
                         )
                     }
                 }
@@ -78,7 +80,7 @@ fun MainScreen(
                     requestState = requestState,
                     updateRequest = updateRequest,
                     onEvent = onEvent,
-                    sendRequest = responseVM::sendRequest
+                    sendRequest = sendRequest
                 )
                 Box(
                     Modifier
@@ -90,7 +92,7 @@ fun MainScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .weight(1f),
-                    httpResponseScreenViewModel = responseVM
+                    responseState = responseState
                 )
             }
         }
@@ -105,7 +107,7 @@ fun MainScreen(
                     requestState = requestState,
                     updateRequest = updateRequest,
                     onEvent = onEvent,
-                    sendRequest = responseVM::sendRequest
+                    sendRequest = sendRequest
                 )
                 Box(
                     Modifier
@@ -117,7 +119,8 @@ fun MainScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .weight(1f),
-                    httpResponseScreenViewModel = responseVM
+                    responseState = responseState
+
                 )
             }
         }

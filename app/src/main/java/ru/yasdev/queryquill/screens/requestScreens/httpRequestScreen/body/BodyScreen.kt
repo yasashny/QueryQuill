@@ -79,8 +79,8 @@ fun LazyListScope.bodyScreen(
 
         is BodyState.BinaryFile -> {
             item {
-                BinaryFileElement(currentState = bodyState){uri ->
-                    updateRequest(BodyState.BinaryFile(uri))
+                BinaryFileElement(currentState = bodyState){uri, fileName ->
+                    updateRequest(BodyState.BinaryFile(uri, fileName))
                 }
             }
         }

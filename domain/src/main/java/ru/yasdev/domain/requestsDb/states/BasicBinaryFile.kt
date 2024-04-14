@@ -6,4 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed class BasicBinaryFile {
     abstract val uri: Uri
+    abstract val fileName: String
 }

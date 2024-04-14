@@ -1,6 +1,8 @@
 package ru.yasdev.queryquill.screens.requestScreens
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import ru.yasdev.domain.requestsDb.models.RequestModel
@@ -11,6 +13,7 @@ import ru.yasdev.queryquill.screens.requestScreens.viewModel.RequestEvent
 import ru.yasdev.queryquill.screens.requestScreens.viewModel.RequestState
 import ru.yasdev.queryquill.screens.requestScreens.viewModel.UpdateHttpRequestModel
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun RequestScreen(
     modifier: Modifier,
@@ -18,7 +21,8 @@ fun RequestScreen(
     requestState: RequestState,
     updateRequest: (UpdateHttpRequestModel) -> Unit,
     onEvent: (RequestEvent) -> Unit,
-    sendRequest: (RequestModel) -> Unit
+    sendRequest: suspend (RequestModel) -> Unit,
+    pagerState: PagerState? = null
 ) {
     Box(modifier = modifier) {
         when (requestState) {
@@ -33,7 +37,7 @@ fun RequestScreen(
             }
 
             RequestState.Request -> {
-                HttpRequestScreen(requestModel = requestModel, updateRequest = updateRequest, sendRequest = sendRequest)
+                HttpRequestScreen(requestModel = requestModel, updateRequest = updateRequest, sendRequest = sendRequest, pagerState = pagerState)
             }
         }
     }

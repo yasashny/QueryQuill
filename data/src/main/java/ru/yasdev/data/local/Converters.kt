@@ -1,4 +1,4 @@
-package ru.yasdev.data.requestsDb
+package ru.yasdev.data.local
 
 import androidx.room.TypeConverter
 import kotlinx.serialization.encodeToString

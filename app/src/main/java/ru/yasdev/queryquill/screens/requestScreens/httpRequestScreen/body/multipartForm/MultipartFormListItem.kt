@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ru.yasdev.domain.requestsDb.models.KeyValue
 import ru.yasdev.domain.requestsDb.models.MultipartFormType
 import ru.yasdev.domain.requestsDb.states.MultipartFormState
 import ru.yasdev.queryquill.components.BinaryFileElement
@@ -73,12 +72,12 @@ fun MultipartFormListItem(
             is MultipartFormState.BinaryFile -> {
                 OutlinedTextField(
                     value = multipartFormState.title, onValueChange = {newTitle ->
-                        onTextChanged(MultipartFormState.BinaryFile(multipartFormState.uri, newTitle), true)
+                        onTextChanged(MultipartFormState.BinaryFile(uri = multipartFormState.uri, title = newTitle, fileName = multipartFormState.fileName), true)
                     },
                     label = { Text(text = "Name") }, modifier = Modifier.fillMaxWidth().padding(start = 15.dp, top = 15.dp, end = 15.dp)
                 )
-                BinaryFileElement(currentState = multipartFormState) { uri ->
-                    onTextChanged(MultipartFormState.BinaryFile(uri, multipartFormState.title), true)
+                BinaryFileElement(currentState = multipartFormState) { uri, fileName ->
+                    onTextChanged(MultipartFormState.BinaryFile(uri = uri, title = multipartFormState.title, fileName = fileName), true)
                 }
             }
 

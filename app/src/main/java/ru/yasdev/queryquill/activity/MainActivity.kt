@@ -18,7 +18,6 @@ import ru.yasdev.queryquill.components.MyTopAppBar
 import ru.yasdev.queryquill.navigationDrawer.NavigationDrawer
 import ru.yasdev.queryquill.screens.mainScreen.MainScreen
 import ru.yasdev.queryquill.screens.requestScreens.viewModel.RequestViewModel
-import ru.yasdev.queryquill.screens.responseScreens.httpResponseScreen.HttpResponseScreenViewModel
 import ru.yasdev.queryquill.ui.theme.QueryQuillTheme
 
 class MainActivity : ComponentActivity() {
@@ -34,11 +33,11 @@ class MainActivity : ComponentActivity() {
             requestViewModel = koinViewModel<RequestViewModel>()
             val requestModel by requestViewModel.requestModel.collectAsState()
             val requestState by requestViewModel.requestState.collectAsState()
+            val responseModel by requestViewModel.responseState.collectAsState()
             QueryQuillTheme {
                 NavigationDrawer(requestViewModel) { drawerState ->
                     val windowSizeClass = calculateWindowSizeClass(this)
                     val screenState = adaptiveScreenManager(windowSizeClass)
-                    val httpResponseScreenViewModel = koinViewModel<HttpResponseScreenViewModel>()
                     Scaffold(topBar = {
                         MyTopAppBar(
                             drawerState = drawerState,
@@ -54,11 +53,13 @@ class MainActivity : ComponentActivity() {
                         ) {
                             MainScreen(
                                 screenState = screenState,
-                                responseVM = httpResponseScreenViewModel,
                                 requestModel = requestModel,
                                 requestState = requestState,
                                 updateRequest = requestViewModel::updateHttpRequest,
-                                onEvent = requestViewModel::onEvent
+                                onEvent = requestViewModel::onEvent,
+                                sendRequest = requestViewModel::sendRequest,
+                                responseState = responseModel
+
                             )
                         }
                     }

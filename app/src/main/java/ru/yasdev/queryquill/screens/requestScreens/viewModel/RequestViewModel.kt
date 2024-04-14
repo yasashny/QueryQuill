@@ -19,6 +19,9 @@ import ru.yasdev.domain.requestsDb.useCases.DeleteRequestUseCase
 import ru.yasdev.domain.requestsDb.useCases.GetListOfRequestsUseCase
 import ru.yasdev.domain.requestsDb.useCases.GetRequestUseCase
 import ru.yasdev.domain.requestsDb.useCases.UpdateRequestUseCase
+import ru.yasdev.domain.sendRequest.RequestResponseModel
+import ru.yasdev.domain.sendRequest.ResponseModel
+import ru.yasdev.domain.sendRequest.SendRequestUseCase
 import ru.yasdev.queryquill.navigationDrawer.ListOfRequestsState
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -29,7 +32,8 @@ class RequestViewModel(
     private val deleteRequestUseCase: DeleteRequestUseCase,
     private val updateRequestUseCase: UpdateRequestUseCase,
     private val saveLastRequestIdUseCase: SaveLastRequestIdUseCase,
-    private val getLastRequestIdUseCase: GetLastRequestIdUseCase
+    private val getLastRequestIdUseCase: GetLastRequestIdUseCase,
+    private val sendRequestUseCase: SendRequestUseCase
 ) : ViewModel() {
 
     private val _requestState = MutableStateFlow<RequestState>(RequestState.Loading)
@@ -37,6 +41,15 @@ class RequestViewModel(
 
     private val _requestModel = MutableStateFlow(RequestModel.default())
     val requestModel = _requestModel.asStateFlow()
+
+    private val _responseState = MutableStateFlow(ResponseModel.default())
+    val responseState = _responseState.asStateFlow()
+
+    suspend fun sendRequest(requestModel: RequestModel){
+        println("www")
+        _responseState.value = sendRequestUseCase.execute(requestModel)
+
+    }
 
     val listOfRequests = getListOfRequestsUseCase.execute().flatMapLatest { list ->
         flow { emit(ListOfRequestsState.ListOfRequests(list)) }
@@ -49,7 +62,8 @@ class RequestViewModel(
                     _requestState.value = RequestState.Null
                 } else {
                     val request = getRequestUseCase.execute(it)
-                    _requestModel.value = request
+                    _requestModel.value = request.request
+                    _responseState.value = request.response
                     _requestState.value = RequestState.Request
                 }
             }
@@ -61,7 +75,8 @@ class RequestViewModel(
             is RequestEvent.AddRequest -> {
                 viewModelScope.launch {
                     val newRequest = addRequestUseCase.execute(requestEvent.model)
-                    _requestModel.value = newRequest
+                    _requestModel.value = newRequest.request
+                    _responseState.value = newRequest.response
                     _requestState.value = RequestState.Request
                 }
             }
@@ -70,6 +85,7 @@ class RequestViewModel(
                 viewModelScope.launch {
                     if (requestEvent.id == requestModel.value.id) {
                         _requestState.value = RequestState.Null
+                        _responseState.value = ResponseModel.default()
                     }
                     deleteRequestUseCase.execute(requestEvent.id)
                 }
@@ -79,14 +95,17 @@ class RequestViewModel(
                 viewModelScope.launch {
                     if (requestEvent.id == null) {
                         if (requestState.value == RequestState.Request) {
-                            updateRequestUseCase.execute(requestModel.value)
+                            updateRequestUseCase.execute(RequestResponseModel(requestModel.value, responseState.value))
                         }
                         _requestState.value = RequestState.Null
+                        _responseState.value = ResponseModel.default()
                     } else {
                         if (requestState.value == RequestState.Request) {
-                            updateRequestUseCase.execute(requestModel.value)
+                            updateRequestUseCase.execute(RequestResponseModel(requestModel.value, responseState.value))
                         }
-                        _requestModel.value = getRequestUseCase.execute(requestEvent.id)
+                        val getRequest = getRequestUseCase.execute(requestEvent.id)
+                        _requestModel.value = getRequest.request
+                        _responseState.value = getRequest.response
                         _requestState.value = RequestState.Request
                     }
                 }
@@ -134,7 +153,7 @@ class RequestViewModel(
     fun saveLastRequest() {
         viewModelScope.launch {
             if (requestState.value == RequestState.Request) {
-                updateRequestUseCase.execute(requestModel.value)
+                updateRequestUseCase.execute(RequestResponseModel(requestModel.value, responseState.value))
                 saveLastRequestIdUseCase.execute(requestModel.value.id)
             } else {
                 saveLastRequestIdUseCase.execute(null)
