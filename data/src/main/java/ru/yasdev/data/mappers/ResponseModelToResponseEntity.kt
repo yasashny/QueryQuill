@@ -8,6 +8,7 @@ fun ResponseModel.toResponseEntity(id: Int): ResponseEntity{
         status = status,
         body = body,
         contentLength = contentLength,
-        id = id
+        id = id,
+        time = time
     )
 }

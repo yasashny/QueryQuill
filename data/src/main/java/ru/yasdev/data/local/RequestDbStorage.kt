@@ -38,7 +38,8 @@ class RequestDbStorage(context: Context) {
             id = id.toInt(),
             status = "--",
             body = "--",
-            contentLength = "--"
+            contentLength = "--",
+            time = "--"
         ))
         return getRequest(id.toInt())
 

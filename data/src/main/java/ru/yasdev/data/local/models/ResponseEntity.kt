@@ -8,5 +8,6 @@ data class ResponseEntity(
     @PrimaryKey val id: Int,
     val status: String,
     val body: String,
-    val contentLength: String
+    val contentLength: String,
+    val time: String
 )

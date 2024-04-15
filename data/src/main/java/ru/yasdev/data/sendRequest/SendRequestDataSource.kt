@@ -25,6 +25,7 @@ import io.ktor.http.contentLength
 import io.ktor.http.fromFilePath
 import io.ktor.util.InternalAPI
 import io.ktor.util.network.UnresolvedAddressException
+import io.ktor.util.toByteArray
 import ru.yasdev.data.utils.encodeBase64
 import ru.yasdev.data.utils.fileFromContentUri
 import ru.yasdev.data.utils.fileNameByUri
@@ -162,24 +163,30 @@ class SendRequestDataSource(private val client: HttpClient, private val context:
                     AuthState.NoAuth -> {}
                 }
             }
+            val requestTime = response.requestTime
+            val responseTime = response.responseTime
+            val elapsedTime = responseTime.timestamp - requestTime.timestamp
             return ResponseModel(
-                response.status.value.toString(),
-                response.bodyAsText(),
-                response.contentLength()?.toString() ?: "--"
+                status = response.status.value.toString(),
+                body = response.bodyAsText(),
+                contentLength = response.content.toByteArray().size.toLong().toString(),
+                time = elapsedTime.toString()
             )
         } catch (e: ConnectException) {
             // Handle connection errors
-            return ResponseModel("Error", "qqq", "--")
+            return ResponseModel("Error", e.message.toString(), "--", "--")
         } catch (e: UnknownHostException) {
+
             // Handle unresolved host errors
-            return ResponseModel("Error", "qqq", "--")
+            return ResponseModel("Error", e.message.toString(), "--", "--")
         } catch (e: RedirectResponseException) {
-            return ResponseModel("Error", "qqq", "--")
+            return ResponseModel("Error", e.message.toString(), "--", "--")
         } catch (e: ResponseException) {
-            return ResponseModel("Error", "qqq", "--")
+            return ResponseModel("Error", e.message.toString(), "--", "--")
         } catch (e: Exception) {
+            println(e)
             // Handle other exceptions
-            return ResponseModel("Error", "qqq", "--")
+            return ResponseModel("Error", e.message.toString(), "--", "--")
         }
 
     }

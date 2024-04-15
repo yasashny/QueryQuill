@@ -22,6 +22,7 @@ fun HttpResponseScreen(
         Column(Modifier.fillMaxSize()) {
             Text(text = responseState.status)
             Text(text = responseState.contentLength)
+            Text(text = responseState.time)
             Text(text = responseState.body)
         }
     }
