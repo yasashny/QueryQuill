@@ -183,7 +183,12 @@ class SendRequestDataSource(private val client: HttpClient, private val context:
             return ResponseModel("Error", e.message.toString(), "--", "--")
         } catch (e: ResponseException) {
             return ResponseModel("Error", e.message.toString(), "--", "--")
-        } catch (e: Exception) {
+        }catch (e: UnresolvedAddressException){
+            return ResponseModel("Error", "Couldn't resolve host name", "--", "--")
+        }catch (e: NullPointerException){
+            return ResponseModel("Error", "File not found", "--", "--")
+        }
+        catch (e: Exception) {
             println(e)
             // Handle other exceptions
             return ResponseModel("Error", e.message.toString(), "--", "--")
