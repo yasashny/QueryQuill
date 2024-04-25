@@ -13,6 +13,7 @@ import io.ktor.client.request.forms.formData
 import io.ktor.client.request.headers
 import io.ktor.client.request.request
 import io.ktor.client.statement.bodyAsText
+import io.ktor.client.statement.readBytes
 import io.ktor.http.ContentType
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
@@ -22,6 +23,7 @@ import io.ktor.http.Parameters
 import io.ktor.http.URLBuilder
 import io.ktor.http.URLProtocol
 import io.ktor.http.contentLength
+import io.ktor.http.contentType
 import io.ktor.http.fromFilePath
 import io.ktor.util.InternalAPI
 import io.ktor.util.network.UnresolvedAddressException
@@ -168,7 +170,7 @@ class SendRequestDataSource(private val client: HttpClient, private val context:
             val elapsedTime = responseTime.timestamp - requestTime.timestamp
             return ResponseModel(
                 status = response.status.value.toString(),
-                body = response.bodyAsText(),
+                body = response.readBytes().toString(Charsets.UTF_8),
                 contentLength = response.content.toByteArray().size.toLong().toString(),
                 time = elapsedTime.toString()
             )

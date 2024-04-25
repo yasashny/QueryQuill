@@ -46,7 +46,8 @@ fun MainScreen(
                 HorizontalPager(
                     state = pagerState, modifier = Modifier
                         .fillMaxWidth()
-                        .weight(1f)
+                        .weight(1f),
+                    userScrollEnabled = false
                 ) {
                     when (it) {
                         0 -> RequestScreen(
@@ -63,7 +64,7 @@ fun MainScreen(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .weight(1f),
-                            responseState = responseState
+                            responseModel = responseState
                         )
                     }
                 }
@@ -92,7 +93,7 @@ fun MainScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .weight(1f),
-                    responseState = responseState
+                    responseModel = responseState
                 )
             }
         }
@@ -119,7 +120,7 @@ fun MainScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .weight(1f),
-                    responseState = responseState
+                    responseModel = responseState
 
                 )
             }

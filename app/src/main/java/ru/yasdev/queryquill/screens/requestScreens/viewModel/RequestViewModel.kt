@@ -2,6 +2,7 @@ package ru.yasdev.queryquill.screens.requestScreens.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -56,7 +57,7 @@ class RequestViewModel(
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), ListOfRequestsState.Loading)
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             getLastRequestIdUseCase.execute().collect {
                 if (it == null) {
                     _requestState.value = RequestState.Null
@@ -73,7 +74,7 @@ class RequestViewModel(
     fun onEvent(requestEvent: RequestEvent) {
         when (requestEvent) {
             is RequestEvent.AddRequest -> {
-                viewModelScope.launch {
+                viewModelScope.launch(Dispatchers.IO) {
                     val newRequest = addRequestUseCase.execute(requestEvent.model)
                     _requestModel.value = newRequest.request
                     _responseState.value = newRequest.response
@@ -82,7 +83,7 @@ class RequestViewModel(
             }
 
             is RequestEvent.DeleteRequest -> {
-                viewModelScope.launch {
+                viewModelScope.launch(Dispatchers.IO) {
                     if (requestEvent.id == requestModel.value.id) {
                         _requestState.value = RequestState.Null
                         _responseState.value = ResponseModel.default()
@@ -92,7 +93,7 @@ class RequestViewModel(
             }
 
             is RequestEvent.SetRequest -> {
-                viewModelScope.launch {
+                viewModelScope.launch(Dispatchers.IO) {
                     if (requestEvent.id == null) {
                         if (requestState.value == RequestState.Request) {
                             updateRequestUseCase.execute(RequestResponseModel(requestModel.value, responseState.value))
@@ -151,7 +152,7 @@ class RequestViewModel(
     }
 
     fun saveLastRequest() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             if (requestState.value == RequestState.Request) {
                 updateRequestUseCase.execute(RequestResponseModel(requestModel.value, responseState.value))
                 saveLastRequestIdUseCase.execute(requestModel.value.id)
