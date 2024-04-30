@@ -3,31 +3,22 @@ package ru.yasdev.data.sendRequest
 import android.content.Context
 import android.net.Uri
 import io.ktor.client.HttpClient
-import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.RedirectResponseException
 import io.ktor.client.plugins.ResponseException
-import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.request.forms.FormDataContent
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.headers
 import io.ktor.client.request.request
-import io.ktor.client.statement.bodyAsText
 import io.ktor.client.statement.readBytes
 import io.ktor.http.ContentType
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
-import io.ktor.http.HttpStatusCode
 import io.ktor.http.Parameters
-import io.ktor.http.URLBuilder
-import io.ktor.http.URLProtocol
-import io.ktor.http.contentLength
-import io.ktor.http.contentType
 import io.ktor.http.fromFilePath
 import io.ktor.util.InternalAPI
 import io.ktor.util.network.UnresolvedAddressException
-import io.ktor.util.toByteArray
 import ru.yasdev.data.utils.encodeBase64
 import ru.yasdev.data.utils.fileFromContentUri
 import ru.yasdev.data.utils.fileNameByUri
@@ -81,9 +72,10 @@ class SendRequestDataSource(private val client: HttpClient, private val context:
 
                 when (val bodyState = model.bodyState) {
                     is BodyState.BinaryFile -> {
-                        //Сделать проверку на существующий файл
-                        fileNameByUri(context.contentResolver, bodyState.uri)
-                        body = fileFromContentUri(context = context, bodyState.uri).readBytes()
+                        if (bodyState.uri != Uri.EMPTY) {
+                            fileNameByUri(context.contentResolver, bodyState.uri)
+                            body = fileFromContentUri(context = context, bodyState.uri).readBytes()
+                        }
                     }
 
                     is BodyState.FormUrlEncoded -> {
@@ -102,7 +94,6 @@ class SendRequestDataSource(private val client: HttpClient, private val context:
                                 bodyState.multipart.forEach { multipartState ->
                                     when (multipartState) {
                                         is MultipartFormState.BinaryFile -> {
-                                            //Сделать проверку на существующий файл
                                             if (multipartState.uri != Uri.EMPTY) {
                                                 append(multipartState.title, fileFromContentUri(
                                                     context = context, multipartState.uri
@@ -114,8 +105,7 @@ class SendRequestDataSource(private val client: HttpClient, private val context:
                                                                 context.contentResolver,
                                                                 multipartState.uri
                                                             )
-                                                        )
-                                                            .firstOrNull()?.toString()
+                                                        ).firstOrNull()?.toString()
                                                             ?: ContentType.Application.OctetStream.toString()
                                                     )
                                                     append(
@@ -167,34 +157,28 @@ class SendRequestDataSource(private val client: HttpClient, private val context:
             }
             val requestTime = response.requestTime
             val responseTime = response.responseTime
-            val elapsedTime = responseTime.timestamp - requestTime.timestamp
+            val elapsedTime = (responseTime.timestamp - requestTime.timestamp).toString()
+            val body = response.readBytes().toString(Charsets.UTF_8)
+            val contentLength = body.length.toString()
+            val status = response.status.value.toString()
             return ResponseModel(
-                status = response.status.value.toString(),
-                body = response.readBytes().toString(Charsets.UTF_8),
-                contentLength = response.content.toByteArray().size.toLong().toString(),
-                time = elapsedTime.toString()
+                status = status, body = body, contentLength = contentLength, time = elapsedTime
             )
+
         } catch (e: ConnectException) {
-            // Handle connection errors
             return ResponseModel("Error", e.message.toString(), "--", "--")
         } catch (e: UnknownHostException) {
-
-            // Handle unresolved host errors
             return ResponseModel("Error", e.message.toString(), "--", "--")
         } catch (e: RedirectResponseException) {
-            return ResponseModel("Error", e.message.toString(), "--", "--")
+            return ResponseModel("Error", e.message, "--", "--")
         } catch (e: ResponseException) {
             return ResponseModel("Error", e.message.toString(), "--", "--")
-        }catch (e: UnresolvedAddressException){
+        } catch (e: UnresolvedAddressException) {
             return ResponseModel("Error", "Couldn't resolve host name", "--", "--")
-        }catch (e: NullPointerException){
+        } catch (e: NullPointerException) {
             return ResponseModel("Error", "File not found", "--", "--")
-        }
-        catch (e: Exception) {
-            println(e)
-            // Handle other exceptions
+        } catch (e: Exception) {
             return ResponseModel("Error", e.message.toString(), "--", "--")
         }
-
     }
 }

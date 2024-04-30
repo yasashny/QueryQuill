@@ -28,7 +28,10 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
@@ -44,7 +47,16 @@ fun NavigationDrawer(
     val scope = rememberCoroutineScope()
     val items by viewModel.listOfRequests.collectAsState(initial = ListOfRequestsState.Loading)
     val requestId by viewModel.requestModel.collectAsState()
-    ModalNavigationDrawer(drawerState = drawerState, drawerContent = {
+    var gesturesState by remember {
+        mutableStateOf(false)
+    }
+    if(drawerState.isOpen){
+        gesturesState = true
+    }
+    if(drawerState.isClosed){
+        gesturesState = false
+    }
+    ModalNavigationDrawer(drawerState = drawerState, gesturesEnabled = gesturesState, drawerContent = {
         ModalDrawerSheet {
             Spacer(Modifier.height(12.dp))
             Row {

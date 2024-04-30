@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -111,28 +112,30 @@ fun HttpResponseScreen(
         }
     }
 }
-@SuppressLint("SetJavaScriptEnabled")
+@SuppressLint("SetJavaScriptEnabled", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun WebViewPage(html: String) {
-    val context = LocalContext.current
+    Scaffold {
+        val context = LocalContext.current
 
 
-    val webView = remember {
-        WebView(context).apply {
-            webViewClient = WebViewClient()
-            settings.javaScriptEnabled = true
-            settings.cacheMode = WebSettings.LOAD_NO_CACHE
-            layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
-            )
+        val webView = remember {
+            WebView(context).apply {
+                webViewClient = WebViewClient()
+                settings.javaScriptEnabled = true
+                settings.cacheMode = WebSettings.LOAD_NO_CACHE
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
+                )
 
+
+            }
 
         }
 
+        AndroidView(modifier = Modifier.fillMaxSize(), factory = { webView }, update = {
+            it.loadDataWithBaseURL(null, html, "text/html", "UTF-8", null)
+        })
     }
-
-    AndroidView(modifier = Modifier.fillMaxSize(), factory = { webView }, update = {
-        it.loadDataWithBaseURL(null, html, "text/html", "UTF-8", null)
-    })
 }
 

@@ -22,7 +22,7 @@ fun LazyListScope.authScreen(
     item {
         Row {
             Box(
-                contentAlignment = Alignment.Center,
+                //contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 15.dp, top = 15.dp)
