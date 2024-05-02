@@ -65,7 +65,7 @@ fun ChangeLabelAlertDialog(openDialog: MutableState<Boolean>, flag: MutableState
                         TextButton(onClick = {
                             flag.value = newLabel
                             openDialog.value = false
-                        }) {
+                        }, enabled = newLabel.isNotEmpty()) {
                             Text("Change label")
                         }
                     }

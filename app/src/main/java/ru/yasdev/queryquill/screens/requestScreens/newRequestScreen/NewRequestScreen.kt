@@ -29,7 +29,7 @@ fun NewRequestScreen(addRequest: (model: AddRequestModel) -> Unit) {
         contentAlignment = Alignment.Center
     ) {
         var label by remember {
-            mutableStateOf("MyRequest")
+            mutableStateOf("My Request")
         }
         OutlinedCard(
             modifier = Modifier
@@ -52,13 +52,14 @@ fun NewRequestScreen(addRequest: (model: AddRequestModel) -> Unit) {
                             Alignment.CenterHorizontally
                         )
                         .padding(top = 15.dp),
-                    label = { Text(text = "label") })
+                    label = { Text(text = "Label") })
                 OutlinedButton(
                     onClick = { addRequest(AddRequestModel(label = label)) }, modifier = Modifier
                         .align(
                             Alignment.CenterHorizontally
                         )
-                        .padding(bottom = 15.dp, top = 15.dp)
+                        .padding(bottom = 15.dp, top = 15.dp),
+                    enabled = label.isNotEmpty()
                 ) {
                     Text(text = "Add request")
                 }
