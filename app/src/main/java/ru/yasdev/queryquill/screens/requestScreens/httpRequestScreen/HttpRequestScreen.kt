@@ -15,15 +15,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import ru.yasdev.domain.requestsDb.models.KeyValue
 import ru.yasdev.domain.requestsDb.models.RequestModel
+import ru.yasdev.queryquill.components.ChangeContentTypeDialog
 import ru.yasdev.queryquill.components.LoadingAlertDialog
 import ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen.auth.authScreen
 import ru.yasdev.queryquill.screens.requestScreens.httpRequestScreen.body.bodyScreen
@@ -37,9 +39,33 @@ import ru.yasdev.queryquill.screens.requestScreens.viewModel.UpdateHttpRequestMo
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HttpRequestScreen(
-    requestModel: RequestModel, updateRequest: (UpdateHttpRequestModel) -> Unit, sendRequest: suspend (RequestModel) -> Unit,
+    requestModel: RequestModel,
+    updateRequest: (UpdateHttpRequestModel) -> Unit,
+    sendRequest: suspend (RequestModel) -> Unit,
     pagerState: PagerState? = null
 ) {
+    val context = LocalContext.current
+    val openChangeContentTypeDialog = remember {
+        mutableStateOf(Pair(false, ""))
+    }
+    val isChangeContentType = remember {
+        mutableStateOf(false)
+    }
+    if (openChangeContentTypeDialog.value.first) {
+        ChangeContentTypeDialog(
+            openDialog = openChangeContentTypeDialog, isChangeType = isChangeContentType
+        )
+    }
+    if (isChangeContentType.value) {
+        updateRequest(
+            UpdateHttpRequestModel.Header(listOf(
+                KeyValue(
+                    "Content-Type", openChangeContentTypeDialog.value.second
+                )
+            ) + requestModel.header.list.filter { keyValue -> keyValue.key != "Content-Type" })
+        )
+        isChangeContentType.value = false
+    }
     val scope = rememberCoroutineScope()
     val openLoadingDialog = remember {
         mutableStateOf(false)
@@ -47,13 +73,14 @@ fun HttpRequestScreen(
     val isCancelJob = remember {
         mutableStateOf(false)
     }
-    if(openLoadingDialog.value){
+    if (openLoadingDialog.value) {
         LoadingAlertDialog(openDialog = openLoadingDialog, isCancelJob)
     }
-    if(isCancelJob.value){
+    if (isCancelJob.value) {
         scope.cancel()
         isCancelJob.value = false
     }
+
     Scaffold(floatingActionButton = {
         ExtendedFloatingActionButton(onClick = {
             println("qqq")
@@ -63,9 +90,9 @@ fun HttpRequestScreen(
                 openLoadingDialog.value = false
                 pagerState?.scrollToPage(2)
             }
-             }, icon = {
+        }, icon = {
             Icon(
-                imageVector = Icons.AutoMirrored.Outlined.Send, contentDescription = ""
+                imageVector = Icons.AutoMirrored.Outlined.Send, contentDescription = null
             )
         }, text = { Text(text = "Send request") })
     }) {
@@ -79,6 +106,13 @@ fun HttpRequestScreen(
                 }
                 when (httpRequestHeaderState.value) {
                     HttpRequestHeaderState.BODY -> bodyScreen(requestModel.bodyState) { bodyState ->
+                        changeContentType(
+                            requestModel = requestModel,
+                            updateRequest = updateRequest,
+                            bodyState = bodyState,
+                            openChangeContentTypeDialog = openChangeContentTypeDialog,
+                            context = context
+                        )
                         updateRequest(UpdateHttpRequestModel.Body(bodyState))
                     }
 
@@ -100,7 +134,3 @@ fun HttpRequestScreen(
         }
     }
 }
-
-
-
-

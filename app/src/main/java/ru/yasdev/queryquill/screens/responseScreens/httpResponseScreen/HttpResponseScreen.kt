@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -117,8 +116,6 @@ fun HttpResponseScreen(
 fun WebViewPage(html: String) {
     Scaffold {
         val context = LocalContext.current
-
-
         val webView = remember {
             WebView(context).apply {
                 webViewClient = WebViewClient()
@@ -127,12 +124,8 @@ fun WebViewPage(html: String) {
                 layoutParams = ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
                 )
-
-
             }
-
         }
-
         AndroidView(modifier = Modifier.fillMaxSize(), factory = { webView }, update = {
             it.loadDataWithBaseURL(null, html, "text/html", "UTF-8", null)
         })

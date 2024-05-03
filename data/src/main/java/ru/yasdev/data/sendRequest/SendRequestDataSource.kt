@@ -11,17 +11,16 @@ import io.ktor.client.request.forms.formData
 import io.ktor.client.request.headers
 import io.ktor.client.request.request
 import io.ktor.client.statement.readBytes
-import io.ktor.http.ContentType
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.http.Parameters
-import io.ktor.http.fromFilePath
 import io.ktor.util.InternalAPI
 import io.ktor.util.network.UnresolvedAddressException
 import ru.yasdev.data.utils.encodeBase64
 import ru.yasdev.data.utils.fileFromContentUri
 import ru.yasdev.data.utils.fileNameByUri
+import ru.yasdev.data.utils.getMIMEType
 import ru.yasdev.domain.requestsDb.models.HttpType
 import ru.yasdev.domain.requestsDb.models.KeyValue
 import ru.yasdev.domain.requestsDb.states.AuthState
@@ -100,13 +99,7 @@ class SendRequestDataSource(private val client: HttpClient, private val context:
                                                 ).readBytes(), Headers.build {
                                                     append(
                                                         HttpHeaders.ContentType,
-                                                        ContentType.fromFilePath(
-                                                            fileNameByUri(
-                                                                context.contentResolver,
-                                                                multipartState.uri
-                                                            )
-                                                        ).firstOrNull()?.toString()
-                                                            ?: ContentType.Application.OctetStream.toString()
+                                                        getMIMEType(context, multipartState.uri)
                                                     )
                                                     append(
                                                         HttpHeaders.ContentDisposition,
