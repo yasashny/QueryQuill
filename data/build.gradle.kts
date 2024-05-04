@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "ru.yasdev.data"
+    namespace = "com.yas.data"
     compileSdk = 34
 
     defaultConfig {

@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "ru.yasdev.queryquill"
+    namespace = "com.yas.queryquill"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "ru.yasdev.queryquill"
+        applicationId = "com.yas.queryquill"
         minSdk = 29
         targetSdk = 34
         versionCode = 1
