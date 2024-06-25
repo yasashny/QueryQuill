@@ -1,34 +1,39 @@
 [versions]
 activityCompose = "1.9.0"
-appcompat = "1.6.1"
-composeBom = "2024.05.00"
+appcompat = "1.7.0"
+sora-editor-bom = "0.23.4"
+composeBom = "2024.06.00"
 coreKtx = "1.13.1"
 datastorePreferences = "1.1.1"
-espressoCore = "3.5.1"
+desugar_jdk_libs = "2.0.4"
+espressoCore = "3.6.0"
 junit = "4.13.2"
-junitVersion = "1.1.5"
+junitVersion = "1.2.0"
 koinAndroidxCompose = "3.5.3"
-kotlinxCoroutinesAndroid = "1.7.3"
+kotlinxCoroutinesAndroid = "1.8.0"
 kotlinxSerializationJson = "1.6.0"
 ktorClientCIO = "2.3.10"
-lifecycleRuntimeKtx = "2.7.0"
+lifecycleRuntimeKtx = "2.8.2"
 material = "1.12.0"
 material3Android = "1.2.1"
 material3WindowSizeClass = "1.2.1"
 navigationCompose = "2.7.7"
 roomVersion = "2.6.1"
-androidApplicationPlugin = "8.4.0"
+androidApplicationPlugin = "8.5.0"
 kotlinVersion = "1.9.23"
-androidLibraryVersion = "8.4.0"
+androidLibraryVersion = "8.5.0"
 kspVersion = "1.9.23-1.0.19"
 
 [libraries]
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+sora-editor-bom = { module = "io.github.Rosemoe.sora-editor:bom", version.ref = "sora-editor-bom" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
 datastore = { module = "androidx.datastore:datastore", version.ref = "datastorePreferences" }
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
+desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
+sora-editor = { module = "io.github.Rosemoe.sora-editor:editor" }
 espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
 ext-junit = { module = "androidx.test.ext:junit", version.ref = "junitVersion" }
 junit = { module = "junit:junit", version.ref = "junit" }

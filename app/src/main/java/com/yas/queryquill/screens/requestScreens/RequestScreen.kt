@@ -4,6 +4,8 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.yas.domain.requestsDb.models.RequestModel
 import com.yas.queryquill.screens.requestScreens.httpRequestScreen.HttpRequestScreen
@@ -12,18 +14,22 @@ import com.yas.queryquill.screens.requestScreens.newRequestScreen.NewRequestScre
 import com.yas.queryquill.screens.requestScreens.viewModel.RequestEvent
 import com.yas.queryquill.screens.requestScreens.viewModel.RequestState
 import com.yas.queryquill.screens.requestScreens.viewModel.UpdateHttpRequestModel
+import kotlinx.coroutines.flow.StateFlow
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun RequestScreen(
     modifier: Modifier,
-    requestModel: RequestModel,
-    requestState: RequestState,
+    requestModel: StateFlow<RequestModel>,
+    requestStateFlow: StateFlow<RequestState>,
     updateRequest: (UpdateHttpRequestModel) -> Unit,
     onEvent: (RequestEvent) -> Unit,
     sendRequest: suspend (RequestModel) -> Unit,
-    pagerState: PagerState? = null
+    pagerState: PagerState? = null,
+    navigateToEditor: () -> Unit
 ) {
+    val requestState by requestStateFlow.collectAsState()
+
     Box(modifier = modifier) {
         when (requestState) {
             RequestState.Loading -> {
@@ -37,7 +43,13 @@ fun RequestScreen(
             }
 
             RequestState.Request -> {
-                HttpRequestScreen(requestModel = requestModel, updateRequest = updateRequest, sendRequest = sendRequest, pagerState = pagerState)
+                HttpRequestScreen(
+                    requestModelFlow = requestModel,
+                    updateRequest = updateRequest,
+                    sendRequest = sendRequest,
+                    pagerState = pagerState,
+                    navigateToEditor = navigateToEditor
+                )
             }
         }
     }

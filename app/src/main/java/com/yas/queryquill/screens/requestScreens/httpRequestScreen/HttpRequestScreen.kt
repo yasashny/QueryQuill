@@ -15,14 +15,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
 import com.yas.domain.requestsDb.models.KeyValue
 import com.yas.domain.requestsDb.models.RequestModel
 import com.yas.queryquill.components.ChangeContentTypeDialog
@@ -34,16 +34,21 @@ import com.yas.queryquill.screens.requestScreens.httpRequestScreen.query.querySc
 import com.yas.queryquill.screens.requestScreens.httpRequestScreen.requestScreenHeader.HttpRequestHeaderState
 import com.yas.queryquill.screens.requestScreens.httpRequestScreen.requestScreenHeader.HttpRequestScreenHeader
 import com.yas.queryquill.screens.requestScreens.viewModel.UpdateHttpRequestModel
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HttpRequestScreen(
-    requestModel: RequestModel,
+    requestModelFlow: StateFlow<RequestModel>,
     updateRequest: (UpdateHttpRequestModel) -> Unit,
     sendRequest: suspend (RequestModel) -> Unit,
-    pagerState: PagerState? = null
+    pagerState: PagerState? = null,
+    navigateToEditor: () -> Unit
 ) {
+    val requestModel by requestModelFlow.collectAsState()
     val context = LocalContext.current
     val openChangeContentTypeDialog = remember {
         mutableStateOf(Pair(false, ""))
@@ -105,7 +110,9 @@ fun HttpRequestScreen(
                     )
                 }
                 when (httpRequestHeaderState.value) {
-                    HttpRequestHeaderState.BODY -> bodyScreen(requestModel.bodyState) { bodyState ->
+                    HttpRequestHeaderState.BODY -> bodyScreen(
+                        bodyState = requestModel.bodyState, navigateToEditor = navigateToEditor
+                    ) { bodyState ->
                         changeContentType(
                             requestModel = requestModel,
                             updateRequest = updateRequest,

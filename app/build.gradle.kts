@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.devtools.ksp)
+    kotlin("plugin.serialization") version "1.9.23"
 }
 
 android {
@@ -31,11 +32,12 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        isCoreLibraryDesugaringEnabled = true
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -52,7 +54,6 @@ android {
 
 
 dependencies {
-
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
@@ -81,6 +82,13 @@ dependencies {
     //Navigation
     implementation(libs.navigation.compose)
 
+    //Serialization
+    implementation(libs.kotlinx.serialization.json)
+
+    //SoraEditor
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
+    implementation(platform(libs.sora.editor.bom))
+    implementation(libs.sora.editor)
 
     implementation(project(":domain"))
     implementation(project(":data"))

@@ -9,16 +9,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import org.koin.androidx.compose.koinViewModel
+import androidx.navigation.compose.rememberNavController
 import com.yas.queryquill.adaptive.adaptiveScreenManager
-import com.yas.queryquill.components.MyTopAppBar
+import com.yas.queryquill.components.topAppBar.MyTopAppBar
+import com.yas.queryquill.navigation.Navigation
 import com.yas.queryquill.navigationDrawer.NavigationDrawer
-import com.yas.queryquill.screens.mainScreen.MainScreen
 import com.yas.queryquill.screens.requestScreens.viewModel.RequestViewModel
 import com.yas.queryquill.ui.theme.QueryQuillTheme
+import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
 
@@ -31,9 +30,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             requestViewModel = koinViewModel<RequestViewModel>()
-            val requestModel by requestViewModel.requestModel.collectAsState()
-            val requestState by requestViewModel.requestState.collectAsState()
-            val responseModel by requestViewModel.responseState.collectAsState()
+            val navController = rememberNavController()
             QueryQuillTheme {
                 NavigationDrawer(requestViewModel) { drawerState ->
                     val windowSizeClass = calculateWindowSizeClass(this)
@@ -41,9 +38,10 @@ class MainActivity : ComponentActivity() {
                     Scaffold(topBar = {
                         MyTopAppBar(
                             drawerState = drawerState,
-                            label = requestModel.label,
+                            requestModelFlow = requestViewModel.requestModel,
                             updateRequest = requestViewModel::updateHttpRequest,
-                            requestState = requestState
+                            requestStateFlow = requestViewModel.requestState,
+                            navController = navController
                         )
                     }) {
                         Surface(
@@ -51,15 +49,15 @@ class MainActivity : ComponentActivity() {
                                 .padding(top = it.calculateTopPadding())
                                 .fillMaxSize()
                         ) {
-                            MainScreen(
+                            Navigation(
+                                navController = navController,
                                 screenState = screenState,
-                                requestModel = requestModel,
-                                requestState = requestState,
+                                requestModel = requestViewModel.requestModel,
+                                requestState = requestViewModel.requestState,
                                 updateRequest = requestViewModel::updateHttpRequest,
-                                onEvent = requestViewModel::onEvent,
                                 sendRequest = requestViewModel::sendRequest,
-                                responseState = responseModel
-
+                                onEvent = requestViewModel::onEvent,
+                                responseState = requestViewModel.responseState
                             )
                         }
                     }
@@ -68,8 +66,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onStop() {
         requestViewModel.saveLastRequest()
+        super.onStop()
     }
 }

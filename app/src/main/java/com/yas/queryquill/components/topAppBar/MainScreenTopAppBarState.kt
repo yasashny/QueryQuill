@@ -1,4 +1,4 @@
-package com.yas.queryquill.components
+package com.yas.queryquill.components.topAppBar
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -12,22 +12,33 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.text.style.TextOverflow
-import kotlinx.coroutines.launch
+import com.yas.domain.requestsDb.models.RequestModel
+import com.yas.queryquill.components.ChangeLabelAlertDialog
 import com.yas.queryquill.screens.requestScreens.viewModel.RequestState
 import com.yas.queryquill.screens.requestScreens.viewModel.UpdateHttpRequestModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyTopAppBar(
+fun MainScreenTopAppBarState(
     drawerState: DrawerState,
-    label: String,
+    requestModelFlow: StateFlow<RequestModel>,
     updateRequest: (UpdateHttpRequestModel) -> Unit,
-    requestState: RequestState
+    requestStateFlow: StateFlow<RequestState>
 ) {
+    val requestModel by requestModelFlow.collectAsState()
+    val requestState by requestStateFlow.collectAsState()
+
+    val label = requestModel.label
+
     TopAppBar(title = {
         if (requestState == RequestState.Request) {
             Text(
@@ -43,10 +54,9 @@ fun MyTopAppBar(
 
         val scope = rememberCoroutineScope()
 
-        IconButton(onClick = { scope.launch { drawerState.open() } }) {
+        IconButton(onClick = { scope.launch(Dispatchers.IO) { drawerState.open() } }) {
             Icon(imageVector = Icons.Filled.Menu, contentDescription = null)
         }
-
 
     }, actions = {
         val openDialog = remember {

@@ -2,9 +2,9 @@ package com.yas.domain.requestsDb.states
 
 import android.net.Uri
 import androidx.compose.runtime.Immutable
-import kotlinx.serialization.Serializable
 import com.yas.domain.requestsDb.models.KeyValue
 import com.yas.domain.requestsDb.serializers.UriAsStringSerializer
+import kotlinx.serialization.Serializable
 
 @Serializable
 @Immutable
@@ -13,13 +13,13 @@ sealed interface BodyState : BasicState {
     override val name: String
 
     @Serializable
-    data class Text(val text: String) : BodyState {
+    data class Text(val text: String, val textType: TextType) : BodyState {
         override val name: String
             get() = "Text"
 
         companion object {
             fun default(): Text {
-                return Text("")
+                return Text("", TextType.JSON)
             }
         }
     }
@@ -49,9 +49,10 @@ sealed interface BodyState : BasicState {
     }
 
     @Serializable
-    data class BinaryFile(override val uri: @Serializable(UriAsStringSerializer::class) Uri,
-                          override val fileName: String) :
-        BodyState, BasicBinaryFile() {
+    data class BinaryFile(
+        override val uri: @Serializable(UriAsStringSerializer::class) Uri,
+        override val fileName: String
+    ) : BodyState, BasicBinaryFile() {
         override val name: String
             get() = "Binary File"
 

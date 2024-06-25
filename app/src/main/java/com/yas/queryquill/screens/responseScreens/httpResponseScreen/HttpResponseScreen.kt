@@ -18,6 +18,7 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,11 +29,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.yas.domain.sendRequest.ResponseModel
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun HttpResponseScreen(
-    modifier: Modifier, responseModel: ResponseModel
+    modifier: Modifier, responseModelFlow: StateFlow<ResponseModel>
 ) {
+    val responseModel by responseModelFlow.collectAsState()
     Box(modifier = modifier) {
         Column(Modifier.fillMaxSize()) {
             Row {
@@ -111,6 +114,7 @@ fun HttpResponseScreen(
         }
     }
 }
+
 @SuppressLint("SetJavaScriptEnabled", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun WebViewPage(html: String) {

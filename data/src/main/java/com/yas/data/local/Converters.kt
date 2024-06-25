@@ -1,14 +1,14 @@
 package com.yas.data.local
 
 import androidx.room.TypeConverter
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.modules.SerializersModule
 import com.yas.domain.requestsDb.models.HttpType
 import com.yas.domain.requestsDb.models.KeyValue
 import com.yas.domain.requestsDb.states.AuthState
 import com.yas.domain.requestsDb.states.BodyState
 import com.yas.domain.requestsDb.states.MultipartFormState
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
 
 object Converters {
     private val jsonSerializer = Json {
@@ -33,10 +33,14 @@ object Converters {
                 BodyState::class, BodyState.Text::class, BodyState.Text.serializer()
             )
             polymorphic(
-                BodyState::class, BodyState.MultipartForm::class, BodyState.MultipartForm.serializer()
+                BodyState::class,
+                BodyState.MultipartForm::class,
+                BodyState.MultipartForm.serializer()
             )
             polymorphic(
-                BodyState::class, BodyState.FormUrlEncoded::class, BodyState.FormUrlEncoded.serializer()
+                BodyState::class,
+                BodyState.FormUrlEncoded::class,
+                BodyState.FormUrlEncoded.serializer()
             )
             polymorphic(
                 BodyState::class, BodyState.BinaryFile::class, BodyState.BinaryFile.serializer()
@@ -65,10 +69,12 @@ object Converters {
         jsonSerializer.decodeFromString<List<KeyValue>>(value)
 
     @TypeConverter
+    @JvmStatic
     fun httpTypeFromString(value: String): HttpType =
         jsonSerializer.decodeFromString<HttpType>(value)
 
     @TypeConverter
+    @JvmStatic
     fun httpTypeToString(httpType: HttpType): String = jsonSerializer.encodeToString(httpType)
 
     @TypeConverter
