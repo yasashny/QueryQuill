@@ -1,8 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.google.devtools.ksp)
-    kotlin("plugin.serialization") version "1.9.23"
+    alias(libs.plugins.serialization)
 }
 
 android {
@@ -21,7 +22,6 @@ android {
             useSupportLibrary = true
         }
     }
-
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -38,12 +38,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = "17"
-    }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.11"
     }
     packaging {
         resources {
@@ -63,8 +57,6 @@ dependencies {
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
-    implementation(libs.material3.window.size.classs)
-    implementation(libs.material3.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -85,10 +77,15 @@ dependencies {
     //Serialization
     implementation(libs.kotlinx.serialization.json)
 
-    //SoraEditor
+    //CoreLibraryDesugaring
     coreLibraryDesugaring(libs.desugar.jdk.libs)
+
+    //SoraEditor
     implementation(platform(libs.sora.editor.bom))
     implementation(libs.sora.editor)
+
+    //WindowSizeClass
+    implementation(libs.material3.window.size.classs)
 
     implementation(project(":domain"))
     implementation(project(":data"))

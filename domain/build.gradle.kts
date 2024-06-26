@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    kotlin("plugin.serialization") version "1.9.23"
+    alias(libs.plugins.serialization)
 }
 
 android {
@@ -35,13 +35,13 @@ android {
 
 dependencies {
 
-
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)
 

@@ -15,53 +15,75 @@ kotlinxSerializationJson = "1.6.0"
 ktorClientCIO = "2.3.10"
 lifecycleRuntimeKtx = "2.8.2"
 material = "1.12.0"
-material3Android = "1.2.1"
 material3WindowSizeClass = "1.2.1"
 navigationCompose = "2.7.7"
 roomVersion = "2.6.1"
 androidApplicationPlugin = "8.5.0"
-kotlinVersion = "1.9.23"
+kotlin = "2.0.0"
 androidLibraryVersion = "8.5.0"
-kspVersion = "1.9.23-1.0.19"
+kspVersion = "2.0.0-1.0.22"
+
 
 [libraries]
-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+#Coroutines
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
+
+#Koin
+koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinAndroidxCompose" }
+
+#Navigation
+navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+
+#Serialization
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+
+#CoreLibraryDesugaring
+desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
+
+#SoraEditor
 sora-editor-bom = { module = "io.github.Rosemoe.sora-editor:bom", version.ref = "sora-editor-bom" }
+sora-editor = { module = "io.github.Rosemoe.sora-editor:editor" }
+
+#Ktor
+ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktorClientCIO" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorClientCIO" }
+ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktorClientCIO" }
+
+#Room
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomVersion" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomVersion" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomVersion" }
+
+#DataStore
+datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
+datastore = { module = "androidx.datastore:datastore", version.ref = "datastorePreferences" }
+
+#WindowSizeClass
+material3-window-size-classs = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "material3WindowSizeClass" }
+
+activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
-datastore = { module = "androidx.datastore:datastore", version.ref = "datastorePreferences" }
-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
-desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
-sora-editor = { module = "io.github.Rosemoe.sora-editor:editor" }
 espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
 ext-junit = { module = "androidx.test.ext:junit", version.ref = "junitVersion" }
 junit = { module = "junit:junit", version.ref = "junit" }
-koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinAndroidxCompose" }
-kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
-ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktorClientCIO" }
-ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorClientCIO" }
-ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktorClientCIO" }
 lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
-material = { module = "com.google.android.material:material", version.ref = "material" }
 material3 = { module = "androidx.compose.material3:material3" }
-material3-android = { module = "androidx.compose.material3:material3-android", version.ref = "material3Android" }
-material3-window-size-classs = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "material3WindowSizeClass" }
-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomVersion" }
-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomVersion" }
-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomVersion" }
 ui = { module = "androidx.compose.ui:ui" }
 ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
 ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+material = { module = "com.google.android.material:material", version.ref = "material" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidApplicationPlugin" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinVersion" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "androidLibraryVersion" }
 google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "kspVersion" }
 androidx-room = { id = "androidx.room", version.ref = "roomVersion" }
+serialization = {id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin"}
