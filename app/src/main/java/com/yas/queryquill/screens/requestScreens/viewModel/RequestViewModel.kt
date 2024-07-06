@@ -46,8 +46,7 @@ class RequestViewModel(
     private val _responseState = MutableStateFlow(ResponseModel.default())
     val responseState = _responseState.asStateFlow()
 
-    suspend fun sendRequest(requestModel: RequestModel){
-        println("www")
+    suspend fun sendRequest(requestModel: RequestModel) {
         _responseState.value = sendRequestUseCase.execute(requestModel)
 
     }
@@ -96,13 +95,21 @@ class RequestViewModel(
                 viewModelScope.launch(Dispatchers.IO) {
                     if (requestEvent.id == null) {
                         if (requestState.value == RequestState.Request) {
-                            updateRequestUseCase.execute(RequestResponseModel(requestModel.value, responseState.value))
+                            updateRequestUseCase.execute(
+                                RequestResponseModel(
+                                    requestModel.value, responseState.value
+                                )
+                            )
                         }
                         _requestState.value = RequestState.Null
                         _responseState.value = ResponseModel.default()
                     } else {
                         if (requestState.value == RequestState.Request) {
-                            updateRequestUseCase.execute(RequestResponseModel(requestModel.value, responseState.value))
+                            updateRequestUseCase.execute(
+                                RequestResponseModel(
+                                    requestModel.value, responseState.value
+                                )
+                            )
                         }
                         val getRequest = getRequestUseCase.execute(requestEvent.id)
                         _requestModel.value = getRequest.request
@@ -154,7 +161,11 @@ class RequestViewModel(
     fun saveLastRequest() {
         viewModelScope.launch(Dispatchers.IO) {
             if (requestState.value == RequestState.Request) {
-                updateRequestUseCase.execute(RequestResponseModel(requestModel.value, responseState.value))
+                updateRequestUseCase.execute(
+                    RequestResponseModel(
+                        requestModel.value, responseState.value
+                    )
+                )
                 saveLastRequestIdUseCase.execute(requestModel.value.id)
             } else {
                 saveLastRequestIdUseCase.execute(null)

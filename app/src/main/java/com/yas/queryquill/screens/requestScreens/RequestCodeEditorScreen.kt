@@ -1,9 +1,8 @@
 package com.yas.queryquill.screens.requestScreens
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.yas.domain.requestsDb.models.RequestModel
 import com.yas.domain.requestsDb.states.BodyState
@@ -13,14 +12,13 @@ import com.yas.queryquill.screens.requestScreens.viewModel.UpdateHttpRequestMode
 import kotlinx.coroutines.flow.StateFlow
 
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun RequestCodeEditorScreen(
     requestModelFlow: StateFlow<RequestModel>, updateRequest: (UpdateHttpRequestModel) -> Unit
 ) {
 
-    val requestModel by requestModelFlow.collectAsState()
-
-    val bodyState = requestModel.bodyState as BodyState.Text
+    val bodyState = requestModelFlow.value.bodyState as BodyState.Text
 
     val editorState = CodeEditorState()
     editorState.initialContent.insert(0, 0, bodyState.text)

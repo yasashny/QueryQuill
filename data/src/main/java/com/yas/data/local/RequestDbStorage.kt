@@ -2,7 +2,6 @@ package com.yas.data.local
 
 import android.content.Context
 import androidx.room.Room
-import kotlinx.coroutines.flow.Flow
 import com.yas.data.local.models.ResponseEntity
 import com.yas.data.mappers.toRequestEntity
 import com.yas.data.mappers.toRequestModel
@@ -11,6 +10,7 @@ import com.yas.data.mappers.toResponseModel
 import com.yas.domain.requestsDb.models.AddRequestModel
 import com.yas.domain.requestsDb.models.RequestsListItemModel
 import com.yas.domain.sendRequest.RequestResponseModel
+import kotlinx.coroutines.flow.Flow
 
 class RequestDbStorage(context: Context) {
 
@@ -26,20 +26,26 @@ class RequestDbStorage(context: Context) {
     suspend fun getRequest(id: Int): RequestResponseModel {
         val requestEntity = db.requestDao.getRequest(id)
         val responseEntity = db.responseDao.getResponse(id)
-        return RequestResponseModel(requestEntity.toRequestModel(), responseEntity.toResponseModel())
+        return RequestResponseModel(
+            requestEntity.toRequestModel(), responseEntity.toResponseModel()
+        )
     }
 
     suspend fun addRequest(model: AddRequestModel): RequestResponseModel {
         val id = db.requestDao.insertRequest(
             model.toRequestEntity()
         )
-        db.responseDao.insertResponse(ResponseEntity(
-            id = id.toInt(),
-            status = "--",
-            body = "--",
-            contentLength = "--",
-            time = "--"
-        ))
+        db.responseDao.insertResponse(
+            ResponseEntity(
+                id = id.toInt(),
+                status = "--",
+                body = byteArrayOf(),
+                contentLength = "--",
+                time = "--",
+                contentType = null,
+                contentSubtype = null
+            )
+        )
         return getRequest(id.toInt())
 
     }

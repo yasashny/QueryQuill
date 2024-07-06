@@ -2,6 +2,17 @@ package com.yas.data.sendRequest
 
 import android.content.Context
 import android.net.Uri
+import com.yas.data.utils.encodeBase64
+import com.yas.data.utils.fileFromContentUri
+import com.yas.data.utils.fileNameByUri
+import com.yas.data.utils.getMIMEType
+import com.yas.domain.requestsDb.models.HttpType
+import com.yas.domain.requestsDb.models.KeyValue
+import com.yas.domain.requestsDb.states.AuthState
+import com.yas.domain.requestsDb.states.BodyState
+import com.yas.domain.requestsDb.states.MultipartFormState
+import com.yas.domain.sendRequest.ResponseModel
+import com.yas.domain.sendRequest.SendRequestModel
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.RedirectResponseException
 import io.ktor.client.plugins.ResponseException
@@ -15,19 +26,9 @@ import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.http.Parameters
+import io.ktor.http.contentType
 import io.ktor.util.InternalAPI
 import io.ktor.util.network.UnresolvedAddressException
-import com.yas.data.utils.encodeBase64
-import com.yas.data.utils.fileFromContentUri
-import com.yas.data.utils.fileNameByUri
-import com.yas.data.utils.getMIMEType
-import com.yas.domain.requestsDb.models.HttpType
-import com.yas.domain.requestsDb.models.KeyValue
-import com.yas.domain.requestsDb.states.AuthState
-import com.yas.domain.requestsDb.states.BodyState
-import com.yas.domain.requestsDb.states.MultipartFormState
-import com.yas.domain.sendRequest.ResponseModel
-import com.yas.domain.sendRequest.SendRequestModel
 import java.net.ConnectException
 import java.net.UnknownHostException
 
@@ -151,27 +152,35 @@ class SendRequestDataSource(private val client: HttpClient, private val context:
             val requestTime = response.requestTime
             val responseTime = response.responseTime
             val elapsedTime = (responseTime.timestamp - requestTime.timestamp).toString()
-            val body = response.readBytes().toString(Charsets.UTF_8)
-            val contentLength = body.length.toString()
+            val body = response.readBytes()
+            val contentLength = body.size.toString()
             val status = response.status.value.toString()
+            val contentType = response.contentType()?.contentType
+            val contentSubtype = response.contentType()?.contentSubtype
+
             return ResponseModel(
-                status = status, body = body, contentLength = contentLength, time = elapsedTime
+                status = status,
+                body = body,
+                contentLength = contentLength,
+                time = elapsedTime,
+                contentType = contentType,
+                contentSubtype = contentSubtype
             )
 
         } catch (e: ConnectException) {
-            return ResponseModel("Error", e.message.toString(), "--", "--")
+            return ResponseModel.errorType(e.message.toString().encodeToByteArray())
         } catch (e: UnknownHostException) {
-            return ResponseModel("Error", e.message.toString(), "--", "--")
+            return ResponseModel.errorType(e.message.toString().encodeToByteArray())
         } catch (e: RedirectResponseException) {
-            return ResponseModel("Error", e.message, "--", "--")
+            return ResponseModel.errorType(e.message.encodeToByteArray())
         } catch (e: ResponseException) {
-            return ResponseModel("Error", e.message.toString(), "--", "--")
+            return ResponseModel.errorType(e.message.toString().encodeToByteArray())
         } catch (e: UnresolvedAddressException) {
-            return ResponseModel("Error", "Couldn't resolve host name", "--", "--")
+            return ResponseModel.errorType("Couldn't resolve host name".encodeToByteArray())
         } catch (e: NullPointerException) {
-            return ResponseModel("Error", "File not found", "--", "--")
+            return ResponseModel.errorType("File not found".encodeToByteArray())
         } catch (e: Exception) {
-            return ResponseModel("Error", e.message.toString(), "--", "--")
+            return ResponseModel.errorType(e.message.toString().encodeToByteArray())
         }
     }
 }

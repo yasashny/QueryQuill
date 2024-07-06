@@ -88,7 +88,6 @@ fun HttpRequestScreen(
 
     Scaffold(floatingActionButton = {
         ExtendedFloatingActionButton(onClick = {
-            println("qqq")
             openLoadingDialog.value = true
             scope.launch {
                 sendRequest(requestModel)
@@ -132,9 +131,7 @@ fun HttpRequestScreen(
                 }
                 item {
                     Spacer(
-                        modifier = Modifier
-                            .height(150.dp)
-                            .fillMaxWidth()
+                        modifier = Modifier.height(150.dp).fillMaxWidth()
                     )
                 }
             }

@@ -1,21 +1,12 @@
 package com.yas.queryquill.screens.responseScreens.httpResponseScreen
 
-import android.annotation.SuppressLint
-import android.view.ViewGroup
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.OutlinedCard
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -25,18 +16,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import com.yas.domain.sendRequest.ResponseModel
+import com.yas.queryquill.screens.responseScreens.ResponseScreenSource
+import com.yas.queryquill.screens.responseScreens.httpResponseScreen.preview.ResponseScreenPreview
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun HttpResponseScreen(
     modifier: Modifier, responseModelFlow: StateFlow<ResponseModel>
 ) {
-    val responseModel by responseModelFlow.collectAsState()
     Box(modifier = modifier) {
+        val responseModel by responseModelFlow.collectAsState()
         Column(Modifier.fillMaxSize()) {
             Row {
                 OutlinedCard(
@@ -77,9 +68,7 @@ fun HttpResponseScreen(
             Row {
                 Box(
                     contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 15.dp)
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 15.dp)
                 ) {
                     SegmentedButtonResponse(
                         currentState = responseState,
@@ -92,47 +81,19 @@ fun HttpResponseScreen(
                 }
 
             }
-
             when (responseState) {
                 ResponseState.PREVIEW -> {
-                    WebViewPage(html = responseModel.body)
+                    ResponseScreenPreview(
+                        body = responseModel.body,
+                        contentType = responseModel.contentType,
+                        contentSubtype = responseModel.contentSubtype
+                    )
                 }
 
                 ResponseState.SOURCE -> {
-                    SelectionContainer {
-                        val textChunks by remember {
-                            mutableStateOf(responseModel.body.chunked(1000))
-                        }
-                        LazyColumn {
-                            items(textChunks) { chunk ->
-                                Text(text = chunk)
-                            }
-                        }
-                    }
+                    ResponseScreenSource(responseModel.body.decodeToString())
                 }
             }
         }
     }
 }
-
-@SuppressLint("SetJavaScriptEnabled", "UnusedMaterial3ScaffoldPaddingParameter")
-@Composable
-fun WebViewPage(html: String) {
-    Scaffold {
-        val context = LocalContext.current
-        val webView = remember {
-            WebView(context).apply {
-                webViewClient = WebViewClient()
-                settings.javaScriptEnabled = true
-                settings.cacheMode = WebSettings.LOAD_NO_CACHE
-                layoutParams = ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
-                )
-            }
-        }
-        AndroidView(modifier = Modifier.fillMaxSize(), factory = { webView }, update = {
-            it.loadDataWithBaseURL(null, html, "text/html", "UTF-8", null)
-        })
-    }
-}
-

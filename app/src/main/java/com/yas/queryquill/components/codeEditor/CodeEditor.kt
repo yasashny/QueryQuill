@@ -14,7 +14,10 @@ import io.github.rosemoe.sora.widget.CodeEditor
 
 @Composable
 fun CodeEditor(
-    modifier: Modifier = Modifier, state: CodeEditorState, updateRequest: (String) -> Unit
+    modifier: Modifier = Modifier,
+    state: CodeEditorState,
+    isEditable: Boolean = true,
+    updateRequest: (String) -> Unit = {}
 ) {
     val context = LocalContext.current
     val editor = remember {
@@ -30,11 +33,14 @@ fun CodeEditor(
             text.addContentListener(CodeEditorListener(updateRequest))
         }
     }, modifier = modifier, update = {
+        it.isEditable = isEditable
         it.isWordwrap = true
         it.isScalable = false
         it.typefaceText = Typeface.MONOSPACE
         it.nonPrintablePaintingFlags =
-            CodeEditor.FLAG_DRAW_WHITESPACE_LEADING or CodeEditor.FLAG_DRAW_LINE_SEPARATOR or CodeEditor.FLAG_DRAW_WHITESPACE_IN_SELECTION
+            CodeEditor.FLAG_DRAW_WHITESPACE_LEADING or
+                    CodeEditor.FLAG_DRAW_LINE_SEPARATOR or
+                    CodeEditor.FLAG_DRAW_WHITESPACE_IN_SELECTION
 
     }, onRelease = {
         it.release()
