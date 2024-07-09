@@ -7,6 +7,7 @@ import com.yas.data.utils.getMIMEType
 import com.yas.domain.requestsDb.models.KeyValue
 import com.yas.domain.requestsDb.models.RequestModel
 import com.yas.domain.requestsDb.states.BodyState
+import com.yas.domain.requestsDb.states.TextType
 import com.yas.queryquill.screens.requestScreens.viewModel.UpdateHttpRequestModel
 
 
@@ -63,7 +64,12 @@ fun changeContentType(
         is BodyState.Text -> updateRequest(
             UpdateHttpRequestModel.Header(listOf(
                 KeyValue(
-                    contentType, ""
+                    contentType, when(bodyState.textType){
+                        TextType.JSON -> "application/json"
+                        TextType.XML -> "text/xml"
+                        TextType.PLAIN -> "text/plain"
+                        TextType.OTHER -> ""
+                    }
                 )
             ) + requestModel.header.list.filter { keyValue -> keyValue.key != contentType })
         )
