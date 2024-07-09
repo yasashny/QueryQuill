@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
                     }) {
                         Surface(
                             Modifier
-                                .padding(top = it.calculateTopPadding())
+                                .padding(it)
                                 .fillMaxSize()
                         ) {
                             Navigation(

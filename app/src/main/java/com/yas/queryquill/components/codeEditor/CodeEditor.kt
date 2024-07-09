@@ -1,12 +1,9 @@
 package com.yas.queryquill.components.codeEditor
 
-import android.content.Context
 import android.graphics.Typeface
 import android.view.ViewGroup
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import io.github.rosemoe.sora.text.Content
 import io.github.rosemoe.sora.text.ContentListener
@@ -15,48 +12,31 @@ import io.github.rosemoe.sora.widget.CodeEditor
 @Composable
 fun CodeEditor(
     modifier: Modifier = Modifier,
-    state: CodeEditorState,
+    initialText: String,
     isEditable: Boolean = true,
     updateRequest: (String) -> Unit = {}
 ) {
-    val context = LocalContext.current
-    val editor = remember {
-        setCodeEditorFactory(
-            context = context, state = state
-        )
-    }
-    AndroidView(factory = {
-        editor.apply {
+    AndroidView(factory = { cxt ->
+        CodeEditor(cxt).apply {
             layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
             )
             text.addContentListener(CodeEditorListener(updateRequest))
         }
     }, modifier = modifier, update = {
+        val content = Content()
+        content.insert(0, 0, initialText)
+        it.setText(content)
         it.isEditable = isEditable
         it.isWordwrap = true
         it.isScalable = false
         it.typefaceText = Typeface.MONOSPACE
         it.nonPrintablePaintingFlags =
-            CodeEditor.FLAG_DRAW_WHITESPACE_LEADING or
-                    CodeEditor.FLAG_DRAW_LINE_SEPARATOR or
-                    CodeEditor.FLAG_DRAW_WHITESPACE_IN_SELECTION
+            CodeEditor.FLAG_DRAW_WHITESPACE_LEADING or CodeEditor.FLAG_DRAW_LINE_SEPARATOR or CodeEditor.FLAG_DRAW_WHITESPACE_IN_SELECTION
 
     }, onRelease = {
         it.release()
     })
-}
-
-
-private fun setCodeEditorFactory(
-    context: Context, state: CodeEditorState
-): CodeEditor {
-    val editor = CodeEditor(context)
-    editor.apply {
-        setText(state.content)
-    }
-    state.editor = editor
-    return editor
 }
 
 

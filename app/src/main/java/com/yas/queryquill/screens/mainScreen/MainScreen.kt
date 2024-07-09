@@ -50,8 +50,7 @@ fun MainScreen(
                 HorizontalPager(
                     state = pagerState,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f),
+                        .fillMaxWidth(),
                     userScrollEnabled = false
                 ) {
                     when (it) {
@@ -68,8 +67,7 @@ fun MainScreen(
 
                         1 -> HttpResponseScreen(
                             modifier = Modifier
-                                .fillMaxSize()
-                                .weight(1f),
+                                .fillMaxSize(),
                             responseModelFlow = responseState
                         )
                     }
