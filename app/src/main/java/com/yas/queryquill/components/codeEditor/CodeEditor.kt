@@ -18,21 +18,22 @@ fun CodeEditor(
 ) {
     AndroidView(factory = { cxt ->
         CodeEditor(cxt).apply {
+            isWordwrap = true
+            isScalable = false
+            typefaceText = Typeface.MONOSPACE
+            nonPrintablePaintingFlags =
+                CodeEditor.FLAG_DRAW_WHITESPACE_LEADING or CodeEditor.FLAG_DRAW_LINE_SEPARATOR or CodeEditor.FLAG_DRAW_WHITESPACE_IN_SELECTION
             layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
             )
-            text.addContentListener(CodeEditorListener(updateRequest))
+
         }
     }, modifier = modifier, update = {
         val content = Content()
         content.insert(0, 0, initialText)
         it.setText(content)
         it.isEditable = isEditable
-        it.isWordwrap = true
-        it.isScalable = false
-        it.typefaceText = Typeface.MONOSPACE
-        it.nonPrintablePaintingFlags =
-            CodeEditor.FLAG_DRAW_WHITESPACE_LEADING or CodeEditor.FLAG_DRAW_LINE_SEPARATOR or CodeEditor.FLAG_DRAW_WHITESPACE_IN_SELECTION
+        it.text.addContentListener(CodeEditorListener(updateRequest))
 
     }, onRelease = {
         it.release()
