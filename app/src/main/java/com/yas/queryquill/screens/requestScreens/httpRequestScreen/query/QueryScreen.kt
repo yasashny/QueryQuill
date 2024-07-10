@@ -6,10 +6,11 @@ import com.yas.queryquill.components.editableList
 import com.yas.queryquill.screens.requestScreens.viewModel.UpdateHttpRequestModel
 
 
-fun LazyListScope.queryScreen(requestModel: RequestModel,
-                              updateRequest: (UpdateHttpRequestModel) -> Unit
-){
-    editableList(items = requestModel.query.list){keyValueList ->
+fun LazyListScope.queryScreen(
+    requestModel: RequestModel, updateRequest: (UpdateHttpRequestModel) -> Unit
+) {
+    queryPreview(requestModel = requestModel)
+    editableList(items = requestModel.query.list) { keyValueList ->
         updateRequest(UpdateHttpRequestModel.Query(keyValueList))
     }
 }

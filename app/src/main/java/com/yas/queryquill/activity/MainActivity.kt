@@ -17,7 +17,7 @@ import com.yas.queryquill.navigation.Navigation
 import com.yas.queryquill.navigationDrawer.NavigationDrawer
 import com.yas.queryquill.screens.requestScreens.viewModel.RequestViewModel
 import com.yas.queryquill.ui.theme.QueryQuillTheme
-import com.yas.queryquill.utils.textMateInit
+import com.yas.queryquill.utils.TextMateInit
 import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             requestViewModel = koinViewModel<RequestViewModel>()
             val navController = rememberNavController()
-            textMateInit(applicationContext)
+            TextMateInit(applicationContext)
             QueryQuillTheme {
                 NavigationDrawer(requestViewModel) { drawerState ->
                     val windowSizeClass = calculateWindowSizeClass(this)
