@@ -43,7 +43,8 @@ class RequestDbStorage(context: Context) {
                 contentLength = "--",
                 time = "--",
                 contentType = null,
-                contentSubtype = null
+                contentSubtype = null,
+                headers = emptyList()
             )
         )
         return getRequest(id.toInt())

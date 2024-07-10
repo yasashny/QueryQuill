@@ -2,6 +2,7 @@ package com.yas.data.local.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.yas.domain.requestsDb.models.KeyValue
 
 @Entity
 data class ResponseEntity(
@@ -11,5 +12,6 @@ data class ResponseEntity(
     val contentLength: String,
     val time: String,
     val contentType: String?,
-    val contentSubtype: String?
+    val contentSubtype: String?,
+    val headers: List<KeyValue>
 )

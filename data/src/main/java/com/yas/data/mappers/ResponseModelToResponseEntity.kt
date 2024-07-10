@@ -11,6 +11,7 @@ fun ResponseModel.toResponseEntity(id: Int): ResponseEntity {
         id = id,
         time = time,
         contentType = contentType,
-        contentSubtype = contentSubtype
+        contentSubtype = contentSubtype,
+        headers = headers
     )
 }

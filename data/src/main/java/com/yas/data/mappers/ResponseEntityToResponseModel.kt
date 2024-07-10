@@ -10,6 +10,7 @@ fun ResponseEntity.toResponseModel(): ResponseModel {
         contentLength = contentLength,
         time = time,
         contentType = contentType,
-        contentSubtype = contentSubtype
+        contentSubtype = contentSubtype,
+        headers = headers
     )
 }

@@ -21,25 +21,10 @@ fun CodeEditor(
     updateRequest: (String) -> Unit = {}
 ) {
     AndroidView(factory = { cxt ->
-        CodeEditor(cxt).apply {
-            isWordwrap = true
-            isScalable = false
-            typefaceText = Typeface.MONOSPACE
-            nonPrintablePaintingFlags =
-                CodeEditor.FLAG_DRAW_WHITESPACE_LEADING or
-                        CodeEditor.FLAG_DRAW_LINE_SEPARATOR or
-                        CodeEditor.FLAG_DRAW_WHITESPACE_IN_SELECTION
-            layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-
-        }
+        CodeEditor(cxt)
     }, modifier = modifier, update = {
-        val content = Content()
-        content.insert(0, 0, initialText)
-        it.setText(content)
+
         it.isEditable = isEditable
-        it.text.addContentListener(CodeEditorListener(updateRequest))
 
         it.colorScheme = TextMateColorScheme.create(ThemeRegistry.getInstance())
         val languageScopeName = languageType.code
@@ -49,6 +34,23 @@ fun CodeEditor(
             )
             it.setEditorLanguage(language)
         }
+
+        it.isScalable = false
+        it.typefaceText = Typeface.MONOSPACE
+        it.nonPrintablePaintingFlags =
+            CodeEditor.FLAG_DRAW_WHITESPACE_LEADING or
+                    CodeEditor.FLAG_DRAW_LINE_SEPARATOR or
+                    CodeEditor.FLAG_DRAW_WHITESPACE_IN_SELECTION
+        it.layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+
+        val content = Content()
+        content.insert(0, 0, initialText)
+        it.setText(content)
+        it.text.addContentListener(CodeEditorListener(updateRequest))
+        it.isWordwrap = true
+
 
     }, onRelease = {
         it.release()

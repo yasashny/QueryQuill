@@ -157,6 +157,12 @@ class SendRequestDataSource(private val client: HttpClient, private val context:
             val status = response.status.value.toString()
             val contentType = response.contentType()?.contentType
             val contentSubtype = response.contentType()?.contentSubtype
+            val headers = mutableListOf<KeyValue>()
+            response.headers.forEach { key, values ->
+                values.forEach { value ->
+                    headers.add(KeyValue(key = key, value = value))
+                }
+            }
 
             return ResponseModel(
                 status = status,
@@ -164,7 +170,8 @@ class SendRequestDataSource(private val client: HttpClient, private val context:
                 contentLength = contentLength,
                 time = elapsedTime,
                 contentType = contentType,
-                contentSubtype = contentSubtype
+                contentSubtype = contentSubtype,
+                headers = headers
             )
 
         } catch (e: ConnectException) {
