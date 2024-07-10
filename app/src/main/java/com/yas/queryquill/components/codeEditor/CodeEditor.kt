@@ -5,6 +5,9 @@ import android.view.ViewGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
+import io.github.rosemoe.sora.langs.textmate.TextMateColorScheme
+import io.github.rosemoe.sora.langs.textmate.TextMateLanguage
+import io.github.rosemoe.sora.langs.textmate.registry.ThemeRegistry
 import io.github.rosemoe.sora.text.Content
 import io.github.rosemoe.sora.text.ContentListener
 import io.github.rosemoe.sora.widget.CodeEditor
@@ -14,6 +17,7 @@ fun CodeEditor(
     modifier: Modifier = Modifier,
     initialText: String,
     isEditable: Boolean = true,
+    languageType: LanguageType,
     updateRequest: (String) -> Unit = {}
 ) {
     AndroidView(factory = { cxt ->
@@ -22,7 +26,9 @@ fun CodeEditor(
             isScalable = false
             typefaceText = Typeface.MONOSPACE
             nonPrintablePaintingFlags =
-                CodeEditor.FLAG_DRAW_WHITESPACE_LEADING or CodeEditor.FLAG_DRAW_LINE_SEPARATOR or CodeEditor.FLAG_DRAW_WHITESPACE_IN_SELECTION
+                CodeEditor.FLAG_DRAW_WHITESPACE_LEADING or
+                        CodeEditor.FLAG_DRAW_LINE_SEPARATOR or
+                        CodeEditor.FLAG_DRAW_WHITESPACE_IN_SELECTION
             layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
             )
@@ -34,6 +40,15 @@ fun CodeEditor(
         it.setText(content)
         it.isEditable = isEditable
         it.text.addContentListener(CodeEditorListener(updateRequest))
+
+        it.colorScheme = TextMateColorScheme.create(ThemeRegistry.getInstance())
+        val languageScopeName = languageType.code
+        if (languageScopeName != null) {
+            val language = TextMateLanguage.create(
+                languageScopeName, true
+            )
+            it.setEditorLanguage(language)
+        }
 
     }, onRelease = {
         it.release()

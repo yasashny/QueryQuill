@@ -8,6 +8,7 @@ import com.yas.domain.requestsDb.models.RequestModel
 import com.yas.domain.requestsDb.states.BodyState
 import com.yas.queryquill.components.codeEditor.CodeEditor
 import com.yas.queryquill.screens.requestScreens.viewModel.UpdateHttpRequestModel
+import com.yas.queryquill.utils.textTypeToLanguageName
 import kotlinx.coroutines.flow.StateFlow
 
 
@@ -19,7 +20,11 @@ fun RequestCodeEditorScreen(
 
     val bodyState = requestModelFlow.value.bodyState as BodyState.Text
 
-    CodeEditor(initialText = bodyState.text, modifier = Modifier.fillMaxSize()) { newText ->
+    CodeEditor(
+        initialText = bodyState.text,
+        modifier = Modifier.fillMaxSize(),
+        languageType = textTypeToLanguageName(bodyState.textType)
+    ) { newText ->
         updateRequest(UpdateHttpRequestModel.Body(BodyState.Text(newText, bodyState.textType)))
     }
 

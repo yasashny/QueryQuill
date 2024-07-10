@@ -86,6 +86,7 @@ dependencies {
     //SoraEditor
     implementation(platform(libs.sora.editor.bom))
     implementation(libs.sora.editor)
+    implementation(libs.sora.editor.textmate)
 
     //WindowSizeClass
     implementation(libs.material3.window.size.classs)

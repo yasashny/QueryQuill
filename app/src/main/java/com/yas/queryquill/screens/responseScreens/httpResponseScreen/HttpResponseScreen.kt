@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.yas.domain.sendRequest.ResponseModel
+import com.yas.queryquill.components.codeEditor.mimeTypeToLanguageType
 import com.yas.queryquill.screens.responseScreens.ResponseScreenSource
 import com.yas.queryquill.screens.responseScreens.httpResponseScreen.preview.ResponseScreenPreview
 import kotlinx.coroutines.flow.StateFlow
@@ -68,7 +69,9 @@ fun HttpResponseScreen(
             Row {
                 Box(
                     contentAlignment = Alignment.Center,
-                    modifier = Modifier.fillMaxWidth().padding(bottom = 15.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 15.dp)
                 ) {
                     SegmentedButtonResponse(
                         currentState = responseState,
@@ -85,13 +88,15 @@ fun HttpResponseScreen(
                 ResponseState.PREVIEW -> {
                     ResponseScreenPreview(
                         body = responseModel.body,
-                        contentType = responseModel.contentType,
+                        mimeType = responseModel.contentType,
                         contentSubtype = responseModel.contentSubtype
                     )
                 }
 
                 ResponseState.SOURCE -> {
-                    ResponseScreenSource(responseModel.body.decodeToString())
+                    val languageType =
+                        mimeTypeToLanguageType("${responseModel.contentType}/${responseModel.contentSubtype}")
+                    ResponseScreenSource(responseModel.body.decodeToString(), languageType)
                 }
             }
         }

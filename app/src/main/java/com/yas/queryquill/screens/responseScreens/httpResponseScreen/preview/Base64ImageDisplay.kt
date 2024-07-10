@@ -3,29 +3,31 @@ package com.yas.queryquill.screens.responseScreens.httpResponseScreen.preview
 import android.graphics.BitmapFactory
 import android.util.Base64
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
+import com.yas.queryquill.components.codeEditor.LanguageType
+import com.yas.queryquill.screens.responseScreens.ResponseScreenSource
 
 @Composable
-fun Base64ImageDisplay(base64String: String) {
+fun Base64ImageDisplay(base64String: String, utf8String: String) {
     val bitmap = base64String.toBitmap()
-
-    Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp)
-    ) {
-        bitmap?.let {
-            Image(
-                bitmap = it.asImageBitmap(),
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize()
-            )
-        }
+    if (bitmap != null) {
+        Image(
+            bitmap = bitmap.asImageBitmap(),
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        )
+    } else {
+        ResponseScreenSource(text = utf8String, languageType = LanguageType.PLAIN)
     }
+
+
 }
 
 private fun String.toBitmap(): android.graphics.Bitmap? {

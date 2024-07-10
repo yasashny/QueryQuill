@@ -3,6 +3,8 @@ package com.yas.domain.requestsDb.states
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+// For body screen
+
 @Serializable
 enum class TextType(val title: String) : BasicState {
     @SerialName("JSON")

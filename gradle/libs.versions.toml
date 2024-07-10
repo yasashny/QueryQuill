@@ -43,6 +43,7 @@ desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref 
 #SoraEditor
 sora-editor-bom = { module = "io.github.Rosemoe.sora-editor:bom", version.ref = "sora-editor-bom" }
 sora-editor = { module = "io.github.Rosemoe.sora-editor:editor" }
+sora-editor-textmate = { module = "io.github.Rosemoe.sora-editor:language-textmate" }
 
 #Ktor
 ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktorClientCIO" }
