@@ -12,6 +12,7 @@ import com.yas.queryquill.screens.requestScreens.RequestCodeEditorScreen
 import com.yas.queryquill.screens.requestScreens.viewModel.RequestEvent
 import com.yas.queryquill.screens.requestScreens.viewModel.RequestState
 import com.yas.queryquill.screens.requestScreens.viewModel.UpdateHttpRequestModel
+import com.yas.queryquill.screens.settingsScreen.SettingsScreen
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.reflect.KFunction1
 
@@ -21,6 +22,7 @@ sealed class Destinations(
 ) {
     data object MainScreenRoute : Destinations(route = "main")
     data object EditorScreenRoute : Destinations(route = "editor")
+    data object SettingsScreenRoute : Destinations(route = "settings")
 }
 
 
@@ -50,6 +52,9 @@ fun Navigation(
         }
         composable(Destinations.EditorScreenRoute.route) {
             RequestCodeEditorScreen(requestModel, updateRequest)
+        }
+        composable(Destinations.SettingsScreenRoute.route){
+            SettingsScreen()
         }
     }
 }

@@ -38,5 +38,8 @@ fun MyTopAppBar(
                 requestModelFlow = requestModelFlow, navController = navController
             )
         }
+        Destinations.SettingsScreenRoute.route -> {
+            SettingsTopAppBarState(navController = navController)
+        }
     }
 }

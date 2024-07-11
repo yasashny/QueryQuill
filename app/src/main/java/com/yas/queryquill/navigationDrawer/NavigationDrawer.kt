@@ -44,7 +44,7 @@ import com.yas.queryquill.screens.requestScreens.viewModel.RequestViewModel
 
 @Composable
 fun NavigationDrawer(
-    viewModel: RequestViewModel, composable: @Composable (drawerState: DrawerState) -> Unit
+    viewModel: RequestViewModel, navigateToSettings: () -> Unit, composable: @Composable (drawerState: DrawerState) -> Unit
 ) {
 
     val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -64,7 +64,12 @@ fun NavigationDrawer(
         ModalDrawerSheet {
             Spacer(Modifier.height(12.dp))
             Row {
-                IconButton(onClick = { /*TODO*/ }) {
+                val settingsScope = rememberCoroutineScope()
+                IconButton(onClick = { settingsScope.launch {
+
+                    navigateToSettings()
+                    drawerState.close()
+                } }) {
                     Icon(imageVector = Icons.Outlined.Settings, contentDescription = null)
                 }
                 OutlinedButton(

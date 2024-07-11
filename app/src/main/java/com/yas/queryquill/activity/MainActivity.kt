@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.yas.queryquill.adaptive.adaptiveScreenManager
 import com.yas.queryquill.components.topAppBar.MyTopAppBar
+import com.yas.queryquill.navigation.Destinations
 import com.yas.queryquill.navigation.Navigation
 import com.yas.queryquill.navigationDrawer.NavigationDrawer
 import com.yas.queryquill.screens.requestScreens.viewModel.RequestViewModel
@@ -34,7 +35,8 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             TextMateInit(applicationContext)
             QueryQuillTheme {
-                NavigationDrawer(requestViewModel) { drawerState ->
+                NavigationDrawer(requestViewModel,
+                    navigateToSettings = { navController.navigate(Destinations.SettingsScreenRoute.route) }) { drawerState ->
                     val windowSizeClass = calculateWindowSizeClass(this)
                     val screenState = adaptiveScreenManager(windowSizeClass)
                     Scaffold(topBar = {
