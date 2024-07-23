@@ -34,6 +34,7 @@ import com.yas.queryquill.screens.requestScreens.httpRequestScreen.query.querySc
 import com.yas.queryquill.screens.requestScreens.httpRequestScreen.requestScreenHeader.HttpRequestHeaderState
 import com.yas.queryquill.screens.requestScreens.httpRequestScreen.requestScreenHeader.HttpRequestScreenHeader
 import com.yas.queryquill.screens.requestScreens.viewModel.UpdateHttpRequestModel
+import com.yas.queryquill.utils.vibration
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -88,6 +89,7 @@ fun HttpRequestScreen(
 
     Scaffold(floatingActionButton = {
         ExtendedFloatingActionButton(onClick = {
+            vibration(context)
             openLoadingDialog.value = true
             scope.launch {
                 sendRequest(requestModel)
