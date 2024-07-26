@@ -1,6 +1,7 @@
 [versions]
 activityCompose = "1.9.0"
 appcompat = "1.7.0"
+coreSplashscreen = "1.0.1"
 sora-editor-bom = "0.23.4"
 composeBom = "2024.06.00"
 coreKtx = "1.13.1"
@@ -26,6 +27,7 @@ kspVersion = "2.0.0-1.0.22"
 
 [libraries]
 #Coroutines
+core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 
 #Koin

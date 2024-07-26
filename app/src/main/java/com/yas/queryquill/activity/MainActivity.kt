@@ -10,6 +10,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.ui.Modifier
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import com.yas.queryquill.adaptive.adaptiveScreenManager
 import com.yas.queryquill.components.topAppBar.MyTopAppBar
@@ -30,6 +31,7 @@ class MainActivity : ComponentActivity() {
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen()
         setContent {
             requestViewModel = koinViewModel<RequestViewModel>()
             val navController = rememberNavController()
