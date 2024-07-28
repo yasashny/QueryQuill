@@ -20,19 +20,16 @@ import com.yas.domain.requestsDb.states.BasicState
 
 @Composable
 fun ChipGroup(
-    currentState: BasicState,
-    options: List<BasicState>,
-    onClick: (BasicState) -> Unit
+    currentState: BasicState, options: List<BasicState>, onClick: (BasicState) -> Unit
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Row(modifier = Modifier.horizontalScroll(rememberScrollState())) {
-            options.forEachIndexed { index, chipState ->
-                InputChip(
-                    modifier = if (index == 0) {
-                        Modifier.padding(start = 29.dp, end = 4.dp)
-                    } else {
-                        Modifier.padding(horizontal = 4.dp)
-                    },
+        Row(
+            modifier = Modifier
+                .horizontalScroll(rememberScrollState())
+                .padding(start = 29.dp, end = 15.dp)
+        ) {
+            options.forEach { chipState ->
+                InputChip(modifier = Modifier.padding(horizontal = 4.dp),
                     onClick = { onClick(chipState) },
                     label = { Text(chipState.name) },
                     selected = currentState::class == chipState::class,
@@ -44,8 +41,7 @@ fun ChipGroup(
                                 modifier = Modifier.size(FilterChipDefaults.IconSize)
                             )
                         }
-                    }
-                )
+                    })
             }
         }
     }

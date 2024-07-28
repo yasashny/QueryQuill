@@ -2,7 +2,6 @@ package com.yas.queryquill.components.codeEditor
 
 import android.graphics.Typeface
 import android.view.ViewGroup
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
@@ -18,17 +17,17 @@ fun CodeEditor(
     modifier: Modifier = Modifier,
     initialText: String,
     isEditable: Boolean = true,
+    isBasicDisplayMode: Boolean,
     languageType: LanguageType,
     updateRequest: (String) -> Unit = {}
 ) {
-    val textSize = MaterialTheme.typography.bodyLarge.fontSize.value
 
     AndroidView(factory = { cxt ->
         CodeEditor(cxt)
     }, modifier = modifier, update = {
         it.isEditable = isEditable
-        it.setTextSize(textSize)
         it.colorScheme = TextMateColorScheme.create(ThemeRegistry.getInstance())
+        it.isBasicDisplayMode = isBasicDisplayMode
         val languageScopeName = languageType.code
         if (languageScopeName != null) {
             val language = TextMateLanguage.create(
@@ -40,9 +39,7 @@ fun CodeEditor(
         it.isScalable = false
         it.typefaceText = Typeface.MONOSPACE
         it.nonPrintablePaintingFlags =
-            CodeEditor.FLAG_DRAW_WHITESPACE_LEADING or
-                    CodeEditor.FLAG_DRAW_LINE_SEPARATOR or
-                    CodeEditor.FLAG_DRAW_WHITESPACE_IN_SELECTION
+            CodeEditor.FLAG_DRAW_WHITESPACE_LEADING or CodeEditor.FLAG_DRAW_LINE_SEPARATOR or CodeEditor.FLAG_DRAW_WHITESPACE_IN_SELECTION
         it.layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
         )

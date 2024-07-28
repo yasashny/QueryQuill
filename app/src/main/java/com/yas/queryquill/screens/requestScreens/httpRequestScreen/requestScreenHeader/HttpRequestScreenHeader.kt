@@ -38,7 +38,7 @@ fun HttpRequestScreenHeader(
                 HttpType.OPTIONS,
                 HttpType.DELETE,
                 HttpType.HEAD
-            ), label = "Type", modifier = Modifier.weight(1f)
+            ), label = "Type", modifier = Modifier.weight(1.2f)
         ) { httpType ->
             updateRequest(UpdateHttpRequestModel.Type(httpType))
         }

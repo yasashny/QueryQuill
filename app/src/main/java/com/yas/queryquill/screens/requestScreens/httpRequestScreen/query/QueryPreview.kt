@@ -24,7 +24,14 @@ fun LazyListScope.queryPreview(requestModel: RequestModel) {
                 .background(MaterialTheme.colorScheme.secondaryContainer)
                 .padding(15.dp)
         ) {
-            val text = "${requestModel.url}${
+            val text = "${
+                if (!requestModel.url.startsWith("http://") && !requestModel.url.startsWith("https://")) {
+                    "http://"
+
+                } else {
+                    ""
+                }
+            }${requestModel.url}${
                 if (requestModel.query.list.any { keyValue: KeyValue -> keyValue != KeyValue.empty() }) {
                     "?"
                 } else {

@@ -12,6 +12,7 @@ fun ResponseScreenSource(text: String, languageType: LanguageType) {
         initialText = text,
         modifier = Modifier.fillMaxSize(),
         isEditable = false,
-        languageType = languageType
+        languageType = languageType,
+        isBasicDisplayMode = true
     )
 }

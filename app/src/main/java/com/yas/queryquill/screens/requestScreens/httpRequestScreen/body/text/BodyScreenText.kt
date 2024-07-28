@@ -51,7 +51,7 @@ fun BodyScreenText(
                 .padding(horizontal = 15.dp)
                 .background(
                     color = MaterialTheme.colorScheme.secondaryContainer,
-                    shape = RoundedCornerShape(15.dp)
+                    shape = RoundedCornerShape(5.dp)
                 )
                 .clickable {
                     navigateToEditor()

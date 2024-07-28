@@ -91,6 +91,7 @@ dependencies {
     //WindowSizeClass
     implementation(libs.material3.window.size.classs)
 
+    //SplashScreen
     implementation(libs.core.splashscreen)
 
     implementation(project(":domain"))

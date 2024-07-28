@@ -4,14 +4,17 @@ import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,8 +43,13 @@ fun BinaryFileElement(
         })
     OutlinedCard(
         Modifier
-            .padding(start = 15.dp, end = 15.dp, top = 15.dp)
+            .padding(15.dp)
             .fillMaxWidth()
+            .clickable {
+                getContent.launch(arrayOf("*/*"))
+            },
+        border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outline),
+        shape = RoundedCornerShape(4.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
@@ -49,24 +57,18 @@ fun BinaryFileElement(
                     .padding(15.dp)
                     .weight(1f),
                 text = if (currentState.uri == Uri.EMPTY) {
-                    "No file selected"
+                    "Select file"
                 } else {
                     currentState.fileName
                 },
             )
             IconButton(modifier = Modifier, onClick = {
                 updateRequest(
-                    Uri.EMPTY,
-                    ""
+                    Uri.EMPTY, ""
                 )
             }, enabled = currentState.uri != Uri.EMPTY) {
-                Icon(imageVector = Icons.Outlined.Delete, contentDescription = "")
+                Icon(imageVector = Icons.Outlined.Delete, contentDescription = null)
             }
         }
-    }
-    OutlinedButton(
-        modifier = Modifier.padding(15.dp),
-        onClick = { getContent.launch(arrayOf("*/*")) }) {
-        Text("Selected File")
     }
 }

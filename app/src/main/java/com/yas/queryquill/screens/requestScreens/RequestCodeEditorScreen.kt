@@ -23,7 +23,8 @@ fun RequestCodeEditorScreen(
     CodeEditor(
         initialText = bodyState.text,
         modifier = Modifier.fillMaxSize(),
-        languageType = textTypeToLanguageName(bodyState.textType)
+        languageType = textTypeToLanguageName(bodyState.textType),
+        isBasicDisplayMode = false
     ) { newText ->
         updateRequest(UpdateHttpRequestModel.Body(BodyState.Text(newText, bodyState.textType)))
     }

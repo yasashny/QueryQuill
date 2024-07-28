@@ -1,5 +1,5 @@
 [versions]
-activityCompose = "1.9.0"
+activityCompose = "1.9.1"
 appcompat = "1.7.0"
 coreSplashscreen = "1.0.1"
 sora-editor-bom = "0.23.4"
@@ -7,27 +7,26 @@ composeBom = "2024.06.00"
 coreKtx = "1.13.1"
 datastorePreferences = "1.1.1"
 desugar_jdk_libs = "2.0.4"
-espressoCore = "3.6.0"
+espressoCore = "3.6.1"
 junit = "4.13.2"
-junitVersion = "1.2.0"
+junitVersion = "1.2.1"
 koinAndroidxCompose = "3.5.3"
 kotlinxCoroutinesAndroid = "1.8.0"
 kotlinxSerializationJson = "1.6.0"
 ktorClientCIO = "2.3.10"
-lifecycleRuntimeKtx = "2.8.2"
+lifecycleRuntimeKtx = "2.8.4"
 material = "1.12.0"
 material3WindowSizeClass = "1.2.1"
 navigationCompose = "2.7.7"
 roomVersion = "2.6.1"
-androidApplicationPlugin = "8.5.0"
+androidApplicationPlugin = "8.5.1"
 kotlin = "2.0.0"
-androidLibraryVersion = "8.5.0"
+androidLibraryVersion = "8.5.1"
 kspVersion = "2.0.0-1.0.22"
 
 
 [libraries]
 #Coroutines
-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 
 #Koin
@@ -63,6 +62,9 @@ datastore = { module = "androidx.datastore:datastore", version.ref = "datastoreP
 
 #WindowSizeClass
 material3-window-size-classs = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "material3WindowSizeClass" }
+
+#SplashScreen
+core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
