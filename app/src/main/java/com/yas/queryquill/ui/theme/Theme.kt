@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import com.yas.domain.settings.ThemeState
 
 private val LightColorScheme = lightColorScheme(
     primary = primaryLight,
@@ -246,11 +247,15 @@ private val highContrastDarkColorScheme = darkColorScheme(
 
 @Composable
 fun QueryQuillTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
-    content: @Composable () -> Unit
+    dynamicColor: Boolean = true, theme: ThemeState, content: @Composable () -> Unit
 ) {
+    val darkTheme = when (theme) {
+        ThemeState.SYSTEM -> isSystemInDarkTheme()
+        ThemeState.DARK -> true
+        ThemeState.LIGHT -> false
+    }
+
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
@@ -269,14 +274,15 @@ fun QueryQuillTheme(
             window.statusBarColor = Color.Transparent.toArgb()
             window.navigationBarColor = Color.Transparent.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
-            WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = !darkTheme
-            WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightNavigationBars = !darkTheme
+            WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars =
+                !darkTheme
+            WindowCompat.getInsetsController(
+                window, window.decorView
+            ).isAppearanceLightNavigationBars = !darkTheme
         }
     }
 
     MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
+        colorScheme = colorScheme, typography = Typography, content = content
     )
 }
