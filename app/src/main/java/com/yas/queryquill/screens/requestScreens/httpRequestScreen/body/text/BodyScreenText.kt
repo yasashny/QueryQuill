@@ -1,16 +1,18 @@
 package com.yas.queryquill.screens.requestScreens.httpRequestScreen.body.text
 
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -44,25 +46,24 @@ fun BodyScreenText(
             }
         }
 
-        Box(
+        OutlinedCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp)
                 .padding(horizontal = 15.dp)
-                .background(
-                    color = MaterialTheme.colorScheme.secondaryContainer,
-                    shape = RoundedCornerShape(5.dp)
-                )
                 .clickable {
                     navigateToEditor()
-                }, contentAlignment = Alignment.CenterStart
+                },
+            border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outline),
+            shape = RoundedCornerShape(8.dp)
         ) {
-            Text(
-                text = "Input your body here...",
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
-                fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                modifier = Modifier.padding(start = 15.dp)
-            )
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.CenterStart) {
+                Text(
+                    text = "Input your body here...",
+                    fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                    modifier = Modifier.padding(start = 15.dp)
+                )
+            }
         }
     }
 }

@@ -24,6 +24,7 @@ fun LazyListScope.queryPreview(requestModel: RequestModel) {
                 .background(MaterialTheme.colorScheme.secondaryContainer)
                 .padding(15.dp)
         ) {
+            val pattern = Regex(".*\\?.*=.*")
             val text = "${
                 if (!requestModel.url.startsWith("http://") && !requestModel.url.startsWith("https://")) {
                     "http://"
@@ -32,10 +33,14 @@ fun LazyListScope.queryPreview(requestModel: RequestModel) {
                     ""
                 }
             }${requestModel.url}${
-                if (requestModel.query.list.any { keyValue: KeyValue -> keyValue != KeyValue.empty() }) {
-                    "?"
+                if (pattern.containsMatchIn(requestModel.url)) {
+                    "&"
                 } else {
-                    ""
+                    if (requestModel.query.list.any { keyValue: KeyValue -> keyValue != KeyValue.empty() }) {
+                        "?"
+                    } else {
+                        ""
+                    }
                 }
             }${
                 requestModel.query.list.filter { keyValue: KeyValue -> keyValue != KeyValue.empty() }
