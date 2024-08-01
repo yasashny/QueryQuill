@@ -1,4 +1,4 @@
-package com.yas.data.settings
+package com.yas.settings_data
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -6,12 +6,12 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.yas.domain.settings.SettingsModel
-import com.yas.domain.settings.ThemeState
+import com.yas.settings_data.models.SettingsDTO
+import com.yas.settings_data.models.ThemeStateDTO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class SettingsStorage(private val context: Context) {
+internal class SettingsStorage(private val context: Context) {
 
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
@@ -23,27 +23,27 @@ class SettingsStorage(private val context: Context) {
     }
 
 
-    fun getSettings(): Flow<SettingsModel> {
+    fun getSettings(): Flow<SettingsDTO> {
         return context.dataStore.data.map { pref ->
             val prefTheme = pref[stringPreferencesKey(THEME)]
             val theme = when (prefTheme) {
-                null -> ThemeState.SYSTEM
-                DARK -> ThemeState.DARK
-                LIGHT -> ThemeState.LIGHT
-                SYSTEM -> ThemeState.SYSTEM
-                else -> ThemeState.SYSTEM
+                null -> ThemeStateDTO.SYSTEM
+                DARK -> ThemeStateDTO.DARK
+                LIGHT -> ThemeStateDTO.LIGHT
+                SYSTEM -> ThemeStateDTO.SYSTEM
+                else -> ThemeStateDTO.SYSTEM
             }
-            SettingsModel(theme)
+            SettingsDTO(theme)
         }
     }
 
 
-    suspend fun updateSettings(model: SettingsModel) {
+    suspend fun updateSettings(model: SettingsDTO) {
         context.dataStore.edit { pref ->
             pref[stringPreferencesKey(THEME)] = when (model.theme) {
-                ThemeState.SYSTEM -> SYSTEM
-                ThemeState.DARK -> DARK
-                ThemeState.LIGHT -> LIGHT
+                ThemeStateDTO.SYSTEM -> SYSTEM
+                ThemeStateDTO.DARK -> DARK
+                ThemeStateDTO.LIGHT -> LIGHT
             }
         }
     }

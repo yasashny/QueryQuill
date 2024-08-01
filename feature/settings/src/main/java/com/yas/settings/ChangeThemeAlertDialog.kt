@@ -1,4 +1,4 @@
-package com.yas.queryquill.screens.settingsScreen
+package com.yas.settings
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,11 +24,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
-import com.yas.domain.settings.ThemeState
+import com.yas.common.ThemeState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChangeThemeAlertDialog(
+internal fun ChangeThemeAlertDialog(
     openDialog: MutableState<Boolean>, currentTheme: ThemeState, updateTheme: (ThemeState) -> Unit
 ) {
     if (openDialog.value) {

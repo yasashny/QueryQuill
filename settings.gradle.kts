@@ -17,3 +17,6 @@ rootProject.name = "QueryQuill"
 include(":app")
 include(":data")
 include(":domain")
+include(":feature:settings")
+include(":core:settings-data")
+include(":common")

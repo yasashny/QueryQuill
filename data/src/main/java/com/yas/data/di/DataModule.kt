@@ -6,12 +6,9 @@ import com.yas.data.local.LocalDbRepositoryImpl
 import com.yas.data.local.RequestDbStorage
 import com.yas.data.sendRequest.SendRequestDataSource
 import com.yas.data.sendRequest.SendRequestRepositoryImpl
-import com.yas.data.settings.SettingsRepositoryImpl
-import com.yas.data.settings.SettingsStorage
 import com.yas.domain.lastRequest.repositories.LastRequestRepository
 import com.yas.domain.requestsDb.repositories.LocalDbRepository
 import com.yas.domain.sendRequest.SendRequestRepository
-import com.yas.domain.settings.SettingsRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.HttpTimeout
@@ -34,6 +31,4 @@ val dataModule = module {
             followRedirects = true
         }
     }
-    singleOf(::SettingsStorage)
-    singleOf(::SettingsRepositoryImpl) { bind<SettingsRepository>() }
 }

@@ -6,15 +6,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.yas.domain.requestsDb.models.RequestModel
 import com.yas.domain.sendRequest.ResponseModel
-import com.yas.domain.settings.ThemeState
 import com.yas.queryquill.adaptive.ScreenState
 import com.yas.queryquill.screens.mainScreen.MainScreen
 import com.yas.queryquill.screens.requestScreens.RequestCodeEditorScreen
 import com.yas.queryquill.screens.requestScreens.viewModel.RequestEvent
 import com.yas.queryquill.screens.requestScreens.viewModel.RequestState
 import com.yas.queryquill.screens.requestScreens.viewModel.UpdateHttpRequestModel
-import com.yas.queryquill.screens.settingsScreen.SettingsScreen
-import com.yas.queryquill.screens.settingsScreen.UpdateSettings
+import com.yas.settings.SettingsScreen
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.reflect.KFunction1
 
@@ -37,9 +35,7 @@ fun Navigation(
     updateRequest: KFunction1<UpdateHttpRequestModel, Unit>,
     sendRequest: suspend (RequestModel) -> Unit,
     onEvent: KFunction1<RequestEvent, Unit>,
-    responseState: StateFlow<ResponseModel>,
-    updateSettings: (UpdateSettings) -> Unit,
-    theme: ThemeState
+    responseState: StateFlow<ResponseModel>
 ) {
     NavHost(navController = navController, startDestination = Destinations.MainScreenRoute.route) {
         composable(Destinations.MainScreenRoute.route) {
@@ -58,7 +54,7 @@ fun Navigation(
             RequestCodeEditorScreen(requestModel, updateRequest)
         }
         composable(Destinations.SettingsScreenRoute.route) {
-            SettingsScreen(theme = theme, updateSettings = updateSettings)
+            SettingsScreen()
         }
     }
 }

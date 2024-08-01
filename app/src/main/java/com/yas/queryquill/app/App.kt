@@ -7,13 +7,15 @@ import com.yas.data.di.dataModule
 import com.yas.domain.di.domainModule
 
 import com.yas.queryquill.di.appModule
+import com.yas.settings.di.settingsModule
+import com.yas.settings_data.di.settingsDataModule
 
 class App: Application() {
     override fun onCreate() {
         super.onCreate()
         startKoin {
             androidContext(this@App)
-            modules(listOf(appModule, dataModule, domainModule))
+            modules(listOf(appModule, dataModule, domainModule, settingsDataModule, settingsModule))
         }
     }
 }

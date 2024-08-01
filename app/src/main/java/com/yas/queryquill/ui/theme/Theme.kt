@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
-import com.yas.domain.settings.ThemeState
+import com.yas.common.ThemeState
 
 private val LightColorScheme = lightColorScheme(
     primary = primaryLight,
@@ -248,12 +248,12 @@ private val highContrastDarkColorScheme = darkColorScheme(
 @Composable
 fun QueryQuillTheme(
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true, theme: ThemeState, content: @Composable () -> Unit
+    dynamicColor: Boolean = true, theme: com.yas.common.ThemeState, content: @Composable () -> Unit
 ) {
     val darkTheme = when (theme) {
-        ThemeState.SYSTEM -> isSystemInDarkTheme()
-        ThemeState.DARK -> true
-        ThemeState.LIGHT -> false
+        com.yas.common.ThemeState.SYSTEM -> isSystemInDarkTheme()
+        com.yas.common.ThemeState.DARK -> true
+        com.yas.common.ThemeState.LIGHT -> false
     }
 
     val colorScheme = when {
