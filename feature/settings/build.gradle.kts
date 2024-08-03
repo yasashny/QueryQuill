@@ -59,7 +59,7 @@ dependencies {
 
     //Koin
     implementation(libs.koin.androidx.compose)
+    implementation(project(":data:settings"))
 
-    implementation(project(":core:settings-data"))
-    implementation(project(":common"))
+    implementation(project(":core:model"))
 }

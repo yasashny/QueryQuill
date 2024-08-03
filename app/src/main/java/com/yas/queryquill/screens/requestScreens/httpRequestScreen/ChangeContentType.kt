@@ -8,7 +8,7 @@ import com.yas.domain.requestsDb.models.RequestModel
 import com.yas.domain.requestsDb.states.BodyState
 import com.yas.domain.requestsDb.states.TextType
 import com.yas.queryquill.screens.requestScreens.viewModel.UpdateRequestModel
-import com.yas.requests_data.utils.getMIMEType
+import com.yas.requests.utils.getMIMEType
 
 
 fun changeContentType(

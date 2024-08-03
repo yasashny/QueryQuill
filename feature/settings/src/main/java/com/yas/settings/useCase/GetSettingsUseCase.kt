@@ -2,8 +2,8 @@ package com.yas.settings.useCase
 
 import com.yas.settings.SettingsState
 import com.yas.settings.mappers.toSettingsModel
-import com.yas.settings_data.SettingsRepository
-import com.yas.settings_data.models.SettingsDTO
+import com.yas.settings.SettingsRepository
+import com.yas.settings.models.SettingsDTO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

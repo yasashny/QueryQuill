@@ -95,10 +95,9 @@ dependencies {
     implementation(libs.core.splashscreen)
 
     implementation(project(":domain"))
-    implementation(project(":data"))
-    implementation(project(":core:settings-data"))
+    implementation(project(":data:settings"))
     implementation(project(":feature:settings"))
-    implementation(project(":common"))
-    implementation(project(":core:requests-data"))
+    implementation(project(":core:model"))
+    implementation(project(":data:requests"))
 
 }

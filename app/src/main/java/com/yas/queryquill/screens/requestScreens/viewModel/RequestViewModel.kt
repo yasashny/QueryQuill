@@ -8,8 +8,8 @@ import com.yas.domain.sendRequest.ResponseModel
 import com.yas.queryquill.mappers.toDTO
 import com.yas.queryquill.mappers.toModel
 import com.yas.queryquill.navigationDrawer.ListOfRequestsState
-import com.yas.requests_data.local.RequestsRepository
-import com.yas.requests_data.sendRequest.SendRequestRepository
+import com.yas.requests.local.RequestsRepository
+import com.yas.requests.sendRequest.SendRequestRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

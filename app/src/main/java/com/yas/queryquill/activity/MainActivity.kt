@@ -13,7 +13,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
-import com.yas.common.ThemeState
+import com.yas.model.ThemeState
 import com.yas.queryquill.adaptive.adaptiveScreenManager
 import com.yas.queryquill.components.topAppBar.MyTopAppBar
 import com.yas.queryquill.navigation.Destinations
@@ -43,8 +43,8 @@ class MainActivity : ComponentActivity() {
             }
             requestViewModel = koinViewModel<RequestViewModel>()
             val navController = rememberNavController()
-            TextMateInit(applicationContext, theme ?: ThemeState.SYSTEM)
-            QueryQuillTheme(theme = theme ?: ThemeState.SYSTEM) {
+            TextMateInit(applicationContext, theme ?: com.yas.model.ThemeState.SYSTEM)
+            QueryQuillTheme(theme = theme ?: com.yas.model.ThemeState.SYSTEM) {
                 NavigationDrawer(requestViewModel,
                     navigateToSettings = { navController.navigate(Destinations.SettingsScreenRoute.route) }) { drawerState ->
                     val windowSizeClass = calculateWindowSizeClass(this)

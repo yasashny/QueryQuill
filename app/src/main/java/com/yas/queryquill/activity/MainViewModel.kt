@@ -2,7 +2,7 @@ package com.yas.queryquill.activity
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yas.common.ThemeState
+import com.yas.model.ThemeState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 class MainViewModel(
     private val getThemeUseCase: GetThemeUseCase
 ) : ViewModel() {
-    private val _themeState = MutableStateFlow<ThemeState?>(null)
+    private val _themeState = MutableStateFlow<com.yas.model.ThemeState?>(null)
     val themeState = _themeState.asStateFlow()
 
     init {

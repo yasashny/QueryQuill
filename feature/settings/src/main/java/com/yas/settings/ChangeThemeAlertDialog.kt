@@ -24,12 +24,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
-import com.yas.common.ThemeState
+import com.yas.model.ThemeState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ChangeThemeAlertDialog(
-    openDialog: MutableState<Boolean>, currentTheme: ThemeState, updateTheme: (ThemeState) -> Unit
+    openDialog: MutableState<Boolean>, currentTheme: com.yas.model.ThemeState, updateTheme: (com.yas.model.ThemeState) -> Unit
 ) {
     if (openDialog.value) {
         BasicAlertDialog(onDismissRequest = {
@@ -42,7 +42,7 @@ internal fun ChangeThemeAlertDialog(
                 shape = MaterialTheme.shapes.large,
                 tonalElevation = AlertDialogDefaults.TonalElevation
             ) {
-                val radioOptions = listOf(ThemeState.SYSTEM, ThemeState.DARK, ThemeState.LIGHT)
+                val radioOptions = listOf(com.yas.model.ThemeState.SYSTEM, com.yas.model.ThemeState.DARK, com.yas.model.ThemeState.LIGHT)
                 val (selectedOption, onOptionSelected) = remember { mutableStateOf(currentTheme) }
 
 

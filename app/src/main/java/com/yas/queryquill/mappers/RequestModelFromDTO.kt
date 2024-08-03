@@ -11,16 +11,16 @@ import com.yas.domain.requestsDb.states.BodyState
 import com.yas.domain.requestsDb.states.MultipartFormState
 import com.yas.domain.requestsDb.states.TextType
 import com.yas.domain.sendRequest.ResponseModel
-import com.yas.requests_data.local.models.AddRequestModelDTO
-import com.yas.requests_data.local.models.AuthStateDTO
-import com.yas.requests_data.local.models.BodyStateDTO
-import com.yas.requests_data.local.models.HttpTypeDTO
-import com.yas.requests_data.local.models.KeyValueDTO
-import com.yas.requests_data.local.models.MultipartFormStateDTO
-import com.yas.requests_data.local.models.RequestDTO
-import com.yas.requests_data.local.models.RequestsListItemDTO
-import com.yas.requests_data.local.models.ResponseDTO
-import com.yas.requests_data.local.models.TextTypeDTO
+import com.yas.requests.local.models.AddRequestModelDTO
+import com.yas.requests.local.models.AuthStateDTO
+import com.yas.requests.local.models.BodyStateDTO
+import com.yas.requests.local.models.HttpTypeDTO
+import com.yas.requests.local.models.KeyValueDTO
+import com.yas.requests.local.models.MultipartFormStateDTO
+import com.yas.requests.local.models.RequestDTO
+import com.yas.requests.local.models.RequestsListItemDTO
+import com.yas.requests.local.models.ResponseDTO
+import com.yas.requests.local.models.TextTypeDTO
 
 fun RequestDTO.toModel() : RequestModel {
     return RequestModel(

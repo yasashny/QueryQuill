@@ -1,20 +1,19 @@
 package com.yas.settings.mappers
 
-import com.yas.common.ThemeState
-import com.yas.settings_data.models.ThemeStateDTO
+import com.yas.settings.models.ThemeStateDTO
 
-internal fun ThemeStateDTO.toThemeState(): ThemeState {
+internal fun ThemeStateDTO.toThemeState(): com.yas.model.ThemeState {
     return when (this) {
-        ThemeStateDTO.SYSTEM -> ThemeState.SYSTEM
-        ThemeStateDTO.DARK -> ThemeState.DARK
-        ThemeStateDTO.LIGHT -> ThemeState.LIGHT
+        ThemeStateDTO.SYSTEM -> com.yas.model.ThemeState.SYSTEM
+        ThemeStateDTO.DARK -> com.yas.model.ThemeState.DARK
+        ThemeStateDTO.LIGHT -> com.yas.model.ThemeState.LIGHT
     }
 }
 
-internal fun ThemeState.toDTO(): ThemeStateDTO {
+internal fun com.yas.model.ThemeState.toDTO(): ThemeStateDTO {
     return when (this) {
-        ThemeState.SYSTEM -> ThemeStateDTO.SYSTEM
-        ThemeState.DARK -> ThemeStateDTO.DARK
-        ThemeState.LIGHT -> ThemeStateDTO.LIGHT
+        com.yas.model.ThemeState.SYSTEM -> ThemeStateDTO.SYSTEM
+        com.yas.model.ThemeState.DARK -> ThemeStateDTO.DARK
+        com.yas.model.ThemeState.LIGHT -> ThemeStateDTO.LIGHT
     }
 }
