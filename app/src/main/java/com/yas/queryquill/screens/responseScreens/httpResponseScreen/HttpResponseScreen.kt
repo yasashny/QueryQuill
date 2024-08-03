@@ -25,95 +25,102 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.yas.domain.sendRequest.ResponseModel
 import com.yas.queryquill.components.codeEditor.mimeTypeToLanguageType
+import com.yas.queryquill.screens.requestScreens.viewModel.ResponseState
 import com.yas.queryquill.screens.responseScreens.ResponseScreenSource
 import com.yas.queryquill.screens.responseScreens.httpResponseScreen.preview.ResponseScreenPreview
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun HttpResponseScreen(
-    modifier: Modifier, responseModelFlow: StateFlow<ResponseModel>
+    modifier: Modifier, responseStateFlow: StateFlow<ResponseState>
 ) {
     Box(modifier = modifier) {
-        val responseModel by responseModelFlow.collectAsState()
-        Column(Modifier.fillMaxSize()) {
-            OutlinedCard(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(15.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(MaterialTheme.colorScheme.surfaceContainer)
-                    .height(IntrinsicSize.Min)
+        val responseState by responseStateFlow.collectAsState()
 
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = responseModel.status,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer,
-                        modifier = Modifier.padding(vertical = 10.dp, horizontal = 15.dp)
-                    )
-                    VerticalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-                    Text(
-                        text = "${responseModel.time} ms",
-                        color = MaterialTheme.colorScheme.onSecondaryContainer,
-                        modifier = Modifier.padding(10.dp)
-                    )
-                    VerticalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-                    Text(
-                        text = "${responseModel.contentLength} bytes",
-                        color = MaterialTheme.colorScheme.onSecondaryContainer,
-                        modifier = Modifier.padding(10.dp)
-                    )
-                }
-            }
+        when(val state = responseState){
+            ResponseState.Loading -> {}
+            is ResponseState.Response -> {
+                Column(Modifier.fillMaxSize()) {
+                    OutlinedCard(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(15.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(MaterialTheme.colorScheme.surfaceContainer)
+                            .height(IntrinsicSize.Min)
 
-            var responseState by remember {
-                mutableStateOf(ResponseState.PREVIEW)
-            }
-            Row {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 15.dp)
-                ) {
-                    SegmentedButtonResponse(
-                        currentState = responseState, options = listOf(
-                            ResponseState.PREVIEW, ResponseState.SOURCE, ResponseState.HEADERS
-                        )
-                    ) { newState ->
-                        if (newState != responseState) {
-                            responseState = newState
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                text = state.model.status,
+                                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                modifier = Modifier.padding(vertical = 10.dp, horizontal = 15.dp)
+                            )
+                            VerticalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                            Text(
+                                text = "${state.model.time} ms",
+                                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                modifier = Modifier.padding(10.dp)
+                            )
+                            VerticalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                            Text(
+                                text = "${state.model.contentLength} bytes",
+                                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                modifier = Modifier.padding(10.dp)
+                            )
+                        }
+                    }
+
+                    var responseSegmentedButtonState by remember {
+                        mutableStateOf(ResponseSegmentedButtonState.PREVIEW)
+                    }
+                    Row {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 15.dp)
+                        ) {
+                            SegmentedButtonResponse(
+                                currentState = responseSegmentedButtonState, options = listOf(
+                                    ResponseSegmentedButtonState.PREVIEW, ResponseSegmentedButtonState.SOURCE, ResponseSegmentedButtonState.HEADERS
+                                )
+                            ) { newState ->
+                                if (newState != responseSegmentedButtonState) {
+                                    responseSegmentedButtonState = newState
+                                }
+                            }
+                        }
+
+                    }
+                    when (responseSegmentedButtonState) {
+                        ResponseSegmentedButtonState.PREVIEW -> {
+                            ResponseScreenPreview(
+                                body = state.model.body,
+                                mimeType = state.model.contentType,
+                                contentSubtype = state.model.contentSubtype
+                            )
+                        }
+
+                        ResponseSegmentedButtonState.SOURCE -> {
+                            val languageType =
+                                mimeTypeToLanguageType("${state.model.contentType}/${state.model.contentSubtype}")
+                            ResponseScreenSource(
+                                state.model.body.decodeToString(), languageType
+                            )
+                        }
+
+                        ResponseSegmentedButtonState.HEADERS -> {
+                            ResponseScreenHeaders(state.model.headers)
                         }
                     }
                 }
-
-            }
-            when (responseState) {
-                ResponseState.PREVIEW -> {
-                    ResponseScreenPreview(
-                        body = responseModel.body,
-                        mimeType = responseModel.contentType,
-                        contentSubtype = responseModel.contentSubtype
-                    )
-                }
-
-                ResponseState.SOURCE -> {
-                    val languageType =
-                        mimeTypeToLanguageType("${responseModel.contentType}/${responseModel.contentSubtype}")
-                    ResponseScreenSource(
-                        responseModel.body.decodeToString(), languageType
-                    )
-                }
-
-                ResponseState.HEADERS -> {
-                    ResponseScreenHeaders(responseModel.headers)
-                }
             }
         }
+
     }
 }

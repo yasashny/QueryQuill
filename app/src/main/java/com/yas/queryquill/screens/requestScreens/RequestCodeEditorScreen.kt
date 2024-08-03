@@ -7,7 +7,8 @@ import androidx.compose.ui.Modifier
 import com.yas.domain.requestsDb.models.RequestModel
 import com.yas.domain.requestsDb.states.BodyState
 import com.yas.queryquill.components.codeEditor.CodeEditor
-import com.yas.queryquill.screens.requestScreens.viewModel.UpdateHttpRequestModel
+import com.yas.queryquill.screens.requestScreens.viewModel.RequestState
+import com.yas.queryquill.screens.requestScreens.viewModel.UpdateRequestModel
 import com.yas.queryquill.utils.textTypeToLanguageName
 import kotlinx.coroutines.flow.StateFlow
 
@@ -15,10 +16,10 @@ import kotlinx.coroutines.flow.StateFlow
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun RequestCodeEditorScreen(
-    requestModelFlow: StateFlow<RequestModel>, updateRequest: (UpdateHttpRequestModel) -> Unit
+    requestModelFlow: StateFlow<RequestState>, updateRequest: (UpdateRequestModel) -> Unit
 ) {
 
-    val bodyState = requestModelFlow.value.bodyState as BodyState.Text
+    val bodyState = ((requestModelFlow.value as RequestState.Request).request.bodyState as BodyState.Text)
 
     CodeEditor(
         initialText = bodyState.text,
@@ -26,7 +27,7 @@ fun RequestCodeEditorScreen(
         languageType = textTypeToLanguageName(bodyState.textType),
         isBasicDisplayMode = false
     ) { newText ->
-        updateRequest(UpdateHttpRequestModel.Body(BodyState.Text(newText, bodyState.textType)))
+        updateRequest(UpdateRequestModel.Body(BodyState.Text(newText, bodyState.textType)))
     }
 
 }

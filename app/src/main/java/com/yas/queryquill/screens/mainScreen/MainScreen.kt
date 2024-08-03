@@ -17,13 +17,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.yas.domain.requestsDb.models.RequestModel
-import com.yas.domain.sendRequest.ResponseModel
 import com.yas.queryquill.adaptive.ScreenState
 import com.yas.queryquill.components.PrimaryTextTabs
 import com.yas.queryquill.screens.requestScreens.RequestScreen
 import com.yas.queryquill.screens.requestScreens.viewModel.RequestEvent
 import com.yas.queryquill.screens.requestScreens.viewModel.RequestState
-import com.yas.queryquill.screens.requestScreens.viewModel.UpdateHttpRequestModel
+import com.yas.queryquill.screens.requestScreens.viewModel.ResponseState
+import com.yas.queryquill.screens.requestScreens.viewModel.UpdateRequestModel
 import com.yas.queryquill.screens.responseScreens.httpResponseScreen.HttpResponseScreen
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.reflect.KFunction1
@@ -33,12 +33,11 @@ import kotlin.reflect.KFunction1
 @Composable
 fun MainScreen(
     screenState: ScreenState,
-    requestModel: StateFlow<RequestModel>,
     requestState: StateFlow<RequestState>,
-    updateRequest: KFunction1<UpdateHttpRequestModel, Unit>,
+    updateRequest: KFunction1<UpdateRequestModel, Unit>,
     sendRequest: suspend (RequestModel) -> Unit,
     onEvent: KFunction1<RequestEvent, Unit>,
-    responseState: StateFlow<ResponseModel>,
+    responseState: StateFlow<ResponseState>,
     navigateToEditor: () -> Unit
 ) {
 
@@ -56,7 +55,6 @@ fun MainScreen(
                     when (it) {
                         0 -> RequestScreen(
                             modifier = Modifier.fillMaxSize(),
-                            requestModel = requestModel,
                             requestStateFlow = requestState,
                             updateRequest = updateRequest,
                             onEvent = onEvent,
@@ -68,7 +66,7 @@ fun MainScreen(
                         1 -> HttpResponseScreen(
                             modifier = Modifier
                                 .fillMaxSize(),
-                            responseModelFlow = responseState
+                            responseStateFlow = responseState
                         )
                     }
                 }
@@ -81,7 +79,6 @@ fun MainScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .weight(1f),
-                    requestModel = requestModel,
                     requestStateFlow = requestState,
                     updateRequest = updateRequest,
                     onEvent = onEvent,
@@ -97,7 +94,7 @@ fun MainScreen(
                 HttpResponseScreen(
                     modifier = Modifier
                         .fillMaxSize()
-                        .weight(1f), responseModelFlow = responseState
+                        .weight(1f), responseStateFlow = responseState
                 )
             }
         }
@@ -108,7 +105,6 @@ fun MainScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .weight(1f),
-                    requestModel = requestModel,
                     requestStateFlow = requestState,
                     updateRequest = updateRequest,
                     onEvent = onEvent,
@@ -124,7 +120,7 @@ fun MainScreen(
                 HttpResponseScreen(
                     modifier = Modifier
                         .fillMaxSize()
-                        .weight(1f), responseModelFlow = responseState
+                        .weight(1f), responseStateFlow = responseState
                 )
             }
         }

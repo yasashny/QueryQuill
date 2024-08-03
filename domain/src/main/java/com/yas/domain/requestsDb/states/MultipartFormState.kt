@@ -1,15 +1,13 @@
 package com.yas.domain.requestsDb.states
 
 import android.net.Uri
-import kotlinx.serialization.Serializable
 import com.yas.domain.requestsDb.models.KeyValue
-import com.yas.domain.requestsDb.serializers.UriAsStringSerializer
 
-@Serializable
+
 sealed interface MultipartFormState : BasicState {
     override val name: String
 
-    @Serializable
+
     data class Text(val keyValue: KeyValue) : MultipartFormState {
         override val name: String
             get() = "TEXT"
@@ -21,8 +19,8 @@ sealed interface MultipartFormState : BasicState {
         }
     }
 
-    @Serializable
-    data class BinaryFile(override val uri: @Serializable(UriAsStringSerializer::class) Uri, val title: String,
+
+    data class BinaryFile(override val uri: Uri, val title: String,
                           override val fileName: String) :
         MultipartFormState, BasicBinaryFile() {
         override val name: String

@@ -12,15 +12,16 @@ import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
 import com.yas.domain.requestsDb.models.RequestModel
 import com.yas.domain.requestsDb.states.BodyState
+import com.yas.queryquill.screens.requestScreens.viewModel.RequestState
 import kotlinx.coroutines.flow.StateFlow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditorTopAppBarState(
-    requestModelFlow: StateFlow<RequestModel>, navController: NavHostController
+    requestStateFlow: StateFlow<RequestState>, navController: NavHostController
 ) {
-    val requestModel by requestModelFlow.collectAsState()
-    val textType = (requestModel.bodyState as BodyState.Text).textType
+    val requestModel = requestStateFlow.collectAsState().value as RequestState.Request
+    val textType = (requestModel.request.bodyState as BodyState.Text).textType
     TopAppBar(title = {
         Text(text = "Text/${textType.title}")
 

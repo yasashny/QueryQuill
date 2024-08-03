@@ -13,15 +13,13 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.text.style.TextOverflow
-import com.yas.domain.requestsDb.models.RequestModel
 import com.yas.queryquill.components.ChangeLabelAlertDialog
 import com.yas.queryquill.screens.requestScreens.viewModel.RequestState
-import com.yas.queryquill.screens.requestScreens.viewModel.UpdateHttpRequestModel
+import com.yas.queryquill.screens.requestScreens.viewModel.UpdateRequestModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -30,70 +28,137 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainScreenTopAppBarState(
     drawerState: DrawerState,
-    requestModelFlow: StateFlow<RequestModel>,
-    updateRequest: (UpdateHttpRequestModel) -> Unit,
+    updateRequest: (UpdateRequestModel) -> Unit,
     requestStateFlow: StateFlow<RequestState>
 ) {
-    val requestModel by requestModelFlow.collectAsState()
-    val requestState by requestStateFlow.collectAsState()
-
-    val label = requestModel.label
-
-    TopAppBar(title = {
-        if (requestState == RequestState.Request) {
-            Text(
-                label, maxLines = 1, overflow = TextOverflow.Ellipsis
-            )
-        } else {
-            Text(
-                "QueryQuill", maxLines = 1, overflow = TextOverflow.Ellipsis
-            )
-        }
-
-    }, navigationIcon = {
-
-        val scope = rememberCoroutineScope()
-
-        IconButton(onClick = { scope.launch(Dispatchers.IO) { drawerState.open() } }) {
-            Icon(imageVector = Icons.Filled.Menu, contentDescription = null)
-        }
-
-    }, actions = {
-        val openDialog = remember {
-            mutableStateOf(false)
-        }
-        val flag = remember {
-            mutableStateOf<String?>(null)
-        }
-        if (flag.value != null) {
-            updateRequest(UpdateHttpRequestModel.Label(flag.value as String))
-            flag.value = null
-        }
-        if (openDialog.value) {
-            ChangeLabelAlertDialog(openDialog, flag)
-        }
-        if (requestState == RequestState.Request) {
-            IconButton(onClick = {
-                openDialog.value = true
-            }) {
-                Icon(
-                    imageVector = Icons.Outlined.Edit, contentDescription = null
+    when (val requestState = requestStateFlow.collectAsState().value) {
+        RequestState.Loading -> {
+            TopAppBar(title = {
+                Text(
+                    "QueryQuill", maxLines = 1, overflow = TextOverflow.Ellipsis
                 )
-            }
-        } else {
-            IconButton(
-                onClick = {
+
+            }, navigationIcon = {
+
+                val scope = rememberCoroutineScope()
+
+                IconButton(onClick = { scope.launch(Dispatchers.IO) { drawerState.open() } }) {
+                    Icon(imageVector = Icons.Filled.Menu, contentDescription = null)
+                }
+
+            }, actions = {
+                val openDialog = remember {
+                    mutableStateOf(false)
+                }
+                val flag = remember {
+                    mutableStateOf<String?>(null)
+                }
+                if (flag.value != null) {
+                    updateRequest(UpdateRequestModel.Label(flag.value as String))
+                    flag.value = null
+                }
+                if (openDialog.value) {
+                    ChangeLabelAlertDialog(openDialog, flag)
+                }
+                IconButton(
+                    onClick = {
+                        openDialog.value = true
+                    }, enabled = false
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Edit, contentDescription = null
+                    )
+                }
+
+            }, colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainer
+            )
+            )
+        }
+
+        RequestState.NewRequest -> {
+            TopAppBar(title = {
+                Text(
+                    "QueryQuill", maxLines = 1, overflow = TextOverflow.Ellipsis
+                )
+
+            }, navigationIcon = {
+
+                val scope = rememberCoroutineScope()
+
+                IconButton(onClick = { scope.launch(Dispatchers.IO) { drawerState.open() } }) {
+                    Icon(imageVector = Icons.Filled.Menu, contentDescription = null)
+                }
+
+            }, actions = {
+                val openDialog = remember {
+                    mutableStateOf(false)
+                }
+                val flag = remember {
+                    mutableStateOf<String?>(null)
+                }
+                if (flag.value != null) {
+                    updateRequest(UpdateRequestModel.Label(flag.value as String))
+                    flag.value = null
+                }
+                if (openDialog.value) {
+                    ChangeLabelAlertDialog(openDialog, flag)
+                }
+                IconButton(
+                    onClick = {
+                        openDialog.value = true
+                    }, enabled = false
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Edit, contentDescription = null
+                    )
+                }
+
+            }, colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainer
+            )
+            )
+        }
+
+        is RequestState.Request -> {
+            TopAppBar(title = {
+                Text(
+                    requestState.request.label, maxLines = 1, overflow = TextOverflow.Ellipsis
+                )
+
+            }, navigationIcon = {
+
+                val scope = rememberCoroutineScope()
+
+                IconButton(onClick = { scope.launch(Dispatchers.IO) { drawerState.open() } }) {
+                    Icon(imageVector = Icons.Filled.Menu, contentDescription = null)
+                }
+
+            }, actions = {
+                val openDialog = remember {
+                    mutableStateOf(false)
+                }
+                val flag = remember {
+                    mutableStateOf<String?>(null)
+                }
+                if (flag.value != null) {
+                    updateRequest(UpdateRequestModel.Label(flag.value as String))
+                    flag.value = null
+                }
+                if (openDialog.value) {
+                    ChangeLabelAlertDialog(openDialog, flag)
+                }
+                IconButton(onClick = {
                     openDialog.value = true
-                }, enabled = false
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Edit, contentDescription = null
-                )
-            }
+                }) {
+                    Icon(
+                        imageVector = Icons.Outlined.Edit, contentDescription = null
+                    )
+                }
+            }, colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainer
+            )
+            )
         }
-
-    }, colors = TopAppBarDefaults.topAppBarColors(
-        containerColor = MaterialTheme.colorScheme.surfaceContainer
-    )
-    )
+    }
 }

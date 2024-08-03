@@ -3,16 +3,14 @@ package com.yas.domain.requestsDb.states
 import android.net.Uri
 import androidx.compose.runtime.Immutable
 import com.yas.domain.requestsDb.models.KeyValue
-import com.yas.domain.requestsDb.serializers.UriAsStringSerializer
-import kotlinx.serialization.Serializable
 
-@Serializable
+
 @Immutable
 sealed interface BodyState : BasicState {
 
     override val name: String
 
-    @Serializable
+
     data class Text(val text: String, val textType: TextType) : BodyState {
         override val name: String
             get() = "Text"
@@ -24,7 +22,7 @@ sealed interface BodyState : BasicState {
         }
     }
 
-    @Serializable
+
     data class MultipartForm(val multipart: List<MultipartFormState>) : BodyState {
         override val name: String
             get() = "Multipart Form"
@@ -36,7 +34,7 @@ sealed interface BodyState : BasicState {
         }
     }
 
-    @Serializable
+
     data class FormUrlEncoded(val list: List<KeyValue>) : BodyState {
         override val name: String
             get() = "Form Url Encoded"
@@ -48,9 +46,9 @@ sealed interface BodyState : BasicState {
         }
     }
 
-    @Serializable
+
     data class BinaryFile(
-        override val uri: @Serializable(UriAsStringSerializer::class) Uri,
+        override val uri: Uri,
         override val fileName: String
     ) : BodyState, BasicBinaryFile() {
         override val name: String
@@ -63,7 +61,7 @@ sealed interface BodyState : BasicState {
         }
     }
 
-    @Serializable
+
     data object NoBody : BodyState {
         override val name: String
             get() = "No Body"

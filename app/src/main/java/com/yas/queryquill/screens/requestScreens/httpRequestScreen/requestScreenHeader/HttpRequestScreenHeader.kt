@@ -17,13 +17,13 @@ import androidx.compose.ui.unit.dp
 import com.yas.domain.requestsDb.models.HttpType
 import com.yas.queryquill.components.DynamicSelectTextField
 import com.yas.queryquill.components.SegmentedButtonSingleSelect
-import com.yas.queryquill.screens.requestScreens.viewModel.UpdateHttpRequestModel
+import com.yas.queryquill.screens.requestScreens.viewModel.UpdateRequestModel
 
 @Composable
 fun HttpRequestScreenHeader(
     type: HttpType,
     url: String,
-    updateRequest: (UpdateHttpRequestModel) -> Unit,
+    updateRequest: (UpdateRequestModel) -> Unit,
     headerState: MutableState<HttpRequestHeaderState>
 ) {
     Row(
@@ -40,11 +40,11 @@ fun HttpRequestScreenHeader(
                 HttpType.HEAD
             ), label = "Type", modifier = Modifier.weight(1.2f)
         ) { httpType ->
-            updateRequest(UpdateHttpRequestModel.Type(httpType))
+            updateRequest(UpdateRequestModel.Type(httpType))
         }
         OutlinedTextField(
             value = url,
-            onValueChange = { updateRequest(UpdateHttpRequestModel.Url(it)) },
+            onValueChange = { updateRequest(UpdateRequestModel.Url(it)) },
             label = @Composable { Text(text = "Url") },
             modifier = Modifier
                 .weight(2f)

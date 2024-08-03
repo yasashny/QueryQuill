@@ -6,7 +6,7 @@ import com.yas.domain.requestsDb.states.BodyState
 
 @Immutable
 data class RequestModel(
-    val id: Int,
+    val id: Long,
     val label: String,
     val bodyState: BodyState,
     val header: ImmutableList,

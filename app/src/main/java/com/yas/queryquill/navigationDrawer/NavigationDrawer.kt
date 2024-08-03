@@ -41,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.yas.queryquill.screens.requestScreens.viewModel.RequestEvent
+import com.yas.queryquill.screens.requestScreens.viewModel.RequestState
 import com.yas.queryquill.screens.requestScreens.viewModel.RequestViewModel
 import com.yas.queryquill.utils.vibration
 import kotlinx.coroutines.launch
@@ -55,7 +56,12 @@ fun NavigationDrawer(
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val items by viewModel.listOfRequests.collectAsState(initial = ListOfRequestsState.Loading)
-    val requestId by viewModel.requestModel.collectAsState()
+    val requestState by viewModel.requestState.collectAsState()
+    val requestId =when(val state = requestState){
+        RequestState.Loading -> null
+        RequestState.NewRequest -> null
+        is RequestState.Request -> state.request.id
+    }
     var gesturesState by remember {
         mutableStateOf(false)
     }
@@ -141,7 +147,12 @@ fun NavigationDrawer(
                                     items((items as ListOfRequestsState.ListOfRequests).list) { item ->
                                         NavigationDrawerItem(
                                             label = { Text(item.label) },
-                                            selected = requestId.id == item.id,
+                                            selected = if (requestId != null){
+                                                requestId == item.id
+                                            }else{
+                                                false
+                                            }
+                                            ,
                                             onClick = {
                                                 scope.launch {
                                                     drawerState.close()

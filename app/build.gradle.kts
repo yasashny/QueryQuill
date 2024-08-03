@@ -99,5 +99,6 @@ dependencies {
     implementation(project(":core:settings-data"))
     implementation(project(":feature:settings"))
     implementation(project(":common"))
+    implementation(project(":core:requests-data"))
 
 }

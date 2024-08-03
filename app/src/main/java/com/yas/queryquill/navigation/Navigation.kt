@@ -11,7 +11,8 @@ import com.yas.queryquill.screens.mainScreen.MainScreen
 import com.yas.queryquill.screens.requestScreens.RequestCodeEditorScreen
 import com.yas.queryquill.screens.requestScreens.viewModel.RequestEvent
 import com.yas.queryquill.screens.requestScreens.viewModel.RequestState
-import com.yas.queryquill.screens.requestScreens.viewModel.UpdateHttpRequestModel
+import com.yas.queryquill.screens.requestScreens.viewModel.ResponseState
+import com.yas.queryquill.screens.requestScreens.viewModel.UpdateRequestModel
 import com.yas.settings.SettingsScreen
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.reflect.KFunction1
@@ -30,17 +31,15 @@ sealed class Destinations(
 fun Navigation(
     navController: NavHostController,
     screenState: ScreenState,
-    requestModel: StateFlow<RequestModel>,
     requestState: StateFlow<RequestState>,
-    updateRequest: KFunction1<UpdateHttpRequestModel, Unit>,
+    updateRequest: KFunction1<UpdateRequestModel, Unit>,
     sendRequest: suspend (RequestModel) -> Unit,
     onEvent: KFunction1<RequestEvent, Unit>,
-    responseState: StateFlow<ResponseModel>
+    responseState: StateFlow<ResponseState>
 ) {
     NavHost(navController = navController, startDestination = Destinations.MainScreenRoute.route) {
         composable(Destinations.MainScreenRoute.route) {
             MainScreen(screenState = screenState,
-                requestModel = requestModel,
                 requestState = requestState,
                 updateRequest = updateRequest,
                 onEvent = onEvent,
@@ -51,7 +50,7 @@ fun Navigation(
                 })
         }
         composable(Destinations.EditorScreenRoute.route) {
-            RequestCodeEditorScreen(requestModel, updateRequest)
+            RequestCodeEditorScreen(requestState, updateRequest)
         }
         composable(Destinations.SettingsScreenRoute.route) {
             SettingsScreen()

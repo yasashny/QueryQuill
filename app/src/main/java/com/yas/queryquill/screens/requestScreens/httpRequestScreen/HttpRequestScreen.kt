@@ -33,23 +33,21 @@ import com.yas.queryquill.screens.requestScreens.httpRequestScreen.header.header
 import com.yas.queryquill.screens.requestScreens.httpRequestScreen.query.queryScreen
 import com.yas.queryquill.screens.requestScreens.httpRequestScreen.requestScreenHeader.HttpRequestHeaderState
 import com.yas.queryquill.screens.requestScreens.httpRequestScreen.requestScreenHeader.HttpRequestScreenHeader
-import com.yas.queryquill.screens.requestScreens.viewModel.UpdateHttpRequestModel
+import com.yas.queryquill.screens.requestScreens.viewModel.UpdateRequestModel
 import com.yas.queryquill.utils.vibration
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HttpRequestScreen(
-    requestModelFlow: StateFlow<RequestModel>,
-    updateRequest: (UpdateHttpRequestModel) -> Unit,
+    requestModel: RequestModel,
+    updateRequest: (UpdateRequestModel) -> Unit,
     sendRequest: suspend (RequestModel) -> Unit,
     pagerState: PagerState? = null,
     navigateToEditor: () -> Unit
 ) {
-    val requestModel by requestModelFlow.collectAsState()
     val context = LocalContext.current
     val openChangeContentTypeDialog = remember {
         mutableStateOf(Pair(false, ""))
@@ -64,7 +62,7 @@ fun HttpRequestScreen(
     }
     if (isChangeContentType.value) {
         updateRequest(
-            UpdateHttpRequestModel.Header(listOf(
+            UpdateRequestModel.Header(listOf(
                 KeyValue(
                     "Content-Type", openChangeContentTypeDialog.value.second
                 )
@@ -121,11 +119,11 @@ fun HttpRequestScreen(
                             openChangeContentTypeDialog = openChangeContentTypeDialog,
                             context = context
                         )
-                        updateRequest(UpdateHttpRequestModel.Body(bodyState))
+                        updateRequest(UpdateRequestModel.Body(bodyState))
                     }
 
                     HttpRequestHeaderState.AUTH -> authScreen(requestModel.auth) { authState ->
-                        updateRequest(UpdateHttpRequestModel.Auth(authState))
+                        updateRequest(UpdateRequestModel.Auth(authState))
                     }
 
                     HttpRequestHeaderState.HEADER -> headerScreen(requestModel, updateRequest)

@@ -1,9 +1,7 @@
 package com.yas.domain.sendRequest
 
 import com.yas.domain.requestsDb.models.KeyValue
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class ResponseModel(
     val status: String,
     val body: ByteArray,
@@ -16,10 +14,6 @@ data class ResponseModel(
     companion object {
         fun default(): ResponseModel {
             return ResponseModel("--", byteArrayOf(), "--", "--", null, null, emptyList())
-        }
-
-        fun errorType(message: ByteArray): ResponseModel {
-            return ResponseModel("ERROR", message, "--", "--", null, null, emptyList())
         }
     }
 }

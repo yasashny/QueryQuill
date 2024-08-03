@@ -19,6 +19,7 @@ import com.yas.queryquill.components.topAppBar.MyTopAppBar
 import com.yas.queryquill.navigation.Destinations
 import com.yas.queryquill.navigation.Navigation
 import com.yas.queryquill.navigationDrawer.NavigationDrawer
+import com.yas.queryquill.screens.requestScreens.viewModel.RequestEvent
 import com.yas.queryquill.screens.requestScreens.viewModel.RequestViewModel
 import com.yas.queryquill.ui.theme.QueryQuillTheme
 import com.yas.queryquill.utils.TextMateInit
@@ -51,8 +52,7 @@ class MainActivity : ComponentActivity() {
                     Scaffold(topBar = {
                         MyTopAppBar(
                             drawerState = drawerState,
-                            requestModelFlow = requestViewModel.requestModel,
-                            updateRequest = requestViewModel::updateHttpRequest,
+                            updateRequest = requestViewModel::updateRequest,
                             requestStateFlow = requestViewModel.requestState,
                             navController = navController
                         )
@@ -65,9 +65,8 @@ class MainActivity : ComponentActivity() {
                             Navigation(
                                 navController = navController,
                                 screenState = screenState,
-                                requestModel = requestViewModel.requestModel,
                                 requestState = requestViewModel.requestState,
-                                updateRequest = requestViewModel::updateHttpRequest,
+                                updateRequest = requestViewModel::updateRequest,
                                 sendRequest = requestViewModel::sendRequest,
                                 onEvent = requestViewModel::onEvent,
                                 responseState = requestViewModel.responseState
@@ -81,7 +80,7 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onStop() {
-        requestViewModel.saveLastRequest()
+        requestViewModel.onEvent(RequestEvent.SaveRequest)
         super.onStop()
     }
 }

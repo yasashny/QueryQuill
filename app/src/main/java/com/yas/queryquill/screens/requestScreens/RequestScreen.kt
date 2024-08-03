@@ -13,16 +13,15 @@ import com.yas.queryquill.screens.requestScreens.loadingScreen.LoadingScreen
 import com.yas.queryquill.screens.requestScreens.newRequestScreen.NewRequestScreen
 import com.yas.queryquill.screens.requestScreens.viewModel.RequestEvent
 import com.yas.queryquill.screens.requestScreens.viewModel.RequestState
-import com.yas.queryquill.screens.requestScreens.viewModel.UpdateHttpRequestModel
+import com.yas.queryquill.screens.requestScreens.viewModel.UpdateRequestModel
 import kotlinx.coroutines.flow.StateFlow
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun RequestScreen(
     modifier: Modifier,
-    requestModel: StateFlow<RequestModel>,
     requestStateFlow: StateFlow<RequestState>,
-    updateRequest: (UpdateHttpRequestModel) -> Unit,
+    updateRequest: (UpdateRequestModel) -> Unit,
     onEvent: (RequestEvent) -> Unit,
     sendRequest: suspend (RequestModel) -> Unit,
     pagerState: PagerState? = null,
@@ -31,20 +30,20 @@ fun RequestScreen(
     val requestState by requestStateFlow.collectAsState()
 
     Box(modifier = modifier) {
-        when (requestState) {
+        when (val state = requestState) {
             RequestState.Loading -> {
                 LoadingScreen()
             }
 
-            RequestState.Null -> {
+            RequestState.NewRequest -> {
                 NewRequestScreen { addRequestModel ->
                     onEvent(RequestEvent.AddRequest(addRequestModel))
                 }
             }
 
-            RequestState.Request -> {
+            is RequestState.Request -> {
                 HttpRequestScreen(
-                    requestModelFlow = requestModel,
+                    requestModel = state.request,
                     updateRequest = updateRequest,
                     sendRequest = sendRequest,
                     pagerState = pagerState,

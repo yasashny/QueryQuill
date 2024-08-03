@@ -3,17 +3,17 @@ package com.yas.queryquill.screens.requestScreens.httpRequestScreen
 import android.content.Context
 import android.net.Uri
 import androidx.compose.runtime.MutableState
-import com.yas.data.utils.getMIMEType
 import com.yas.domain.requestsDb.models.KeyValue
 import com.yas.domain.requestsDb.models.RequestModel
 import com.yas.domain.requestsDb.states.BodyState
 import com.yas.domain.requestsDb.states.TextType
-import com.yas.queryquill.screens.requestScreens.viewModel.UpdateHttpRequestModel
+import com.yas.queryquill.screens.requestScreens.viewModel.UpdateRequestModel
+import com.yas.requests_data.utils.getMIMEType
 
 
 fun changeContentType(
     requestModel: RequestModel,
-    updateRequest: (UpdateHttpRequestModel) -> Unit,
+    updateRequest: (UpdateRequestModel) -> Unit,
     bodyState: BodyState,
     openChangeContentTypeDialog: MutableState<Pair<Boolean, String>>,
     context: Context
@@ -30,7 +30,7 @@ fun changeContentType(
                 }
             }else{
                 updateRequest(
-                    UpdateHttpRequestModel.Header(listOf(
+                    UpdateRequestModel.Header(listOf(
                         KeyValue(
                             contentType, mime
                         )
@@ -42,7 +42,7 @@ fun changeContentType(
         }
 
         is BodyState.FormUrlEncoded -> updateRequest(
-            UpdateHttpRequestModel.Header(listOf(
+            UpdateRequestModel.Header(listOf(
                 KeyValue(
                     contentType, "application/x-www-form-urlencoded"
                 )
@@ -50,7 +50,7 @@ fun changeContentType(
         )
 
         is BodyState.MultipartForm -> updateRequest(
-            UpdateHttpRequestModel.Header(listOf(
+            UpdateRequestModel.Header(listOf(
                 KeyValue(
                     contentType, "multipart/form-data"
                 )
@@ -58,11 +58,11 @@ fun changeContentType(
         )
 
         BodyState.NoBody -> updateRequest(
-            UpdateHttpRequestModel.Header(requestModel.header.list.filter { keyValue -> keyValue.key != contentType })
+            UpdateRequestModel.Header(requestModel.header.list.filter { keyValue -> keyValue.key != contentType })
         )
 
         is BodyState.Text -> updateRequest(
-            UpdateHttpRequestModel.Header(listOf(
+            UpdateRequestModel.Header(listOf(
                 KeyValue(
                     contentType, when(bodyState.textType){
                         TextType.JSON -> "application/json"

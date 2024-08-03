@@ -10,9 +10,9 @@ import androidx.compose.runtime.Composable
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SegmentedButtonResponse(
-    currentState: ResponseState,
-    options: List<ResponseState>,
-    onClick: (ResponseState) -> Unit
+    currentState: ResponseSegmentedButtonState,
+    options: List<ResponseSegmentedButtonState>,
+    onClick: (ResponseSegmentedButtonState) -> Unit
 ) {
 
     SingleChoiceSegmentedButtonRow {

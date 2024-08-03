@@ -2,173 +2,147 @@ package com.yas.queryquill.screens.requestScreens.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yas.domain.lastRequest.useCases.GetLastRequestIdUseCase
-import com.yas.domain.lastRequest.useCases.SaveLastRequestIdUseCase
 import com.yas.domain.requestsDb.models.ImmutableList
 import com.yas.domain.requestsDb.models.RequestModel
-import com.yas.domain.requestsDb.useCases.AddRequestUseCase
-import com.yas.domain.requestsDb.useCases.DeleteRequestUseCase
-import com.yas.domain.requestsDb.useCases.GetListOfRequestsUseCase
-import com.yas.domain.requestsDb.useCases.GetRequestUseCase
-import com.yas.domain.requestsDb.useCases.UpdateRequestUseCase
-import com.yas.domain.sendRequest.RequestResponseModel
 import com.yas.domain.sendRequest.ResponseModel
-import com.yas.domain.sendRequest.SendRequestUseCase
+import com.yas.queryquill.mappers.toDTO
+import com.yas.queryquill.mappers.toModel
 import com.yas.queryquill.navigationDrawer.ListOfRequestsState
+import com.yas.requests_data.local.RequestsRepository
+import com.yas.requests_data.sendRequest.SendRequestRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class RequestViewModel(
-    private val getRequestUseCase: GetRequestUseCase,
-    getListOfRequestsUseCase: GetListOfRequestsUseCase,
-    private val addRequestUseCase: AddRequestUseCase,
-    private val deleteRequestUseCase: DeleteRequestUseCase,
-    private val updateRequestUseCase: UpdateRequestUseCase,
-    private val saveLastRequestIdUseCase: SaveLastRequestIdUseCase,
-    private val getLastRequestIdUseCase: GetLastRequestIdUseCase,
-    private val sendRequestUseCase: SendRequestUseCase
+    private val requestsRepository: RequestsRepository,
+    private val sendRequestRepository: SendRequestRepository
 ) : ViewModel() {
 
     private val _requestState = MutableStateFlow<RequestState>(RequestState.Loading)
     val requestState = _requestState.asStateFlow()
 
-    private val _requestModel = MutableStateFlow(RequestModel.default())
-    val requestModel = _requestModel.asStateFlow()
+    val responseState = requestsRepository.getCurrentResponseOrNull().map { responseOrNull ->
+        if (responseOrNull != null) {
+            ResponseState.Response(responseOrNull.toModel())
+        } else {
+            ResponseState.Response(ResponseModel.default())
+        }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), ResponseState.Loading)
 
-    private val _responseState = MutableStateFlow(ResponseModel.default())
-    val responseState = _responseState.asStateFlow()
-
-    suspend fun sendRequest(requestModel: RequestModel) {
-        _responseState.value = sendRequestUseCase.execute(requestModel)
-
-    }
-
-    val listOfRequests = getListOfRequestsUseCase.execute().flatMapLatest { list ->
-        flow { emit(ListOfRequestsState.ListOfRequests(list)) }
+    val listOfRequests = requestsRepository.getListOfRequests().map { list ->
+        ListOfRequestsState.ListOfRequests(list.map { it.toModel() })
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), ListOfRequestsState.Loading)
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            getLastRequestIdUseCase.execute().collect {
-                if (it == null) {
-                    _requestState.value = RequestState.Null
+            requestsRepository.getCurrentRequestOrNull().map { requestOrNull ->
+                if (requestOrNull != null) {
+                    RequestState.Request(request = requestOrNull.toModel())
                 } else {
-                    val request = getRequestUseCase.execute(it)
-                    _requestModel.value = request.request
-                    _responseState.value = request.response
-                    _requestState.value = RequestState.Request
+                    RequestState.NewRequest
                 }
+            }.collect { value ->
+                _requestState.value = value
             }
         }
+    }
+
+    suspend fun sendRequest(requestModel: RequestModel) {
+        sendRequestRepository.sendRequest(requestModel.toDTO())
     }
 
     fun onEvent(requestEvent: RequestEvent) {
         when (requestEvent) {
             is RequestEvent.AddRequest -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    val newRequest = addRequestUseCase.execute(requestEvent.model)
-                    _requestModel.value = newRequest.request
-                    _responseState.value = newRequest.response
-                    _requestState.value = RequestState.Request
+                    requestsRepository.addRequest(requestEvent.model.toDTO())
                 }
             }
 
             is RequestEvent.DeleteRequest -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    if (requestEvent.id == requestModel.value.id) {
-                        _requestState.value = RequestState.Null
-                        _responseState.value = ResponseModel.default()
-                    }
-                    deleteRequestUseCase.execute(requestEvent.id)
+                    requestsRepository.deleteRequest(requestEvent.id)
                 }
             }
 
             is RequestEvent.SetRequest -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    if (requestEvent.id == null) {
-                        if (requestState.value == RequestState.Request) {
-                            updateRequestUseCase.execute(
-                                RequestResponseModel(
-                                    requestModel.value, responseState.value
-                                )
-                            )
+                    onEvent(RequestEvent.SaveRequest)
+                    requestsRepository.changeCurrentRequestId(requestEvent.id)
+                }
+            }
+
+            RequestEvent.SaveRequest -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    when (val request = requestState.value) {
+                        RequestState.Loading -> {}
+                        RequestState.NewRequest -> {}
+                        is RequestState.Request -> {
+                            requestsRepository.updateRequest(request.request.toDTO())
                         }
-                        _requestState.value = RequestState.Null
-                        _responseState.value = ResponseModel.default()
-                    } else {
-                        if (requestState.value == RequestState.Request) {
-                            updateRequestUseCase.execute(
-                                RequestResponseModel(
-                                    requestModel.value, responseState.value
-                                )
-                            )
-                        }
-                        val getRequest = getRequestUseCase.execute(requestEvent.id)
-                        _requestModel.value = getRequest.request
-                        _responseState.value = getRequest.response
-                        _requestState.value = RequestState.Request
                     }
                 }
             }
         }
     }
 
-    fun updateHttpRequest(updateHttpRequestModel: UpdateHttpRequestModel) {
-        when (updateHttpRequestModel) {
-            is UpdateHttpRequestModel.Body -> {
-                _requestModel.value =
-                    _requestModel.value.copy(bodyState = updateHttpRequestModel.bodyState)
-            }
+    fun updateRequest(updateRequestModel: UpdateRequestModel) {
+        when (val request = requestState.value) {
+            RequestState.Loading -> {}
+            RequestState.NewRequest -> {}
+            is RequestState.Request -> {
+                when (updateRequestModel) {
+                    is UpdateRequestModel.Body -> {
+                        _requestState.value =
+                            RequestState.Request(request.request.copy(bodyState = updateRequestModel.bodyState))
+                    }
 
-            is UpdateHttpRequestModel.Header -> {
-                _requestModel.value =
-                    _requestModel.value.copy(header = ImmutableList(updateHttpRequestModel.header))
-            }
+                    is UpdateRequestModel.Header -> {
+                        _requestState.value = RequestState.Request(
+                            request.request.copy(
+                                header = ImmutableList(
+                                    updateRequestModel.header
+                                )
+                            )
+                        )
+                    }
 
-            is UpdateHttpRequestModel.Query -> {
-                _requestModel.value =
-                    _requestModel.value.copy(query = ImmutableList(updateHttpRequestModel.query))
-            }
+                    is UpdateRequestModel.Query -> {
+                        _requestState.value = RequestState.Request(
+                            request.request.copy(
+                                query = ImmutableList(
+                                    updateRequestModel.query
+                                )
+                            )
+                        )
+                    }
 
-            is UpdateHttpRequestModel.Type -> {
-                _requestModel.value = _requestModel.value.copy(type = updateHttpRequestModel.type)
-            }
+                    is UpdateRequestModel.Type -> {
+                        _requestState.value =
+                            RequestState.Request(request.request.copy(type = updateRequestModel.type))
+                    }
 
-            is UpdateHttpRequestModel.Url -> {
-                _requestModel.value = _requestModel.value.copy(url = updateHttpRequestModel.url)
-            }
+                    is UpdateRequestModel.Url -> {
+                        _requestState.value =
+                            RequestState.Request(request.request.copy(url = updateRequestModel.url))
+                    }
 
-            is UpdateHttpRequestModel.Label -> {
-                _requestModel.value = _requestModel.value.copy(label = updateHttpRequestModel.label)
-                saveLastRequest()
-            }
+                    is UpdateRequestModel.Label -> {
+                        _requestState.value =
+                            RequestState.Request(request.request.copy(label = updateRequestModel.label))
+                        onEvent(RequestEvent.SaveRequest)
+                    }
 
-            is UpdateHttpRequestModel.Auth -> {
-                _requestModel.value =
-                    _requestModel.value.copy(auth = updateHttpRequestModel.authState)
-            }
-        }
-    }
-
-    fun saveLastRequest() {
-        viewModelScope.launch(Dispatchers.IO) {
-            if (requestState.value == RequestState.Request) {
-                updateRequestUseCase.execute(
-                    RequestResponseModel(
-                        requestModel.value, responseState.value
-                    )
-                )
-                saveLastRequestIdUseCase.execute(requestModel.value.id)
-            } else {
-                saveLastRequestIdUseCase.execute(null)
+                    is UpdateRequestModel.Auth -> {
+                        _requestState.value =
+                            RequestState.Request(request.request.copy(auth = updateRequestModel.authState))
+                    }
+                }
             }
         }
     }
