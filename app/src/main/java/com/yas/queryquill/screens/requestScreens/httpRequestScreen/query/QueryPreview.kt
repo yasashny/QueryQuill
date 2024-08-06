@@ -11,8 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.yas.domain.requestsDb.models.KeyValue
-import com.yas.domain.requestsDb.models.RequestModel
+import com.yas.model.KeyValue
+import com.yas.model.RequestModel
 
 fun LazyListScope.queryPreview(requestModel: RequestModel) {
     item {

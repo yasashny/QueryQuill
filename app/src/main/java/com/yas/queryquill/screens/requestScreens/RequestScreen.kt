@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import com.yas.domain.requestsDb.models.RequestModel
+import com.yas.model.RequestModel
 import com.yas.queryquill.screens.requestScreens.httpRequestScreen.HttpRequestScreen
 import com.yas.queryquill.screens.requestScreens.loadingScreen.LoadingScreen
 import com.yas.queryquill.screens.requestScreens.newRequestScreen.NewRequestScreen

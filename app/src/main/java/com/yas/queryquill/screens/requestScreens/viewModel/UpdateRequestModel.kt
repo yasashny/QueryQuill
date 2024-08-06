@@ -1,9 +1,9 @@
 package com.yas.queryquill.screens.requestScreens.viewModel
 
-import com.yas.domain.requestsDb.models.HttpType
-import com.yas.domain.requestsDb.models.KeyValue
-import com.yas.domain.requestsDb.states.AuthState
-import com.yas.domain.requestsDb.states.BodyState
+import com.yas.model.HttpType
+import com.yas.model.KeyValue
+import com.yas.model.AuthState
+import com.yas.model.BodyState
 
 sealed interface UpdateRequestModel {
     data class Body(val bodyState: BodyState) :

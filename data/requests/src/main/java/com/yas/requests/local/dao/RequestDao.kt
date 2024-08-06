@@ -3,8 +3,8 @@ package com.yas.requests.local.dao
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
-import com.yas.requests.local.models.RequestDBO
-import com.yas.requests.local.models.RequestsListItemDTO
+import com.yas.requests.models.RequestDBO
+import com.yas.requests.models.RequestsListItemDTO
 import kotlinx.coroutines.flow.Flow
 
 @Dao

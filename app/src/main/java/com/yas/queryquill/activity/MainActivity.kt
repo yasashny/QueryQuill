@@ -43,8 +43,8 @@ class MainActivity : ComponentActivity() {
             }
             requestViewModel = koinViewModel<RequestViewModel>()
             val navController = rememberNavController()
-            TextMateInit(applicationContext, theme ?: com.yas.model.ThemeState.SYSTEM)
-            QueryQuillTheme(theme = theme ?: com.yas.model.ThemeState.SYSTEM) {
+            TextMateInit(applicationContext, theme ?: ThemeState.SYSTEM)
+            QueryQuillTheme(theme = theme ?: ThemeState.SYSTEM) {
                 NavigationDrawer(requestViewModel,
                     navigateToSettings = { navController.navigate(Destinations.SettingsScreenRoute.route) }) { drawerState ->
                     val windowSizeClass = calculateWindowSizeClass(this)
@@ -68,8 +68,7 @@ class MainActivity : ComponentActivity() {
                                 requestState = requestViewModel.requestState,
                                 updateRequest = requestViewModel::updateRequest,
                                 sendRequest = requestViewModel::sendRequest,
-                                onEvent = requestViewModel::onEvent,
-                                responseState = requestViewModel.responseState
+                                onEvent = requestViewModel::onEvent
                             )
                         }
                     }

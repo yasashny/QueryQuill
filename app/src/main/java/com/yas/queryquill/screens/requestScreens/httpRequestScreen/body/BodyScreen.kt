@@ -14,8 +14,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.yas.domain.requestsDb.states.BasicState
-import com.yas.domain.requestsDb.states.BodyState
+import com.yas.model.BasicState
+import com.yas.model.BodyState
 import com.yas.queryquill.components.BinaryFileElement
 import com.yas.queryquill.components.ChangeTypeAlertDialog
 import com.yas.queryquill.components.ChipGroup

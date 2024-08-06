@@ -72,4 +72,5 @@ dependencies {
     implementation(platform(libs.sora.editor.bom))
     implementation(libs.sora.editor)
     implementation(libs.sora.editor.textmate)
+    implementation(project(":core:model"))
 }

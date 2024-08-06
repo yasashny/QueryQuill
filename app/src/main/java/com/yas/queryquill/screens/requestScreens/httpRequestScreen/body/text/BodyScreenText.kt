@@ -18,8 +18,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.yas.domain.requestsDb.states.BodyState
-import com.yas.domain.requestsDb.states.TextType
+import com.yas.model.BodyState
+import com.yas.model.TextType
 import com.yas.queryquill.components.ChipGroup
 
 @Composable

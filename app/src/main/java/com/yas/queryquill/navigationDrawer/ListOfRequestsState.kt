@@ -1,6 +1,6 @@
 package com.yas.queryquill.navigationDrawer
 
-import com.yas.domain.requestsDb.models.RequestsListItem
+import com.yas.model.RequestsListItem
 
 sealed interface ListOfRequestsState {
     data object Loading : ListOfRequestsState

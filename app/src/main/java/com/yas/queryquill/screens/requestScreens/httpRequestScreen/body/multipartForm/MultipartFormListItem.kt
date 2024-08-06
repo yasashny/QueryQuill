@@ -14,9 +14,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.yas.domain.requestsDb.models.KeyValue
-import com.yas.domain.requestsDb.models.MultipartFormType
-import com.yas.domain.requestsDb.states.MultipartFormState
+import com.yas.model.KeyValue
+import com.yas.model.MultipartFormType
+import com.yas.model.MultipartFormState
 import com.yas.queryquill.components.BinaryFileElement
 import com.yas.queryquill.components.DynamicSelectTextField
 

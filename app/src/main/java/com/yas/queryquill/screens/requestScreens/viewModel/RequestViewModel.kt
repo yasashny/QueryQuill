@@ -2,11 +2,8 @@ package com.yas.queryquill.screens.requestScreens.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yas.domain.requestsDb.models.ImmutableList
-import com.yas.domain.requestsDb.models.RequestModel
-import com.yas.domain.sendRequest.ResponseModel
-import com.yas.queryquill.mappers.toDTO
-import com.yas.queryquill.mappers.toModel
+import com.yas.model.ImmutableList
+import com.yas.model.RequestModel
 import com.yas.queryquill.navigationDrawer.ListOfRequestsState
 import com.yas.requests.local.RequestsRepository
 import com.yas.requests.sendRequest.SendRequestRepository
@@ -26,23 +23,15 @@ class RequestViewModel(
     private val _requestState = MutableStateFlow<RequestState>(RequestState.Loading)
     val requestState = _requestState.asStateFlow()
 
-    val responseState = requestsRepository.getCurrentResponseOrNull().map { responseOrNull ->
-        if (responseOrNull != null) {
-            ResponseState.Response(responseOrNull.toModel())
-        } else {
-            ResponseState.Response(ResponseModel.default())
-        }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), ResponseState.Loading)
-
     val listOfRequests = requestsRepository.getListOfRequests().map { list ->
-        ListOfRequestsState.ListOfRequests(list.map { it.toModel() })
+        ListOfRequestsState.ListOfRequests(list)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), ListOfRequestsState.Loading)
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
             requestsRepository.getCurrentRequestOrNull().map { requestOrNull ->
                 if (requestOrNull != null) {
-                    RequestState.Request(request = requestOrNull.toModel())
+                    RequestState.Request(request = requestOrNull)
                 } else {
                     RequestState.NewRequest
                 }
@@ -53,14 +42,14 @@ class RequestViewModel(
     }
 
     suspend fun sendRequest(requestModel: RequestModel) {
-        sendRequestRepository.sendRequest(requestModel.toDTO())
+        sendRequestRepository.sendRequest(requestModel)
     }
 
     fun onEvent(requestEvent: RequestEvent) {
         when (requestEvent) {
             is RequestEvent.AddRequest -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    requestsRepository.addRequest(requestEvent.model.toDTO())
+                    requestsRepository.addRequest(requestEvent.model)
                 }
             }
 
@@ -83,7 +72,7 @@ class RequestViewModel(
                         RequestState.Loading -> {}
                         RequestState.NewRequest -> {}
                         is RequestState.Request -> {
-                            requestsRepository.updateRequest(request.request.toDTO())
+                            requestsRepository.updateRequest(request.request)
                         }
                     }
                 }

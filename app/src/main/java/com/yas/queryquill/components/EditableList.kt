@@ -5,7 +5,7 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.yas.domain.requestsDb.models.KeyValue
+import com.yas.model.KeyValue
 
 
 fun LazyListScope.editableList(

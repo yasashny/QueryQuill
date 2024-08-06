@@ -8,10 +8,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
-import com.yas.domain.requestsDb.models.RequestModel
-import com.yas.domain.requestsDb.states.BodyState
+import com.yas.model.BodyState
 import com.yas.queryquill.screens.requestScreens.viewModel.RequestState
 import kotlinx.coroutines.flow.StateFlow
 

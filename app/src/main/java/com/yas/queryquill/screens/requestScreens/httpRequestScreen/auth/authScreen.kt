@@ -9,8 +9,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.yas.domain.requestsDb.states.AuthState
-import com.yas.domain.requestsDb.states.BasicState
+import com.yas.model.AuthState
+import com.yas.model.BasicState
 import com.yas.queryquill.components.ChangeTypeAlertDialog
 import com.yas.queryquill.components.ChipGroup
 

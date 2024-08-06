@@ -1,9 +1,9 @@
 package com.yas.requests.di
 
 import com.yas.requests.local.RequestsRepository
-import com.yas.requests.local.storage.CurrentRequestStorage
-import com.yas.requests.local.storage.RequestsStorage
-import com.yas.requests.sendRequest.SendRequestDataSource
+import com.yas.requests.local.CurrentRequestLocalDataSource
+import com.yas.requests.local.RequestsLocalDataSource
+import com.yas.requests.sendRequest.SendRequestLocalDataSource
 import com.yas.requests.sendRequest.SendRequestRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
@@ -12,11 +12,11 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 val requestsDataModule = module {
-    singleOf(::CurrentRequestStorage)
+    singleOf(::CurrentRequestLocalDataSource)
     singleOf(::RequestsRepository)
-    singleOf(::RequestsStorage)
+    singleOf(::RequestsLocalDataSource)
     singleOf(::SendRequestRepository)
-    singleOf(::SendRequestDataSource)
+    singleOf(::SendRequestLocalDataSource)
     single<HttpClient> {
         HttpClient(CIO) {
             install(HttpTimeout) {

@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 class MainViewModel(
     private val getThemeUseCase: GetThemeUseCase
 ) : ViewModel() {
-    private val _themeState = MutableStateFlow<com.yas.model.ThemeState?>(null)
+    private val _themeState = MutableStateFlow<ThemeState?>(null)
     val themeState = _themeState.asStateFlow()
 
     init {

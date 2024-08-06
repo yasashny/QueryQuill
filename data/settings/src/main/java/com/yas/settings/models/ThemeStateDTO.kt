@@ -1,5 +1,5 @@
 package com.yas.settings.models
 
-enum class ThemeStateDTO {
+internal enum class ThemeStateDTO {
     SYSTEM, DARK, LIGHT
 }

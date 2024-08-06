@@ -14,13 +14,13 @@ internal class SettingsViewModel(
     private val updateSettingsUseCase: UpdateSettingsUseCase
 ) : ViewModel() {
 
-    private val _settingsState = MutableStateFlow<SettingsState>(SettingsState.Loading)
-    val settingsState = _settingsState.asStateFlow()
+    private val _settingsUiState = MutableStateFlow<SettingsUiState>(SettingsUiState.Loading)
+    val settingsState = _settingsUiState.asStateFlow()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
             getSettingsUseCase.invoke().collect { newSettingsModel ->
-                _settingsState.value = newSettingsModel
+                _settingsUiState.value = SettingsUiState.Success(newSettingsModel)
             }
         }
     }
@@ -28,11 +28,11 @@ internal class SettingsViewModel(
     fun updateModel(updateSettings: UpdateSettings) {
         viewModelScope.launch(Dispatchers.IO) {
             when (val state = settingsState.value) {
-                SettingsState.Loading -> {}
-                is SettingsState.SettingsModel -> {
+                SettingsUiState.Loading -> {}
+                is SettingsUiState.Success -> {
                     when (updateSettings) {
                         is UpdateSettings.UpdateTheme -> {
-                            state.copy(theme = updateSettings.theme)
+                            state.settingsModel.copy(themeState = updateSettings.theme)
                                 .let { updateSettingsUseCase.invoke(it) }
                         }
                     }

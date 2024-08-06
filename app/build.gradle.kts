@@ -94,10 +94,12 @@ dependencies {
     //SplashScreen
     implementation(libs.core.splashscreen)
 
-    implementation(project(":domain"))
     implementation(project(":data:settings"))
     implementation(project(":feature:settings"))
     implementation(project(":core:model"))
     implementation(project(":data:requests"))
+    implementation(project(":core:model"))
+    implementation(project(":feature:response"))
+    implementation(project(":core:ui"))
 
 }

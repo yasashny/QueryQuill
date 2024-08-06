@@ -1,6 +1,6 @@
 package com.yas.queryquill.screens.requestScreens.viewModel
 
-import com.yas.domain.requestsDb.models.AddRequestModel
+import com.yas.model.AddRequestModel
 
 sealed interface RequestEvent {
     data class AddRequest(val model: AddRequestModel) : RequestEvent

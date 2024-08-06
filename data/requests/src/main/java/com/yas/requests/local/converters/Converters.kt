@@ -1,11 +1,11 @@
 package com.yas.requests.local.converters
 
 import androidx.room.TypeConverter
-import com.yas.requests.local.models.AuthStateDTO
-import com.yas.requests.local.models.BodyStateDTO
-import com.yas.requests.local.models.HttpTypeDTO
-import com.yas.requests.local.models.KeyValueDTO
-import com.yas.requests.local.models.MultipartFormStateDTO
+import com.yas.requests.models.AuthStateDTO
+import com.yas.requests.models.BodyStateDTO
+import com.yas.requests.models.HttpTypeDTO
+import com.yas.requests.models.KeyValueDTO
+import com.yas.requests.models.MultipartFormStateDTO
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule

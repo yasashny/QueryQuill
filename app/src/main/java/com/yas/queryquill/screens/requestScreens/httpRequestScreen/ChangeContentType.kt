@@ -3,10 +3,10 @@ package com.yas.queryquill.screens.requestScreens.httpRequestScreen
 import android.content.Context
 import android.net.Uri
 import androidx.compose.runtime.MutableState
-import com.yas.domain.requestsDb.models.KeyValue
-import com.yas.domain.requestsDb.models.RequestModel
-import com.yas.domain.requestsDb.states.BodyState
-import com.yas.domain.requestsDb.states.TextType
+import com.yas.model.KeyValue
+import com.yas.model.RequestModel
+import com.yas.model.BodyState
+import com.yas.model.TextType
 import com.yas.queryquill.screens.requestScreens.viewModel.UpdateRequestModel
 import com.yas.requests.utils.getMIMEType
 
@@ -25,7 +25,8 @@ fun changeContentType(
             val mime = getMIMEType(context, bodyState.uri)
             if(requestModel.bodyState is BodyState.BinaryFile){
                 if ((bodyState.uri != Uri.EMPTY) && !(requestModel.header.list.contains(
-                        KeyValue(contentType, mime)))){
+                        KeyValue(contentType, mime)
+                    ))){
                     openChangeContentTypeDialog.value = Pair(true, mime)
                 }
             }else{

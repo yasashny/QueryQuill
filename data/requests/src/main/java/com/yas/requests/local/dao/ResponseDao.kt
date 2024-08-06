@@ -3,7 +3,7 @@ package com.yas.requests.local.dao
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
-import com.yas.requests.local.models.ResponseDBO
+import com.yas.requests.models.ResponseDBO
 import kotlinx.coroutines.flow.Flow
 
 @Dao

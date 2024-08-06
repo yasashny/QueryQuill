@@ -68,5 +68,5 @@ dependencies {
     implementation(libs.datastore.preferences)
     implementation(libs.datastore)
 
-    //implementation(project(":domain"))
+    implementation(project(":core:model"))
 }

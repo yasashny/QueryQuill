@@ -1,7 +1,7 @@
 package com.yas.queryquill.utils
 
-import com.yas.domain.requestsDb.states.TextType
-import com.yas.queryquill.components.codeEditor.LanguageType
+import com.yas.model.LanguageType
+import com.yas.model.TextType
 
 fun textTypeToLanguageName(textType: TextType): LanguageType = when (textType) {
     TextType.JSON -> LanguageType.JSON

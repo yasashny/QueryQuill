@@ -14,7 +14,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.yas.domain.requestsDb.models.HttpType
+import com.yas.model.HttpType
 import com.yas.queryquill.components.DynamicSelectTextField
 import com.yas.queryquill.components.SegmentedButtonSingleSelect
 import com.yas.queryquill.screens.requestScreens.viewModel.UpdateRequestModel

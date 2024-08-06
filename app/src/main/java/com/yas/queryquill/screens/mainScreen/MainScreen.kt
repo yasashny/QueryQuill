@@ -16,15 +16,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.yas.domain.requestsDb.models.RequestModel
+import com.yas.model.RequestModel
 import com.yas.queryquill.adaptive.ScreenState
 import com.yas.queryquill.components.PrimaryTextTabs
 import com.yas.queryquill.screens.requestScreens.RequestScreen
 import com.yas.queryquill.screens.requestScreens.viewModel.RequestEvent
 import com.yas.queryquill.screens.requestScreens.viewModel.RequestState
-import com.yas.queryquill.screens.requestScreens.viewModel.ResponseState
 import com.yas.queryquill.screens.requestScreens.viewModel.UpdateRequestModel
-import com.yas.queryquill.screens.responseScreens.httpResponseScreen.HttpResponseScreen
+import com.yas.response.ResponseScreen
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.reflect.KFunction1
 
@@ -37,7 +36,6 @@ fun MainScreen(
     updateRequest: KFunction1<UpdateRequestModel, Unit>,
     sendRequest: suspend (RequestModel) -> Unit,
     onEvent: KFunction1<RequestEvent, Unit>,
-    responseState: StateFlow<ResponseState>,
     navigateToEditor: () -> Unit
 ) {
 
@@ -63,10 +61,9 @@ fun MainScreen(
                             navigateToEditor = navigateToEditor
                         )
 
-                        1 -> HttpResponseScreen(
+                        1 -> ResponseScreen(
                             modifier = Modifier
-                                .fillMaxSize(),
-                            responseStateFlow = responseState
+                                .fillMaxSize()
                         )
                     }
                 }
@@ -91,10 +88,10 @@ fun MainScreen(
                         .width(1.dp)
                         .background(MaterialTheme.colorScheme.outlineVariant)
                 )
-                HttpResponseScreen(
+                ResponseScreen(
                     modifier = Modifier
                         .fillMaxSize()
-                        .weight(1f), responseStateFlow = responseState
+                        .weight(1f)
                 )
             }
         }
@@ -117,10 +114,10 @@ fun MainScreen(
                         .height(1.dp)
                         .background(MaterialTheme.colorScheme.outlineVariant)
                 )
-                HttpResponseScreen(
+                ResponseScreen(
                     modifier = Modifier
                         .fillMaxSize()
-                        .weight(1f), responseStateFlow = responseState
+                        .weight(1f)
                 )
             }
         }

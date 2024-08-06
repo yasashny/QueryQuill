@@ -48,4 +48,6 @@ dependencies {
     //DataStore
     implementation(libs.datastore.preferences)
     implementation(libs.datastore)
+
+    implementation(project(":core:model"))
 }

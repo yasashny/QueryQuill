@@ -6,8 +6,8 @@ import androidx.room.TypeConverters
 import com.yas.requests.local.converters.Converters
 import com.yas.requests.local.dao.RequestDao
 import com.yas.requests.local.dao.ResponseDao
-import com.yas.requests.local.models.RequestDBO
-import com.yas.requests.local.models.ResponseDBO
+import com.yas.requests.models.RequestDBO
+import com.yas.requests.models.ResponseDBO
 
 @Database(
     entities = [RequestDBO::class, ResponseDBO::class], version = 1

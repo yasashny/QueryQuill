@@ -24,19 +24,19 @@ fun SettingsScreen() {
     val vm = koinViewModel<SettingsViewModel>()
 
     when (val settingsState = vm.settingsState.collectAsState().value) {
-        SettingsState.Loading -> {
+        SettingsUiState.Loading -> {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
         }
 
-        is SettingsState.SettingsModel -> {
+        is SettingsUiState.Success -> {
             val openDialog = remember {
                 mutableStateOf(false)
             }
             if (openDialog.value) {
                 ChangeThemeAlertDialog(
-                    openDialog = openDialog, currentTheme = settingsState.theme
+                    openDialog = openDialog, currentTheme = settingsState.settingsModel.themeState
                 ) { newThemeState ->
                     vm.updateModel(UpdateSettings.UpdateTheme(newThemeState))
 
@@ -49,7 +49,7 @@ fun SettingsScreen() {
                         .widthIn(max = 900.dp)
                 ) {
                     ListItem(headlineContent = { Text("Theme") }, supportingContent = {
-                        Text(text = settingsState.theme.title)
+                        Text(text = settingsState.settingsModel.themeState.title)
                     }, modifier = Modifier.clickable {
                         openDialog.value = true
                     })

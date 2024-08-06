@@ -8,7 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.yas.domain.requestsDb.states.AuthState
+import com.yas.model.AuthState
 
 @Composable
 fun AuthScreenBasic(authState: AuthState.Basic, updateRequest: (AuthState.Basic) -> Unit) {

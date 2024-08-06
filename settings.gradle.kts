@@ -15,9 +15,10 @@ dependencyResolutionManagement {
 
 rootProject.name = "QueryQuill"
 include(":app")
-include(":domain")
 include(":feature:settings")
 include(":data:settings")
 include(":data:requests")
 include(":core:ui")
 include(":core:model")
+include(":feature:response")
+include(":core:utils")
