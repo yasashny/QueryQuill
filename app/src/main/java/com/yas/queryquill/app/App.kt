@@ -1,6 +1,7 @@
 package com.yas.queryquill.app
 
 import android.app.Application
+import com.yas.new_request.di.newRequestModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
 
@@ -16,7 +17,7 @@ class App: Application() {
         startKoin {
             androidContext(this@App)
             modules(listOf(appModule,
-                requestsDataModule, settingsDataModule, settingsModule, responseModule))
+                requestsDataModule, settingsDataModule, settingsModule, responseModule, newRequestModule))
         }
     }
 }

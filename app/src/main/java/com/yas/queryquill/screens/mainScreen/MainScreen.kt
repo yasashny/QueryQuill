@@ -20,7 +20,6 @@ import com.yas.model.RequestModel
 import com.yas.queryquill.adaptive.ScreenState
 import com.yas.queryquill.components.PrimaryTextTabs
 import com.yas.queryquill.screens.requestScreens.RequestScreen
-import com.yas.queryquill.screens.requestScreens.viewModel.RequestEvent
 import com.yas.queryquill.screens.requestScreens.viewModel.RequestState
 import com.yas.queryquill.screens.requestScreens.viewModel.UpdateRequestModel
 import com.yas.response.ResponseScreen
@@ -35,7 +34,6 @@ fun MainScreen(
     requestState: StateFlow<RequestState>,
     updateRequest: KFunction1<UpdateRequestModel, Unit>,
     sendRequest: suspend (RequestModel) -> Unit,
-    onEvent: KFunction1<RequestEvent, Unit>,
     navigateToEditor: () -> Unit
 ) {
 
@@ -55,7 +53,6 @@ fun MainScreen(
                             modifier = Modifier.fillMaxSize(),
                             requestStateFlow = requestState,
                             updateRequest = updateRequest,
-                            onEvent = onEvent,
                             sendRequest = sendRequest,
                             pagerState = pagerState,
                             navigateToEditor = navigateToEditor
@@ -78,7 +75,6 @@ fun MainScreen(
                         .weight(1f),
                     requestStateFlow = requestState,
                     updateRequest = updateRequest,
-                    onEvent = onEvent,
                     sendRequest = sendRequest,
                     navigateToEditor = navigateToEditor
                 )
@@ -104,7 +100,6 @@ fun MainScreen(
                         .weight(1f),
                     requestStateFlow = requestState,
                     updateRequest = updateRequest,
-                    onEvent = onEvent,
                     sendRequest = sendRequest,
                     navigateToEditor = navigateToEditor
                 )

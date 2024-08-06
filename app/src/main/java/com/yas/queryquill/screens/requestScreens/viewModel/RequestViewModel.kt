@@ -47,11 +47,6 @@ class RequestViewModel(
 
     fun onEvent(requestEvent: RequestEvent) {
         when (requestEvent) {
-            is RequestEvent.AddRequest -> {
-                viewModelScope.launch(Dispatchers.IO) {
-                    requestsRepository.addRequest(requestEvent.model)
-                }
-            }
 
             is RequestEvent.DeleteRequest -> {
                 viewModelScope.launch(Dispatchers.IO) {

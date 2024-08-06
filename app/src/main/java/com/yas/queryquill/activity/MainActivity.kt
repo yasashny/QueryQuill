@@ -67,8 +67,7 @@ class MainActivity : ComponentActivity() {
                                 screenState = screenState,
                                 requestState = requestViewModel.requestState,
                                 updateRequest = requestViewModel::updateRequest,
-                                sendRequest = requestViewModel::sendRequest,
-                                onEvent = requestViewModel::onEvent
+                                sendRequest = requestViewModel::sendRequest
                             )
                         }
                     }

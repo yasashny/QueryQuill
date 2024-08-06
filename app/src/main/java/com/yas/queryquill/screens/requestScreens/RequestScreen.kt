@@ -10,8 +10,7 @@ import androidx.compose.ui.Modifier
 import com.yas.model.RequestModel
 import com.yas.queryquill.screens.requestScreens.httpRequestScreen.HttpRequestScreen
 import com.yas.queryquill.screens.requestScreens.loadingScreen.LoadingScreen
-import com.yas.queryquill.screens.requestScreens.newRequestScreen.NewRequestScreen
-import com.yas.queryquill.screens.requestScreens.viewModel.RequestEvent
+import com.yas.new_request.NewRequestScreen
 import com.yas.queryquill.screens.requestScreens.viewModel.RequestState
 import com.yas.queryquill.screens.requestScreens.viewModel.UpdateRequestModel
 import kotlinx.coroutines.flow.StateFlow
@@ -22,7 +21,6 @@ fun RequestScreen(
     modifier: Modifier,
     requestStateFlow: StateFlow<RequestState>,
     updateRequest: (UpdateRequestModel) -> Unit,
-    onEvent: (RequestEvent) -> Unit,
     sendRequest: suspend (RequestModel) -> Unit,
     pagerState: PagerState? = null,
     navigateToEditor: () -> Unit
@@ -36,9 +34,7 @@ fun RequestScreen(
             }
 
             RequestState.NewRequest -> {
-                NewRequestScreen { addRequestModel ->
-                    onEvent(RequestEvent.AddRequest(addRequestModel))
-                }
+                NewRequestScreen()
             }
 
             is RequestState.Request -> {

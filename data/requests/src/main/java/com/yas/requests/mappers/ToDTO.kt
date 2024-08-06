@@ -1,6 +1,6 @@
 package com.yas.requests.mappers
 
-import com.yas.model.AddRequestModel
+import com.yas.model.NewRequestModel
 import com.yas.model.AuthState
 import com.yas.model.BodyState
 import com.yas.model.HttpType
@@ -83,7 +83,7 @@ private fun AuthState.toDTO(): AuthStateDTO {
     }
 }
 
-internal fun AddRequestModel.toDTO(): AddRequestModelDTO {
+internal fun NewRequestModel.toDTO(): AddRequestModelDTO {
     return AddRequestModelDTO(label = label)
 }
 

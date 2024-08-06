@@ -1,6 +1,6 @@
 package com.yas.requests.local
 
-import com.yas.model.AddRequestModel
+import com.yas.model.NewRequestModel
 import com.yas.model.RequestModel
 import com.yas.model.RequestsListItem
 import com.yas.model.ResponseModel
@@ -55,7 +55,7 @@ class RequestsRepository internal constructor(private val requestsLocalDataSourc
 
 
 
-    suspend fun addRequest(model: AddRequestModel) {
+    suspend fun addRequest(model: NewRequestModel) {
         val id = requestsLocalDataSource.add(model.toDTO())
         currentRequestLocalDataSource.saveId(id)
     }

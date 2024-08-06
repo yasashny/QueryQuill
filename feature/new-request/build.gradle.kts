@@ -1,27 +1,21 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.google.devtools.ksp)
-    alias(libs.plugins.serialization)
+
 }
 
 android {
-    namespace = "com.yas.queryquill"
+    namespace = "com.yas.new_request"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.yas.queryquill"
         minSdk = 29
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
+        consumerProguardFiles("consumer-rules.pro")
     }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -32,7 +26,6 @@ android {
         }
     }
     compileOptions {
-        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -42,17 +35,17 @@ android {
     buildFeatures{
         compose = true
     }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
 }
-
 
 dependencies {
 
     implementation(libs.core.ktx)
+    implementation(libs.appcompat)
+    implementation(libs.material)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.espresso.core)
+
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.activity.compose)
     implementation(platform(libs.compose.bom))
@@ -60,9 +53,6 @@ dependencies {
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.ext.junit)
-    androidTestImplementation(libs.espresso.core)
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.ui.test.junit4)
     debugImplementation(libs.ui.tooling)
@@ -74,33 +64,8 @@ dependencies {
     //Koin
     implementation(libs.koin.androidx.compose)
 
-    //Navigation
-    implementation(libs.navigation.compose)
-
-    //Serialization
-    implementation(libs.kotlinx.serialization.json)
-
-    //CoreLibraryDesugaring
-    coreLibraryDesugaring(libs.desugar.jdk.libs)
-
-    //SoraEditor
-    implementation(platform(libs.sora.editor.bom))
-    implementation(libs.sora.editor)
-    implementation(libs.sora.editor.textmate)
-
-    //WindowSizeClass
-    implementation(libs.material3.window.size.classs)
-
-    //SplashScreen
-    implementation(libs.core.splashscreen)
-
-    implementation(project(":data:settings"))
-    implementation(project(":feature:settings"))
-    implementation(project(":core:model"))
-    implementation(project(":data:requests"))
-    implementation(project(":core:model"))
-    implementation(project(":feature:response"))
     implementation(project(":core:ui"))
-    implementation(project(":feature:new-request"))
-
+    implementation(project(":core:model"))
+    implementation(project(":core:utils"))
+    implementation(project(":data:requests"))
 }
