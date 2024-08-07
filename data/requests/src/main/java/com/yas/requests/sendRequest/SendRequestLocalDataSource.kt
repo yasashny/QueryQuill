@@ -32,7 +32,9 @@ import io.ktor.util.network.UnresolvedAddressException
 import java.net.ConnectException
 import java.net.UnknownHostException
 
-internal class SendRequestLocalDataSource(private val client: HttpClient, private val context: Context) {
+internal class SendRequestLocalDataSource(
+    private val client: HttpClient, private val context: Context
+) {
 
     @OptIn(InternalAPI::class)
     suspend fun sendRequest(model: RequestDTO): ResponseDTO {

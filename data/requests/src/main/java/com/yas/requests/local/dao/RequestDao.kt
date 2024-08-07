@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
 import com.yas.requests.models.RequestDBO
-import com.yas.requests.models.RequestsListItemDTO
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -16,9 +15,6 @@ internal interface RequestDao {
     suspend fun deleteRequest(id: Long)
 
     @Query("SELECT * FROM RequestDBO WHERE id = :id")
-    suspend fun getRequest(id: Long): RequestDBO
-
-    @Query("SELECT id, label FROM RequestDBO")
-    fun getListOfRequests(): Flow<List<RequestsListItemDTO>>
+    fun getRequest(id: Long): Flow<RequestDBO>
 
 }

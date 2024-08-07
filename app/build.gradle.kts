@@ -101,6 +101,10 @@ dependencies {
     implementation(project(":core:model"))
     implementation(project(":feature:response"))
     implementation(project(":core:ui"))
-    implementation(project(":feature:new-request"))
+    implementation(project(":feature:new-transaction"))
+    implementation(project(":feature:request-code-editor"))
+    implementation(project(":feature:request"))
+    implementation(project(":core:utils"))
+    implementation(project(":feature:transaction"))
 
 }

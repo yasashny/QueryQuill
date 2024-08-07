@@ -1,27 +1,28 @@
 package com.yas.requests.mappers
 
-import com.yas.model.NewRequestModel
 import com.yas.model.AuthState
 import com.yas.model.BodyState
 import com.yas.model.HttpType
 import com.yas.model.KeyValue
 import com.yas.model.MultipartFormState
+import com.yas.model.NewTransactionModel
 import com.yas.model.RequestModel
 import com.yas.model.TextType
-import com.yas.requests.models.AddRequestModelDTO
+import com.yas.model.Transaction
 import com.yas.requests.models.AuthStateDTO
 import com.yas.requests.models.BodyStateDTO
 import com.yas.requests.models.HttpTypeDTO
 import com.yas.requests.models.KeyValueDTO
 import com.yas.requests.models.MultipartFormStateDTO
+import com.yas.requests.models.NewTransactionModelDTO
 import com.yas.requests.models.RequestDBO
 import com.yas.requests.models.RequestDTO
 import com.yas.requests.models.TextTypeDTO
+import com.yas.requests.models.TransactionDBO
 
 internal fun RequestModel.toDBO(): RequestDBO {
     return RequestDBO(
         id = id,
-        label = label,
         bodyState = bodyState.toDTO(),
         header = header.list.map { it.toDTO() },
         query = query.list.map { it.toDTO() },
@@ -83,14 +84,13 @@ private fun AuthState.toDTO(): AuthStateDTO {
     }
 }
 
-internal fun NewRequestModel.toDTO(): AddRequestModelDTO {
-    return AddRequestModelDTO(label = label)
+internal fun NewTransactionModel.toDTO(): NewTransactionModelDTO {
+    return NewTransactionModelDTO(label = label)
 }
 
 internal fun RequestModel.toDTO(): RequestDTO {
     return RequestDTO(
         id = id,
-        label = label,
         bodyState = bodyState.toDTO(),
         header = header.list.map { it.toDTO() },
         authState = auth.toDTO(),
@@ -98,4 +98,8 @@ internal fun RequestModel.toDTO(): RequestDTO {
         type = type.toDTO(),
         url = url
     )
+}
+
+internal fun Transaction.toDBO() : TransactionDBO{
+    return TransactionDBO(id = id, label = label)
 }

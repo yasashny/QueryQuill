@@ -1,0 +1,41 @@
+package com.yas.requests.local.dataSource
+
+import android.content.Context
+import androidx.room.Room
+import com.yas.requests.local.db.RequestsDataBase
+import com.yas.requests.models.ResponseDBO
+import kotlinx.coroutines.flow.Flow
+
+internal class ResponseLocalDataSource(context: Context) {
+
+    private val db = Room.databaseBuilder(
+        context, RequestsDataBase::class.java, "request.db"
+    ).build()
+
+    suspend fun create(id: Long) {
+        db.responseDao.insertResponse(
+            ResponseDBO(
+                id = id,
+                status = "--",
+                body = byteArrayOf(),
+                contentLength = "--",
+                time = "--",
+                contentType = null,
+                contentSubtype = null,
+                headers = emptyList()
+            )
+        )
+    }
+
+    fun read(id: Long): Flow<ResponseDBO> {
+        return db.responseDao.getResponse(id)
+    }
+
+    suspend fun update(model: ResponseDBO) {
+        db.responseDao.insertResponse(model)
+    }
+
+    suspend fun delete(id: Long) {
+        db.responseDao.deleteResponse(id)
+    }
+}

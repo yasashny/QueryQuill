@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
-
 }
 
 android {
@@ -68,4 +67,5 @@ dependencies {
     implementation(project(":core:model"))
     implementation(project(":core:utils"))
     implementation(project(":data:requests"))
+    implementation(project(":feature:new-transaction"))
 }

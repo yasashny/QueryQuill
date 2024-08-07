@@ -1,31 +1,30 @@
 package com.yas.requests.mappers
 
-import com.yas.model.KeyValue
 import com.yas.model.AuthState
 import com.yas.model.BodyState
 import com.yas.model.HttpType
 import com.yas.model.ImmutableList
+import com.yas.model.KeyValue
 import com.yas.model.MultipartFormState
 import com.yas.model.RequestModel
-import com.yas.model.RequestsListItem
 import com.yas.model.ResponseModel
 import com.yas.model.TextType
+import com.yas.model.Transaction
 import com.yas.requests.models.AuthStateDTO
 import com.yas.requests.models.BodyStateDTO
 import com.yas.requests.models.HttpTypeDTO
 import com.yas.requests.models.KeyValueDTO
 import com.yas.requests.models.MultipartFormStateDTO
 import com.yas.requests.models.RequestDBO
-import com.yas.requests.models.RequestsListItemDTO
 import com.yas.requests.models.ResponseDBO
 import com.yas.requests.models.TextTypeDTO
+import com.yas.requests.models.TransactionDBO
 
-internal fun RequestDBO.toModel() : RequestModel {
+internal fun RequestDBO.toModel(): RequestModel {
     return RequestModel(
         id = id,
-        label = label,
         bodyState = bodyState.toModel(),
-        header = ImmutableList(list = header.map { it.toModel() }) ,
+        header = ImmutableList(list = header.map { it.toModel() }),
         query = ImmutableList(list = query.map { it.toModel() }),
         auth = authState.toModel(),
         type = type.toModel(),
@@ -34,13 +33,13 @@ internal fun RequestDBO.toModel() : RequestModel {
 }
 
 private fun BodyStateDTO.toModel(): BodyState {
-    return when(this){
+    return when (this) {
 
         is BodyStateDTO.BinaryFile -> BodyState.BinaryFile(uri = uri, fileName = fileName)
         is BodyStateDTO.FormUrlEncoded -> BodyState.FormUrlEncoded(list = list.map { it.toModel() })
         is BodyStateDTO.MultipartForm -> BodyState.MultipartForm(multipart = multipart.map { it.toModel() })
         BodyStateDTO.NoBody -> BodyState.NoBody
-        is BodyStateDTO.Text ->BodyState.Text(text = text, textType = textType.toModel())
+        is BodyStateDTO.Text -> BodyState.Text(text = text, textType = textType.toModel())
     }
 }
 
@@ -49,14 +48,19 @@ private fun KeyValueDTO.toModel(): KeyValue {
 }
 
 private fun MultipartFormStateDTO.toModel(): MultipartFormState {
-    return when(this){
-        is MultipartFormStateDTO.BinaryFile -> MultipartFormState.BinaryFile(uri = uri, fileName = fileName, title = title)
+    return when (this) {
+        is MultipartFormStateDTO.BinaryFile -> MultipartFormState.BinaryFile(
+            uri = uri,
+            fileName = fileName,
+            title = title
+        )
+
         is MultipartFormStateDTO.Text -> MultipartFormState.Text(keyValue = keyValue.toModel())
     }
 }
 
-private fun HttpTypeDTO.toModel() : HttpType {
-    return when(this){
+private fun HttpTypeDTO.toModel(): HttpType {
+    return when (this) {
         HttpTypeDTO.GET -> HttpType.GET
         HttpTypeDTO.POST -> HttpType.POST
         HttpTypeDTO.PUT -> HttpType.PUT
@@ -67,8 +71,8 @@ private fun HttpTypeDTO.toModel() : HttpType {
     }
 }
 
-private fun TextTypeDTO.toModel() : TextType {
-    return when(this){
+private fun TextTypeDTO.toModel(): TextType {
+    return when (this) {
         TextTypeDTO.JSON -> TextType.JSON
         TextTypeDTO.XML -> TextType.XML
         TextTypeDTO.PLAIN -> TextType.PLAIN
@@ -77,13 +81,13 @@ private fun TextTypeDTO.toModel() : TextType {
 }
 
 private fun AuthStateDTO.toModel(): AuthState {
-    return when(this){
+    return when (this) {
         is AuthStateDTO.Basic -> AuthState.Basic(userName = userName, password = password)
         AuthStateDTO.NoAuth -> AuthState.NoAuth
     }
 }
 
-internal fun ResponseDBO.toModel() : ResponseModel {
+internal fun ResponseDBO.toModel(): ResponseModel {
     return ResponseModel(
         status = status,
         body = body,
@@ -95,6 +99,6 @@ internal fun ResponseDBO.toModel() : ResponseModel {
     )
 }
 
-internal fun RequestsListItemDTO.toModel(): RequestsListItem {
-    return RequestsListItem(id = id, label = label)
+internal fun TransactionDBO.toModel(): Transaction {
+    return Transaction(id = id, label = label)
 }

@@ -5,7 +5,6 @@ import androidx.compose.runtime.Immutable
 @Immutable
 data class RequestModel(
     val id: Long,
-    val label: String,
     val bodyState: BodyState,
     val header: ImmutableList,
     val query: ImmutableList,
@@ -17,7 +16,6 @@ data class RequestModel(
         fun default(): RequestModel {
             return RequestModel(
                 id = -1,
-                label = "",
                 bodyState = BodyState.NoBody,
                 header = ImmutableList(emptyList()),
                 query = ImmutableList(emptyList()),

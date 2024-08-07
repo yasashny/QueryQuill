@@ -69,8 +69,9 @@ dependencies {
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     //SoraEditor
-    implementation(platform(libs.sora.editor.bom))
-    implementation(libs.sora.editor)
-    implementation(libs.sora.editor.textmate)
+    api(platform(libs.sora.editor.bom))
+    api(libs.sora.editor)
+    api(libs.sora.editor.textmate)
+
     implementation(project(":core:model"))
 }
