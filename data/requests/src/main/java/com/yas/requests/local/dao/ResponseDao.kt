@@ -15,5 +15,5 @@ internal interface ResponseDao {
     suspend fun deleteResponse(id: Long)
 
     @Query("SELECT * FROM ResponseDBO WHERE id = :id")
-    fun getResponse(id: Long): Flow<ResponseDBO>
+    fun getResponse(id: Long): Flow<ResponseDBO?>
 }

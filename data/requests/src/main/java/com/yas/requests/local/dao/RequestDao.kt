@@ -15,6 +15,6 @@ internal interface RequestDao {
     suspend fun deleteRequest(id: Long)
 
     @Query("SELECT * FROM RequestDBO WHERE id = :id")
-    fun getRequest(id: Long): Flow<RequestDBO>
+    fun getRequest(id: Long): Flow<RequestDBO?>
 
 }

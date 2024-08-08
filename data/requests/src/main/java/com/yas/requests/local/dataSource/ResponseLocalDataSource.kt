@@ -27,7 +27,7 @@ internal class ResponseLocalDataSource(context: Context) {
         )
     }
 
-    fun read(id: Long): Flow<ResponseDBO> {
+    fun read(id: Long): Flow<ResponseDBO?> {
         return db.responseDao.getResponse(id)
     }
 

@@ -30,7 +30,7 @@ internal class RequestLocalDataSource(context: Context) {
         )
     }
 
-    fun read(id: Long): Flow<RequestDBO> {
+    fun read(id: Long): Flow<RequestDBO?> {
         return db.requestDao.getRequest(id)
     }
 

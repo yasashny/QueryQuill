@@ -158,6 +158,11 @@ internal fun NavigationDrawer(
                                             },
                                             badge = {
                                                 IconButton(onClick = {
+                                                    if (state.currentId == item.id){
+                                                        viewModel.onEvent(
+                                                            TransactionEvent.SetTransaction(null)
+                                                        )
+                                                    }
                                                     viewModel.onEvent(
                                                         TransactionEvent.DeleteTransaction(item.id)
                                                     )

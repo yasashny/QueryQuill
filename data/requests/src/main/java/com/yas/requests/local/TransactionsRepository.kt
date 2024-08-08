@@ -43,8 +43,8 @@ class TransactionsRepository internal constructor(
     fun getCurrentRequestOrNull(): Flow<RequestModel?> {
         return currentTransactionIdLocalDataSource.getId().flatMapLatest { value: Long? ->
             if (value != null) {
-                requestLocalDataSource.read(id = value).map { requestDBO: RequestDBO ->
-                    requestDBO.toModel()
+                requestLocalDataSource.read(id = value).map { requestDBO: RequestDBO? ->
+                    requestDBO?.toModel()
                 }
             } else {
                 flowOf(null)
@@ -56,8 +56,8 @@ class TransactionsRepository internal constructor(
     fun getCurrentResponseOrNull(): Flow<ResponseModel?> {
         return currentTransactionIdLocalDataSource.getId().flatMapLatest { value: Long? ->
             if (value != null) {
-                responseLocalDataSource.read(id = value).map { responseDBO: ResponseDBO ->
-                    responseDBO.toModel()
+                responseLocalDataSource.read(id = value).map { responseDBO: ResponseDBO? ->
+                    responseDBO?.toModel()
                 }
             } else {
                 flowOf(null)
@@ -87,7 +87,6 @@ class TransactionsRepository internal constructor(
         transactionLocalDataSource.delete(id).let {
             requestLocalDataSource.delete(id)
             responseLocalDataSource.delete(id)
-            currentTransactionIdLocalDataSource.saveId(null)
         }
     }
 
