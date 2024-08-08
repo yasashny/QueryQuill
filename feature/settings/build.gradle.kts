@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.yas.settings"
+    namespace = "com.yas.feature_settings"
     compileSdk = 34
 
     defaultConfig {
@@ -31,7 +31,7 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
-    buildFeatures{
+    buildFeatures {
         compose = true
     }
 }

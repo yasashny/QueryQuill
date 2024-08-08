@@ -22,7 +22,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.yas.feature_settings.R
 import com.yas.ui.QueryQuillTopBar
 import org.koin.androidx.compose.koinViewModel
 
@@ -32,14 +34,15 @@ fun SettingsScreen(navigateUp: () -> Unit) {
     val vm = koinViewModel<SettingsViewModel>()
 
     Scaffold(topBar = {
-        QueryQuillTopBar(title = { Text(text = "Settings") }, navigationIcon = {
-            IconButton(onClick = { navigateUp() }) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
-                    contentDescription = null
-                )
-            }
-        })
+        QueryQuillTopBar(title = { Text(text = stringResource(R.string.settings)) },
+            navigationIcon = {
+                IconButton(onClick = { navigateUp() }) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
+                        contentDescription = null
+                    )
+                }
+            })
     }) {
         Surface(
             Modifier
@@ -72,11 +75,13 @@ fun SettingsScreen(navigateUp: () -> Unit) {
                                 .wrapContentWidth()
                                 .widthIn(max = 900.dp)
                         ) {
-                            ListItem(headlineContent = { Text("Theme") }, supportingContent = {
-                                Text(text = settingsState.settingsModel.themeState.title)
-                            }, modifier = Modifier.clickable {
-                                openDialog.value = true
-                            })
+                            ListItem(headlineContent = { Text(stringResource(id = R.string.theme)) },
+                                supportingContent = {
+                                    Text(text = settingsState.settingsModel.themeState.title)
+                                },
+                                modifier = Modifier.clickable {
+                                    openDialog.value = true
+                                })
                         }
                     }
                 }

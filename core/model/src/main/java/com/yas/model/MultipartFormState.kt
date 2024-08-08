@@ -19,9 +19,9 @@ sealed interface MultipartFormState : BasicState {
     }
 
 
-    data class BinaryFile(override val uri: Uri, val title: String,
-                          override val fileName: String) :
-        MultipartFormState, BasicBinaryFile() {
+    data class BinaryFile(
+        override val uri: Uri, val title: String, override val fileName: String
+    ) : MultipartFormState, BasicBinaryFile() {
         override val name: String
             get() = "FILE"
 

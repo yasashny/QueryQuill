@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.yas.model.KeyValue
 import com.yas.model.RequestModel
 
-fun LazyListScope.queryPreview(requestModel: RequestModel) {
+internal fun LazyListScope.queryPreview(requestModel: RequestModel) {
     item {
         Box(
             modifier = Modifier

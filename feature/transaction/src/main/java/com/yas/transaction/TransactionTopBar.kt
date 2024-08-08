@@ -13,7 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import com.yas.model.Transaction
 import com.yas.transaction.navigationDrawer.TransactionsUiState
@@ -22,7 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun TransactionTopBar(vm: TransactionViewModel, drawerState: DrawerState) {
+internal fun TransactionTopBar(vm: TransactionViewModel, drawerState: DrawerState) {
 
     val transactions by vm.transactions.collectAsState()
 
@@ -30,58 +30,64 @@ fun TransactionTopBar(vm: TransactionViewModel, drawerState: DrawerState) {
         when (val state = transactions) {
             TransactionsUiState.Loading -> {
                 Text(
-                    "QueryQuill", maxLines = 1, overflow = TextOverflow.Ellipsis
+                    stringResource(R.string.queryquill),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
 
             is TransactionsUiState.Success -> {
                 Text(
-                    state.list.find { it.id == state.currentId }?.label ?: "QueryQuill",
+                    state.list.find { it.id == state.currentId }?.label
+                        ?: stringResource(R.string.queryquill),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
 
             }
         }
-    },
-        navigationIcon = {
-            val scope = rememberCoroutineScope()
+    }, navigationIcon = {
+        val scope = rememberCoroutineScope()
 
-            IconButton(onClick = { scope.launch(Dispatchers.IO) { drawerState.open() } }) {
-                Icon(imageVector = Icons.Filled.Menu, contentDescription = null)
-            }
-        },
-        actions = {
-            when(val state = transactions){
-                TransactionsUiState.Loading -> {}
-                is TransactionsUiState.Success -> {
-                    when(val id = state.currentId){
-                        null -> {}
-                        else -> {
-                            val openDialog = remember {
-                                mutableStateOf(false)
-                            }
-                            val flag = remember {
-                                mutableStateOf<String?>(null)
-                            }
-                            if (flag.value != null) {
-                                vm.onEvent(TransactionEvent.UpdateTransaction(Transaction(id = id, label = flag.value as String)))
-                                flag.value = null
-                            }
-                            if (openDialog.value) {
-                                ChangeLabelAlertDialog(openDialog, flag)
-                            }
-                            IconButton(onClick = {
-                                openDialog.value = true
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Outlined.Edit, contentDescription = null
+        IconButton(onClick = { scope.launch(Dispatchers.IO) { drawerState.open() } }) {
+            Icon(imageVector = Icons.Filled.Menu, contentDescription = null)
+        }
+    }, actions = {
+        when (val state = transactions) {
+            TransactionsUiState.Loading -> {}
+            is TransactionsUiState.Success -> {
+                when (val id = state.currentId) {
+                    null -> {}
+                    else -> {
+                        val openDialog = remember {
+                            mutableStateOf(false)
+                        }
+                        val flag = remember {
+                            mutableStateOf<String?>(null)
+                        }
+                        if (flag.value != null) {
+                            vm.onEvent(
+                                TransactionEvent.UpdateTransaction(
+                                    Transaction(
+                                        id = id, label = flag.value as String
+                                    )
                                 )
-                            }
+                            )
+                            flag.value = null
+                        }
+                        if (openDialog.value) {
+                            ChangeLabelAlertDialog(openDialog, flag)
+                        }
+                        IconButton(onClick = {
+                            openDialog.value = true
+                        }) {
+                            Icon(
+                                imageVector = Icons.Outlined.Edit, contentDescription = null
+                            )
                         }
                     }
                 }
             }
-        })
-
+        }
+    })
 }

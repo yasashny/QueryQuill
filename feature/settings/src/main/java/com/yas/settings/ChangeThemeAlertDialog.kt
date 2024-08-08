@@ -22,8 +22,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import com.yas.feature_settings.R
 import com.yas.model.ThemeState
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,10 +47,9 @@ internal fun ChangeThemeAlertDialog(
                 val radioOptions = listOf(ThemeState.SYSTEM, ThemeState.DARK, ThemeState.LIGHT)
                 val (selectedOption, onOptionSelected) = remember { mutableStateOf(currentTheme) }
 
-
                 Column(Modifier.selectableGroup()) {
                     Text(
-                        text = "Theme",
+                        text = stringResource(R.string.theme),
                         fontSize = MaterialTheme.typography.titleLarge.fontSize,
                         modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp)
                     )

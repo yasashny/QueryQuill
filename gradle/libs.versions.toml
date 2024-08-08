@@ -91,4 +91,4 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 android-library = { id = "com.android.library", version.ref = "androidLibraryVersion" }
 google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "kspVersion" }
 androidx-room = { id = "androidx.room", version.ref = "roomVersion" }
-serialization = {id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin"}
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

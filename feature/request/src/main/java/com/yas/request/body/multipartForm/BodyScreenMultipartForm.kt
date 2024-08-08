@@ -6,12 +6,12 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.yas.model.KeyValue
 import com.yas.model.BodyState
+import com.yas.model.KeyValue
 import com.yas.model.MultipartFormState
 
 
-fun LazyListScope.bodyScreenMultipartForm(
+internal fun LazyListScope.bodyScreenMultipartForm(
     items: List<MultipartFormState>, updateRequest: (BodyState.MultipartForm) -> Unit
 ) {
     item {
@@ -24,7 +24,7 @@ fun LazyListScope.bodyScreenMultipartForm(
             updateRequest(BodyState.MultipartForm(updatedItems))
             if ((index == items.size - 1) and flag) {
                 val newItemList = updatedItems.toMutableList()
-                newItemList.add(MultipartFormState.Text(KeyValue("", "")))
+                newItemList.add(MultipartFormState.Text(KeyValue.empty()))
                 updateRequest(BodyState.MultipartForm(newItemList))
             }
         }, deleteItem = {

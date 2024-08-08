@@ -12,24 +12,27 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import kotlinx.coroutines.launch
 
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
-fun PrimaryTextTabs(pagerState: PagerState) {
-    val titles = listOf("Request", "Response")
+internal fun PrimaryTextTabs(pagerState: PagerState) {
+    val titles = listOf(stringResource(R.string.request), stringResource(R.string.response))
     Column {
         val scope = rememberCoroutineScope()
-        PrimaryTabRow(selectedTabIndex = pagerState.currentPage, containerColor = MaterialTheme.colorScheme.surfaceContainer) {
+        PrimaryTabRow(
+            selectedTabIndex = pagerState.currentPage,
+            containerColor = MaterialTheme.colorScheme.surfaceContainer
+        ) {
             titles.forEachIndexed { index, title ->
-                Tab(
-                    selected = pagerState.currentPage == index,
+                Tab(selected = pagerState.currentPage == index,
                     onClick = {
-                           scope.launch{
-                               pagerState.scrollToPage(index)
-                           }
+                        scope.launch {
+                            pagerState.scrollToPage(index)
+                        }
                     },
                     text = { Text(text = title, maxLines = 2, overflow = TextOverflow.Ellipsis) },
                     icon = {
@@ -38,15 +41,13 @@ fun PrimaryTextTabs(pagerState: PagerState) {
                                 painter = painterResource(id = R.drawable.baseline_north_24),
                                 contentDescription = null
                             )
-                        }
-                        else{
+                        } else {
                             Icon(
                                 painter = painterResource(id = R.drawable.baseline_south_24),
                                 contentDescription = null
                             )
                         }
-                    }
-                )
+                    })
             }
         }
     }

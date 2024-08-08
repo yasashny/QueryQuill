@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yas.model.ImmutableList
 import com.yas.model.RequestModel
-import com.yas.request.RequestUiState
+import com.yas.model.ResponseModel
 import com.yas.request.UpdateRequestModel
 import com.yas.requests.local.TransactionsRepository
 import com.yas.requests.sendRequest.SendRequestRepository
@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class TransactionViewModel(
+internal class TransactionViewModel(
     private val transactionsRepository: TransactionsRepository,
     private val sendRequestRepository: SendRequestRepository
 ) : ViewModel() {
@@ -78,6 +78,7 @@ class TransactionViewModel(
                 is RequestUiState.Success -> {
                     transactionsRepository.updateRequest(request.request)
                 }
+
                 RequestUiState.NewRequest -> {}
             }
         }
@@ -129,7 +130,12 @@ class TransactionViewModel(
                     }
                 }
             }
+
             RequestUiState.NewRequest -> {}
         }
     }
+
+    val responseModel = transactionsRepository.getCurrentResponseOrNull().map { responseOrNull ->
+        responseOrNull ?: ResponseModel.default()
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), ResponseModel.default())
 }

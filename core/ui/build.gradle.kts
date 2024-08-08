@@ -36,7 +36,7 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
-    buildFeatures{
+    buildFeatures {
         compose = true
     }
 }
@@ -69,9 +69,9 @@ dependencies {
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     //SoraEditor
-    api(platform(libs.sora.editor.bom))
-    api(libs.sora.editor)
-    api(libs.sora.editor.textmate)
+    implementation(platform(libs.sora.editor.bom))
+    implementation(libs.sora.editor)
+    implementation(libs.sora.editor.textmate)
 
     implementation(project(":core:model"))
 }

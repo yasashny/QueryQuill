@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="new_request">New Request</string>
+    <string name="label">Label</string>
+    <string name="add_request">Add request</string>
+</resources>

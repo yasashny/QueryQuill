@@ -13,15 +13,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.yas.model.BasicState
 import com.yas.model.BodyState
-import com.yas.request.editableList
+import com.yas.request.R
+import com.yas.request.alertDialog.ChangeTypeAlertDialog
 import com.yas.request.body.multipartForm.bodyScreenMultipartForm
 import com.yas.request.body.text.BodyScreenText
+import com.yas.request.components.BinaryFileElement
+import com.yas.request.components.ChipGroup
+import com.yas.request.components.editableList
 
 
-fun LazyListScope.bodyScreen(
+internal fun LazyListScope.bodyScreen(
     bodyState: BodyState, navigateToEditor: () -> Unit, updateRequest: (BodyState) -> Unit
 ) {
     item {
@@ -37,14 +42,13 @@ fun LazyListScope.bodyScreen(
                         mutableStateOf(Pair(false, bodyState as BasicState))
                     }
                     if (openDialog.value.first) {
-                        com.yas.request.ChangeTypeAlertDialog(
-                            openDialog,
-                            title = "body"
+                        ChangeTypeAlertDialog(
+                            openDialog, title = stringResource(R.string.body)
                         ) { basicState ->
                             updateRequest(basicState as BodyState)
                         }
                     }
-                    com.yas.request.ChipGroup(
+                    ChipGroup(
                         currentState = bodyState, options = listOf(
                             BodyState.NoBody,
                             BodyState.Text.default(),
@@ -97,7 +101,7 @@ fun LazyListScope.bodyScreen(
 
         is BodyState.BinaryFile -> {
             item {
-                com.yas.request.BinaryFileElement(currentState = bodyState) { uri, fileName ->
+                BinaryFileElement(currentState = bodyState) { uri, fileName ->
                     updateRequest(BodyState.BinaryFile(uri, fileName))
                 }
             }

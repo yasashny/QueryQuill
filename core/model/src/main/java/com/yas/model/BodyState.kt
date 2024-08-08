@@ -34,7 +34,7 @@ sealed interface BodyState : BasicState {
     }
 
 
-    data class FormUrlEncoded(val list: List<com.yas.model.KeyValue>) : BodyState {
+    data class FormUrlEncoded(val list: List<KeyValue>) : BodyState {
         override val name: String
             get() = "Form Url Encoded"
 
@@ -47,8 +47,7 @@ sealed interface BodyState : BasicState {
 
 
     data class BinaryFile(
-        override val uri: Uri,
-        override val fileName: String
+        override val uri: Uri, override val fileName: String
     ) : BodyState, BasicBinaryFile() {
         override val name: String
             get() = "Binary File"

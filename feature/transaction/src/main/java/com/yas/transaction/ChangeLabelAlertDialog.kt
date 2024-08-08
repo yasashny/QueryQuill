@@ -24,11 +24,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChangeLabelAlertDialog(openDialog: MutableState<Boolean>, flag: MutableState<String?>) {
+internal fun ChangeLabelAlertDialog(
+    openDialog: MutableState<Boolean>, flag: MutableState<String?>
+) {
     var newLabel by remember {
         mutableStateOf("")
     }
@@ -45,13 +48,13 @@ fun ChangeLabelAlertDialog(openDialog: MutableState<Boolean>, flag: MutableState
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Change Label",
+                        text = stringResource(id = R.string.change_label),
                         fontSize = MaterialTheme.typography.headlineSmall.fontSize
                     )
                     Spacer(modifier = Modifier.height(24.dp))
                     OutlinedTextField(value = newLabel,
                         onValueChange = { newLabel = it },
-                        label = { Text(text = "Label") })
+                        label = { Text(text = stringResource(R.string.label)) })
                     Spacer(modifier = Modifier.height(24.dp))
                     Row(
                         horizontalArrangement = Arrangement.End,
@@ -60,13 +63,13 @@ fun ChangeLabelAlertDialog(openDialog: MutableState<Boolean>, flag: MutableState
                         TextButton(onClick = {
                             openDialog.value = false
                         }) {
-                            Text("Cancel")
+                            Text(stringResource(R.string.cancel))
                         }
                         TextButton(onClick = {
                             flag.value = newLabel
                             openDialog.value = false
                         }, enabled = newLabel.isNotEmpty()) {
-                            Text("Change label")
+                            Text(stringResource(R.string.change_label))
                         }
                     }
                 }

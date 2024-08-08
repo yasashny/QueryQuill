@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="new_request">New request</string>
+    <string name="create_new_request">Create new request</string>
+    <string name="label">Label</string>
+    <string name="cancel">Cancel</string>
+    <string name="change_label">Change label</string>
+    <string name="request">Request</string>
+    <string name="response">Response</string>
+    <string name="queryquill">QueryQuill</string>
+</resources>

@@ -13,16 +13,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.yas.model.KeyValue
-import com.yas.model.MultipartFormType
 import com.yas.model.MultipartFormState
-import com.yas.request.BinaryFileElement
-import com.yas.request.DynamicSelectTextField
+import com.yas.model.MultipartFormType
+import com.yas.request.R
+import com.yas.request.components.BinaryFileElement
+import com.yas.request.components.DynamicSelectTextField
 
 
 @Composable
-fun MultipartFormListItem(
+internal fun MultipartFormListItem(
     multipartFormState: MultipartFormState,
     onTextChanged: (newState: MultipartFormState, isAddNewElement: Boolean) -> Unit,
     deleteItem: () -> Unit,
@@ -38,13 +40,13 @@ fun MultipartFormListItem(
                 .fillMaxWidth()
                 .padding(15.dp), verticalAlignment = Alignment.CenterVertically
         ) {
-            com.yas.request.DynamicSelectTextField(
+            DynamicSelectTextField(
                 selectedValue = when (multipartFormState) {
                     is MultipartFormState.BinaryFile -> MultipartFormType.FILE
                     is MultipartFormState.Text -> MultipartFormType.TEXT
                 }, options = listOf(
                     MultipartFormType.TEXT, MultipartFormType.FILE
-                ), label = "Type", modifier = Modifier.weight(1f)
+                ), label = stringResource(R.string.type), modifier = Modifier.weight(1f)
             ) { multipartFormType ->
                 when (multipartFormType) {
                     MultipartFormType.TEXT -> {
@@ -77,12 +79,12 @@ fun MultipartFormListItem(
                             ), true
                         )
                     },
-                    label = { Text(text = "Name") },
+                    label = { Text(text = stringResource(R.string.name)) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 15.dp)
                 )
-                com.yas.request.BinaryFileElement(currentState = multipartFormState) { uri, fileName ->
+                BinaryFileElement(currentState = multipartFormState) { uri, fileName ->
                     onTextChanged(
                         MultipartFormState.BinaryFile(
                             uri = uri, title = multipartFormState.title, fileName = fileName
@@ -103,7 +105,7 @@ fun MultipartFormListItem(
                             ), true
                         )
                     },
-                    label = { Text(text = "Name") },
+                    label = { Text(text = stringResource(id = R.string.name)) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 15.dp, end = 15.dp)
@@ -120,7 +122,7 @@ fun MultipartFormListItem(
                             ), true
                         )
                     },
-                    label = { Text(text = "Value") },
+                    label = { Text(text = stringResource(R.string.value)) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(15.dp)

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="change_content_type">Change Content-Type?</string>
+    <string name="do_you_want_set_the_content_type_header_to">Do you want set the Content-Type header to %1$s?</string>
+    <string name="current_will_be_lost_are_you_sure_you_want_to_continue">Current %1$s will be lost. Are you sure you want to continue?</string>
+    <string name="switch_type">Switch %1$s Type?</string>
+    <string name="auth">auth</string>
+    <string name="user_name">User name</string>
+    <string name="password">Password</string>
+    <string name="name">Name</string>
+    <string name="value">Value</string>
+    <string name="type">Type</string>
+    <string name="input_your_body_here">Input your body here...</string>
+    <string name="body">body</string>
+    <string name="select_file">Select file</string>
+    <string name="url">Url</string>
+    <string name="send_request">Send request</string>
+</resources>

@@ -2,11 +2,11 @@ package com.yas.request.query
 
 import androidx.compose.foundation.lazy.LazyListScope
 import com.yas.model.RequestModel
-import com.yas.request.editableList
 import com.yas.request.UpdateRequestModel
+import com.yas.request.components.editableList
 
 
-fun LazyListScope.queryScreen(
+internal fun LazyListScope.queryScreen(
     requestModel: RequestModel, updateRequest: (UpdateRequestModel) -> Unit
 ) {
     queryPreview(requestModel = requestModel)

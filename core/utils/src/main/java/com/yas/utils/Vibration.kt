@@ -6,7 +6,7 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 
 
-fun vibration(context: Context){
+fun vibration(context: Context) {
     val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     vibrator.cancel()
 
@@ -16,6 +16,6 @@ fun vibration(context: Context){
         vibrator.vibrate(effect)
     } else {
         // Below Android 10
-        vibrator.vibrate( 100 )
+        vibrator.vibrate(100)
     }
 }

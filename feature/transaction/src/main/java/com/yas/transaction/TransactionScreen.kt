@@ -25,9 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.yas.model.ScreenState
-import com.yas.new_request.NewRequestScreen
+import com.yas.new_transaction.NewRequestScreen
 import com.yas.request.RequestScreen
-import com.yas.request.RequestUiState
 import com.yas.response.ResponseScreen
 import com.yas.transaction.navigationDrawer.NavigationDrawer
 import org.koin.androidx.compose.koinViewModel
@@ -38,13 +37,10 @@ fun TransactionScreen(
     screenState: ScreenState, navigateToEditor: () -> Unit, navigateToSettings: () -> Unit
 ) {
 
-
     val vm = koinViewModel<TransactionViewModel>()
 
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
-        println("qqq")
-        vm.saveRequest()
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_STOP) {
                 vm.saveRequest()
@@ -52,22 +48,21 @@ fun TransactionScreen(
         }
         lifecycleOwner.lifecycle.addObserver(observer)
         onDispose {
-            println("www")
             lifecycleOwner.lifecycle.removeObserver(observer)
-            vm.saveRequest()
         }
     }
 
     NavigationDrawer(vm, navigateToSettings = { navigateToSettings() }) { drawerState ->
         Scaffold(topBar = {
             TransactionTopBar(vm = vm, drawerState = drawerState)
-        }) {
+        }) { paddingValues ->
             Surface(
                 Modifier
-                    .padding(it)
+                    .padding(paddingValues)
                     .fillMaxSize()
             ) {
                 val requestState = vm.requestState.collectAsState().value
+                val responseModel = vm.responseModel.collectAsState().value
                 when (screenState) {
                     ScreenState.SINGLE_SCREEN -> {
                         Column {
@@ -100,7 +95,7 @@ fun TransactionScreen(
                                     }
 
                                     1 -> ResponseScreen(
-                                        modifier = Modifier.fillMaxSize()
+                                        modifier = Modifier.fillMaxSize(), responseModel
                                     )
                                 }
                             }
@@ -137,7 +132,7 @@ fun TransactionScreen(
                             ResponseScreen(
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .weight(1f)
+                                    .weight(1f), responseModel
                             )
                         }
                     }
@@ -171,7 +166,7 @@ fun TransactionScreen(
                             ResponseScreen(
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .weight(1f)
+                                    .weight(1f), responseModel
                             )
                         }
                     }

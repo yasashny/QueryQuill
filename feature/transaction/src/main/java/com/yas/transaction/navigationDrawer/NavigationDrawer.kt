@@ -39,14 +39,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.yas.transaction.R
 import com.yas.transaction.TransactionEvent
 import com.yas.transaction.TransactionViewModel
 import com.yas.utils.vibration
 import kotlinx.coroutines.launch
 
 @Composable
-fun NavigationDrawer(
+internal fun NavigationDrawer(
     viewModel: TransactionViewModel,
     navigateToSettings: () -> Unit,
     composable: @Composable (drawerState: DrawerState) -> Unit
@@ -95,7 +97,7 @@ fun NavigationDrawer(
                     ) {
                         Icon(imageVector = Icons.Outlined.Add, contentDescription = null)
                         Text(
-                            text = "New request",
+                            text = stringResource(R.string.new_request),
                             fontSize = MaterialTheme.typography.titleMedium.fontSize,
                             modifier = Modifier.padding(start = 5.dp, end = 15.dp)
                         )
@@ -130,7 +132,7 @@ fun NavigationDrawer(
                                             }
                                         }) {
                                             Text(
-                                                text = "Create new request",
+                                                text = stringResource(R.string.create_new_request),
                                                 fontSize = MaterialTheme.typography.titleMedium.fontSize
                                             )
                                         }

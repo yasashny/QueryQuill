@@ -13,12 +13,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.yas.model.HttpType
+import com.yas.request.R
 import com.yas.request.UpdateRequestModel
+import com.yas.request.components.DynamicSelectTextField
+import com.yas.request.components.SegmentedButtonSingleSelect
 
 @Composable
-fun HttpRequestScreenHeader(
+internal fun HttpRequestScreenHeader(
     type: HttpType,
     url: String,
     updateRequest: (UpdateRequestModel) -> Unit,
@@ -27,7 +31,7 @@ fun HttpRequestScreenHeader(
     Row(
         Modifier.padding(15.dp)
     ) {
-        com.yas.request.DynamicSelectTextField(
+        DynamicSelectTextField(
             selectedValue = type, options = listOf(
                 HttpType.GET,
                 HttpType.POST,
@@ -36,14 +40,13 @@ fun HttpRequestScreenHeader(
                 HttpType.OPTIONS,
                 HttpType.DELETE,
                 HttpType.HEAD
-            ), label = "Type", modifier = Modifier.weight(1.2f)
+            ), label = stringResource(id = R.string.type), modifier = Modifier.weight(1.2f)
         ) { httpType ->
             updateRequest(UpdateRequestModel.Type(httpType))
         }
-        OutlinedTextField(
-            value = url,
+        OutlinedTextField(value = url,
             onValueChange = { updateRequest(UpdateRequestModel.Url(it)) },
-            label = @Composable { Text(text = "Url") },
+            label = @Composable { Text(text = stringResource(R.string.url)) },
             modifier = Modifier
                 .weight(2f)
                 .padding(start = 15.dp)
@@ -62,10 +65,7 @@ fun HttpRequestScreenHeader(
                 HttpRequestHeaderState.HEADER,
                 HttpRequestHeaderState.QUERY
             )
-            com.yas.request.SegmentedButtonSingleSelect(
-                headerState,
-                options,
-                onClick = { headerState.value = it })
+            SegmentedButtonSingleSelect(headerState, options, onClick = { headerState.value = it })
         }
 
     }

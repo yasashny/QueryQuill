@@ -1,15 +1,13 @@
 package com.yas.response.preview
 
-import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import com.yas.model.LanguageType
 import com.yas.response.ContentType
 import com.yas.response.ResponseScreenSource
-import com.yas.response.mimeTypeToContentType
+import com.yas.response.utils.mimeTypeToContentType
 import java.util.Base64
 
 
-@SuppressLint("SetJavaScriptEnabled", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 internal fun ResponseScreenPreview(body: ByteArray, mimeType: String?, contentSubtype: String?) {
 

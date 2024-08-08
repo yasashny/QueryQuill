@@ -31,12 +31,12 @@ fun Navigation(navController: NavHostController, screenState: ScreenState) {
             })
         }
         composable(Destinations.EditorScreenRoute.route) {
-            RequestCodeEditorScreen{
+            RequestCodeEditorScreen {
                 navController.navigateUp()
             }
         }
         composable(Destinations.SettingsScreenRoute.route) {
-            SettingsScreen{
+            SettingsScreen {
                 navController.navigateUp()
             }
         }

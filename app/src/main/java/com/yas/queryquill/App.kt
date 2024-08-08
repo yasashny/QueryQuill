@@ -1,7 +1,8 @@
 package com.yas.queryquill
 
 import android.app.Application
-import com.yas.new_request.di.newRequestModule
+import com.yas.domain.di.domainModule
+import com.yas.new_transaction.di.newTransactionModule
 import com.yas.queryquill.di.appModule
 import com.yas.request_code_editor.di.requestCodeEditorModule
 import com.yas.requests.di.requestsDataModule
@@ -24,9 +25,10 @@ class App : Application() {
                     settingsDataModule,
                     settingsModule,
                     responseModule,
-                    newRequestModule,
+                    newTransactionModule,
                     transactionModule,
-                    requestCodeEditorModule
+                    requestCodeEditorModule,
+                    domainModule
                 )
             )
         }

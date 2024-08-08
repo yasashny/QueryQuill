@@ -2,24 +2,13 @@ package com.yas.queryquill
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yas.model.ThemeState
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
+import com.yas.domain.GetThemeUseCase
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 
-class MainViewModel(
-    private val getThemeUseCase: GetThemeUseCase
-) : ViewModel() {
+class MainViewModel(getThemeUseCase: GetThemeUseCase) : ViewModel() {
 
-    private val _themeState = MutableStateFlow<ThemeState?>(null)
-    val themeState = _themeState.asStateFlow()
+    val themeState =
+        getThemeUseCase.invoke().stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-    init {
-        viewModelScope.launch(Dispatchers.IO) {
-            getThemeUseCase.invoke().collect {
-                _themeState.value = it
-            }
-        }
-    }
 }

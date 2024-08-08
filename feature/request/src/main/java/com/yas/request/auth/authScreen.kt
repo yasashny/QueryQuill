@@ -8,18 +8,21 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.yas.model.AuthState
 import com.yas.model.BasicState
+import com.yas.request.R
+import com.yas.request.alertDialog.ChangeTypeAlertDialog
+import com.yas.request.components.ChipGroup
 
 
-fun LazyListScope.authScreen(
+internal fun LazyListScope.authScreen(
     authState: AuthState, updateRequest: (AuthState) -> Unit
 ) {
     item {
         Row {
             Box(
-                //contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 15.dp, top = 15.dp)
@@ -28,14 +31,13 @@ fun LazyListScope.authScreen(
                     mutableStateOf(Pair(false, authState as BasicState))
                 }
                 if (openDialog.value.first) {
-                    com.yas.request.ChangeTypeAlertDialog(
-                        openDialog,
-                        title = "auth"
+                    ChangeTypeAlertDialog(
+                        openDialog, title = stringResource(R.string.auth)
                     ) { basicState ->
                         updateRequest(basicState as AuthState)
                     }
                 }
-                com.yas.request.ChipGroup(
+                ChipGroup(
                     currentState = authState, options = listOf(
                         AuthState.NoAuth, AuthState.Basic.default()
                     )

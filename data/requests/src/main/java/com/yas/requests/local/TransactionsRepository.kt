@@ -15,12 +15,10 @@ import com.yas.requests.mappers.toModel
 import com.yas.requests.models.RequestDBO
 import com.yas.requests.models.ResponseDBO
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 
 class TransactionsRepository internal constructor(
     private val requestLocalDataSource: RequestLocalDataSource,
@@ -81,12 +79,7 @@ class TransactionsRepository internal constructor(
     }
 
     suspend fun updateRequest(model: RequestModel) {
-        println("AAAAAAAAAAAAAAAA")
-        withContext(NonCancellable) {
-            println("BBBBBBBBBBBBBBBBBB")
-            println(model)
-            requestLocalDataSource.update(model.toDBO())
-        }
+        requestLocalDataSource.update(model.toDBO())
     }
 
 

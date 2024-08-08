@@ -39,7 +39,7 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
-    buildFeatures{
+    buildFeatures {
         compose = true
     }
     packaging {
@@ -106,5 +106,6 @@ dependencies {
     implementation(project(":feature:request"))
     implementation(project(":core:utils"))
     implementation(project(":feature:transaction"))
+    implementation(project(":core:domain"))
 
 }

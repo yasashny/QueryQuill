@@ -12,7 +12,7 @@ data class RequestModel(
     val type: HttpType,
     val url: String
 ) {
-    companion object{
+    companion object {
         fun default(): RequestModel {
             return RequestModel(
                 id = -1,

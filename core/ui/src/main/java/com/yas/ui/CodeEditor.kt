@@ -15,8 +15,7 @@ import io.github.rosemoe.sora.widget.CodeEditor
 
 @Composable
 fun CodeEditor(
-    modifier: Modifier = Modifier,
-    initialText: String,
+    modifier: Modifier = Modifier, initialText: String,
     isEditable: Boolean = true,
     isBasicDisplayMode: Boolean,
     languageType: LanguageType,

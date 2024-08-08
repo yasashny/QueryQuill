@@ -17,13 +17,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.yas.model.BodyState
 import com.yas.model.TextType
-import com.yas.request.ChipGroup
+import com.yas.request.R
+import com.yas.request.components.ChipGroup
 
 @Composable
-fun BodyScreenText(
+internal fun BodyScreenText(
     bodyState: BodyState.Text, updateRequest: (BodyState.Text) -> Unit, navigateToEditor: () -> Unit
 ) {
     Column {
@@ -59,7 +61,7 @@ fun BodyScreenText(
         ) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.CenterStart) {
                 Text(
-                    text = "Input your body here...",
+                    text = stringResource(R.string.input_your_body_here),
                     fontSize = MaterialTheme.typography.titleMedium.fontSize,
                     modifier = Modifier.padding(start = 15.dp)
                 )

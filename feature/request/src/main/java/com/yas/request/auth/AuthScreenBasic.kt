@@ -7,11 +7,13 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.yas.model.AuthState
+import com.yas.request.R
 
 @Composable
-fun AuthScreenBasic(authState: AuthState.Basic, updateRequest: (AuthState.Basic) -> Unit) {
+internal fun AuthScreenBasic(authState: AuthState.Basic, updateRequest: (AuthState.Basic) -> Unit) {
     Column {
         OutlinedTextField(
             value = authState.userName,
@@ -22,7 +24,7 @@ fun AuthScreenBasic(authState: AuthState.Basic, updateRequest: (AuthState.Basic)
                     )
                 )
             },
-            label = { Text(text = "User name") },
+            label = { Text(text = stringResource(R.string.user_name)) },
             modifier = Modifier
                 .padding(start = 15.dp, end = 15.dp)
                 .fillMaxWidth()
@@ -36,7 +38,7 @@ fun AuthScreenBasic(authState: AuthState.Basic, updateRequest: (AuthState.Basic)
                     )
                 )
             },
-            label = { Text(text = "Password") },
+            label = { Text(text = stringResource(R.string.password)) },
             modifier = Modifier
                 .padding(start = 15.dp, end = 15.dp, top = 15.dp)
                 .fillMaxWidth()

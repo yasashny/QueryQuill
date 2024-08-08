@@ -20,15 +20,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.yas.model.KeyValue
 import com.yas.model.RequestModel
+import com.yas.request.alertDialog.ChangeContentTypeDialog
+import com.yas.request.alertDialog.LoadingAlertDialog
 import com.yas.request.auth.authScreen
 import com.yas.request.body.bodyScreen
 import com.yas.request.header.headerScreen
 import com.yas.request.query.queryScreen
 import com.yas.request.requestScreenHeader.HttpRequestHeaderState
 import com.yas.request.requestScreenHeader.HttpRequestScreenHeader
+import com.yas.request.utils.Constants
+import com.yas.request.utils.changeContentType
 import com.yas.utils.vibration
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
@@ -36,7 +41,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun HttpRequestScreen(
+internal fun HttpRequestScreen(
     requestModel: RequestModel,
     updateRequest: (UpdateRequestModel) -> Unit,
     sendRequest: suspend (RequestModel) -> Unit,
@@ -51,7 +56,7 @@ fun HttpRequestScreen(
         mutableStateOf(false)
     }
     if (openChangeContentTypeDialog.value.first) {
-        com.yas.request.ChangeContentTypeDialog(
+        ChangeContentTypeDialog(
             openDialog = openChangeContentTypeDialog, isChangeType = isChangeContentType
         )
     }
@@ -59,9 +64,9 @@ fun HttpRequestScreen(
         updateRequest(
             UpdateRequestModel.Header(listOf(
                 KeyValue(
-                    "Content-Type", openChangeContentTypeDialog.value.second
+                    Constants.CONTENT_TYPE, openChangeContentTypeDialog.value.second
                 )
-            ) + requestModel.header.list.filter { keyValue -> keyValue.key != "Content-Type" })
+            ) + requestModel.header.list.filter { keyValue -> keyValue.key != Constants.CONTENT_TYPE })
         )
         isChangeContentType.value = false
     }
@@ -73,7 +78,7 @@ fun HttpRequestScreen(
         mutableStateOf(false)
     }
     if (openLoadingDialog.value) {
-        com.yas.request.LoadingAlertDialog(openDialog = openLoadingDialog, isCancelJob)
+        LoadingAlertDialog(openDialog = openLoadingDialog, isCancelJob)
     }
     if (isCancelJob.value) {
         scope.cancel()
@@ -93,7 +98,7 @@ fun HttpRequestScreen(
             Icon(
                 imageVector = Icons.AutoMirrored.Outlined.Send, contentDescription = null
             )
-        }, text = { Text(text = "Send request") })
+        }, text = { Text(text = stringResource(R.string.send_request)) })
     }) {
         Box {
             val httpRequestHeaderState = remember { mutableStateOf(HttpRequestHeaderState.BODY) }
@@ -126,7 +131,9 @@ fun HttpRequestScreen(
                 }
                 item {
                     Spacer(
-                        modifier = Modifier.height(150.dp).fillMaxWidth()
+                        modifier = Modifier
+                            .height(150.dp)
+                            .fillMaxWidth()
                     )
                 }
             }
