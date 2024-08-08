@@ -158,6 +158,7 @@ internal fun NavigationDrawer(
                                             },
                                             badge = {
                                                 IconButton(onClick = {
+                                                    vibration(context)
                                                     if (state.currentId == item.id){
                                                         viewModel.onEvent(
                                                             TransactionEvent.SetTransaction(null)

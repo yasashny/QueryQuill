@@ -1,5 +1,6 @@
 package com.yas.requests.di
 
+import com.yas.common.QQDispatchers
 import com.yas.requests.local.TransactionsRepository
 import com.yas.requests.local.dataSource.CurrentTransactionIdLocalDataSource
 import com.yas.requests.local.dataSource.RequestLocalDataSource
@@ -11,15 +12,14 @@ import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.HttpTimeout
 import org.koin.core.module.dsl.singleOf
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val requestsDataModule = module {
     singleOf(::CurrentTransactionIdLocalDataSource)
-    singleOf(::TransactionsRepository)
     singleOf(::RequestLocalDataSource)
     singleOf(::ResponseLocalDataSource)
     singleOf(::TransactionLocalDataSource)
-    singleOf(::SendRequestRepository)
     singleOf(::SendRequestLocalDataSource)
     single<HttpClient> {
         HttpClient(CIO) {
@@ -28,5 +28,11 @@ val requestsDataModule = module {
             }
             followRedirects = true
         }
+    }
+    single<TransactionsRepository> {
+        TransactionsRepository(get(), get(), get(), get(), get(named(QQDispatchers.IO)))
+    }
+    single<SendRequestRepository> {
+        SendRequestRepository(get(), get(), get(named(QQDispatchers.IO)))
     }
 }

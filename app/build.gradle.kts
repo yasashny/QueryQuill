@@ -107,5 +107,6 @@ dependencies {
     implementation(project(":core:utils"))
     implementation(project(":feature:transaction"))
     implementation(project(":core:domain"))
+    implementation(project(":core:common"))
 
 }

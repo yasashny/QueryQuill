@@ -63,25 +63,25 @@ fun TransactionScreen(
             ) {
                 val requestState = vm.requestState.collectAsState().value
                 val responseModel = vm.responseModel.collectAsState().value
-                when (screenState) {
-                    ScreenState.SINGLE_SCREEN -> {
-                        Column {
-                            val pagerState = rememberPagerState(pageCount = { 2 })
-                            PrimaryTextTabs(pagerState = pagerState)
-                            HorizontalPager(
-                                state = pagerState,
-                                modifier = Modifier.fillMaxWidth(),
-                                userScrollEnabled = false
-                            ) {
-                                when (it) {
-                                    0 -> {
-                                        when (requestState) {
-                                            RequestUiState.Loading -> {}
-                                            RequestUiState.NewRequest -> {
-                                                NewRequestScreen()
-                                            }
+                when (requestState) {
+                    RequestUiState.Loading -> {}
+                    RequestUiState.NewRequest -> {
+                        NewRequestScreen()
+                    }
 
-                                            is RequestUiState.Success -> {
+                    is RequestUiState.Success -> {
+                        when (screenState) {
+                            ScreenState.SINGLE_SCREEN -> {
+                                Column {
+                                    val pagerState = rememberPagerState(pageCount = { 2 })
+                                    PrimaryTextTabs(pagerState = pagerState)
+                                    HorizontalPager(
+                                        state = pagerState,
+                                        modifier = Modifier.fillMaxWidth(),
+                                        userScrollEnabled = false
+                                    ) {
+                                        when (it) {
+                                            0 -> {
                                                 RequestScreen(
                                                     modifier = Modifier.fillMaxSize(),
                                                     pagerState = pagerState,
@@ -91,26 +91,17 @@ fun TransactionScreen(
                                                     sendRequest = vm::sendRequest
                                                 )
                                             }
+
+                                            1 -> ResponseScreen(
+                                                modifier = Modifier.fillMaxSize(), responseModel
+                                            )
                                         }
                                     }
-
-                                    1 -> ResponseScreen(
-                                        modifier = Modifier.fillMaxSize(), responseModel
-                                    )
                                 }
                             }
-                        }
-                    }
 
-                    ScreenState.ROW_SCREEN -> {
-                        Row {
-                            when (requestState) {
-                                RequestUiState.Loading -> {}
-                                RequestUiState.NewRequest -> {
-                                    NewRequestScreen()
-                                }
-
-                                is RequestUiState.Success -> {
+                            ScreenState.ROW_SCREEN -> {
+                                Row {
                                     RequestScreen(
                                         modifier = Modifier
                                             .fillMaxSize()
@@ -120,32 +111,22 @@ fun TransactionScreen(
                                         updateRequest = vm::updateRequest,
                                         sendRequest = vm::sendRequest
                                     )
+                                    Box(
+                                        Modifier
+                                            .fillMaxHeight()
+                                            .width(1.dp)
+                                            .background(MaterialTheme.colorScheme.outlineVariant)
+                                    )
+                                    ResponseScreen(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .weight(1f), responseModel
+                                    )
                                 }
                             }
 
-                            Box(
-                                Modifier
-                                    .fillMaxHeight()
-                                    .width(1.dp)
-                                    .background(MaterialTheme.colorScheme.outlineVariant)
-                            )
-                            ResponseScreen(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .weight(1f), responseModel
-                            )
-                        }
-                    }
-
-                    ScreenState.COLUMN_SCREEN -> {
-                        Column {
-                            when (requestState) {
-                                RequestUiState.Loading -> {}
-                                RequestUiState.NewRequest -> {
-                                    NewRequestScreen()
-                                }
-
-                                is RequestUiState.Success -> {
+                            ScreenState.COLUMN_SCREEN -> {
+                                Column {
                                     RequestScreen(
                                         modifier = Modifier
                                             .fillMaxSize()
@@ -155,19 +136,19 @@ fun TransactionScreen(
                                         updateRequest = vm::updateRequest,
                                         sendRequest = vm::sendRequest
                                     )
+                                    Box(
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .height(1.dp)
+                                            .background(MaterialTheme.colorScheme.outlineVariant)
+                                    )
+                                    ResponseScreen(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .weight(1f), responseModel
+                                    )
                                 }
                             }
-                            Box(
-                                Modifier
-                                    .fillMaxWidth()
-                                    .height(1.dp)
-                                    .background(MaterialTheme.colorScheme.outlineVariant)
-                            )
-                            ResponseScreen(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .weight(1f), responseModel
-                            )
                         }
                     }
                 }

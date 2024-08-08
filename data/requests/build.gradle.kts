@@ -69,4 +69,5 @@ dependencies {
     implementation(libs.datastore)
 
     implementation(project(":core:model"))
+    implementation(project(":core:common"))
 }

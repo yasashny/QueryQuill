@@ -1,11 +1,10 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.serialization)
 }
 
 android {
-    namespace = "com.yas.settings"
+    namespace = "com.yas.common"
     compileSdk = 34
 
     defaultConfig {
@@ -44,11 +43,4 @@ dependencies {
 
     //Koin
     implementation(libs.koin.androidx.compose)
-
-    //DataStore
-    implementation(libs.datastore.preferences)
-    implementation(libs.datastore)
-
-    implementation(project(":core:model"))
-    implementation(project(":core:common"))
 }
