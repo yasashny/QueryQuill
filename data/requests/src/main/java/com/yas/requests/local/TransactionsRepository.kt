@@ -1,6 +1,7 @@
 package com.yas.requests.local
 
 import com.yas.model.GetTransactionModel
+import com.yas.model.ImmutableList
 import com.yas.model.NewTransactionModel
 import com.yas.model.RequestModel
 import com.yas.model.ResponseModel
@@ -37,7 +38,7 @@ class TransactionsRepository internal constructor(
             list.map { it.toModel() }
         }.flatMapLatest { list ->
             currentTransactionIdLocalDataSource.getId().map {
-                GetTransactionModel(list, it)
+                GetTransactionModel(ImmutableList(list), it)
             }
 
         }

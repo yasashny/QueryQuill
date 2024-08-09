@@ -34,9 +34,9 @@ internal fun RequestModel.toDBO(): RequestDBO {
 
 private fun BodyState.toDTO(): BodyStateDTO {
     return when (this) {
-        is BodyState.BinaryFile -> BodyStateDTO.BinaryFile(uri = uri, fileName = fileName)
-        is BodyState.FormUrlEncoded -> BodyStateDTO.FormUrlEncoded(list = list.map { it.toDTO() })
-        is BodyState.MultipartForm -> BodyStateDTO.MultipartForm(multipart = multipart.map { it.toDTO() })
+        is BodyState.BinaryFile -> BodyStateDTO.BinaryFile(uri = uri.uri, fileName = fileName)
+        is BodyState.FormUrlEncoded -> BodyStateDTO.FormUrlEncoded(list = list.list.map { it.toDTO() })
+        is BodyState.MultipartForm -> BodyStateDTO.MultipartForm(multipart = multipart.list.map { it.toDTO() })
         BodyState.NoBody -> BodyStateDTO.NoBody
         is BodyState.Text -> BodyStateDTO.Text(text = text, textType = textType.toDTO())
     }
@@ -49,7 +49,7 @@ private fun KeyValue.toDTO(): KeyValueDTO {
 private fun MultipartFormState.toDTO(): MultipartFormStateDTO {
     return when (this) {
         is MultipartFormState.BinaryFile -> MultipartFormStateDTO.BinaryFile(
-            uri = uri, fileName = fileName, title = title
+            uri = uri.uri, fileName = fileName, title = title
         )
 
         is MultipartFormState.Text -> MultipartFormStateDTO.Text(keyValue = keyValue.toDTO())

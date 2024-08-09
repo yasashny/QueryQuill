@@ -17,10 +17,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.yas.model.BasicState
+import com.yas.model.ImmutableList
 
 @Composable
 internal fun ChipGroup(
-    currentState: BasicState, options: List<BasicState>, onClick: (BasicState) -> Unit
+    currentState: BasicState, options: ImmutableList<BasicState>, onClick: (BasicState) -> Unit
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Row(
@@ -28,7 +29,7 @@ internal fun ChipGroup(
                 .horizontalScroll(rememberScrollState())
                 .padding(start = 29.dp, end = 15.dp)
         ) {
-            options.forEach { chipState ->
+            options.list.forEach { chipState ->
                 InputChip(modifier = Modifier.padding(horizontal = 4.dp),
                     onClick = { onClick(chipState) },
                     label = { Text(chipState.name) },

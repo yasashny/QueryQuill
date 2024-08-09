@@ -14,12 +14,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.yas.model.ImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun <T : Enum<T>> DynamicSelectTextField(
     selectedValue: T,
-    options: List<T>,
+    options: ImmutableList<T>,
     label: String,
     modifier: Modifier,
     onValueChangedEvent: (T) -> Unit
@@ -43,7 +44,7 @@ internal fun <T : Enum<T>> DynamicSelectTextField(
                 .fillMaxWidth()
         )
         ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            options.forEach { option ->
+            options.list.forEach { option ->
                 DropdownMenuItem(text = { Text(text = option.name) }, onClick = {
                     expanded = false
                     if (selectedValue != option) {

@@ -44,7 +44,7 @@ import kotlinx.coroutines.launch
 internal fun HttpRequestScreen(
     requestModel: RequestModel,
     updateRequest: (UpdateRequestModel) -> Unit,
-    sendRequest: suspend (RequestModel) -> Unit,
+    sendRequest: (RequestModel, () -> Unit) -> Unit,
     pagerState: PagerState? = null,
     navigateToEditor: () -> Unit
 ) {
@@ -89,10 +89,11 @@ internal fun HttpRequestScreen(
         ExtendedFloatingActionButton(onClick = {
             vibration(context)
             openLoadingDialog.value = true
-            scope.launch {
-                sendRequest(requestModel)
-                openLoadingDialog.value = false
-                pagerState?.scrollToPage(2)
+            sendRequest(requestModel) {
+                scope.launch {
+                    openLoadingDialog.value = false
+                    pagerState?.scrollToPage(2)
+                }
             }
         }, icon = {
             Icon(

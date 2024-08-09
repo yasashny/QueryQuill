@@ -3,7 +3,9 @@ package com.yas.requests.mappers
 import com.yas.model.AuthState
 import com.yas.model.BodyState
 import com.yas.model.HttpType
+import com.yas.model.ImmutableByteArray
 import com.yas.model.ImmutableList
+import com.yas.model.ImmutableUri
 import com.yas.model.KeyValue
 import com.yas.model.MultipartFormState
 import com.yas.model.RequestModel
@@ -35,9 +37,12 @@ internal fun RequestDBO.toModel(): RequestModel {
 private fun BodyStateDTO.toModel(): BodyState {
     return when (this) {
 
-        is BodyStateDTO.BinaryFile -> BodyState.BinaryFile(uri = uri, fileName = fileName)
-        is BodyStateDTO.FormUrlEncoded -> BodyState.FormUrlEncoded(list = list.map { it.toModel() })
-        is BodyStateDTO.MultipartForm -> BodyState.MultipartForm(multipart = multipart.map { it.toModel() })
+        is BodyStateDTO.BinaryFile -> BodyState.BinaryFile(
+            uri = ImmutableUri(uri), fileName = fileName
+        )
+
+        is BodyStateDTO.FormUrlEncoded -> BodyState.FormUrlEncoded(list = ImmutableList(list.map { it.toModel() }))
+        is BodyStateDTO.MultipartForm -> BodyState.MultipartForm(multipart = ImmutableList(multipart.map { it.toModel() }))
         BodyStateDTO.NoBody -> BodyState.NoBody
         is BodyStateDTO.Text -> BodyState.Text(text = text, textType = textType.toModel())
     }
@@ -50,9 +55,7 @@ private fun KeyValueDTO.toModel(): KeyValue {
 private fun MultipartFormStateDTO.toModel(): MultipartFormState {
     return when (this) {
         is MultipartFormStateDTO.BinaryFile -> MultipartFormState.BinaryFile(
-            uri = uri,
-            fileName = fileName,
-            title = title
+            uri = ImmutableUri(uri), fileName = fileName, title = title
         )
 
         is MultipartFormStateDTO.Text -> MultipartFormState.Text(keyValue = keyValue.toModel())
@@ -90,12 +93,12 @@ private fun AuthStateDTO.toModel(): AuthState {
 internal fun ResponseDBO.toModel(): ResponseModel {
     return ResponseModel(
         status = status,
-        body = body,
+        body = ImmutableByteArray(body),
         contentLength = contentLength,
         time = time,
         contentType = contentType,
         contentSubtype = contentSubtype,
-        headers = headers.map { it.toModel() }
+        headers = ImmutableList(headers.map { it.toModel() })
     )
 }
 

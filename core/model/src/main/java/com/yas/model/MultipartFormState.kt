@@ -20,14 +20,14 @@ sealed interface MultipartFormState : BasicState {
 
 
     data class BinaryFile(
-        override val uri: Uri, val title: String, override val fileName: String
+        override val uri: ImmutableUri, val title: String, override val fileName: String
     ) : MultipartFormState, BasicBinaryFile() {
         override val name: String
             get() = "FILE"
 
         companion object {
             fun default(): BinaryFile {
-                return BinaryFile(Uri.EMPTY, "", "")
+                return BinaryFile(ImmutableUri(Uri.EMPTY), "", "")
             }
         }
     }

@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.yas.model.HttpType
+import com.yas.model.ImmutableList
 import com.yas.request.R
 import com.yas.request.UpdateRequestModel
 import com.yas.request.components.DynamicSelectTextField
@@ -32,14 +33,16 @@ internal fun HttpRequestScreenHeader(
         Modifier.padding(15.dp)
     ) {
         DynamicSelectTextField(
-            selectedValue = type, options = listOf(
-                HttpType.GET,
-                HttpType.POST,
-                HttpType.PUT,
-                HttpType.PATCH,
-                HttpType.OPTIONS,
-                HttpType.DELETE,
-                HttpType.HEAD
+            selectedValue = type, options = ImmutableList(
+                listOf(
+                    HttpType.GET,
+                    HttpType.POST,
+                    HttpType.PUT,
+                    HttpType.PATCH,
+                    HttpType.OPTIONS,
+                    HttpType.DELETE,
+                    HttpType.HEAD
+                )
             ), label = stringResource(id = R.string.type), modifier = Modifier.weight(1.2f)
         ) { httpType ->
             updateRequest(UpdateRequestModel.Type(httpType))
@@ -65,7 +68,9 @@ internal fun HttpRequestScreenHeader(
                 HttpRequestHeaderState.HEADER,
                 HttpRequestHeaderState.QUERY
             )
-            SegmentedButtonSingleSelect(headerState, options, onClick = { headerState.value = it })
+            SegmentedButtonSingleSelect(headerState,
+                ImmutableList(options),
+                onClick = { headerState.value = it })
         }
 
     }

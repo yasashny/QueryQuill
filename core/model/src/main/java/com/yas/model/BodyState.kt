@@ -1,10 +1,7 @@
 package com.yas.model
 
 import android.net.Uri
-import androidx.compose.runtime.Immutable
 
-
-@Immutable
 sealed interface BodyState : BasicState {
 
     override val name: String
@@ -22,39 +19,39 @@ sealed interface BodyState : BasicState {
     }
 
 
-    data class MultipartForm(val multipart: List<MultipartFormState>) : BodyState {
+    data class MultipartForm(val multipart: ImmutableList<MultipartFormState>) : BodyState {
         override val name: String
             get() = "Multipart Form"
 
         companion object {
             fun default(): MultipartForm {
-                return MultipartForm(listOf(MultipartFormState.Text(KeyValue.empty())))
+                return MultipartForm(ImmutableList(listOf(MultipartFormState.Text(KeyValue.empty()))))
             }
         }
     }
 
 
-    data class FormUrlEncoded(val list: List<KeyValue>) : BodyState {
+    data class FormUrlEncoded(val list: ImmutableList<KeyValue>) : BodyState {
         override val name: String
             get() = "Form Url Encoded"
 
         companion object {
             fun default(): FormUrlEncoded {
-                return FormUrlEncoded(listOf(KeyValue.empty()))
+                return FormUrlEncoded(ImmutableList(listOf(KeyValue.empty())))
             }
         }
     }
 
 
     data class BinaryFile(
-        override val uri: Uri, override val fileName: String
+        override val uri: ImmutableUri, override val fileName: String
     ) : BodyState, BasicBinaryFile() {
         override val name: String
             get() = "Binary File"
 
         companion object {
             fun default(): BinaryFile {
-                return BinaryFile(Uri.EMPTY, "")
+                return BinaryFile(ImmutableUri(Uri.EMPTY), "")
             }
         }
     }

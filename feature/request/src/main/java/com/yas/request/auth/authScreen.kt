@@ -12,6 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.yas.model.AuthState
 import com.yas.model.BasicState
+import com.yas.model.ImmutableList
 import com.yas.request.R
 import com.yas.request.alertDialog.ChangeTypeAlertDialog
 import com.yas.request.components.ChipGroup
@@ -38,8 +39,10 @@ internal fun LazyListScope.authScreen(
                     }
                 }
                 ChipGroup(
-                    currentState = authState, options = listOf(
-                        AuthState.NoAuth, AuthState.Basic.default()
+                    currentState = authState, options = ImmutableList(
+                        listOf(
+                            AuthState.NoAuth, AuthState.Basic.default()
+                        )
                     )
                 ) { newState ->
                     if (authState::class != newState::class) {

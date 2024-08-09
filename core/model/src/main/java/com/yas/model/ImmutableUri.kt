@@ -1,6 +1,7 @@
 package com.yas.model
 
+import android.net.Uri
 import androidx.compose.runtime.Immutable
 
 @Immutable
-data class ImmutableList<T>(val list: List<T>)
+data class ImmutableUri(val uri: Uri)

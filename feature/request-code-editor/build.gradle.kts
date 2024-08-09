@@ -37,6 +37,10 @@ android {
         compose = true
     }
 }
+composeCompiler{
+    metricsDestination =  layout.buildDirectory.dir("compose_compiler")
+    reportsDestination = layout.buildDirectory.dir("compose_compiler")
+}
 
 dependencies {
 

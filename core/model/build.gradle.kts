@@ -33,6 +33,10 @@ android {
         jvmTarget = "17"
     }
 }
+composeCompiler{
+    metricsDestination =  layout.buildDirectory.dir("compose_compiler")
+    reportsDestination = layout.buildDirectory.dir("compose_compiler")
+}
 
 dependencies {
 

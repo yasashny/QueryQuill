@@ -15,6 +15,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.yas.model.ImmutableList
+import com.yas.model.ImmutableUri
 import com.yas.model.KeyValue
 import com.yas.model.MultipartFormState
 import com.yas.model.MultipartFormType
@@ -44,8 +46,10 @@ internal fun MultipartFormListItem(
                 selectedValue = when (multipartFormState) {
                     is MultipartFormState.BinaryFile -> MultipartFormType.FILE
                     is MultipartFormState.Text -> MultipartFormType.TEXT
-                }, options = listOf(
-                    MultipartFormType.TEXT, MultipartFormType.FILE
+                }, options = ImmutableList(
+                    listOf(
+                        MultipartFormType.TEXT, MultipartFormType.FILE
+                    )
                 ), label = stringResource(R.string.type), modifier = Modifier.weight(1f)
             ) { multipartFormType ->
                 when (multipartFormType) {
@@ -87,7 +91,9 @@ internal fun MultipartFormListItem(
                 BinaryFileElement(currentState = multipartFormState) { uri, fileName ->
                     onTextChanged(
                         MultipartFormState.BinaryFile(
-                            uri = uri, title = multipartFormState.title, fileName = fileName
+                            uri = ImmutableUri(uri),
+                            title = multipartFormState.title,
+                            fileName = fileName
                         ), true
                     )
                 }

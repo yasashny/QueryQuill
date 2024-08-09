@@ -20,9 +20,9 @@ internal fun changeContentType(
 ) {
     when (bodyState) {
         is BodyState.BinaryFile -> {
-            val mime = getMIMEType(context, bodyState.uri)
+            val mime = getMIMEType(context, bodyState.uri.uri)
             if (requestModel.bodyState is BodyState.BinaryFile) {
-                if ((bodyState.uri != Uri.EMPTY) && !(requestModel.header.list.contains(
+                if ((bodyState.uri.uri != Uri.EMPTY) && !(requestModel.header.list.contains(
                         KeyValue(Constants.CONTENT_TYPE, mime)
                     ))
                 ) {

@@ -25,6 +25,7 @@ android {
         }
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -34,6 +35,10 @@ android {
     buildFeatures {
         compose = true
     }
+}
+composeCompiler{
+    metricsDestination =  layout.buildDirectory.dir("compose_compiler")
+    reportsDestination = layout.buildDirectory.dir("compose_compiler")
 }
 
 dependencies {
@@ -65,6 +70,9 @@ dependencies {
 
     //WindowSizeClass
     implementation(libs.material3.window.size.classs)
+
+    //CoreLibraryDesugaring
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     implementation(project(":core:ui"))
     implementation(project(":core:model"))

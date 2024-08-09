@@ -25,6 +25,7 @@ android {
         }
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -34,6 +35,10 @@ android {
     buildFeatures {
         compose = true
     }
+}
+composeCompiler{
+    metricsDestination =  layout.buildDirectory.dir("compose_compiler")
+    reportsDestination = layout.buildDirectory.dir("compose_compiler")
 }
 
 dependencies {
@@ -60,6 +65,9 @@ dependencies {
     //Koin
     implementation(libs.koin.androidx.compose)
     implementation(project(":data:settings"))
+
+    //CoreLibraryDesugaring
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     implementation(project(":core:model"))
     implementation(project(":core:ui"))

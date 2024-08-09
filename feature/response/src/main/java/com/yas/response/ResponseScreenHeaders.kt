@@ -16,13 +16,14 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.yas.model.ImmutableList
 import com.yas.model.KeyValue
 
 @Composable
-internal fun ResponseScreenHeaders(headers: List<KeyValue>) {
+internal fun ResponseScreenHeaders(headers: ImmutableList<KeyValue>) {
 
     LazyColumn {
-        items(headers) { item ->
+        items(headers.list) { item ->
             SelectionContainer {
                 Column {
                     HorizontalDivider()

@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.yas.model.BodyState
+import com.yas.model.ImmutableList
 import com.yas.model.TextType
 import com.yas.request.R
 import com.yas.request.components.ChipGroup
@@ -37,8 +38,10 @@ internal fun BodyScreenText(
                     .padding(bottom = 15.dp, top = 15.dp)
             ) {
                 ChipGroup(
-                    currentState = bodyState.textType, options = listOf(
-                        TextType.JSON, TextType.XML, TextType.PLAIN, TextType.OTHER
+                    currentState = bodyState.textType, options = ImmutableList(
+                        listOf(
+                            TextType.JSON, TextType.XML, TextType.PLAIN, TextType.OTHER
+                        )
                     )
                 ) { newState ->
                     if (bodyState.textType::class != newState::class) {

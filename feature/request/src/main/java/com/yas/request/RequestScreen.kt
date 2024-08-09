@@ -15,7 +15,7 @@ fun RequestScreen(
     navigateToEditor: () -> Unit,
     requestModel: RequestModel,
     updateRequest: (UpdateRequestModel) -> Unit,
-    sendRequest: suspend (RequestModel) -> Unit
+    sendRequest: (RequestModel, () -> Unit) -> Unit
 ) {
     Box(modifier = modifier) {
         HttpRequestScreen(

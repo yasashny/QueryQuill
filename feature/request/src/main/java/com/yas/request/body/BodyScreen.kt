@@ -17,6 +17,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.yas.model.BasicState
 import com.yas.model.BodyState
+import com.yas.model.ImmutableList
+import com.yas.model.ImmutableUri
 import com.yas.request.R
 import com.yas.request.alertDialog.ChangeTypeAlertDialog
 import com.yas.request.body.multipartForm.bodyScreenMultipartForm
@@ -49,12 +51,14 @@ internal fun LazyListScope.bodyScreen(
                         }
                     }
                     ChipGroup(
-                        currentState = bodyState, options = listOf(
-                            BodyState.NoBody,
-                            BodyState.Text.default(),
-                            BodyState.FormUrlEncoded.default(),
-                            BodyState.MultipartForm.default(),
-                            BodyState.BinaryFile.default()
+                        currentState = bodyState, options = ImmutableList(
+                            listOf(
+                                BodyState.NoBody,
+                                BodyState.Text.default(),
+                                BodyState.FormUrlEncoded.default(),
+                                BodyState.MultipartForm.default(),
+                                BodyState.BinaryFile.default()
+                            )
                         )
                     ) { newState ->
                         if (bodyState::class != newState::class) {
@@ -89,20 +93,20 @@ internal fun LazyListScope.bodyScreen(
         }
 
         is BodyState.FormUrlEncoded -> {
-            editableList(items = bodyState.list) { keyValueList ->
-                updateRequest(BodyState.FormUrlEncoded(keyValueList))
+            editableList(items = bodyState.list.list) { keyValueList ->
+                updateRequest(BodyState.FormUrlEncoded(ImmutableList(keyValueList)))
             }
         }
 
         BodyState.NoBody -> {}
         is BodyState.MultipartForm -> {
-            bodyScreenMultipartForm(items = bodyState.multipart, updateRequest)
+            bodyScreenMultipartForm(items = bodyState.multipart.list, updateRequest)
         }
 
         is BodyState.BinaryFile -> {
             item {
                 BinaryFileElement(currentState = bodyState) { uri, fileName ->
-                    updateRequest(BodyState.BinaryFile(uri, fileName))
+                    updateRequest(BodyState.BinaryFile(ImmutableUri(uri), fileName))
                 }
             }
         }

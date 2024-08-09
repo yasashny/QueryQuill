@@ -51,10 +51,19 @@ fun TransactionScreen(
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
+    val transactions = vm.transactions.collectAsState().value
 
-    NavigationDrawer(vm, navigateToSettings = { navigateToSettings() }) { drawerState ->
+    NavigationDrawer(
+        transactions = transactions,
+        navigateToSettings = { navigateToSettings() },
+        onEvent = vm::onEvent
+    ) { drawerState ->
         Scaffold(topBar = {
-            TransactionTopBar(vm = vm, drawerState = drawerState)
+            TransactionTopBar(transactions = transactions,
+                drawerState = drawerState,
+                updateTransaction = { newTransaction ->
+                    vm.onEvent(TransactionEvent.UpdateTransaction(newTransaction))
+                })
         }) { paddingValues ->
             Surface(
                 Modifier

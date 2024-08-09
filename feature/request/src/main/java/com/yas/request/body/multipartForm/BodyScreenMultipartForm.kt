@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.yas.model.BodyState
+import com.yas.model.ImmutableList
 import com.yas.model.KeyValue
 import com.yas.model.MultipartFormState
 
@@ -21,16 +22,16 @@ internal fun LazyListScope.bodyScreenMultipartForm(
         MultipartFormListItem(multipartFormState = item, onTextChanged = { listItem, flag ->
             val updatedItems = items.toMutableList()
             updatedItems[index] = listItem
-            updateRequest(BodyState.MultipartForm(updatedItems))
+            updateRequest(BodyState.MultipartForm(ImmutableList(updatedItems)))
             if ((index == items.size - 1) and flag) {
                 val newItemList = updatedItems.toMutableList()
                 newItemList.add(MultipartFormState.Text(KeyValue.empty()))
-                updateRequest(BodyState.MultipartForm(newItemList))
+                updateRequest(BodyState.MultipartForm(ImmutableList(newItemList)))
             }
         }, deleteItem = {
             val updatedItems = items.toMutableList()
             updatedItems.removeAt(index)
-            updateRequest(BodyState.MultipartForm(updatedItems))
+            updateRequest(BodyState.MultipartForm(ImmutableList(updatedItems)))
         }, deleteButtonEnabled = { items.size - 1 != index })
     }
 }

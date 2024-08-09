@@ -2,16 +2,24 @@ package com.yas.model
 
 data class ResponseModel(
     val status: String,
-    val body: ByteArray,
+    val body: ImmutableByteArray,
     val contentLength: String,
     val time: String,
     val contentType: String?,
     val contentSubtype: String?,
-    val headers: List<KeyValue>
+    val headers: ImmutableList<KeyValue>
 ) {
     companion object {
         fun default(): ResponseModel {
-            return ResponseModel("--", byteArrayOf(), "--", "--", null, null, emptyList())
+            return ResponseModel(
+                "--",
+                ImmutableByteArray(byteArrayOf()),
+                "--",
+                "--",
+                null,
+                null,
+                ImmutableList(emptyList())
+            )
         }
     }
 }

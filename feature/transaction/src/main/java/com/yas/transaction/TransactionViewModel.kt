@@ -23,7 +23,7 @@ internal class TransactionViewModel(
 ) : ViewModel() {
 
     val transactions = transactionsRepository.getTransactions().map { getTransactionModel ->
-        TransactionsUiState.Success(getTransactionModel.list, getTransactionModel.currentId)
+        TransactionsUiState.Success(getTransactionModel.list.list, getTransactionModel.currentId)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), TransactionsUiState.Loading)
 
     fun onEvent(transactionEvent: TransactionEvent) {
@@ -67,8 +67,11 @@ internal class TransactionViewModel(
         }
     }
 
-    suspend fun sendRequest(requestModel: RequestModel) {
-        sendRequestRepository.sendRequest(requestModel)
+    fun sendRequest(requestModel: RequestModel, requestSent: () -> Unit) {
+        viewModelScope.launch {
+            sendRequestRepository.sendRequest(requestModel)
+            requestSent()
+        }
     }
 
     fun saveRequest() {

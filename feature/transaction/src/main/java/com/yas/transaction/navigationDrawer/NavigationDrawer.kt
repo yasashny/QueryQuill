@@ -30,7 +30,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,20 +42,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.yas.transaction.R
 import com.yas.transaction.TransactionEvent
-import com.yas.transaction.TransactionViewModel
 import com.yas.utils.vibration
 import kotlinx.coroutines.launch
 
 @Composable
 internal fun NavigationDrawer(
-    viewModel: TransactionViewModel,
+    transactions: TransactionsUiState,
     navigateToSettings: () -> Unit,
+    onEvent: (TransactionEvent) -> Unit,
     composable: @Composable (drawerState: DrawerState) -> Unit
 ) {
     val context = LocalContext.current
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-    val transactions by viewModel.transactions.collectAsState()
 
     var gesturesState by remember {
         mutableStateOf(false)
@@ -87,7 +85,7 @@ internal fun NavigationDrawer(
                             scope.launch {
                                 vibration(context = context)
                                 drawerState.close()
-                                viewModel.onEvent(TransactionEvent.SetTransaction(null))
+                                onEvent(TransactionEvent.SetTransaction(null))
                             }
                         },
                         Modifier
@@ -104,7 +102,7 @@ internal fun NavigationDrawer(
                     }
                 }
                 HorizontalDivider(Modifier.padding(vertical = 12.dp))
-                when (val state = transactions) {
+                when (transactions) {
                     TransactionsUiState.Loading -> {
                         Box(
                             modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
@@ -114,7 +112,7 @@ internal fun NavigationDrawer(
                     }
 
                     is TransactionsUiState.Success -> {
-                        when (state.list.size) {
+                        when (transactions.list.size) {
                             0 -> {
                                 Box(
                                     modifier = Modifier.fillMaxSize(),
@@ -124,7 +122,7 @@ internal fun NavigationDrawer(
                                         TextButton(onClick = {
                                             scope.launch {
                                                 drawerState.close()
-                                                viewModel.onEvent(
+                                                onEvent(
                                                     TransactionEvent.SetTransaction(
                                                         null
                                                     )
@@ -142,14 +140,14 @@ internal fun NavigationDrawer(
 
                             else -> {
                                 LazyColumn {
-                                    items(state.list) { item ->
+                                    items(transactions.list) { item ->
                                         NavigationDrawerItem(
                                             label = { Text(item.label) },
-                                            selected = state.currentId == item.id,
+                                            selected = transactions.currentId == item.id,
                                             onClick = {
                                                 scope.launch {
                                                     drawerState.close()
-                                                    viewModel.onEvent(
+                                                    onEvent(
                                                         TransactionEvent.SetTransaction(
                                                             item.id
                                                         )
@@ -159,12 +157,12 @@ internal fun NavigationDrawer(
                                             badge = {
                                                 IconButton(onClick = {
                                                     vibration(context)
-                                                    if (state.currentId == item.id){
-                                                        viewModel.onEvent(
+                                                    if (transactions.currentId == item.id) {
+                                                        onEvent(
                                                             TransactionEvent.SetTransaction(null)
                                                         )
                                                     }
-                                                    viewModel.onEvent(
+                                                    onEvent(
                                                         TransactionEvent.DeleteTransaction(item.id)
                                                     )
                                                 }) {

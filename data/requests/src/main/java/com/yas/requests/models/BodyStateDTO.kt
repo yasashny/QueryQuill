@@ -1,11 +1,9 @@
 package com.yas.requests.models
 
 import android.net.Uri
-import androidx.compose.runtime.Immutable
 import kotlinx.serialization.Serializable
 
 @Serializable
-@Immutable
 internal sealed interface BodyStateDTO {
 
 

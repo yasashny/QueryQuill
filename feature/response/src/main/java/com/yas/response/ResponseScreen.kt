@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.yas.model.ImmutableList
 import com.yas.model.ResponseModel
 import com.yas.response.components.SegmentedButtonResponse
 import com.yas.response.preview.ResponseScreenPreview
@@ -81,10 +82,12 @@ fun ResponseScreen(
                         .padding(bottom = 15.dp)
                 ) {
                     SegmentedButtonResponse(
-                        currentState = responseSegmentedButtonState, options = listOf(
-                            ResponseSegmentedButtonState.PREVIEW,
-                            ResponseSegmentedButtonState.SOURCE,
-                            ResponseSegmentedButtonState.HEADERS
+                        currentState = responseSegmentedButtonState, options = ImmutableList(
+                            listOf(
+                                ResponseSegmentedButtonState.PREVIEW,
+                                ResponseSegmentedButtonState.SOURCE,
+                                ResponseSegmentedButtonState.HEADERS
+                            )
                         )
                     ) { newState ->
                         if (newState != responseSegmentedButtonState) {
@@ -106,7 +109,7 @@ fun ResponseScreen(
                     val languageType =
                         mimeTypeToLanguageType("${responseModel.contentType}/${responseModel.contentSubtype}")
                     ResponseScreenSource(
-                        responseModel.body.decodeToString(), languageType
+                        responseModel.body.byteArray.decodeToString(), languageType
                     )
                 }
 
