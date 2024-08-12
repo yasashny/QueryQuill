@@ -1,13 +1,11 @@
 package com.yas.request
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Send
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -36,16 +34,13 @@ import com.yas.request.utils.Constants
 import com.yas.request.utils.changeContentType
 import com.yas.utils.vibration
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 internal fun HttpRequestScreen(
     requestModel: RequestModel,
     updateRequest: (UpdateRequestModel) -> Unit,
     sendRequest: (RequestModel, () -> Unit) -> Unit,
-    pagerState: PagerState? = null,
     navigateToEditor: () -> Unit
 ) {
     val context = LocalContext.current
@@ -90,10 +85,7 @@ internal fun HttpRequestScreen(
             vibration(context)
             openLoadingDialog.value = true
             sendRequest(requestModel) {
-                scope.launch {
-                    openLoadingDialog.value = false
-                    pagerState?.scrollToPage(2)
-                }
+                openLoadingDialog.value = false
             }
         }, icon = {
             Icon(
