@@ -58,7 +58,7 @@ internal fun BinaryFileElement(
                 modifier = Modifier
                     .padding(15.dp)
                     .weight(1f),
-                text = if (currentState.uri == Uri.EMPTY) {
+                text = if (currentState.uri.uri == Uri.EMPTY) {
                     stringResource(R.string.select_file)
                 } else {
                     currentState.fileName
@@ -68,7 +68,7 @@ internal fun BinaryFileElement(
                 updateRequest(
                     Uri.EMPTY, ""
                 )
-            }, enabled = currentState.uri != Uri.EMPTY) {
+            }, enabled = currentState.uri.uri != Uri.EMPTY) {
                 Icon(imageVector = Icons.Outlined.Delete, contentDescription = null)
             }
         }

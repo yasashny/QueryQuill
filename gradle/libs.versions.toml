@@ -15,14 +15,14 @@ kotlinxCoroutinesAndroid = "1.8.0"
 kotlinxSerializationJson = "1.6.0"
 ktorClientCIO = "2.3.10"
 lifecycleRuntimeKtx = "2.8.4"
-material = "1.12.0"
 material3WindowSizeClass = "1.2.1"
 navigationCompose = "2.7.7"
 roomVersion = "2.6.1"
-androidApplicationPlugin = "8.5.1"
+agp = "8.5.2"
 kotlin = "2.0.0"
-androidLibraryVersion = "8.5.1"
 kspVersion = "2.0.0-1.0.22"
+jetbrainsKotlinJvm = "2.0.0"
+roomGradlePlugin = "2.6.1"
 
 
 [libraries]
@@ -55,6 +55,7 @@ ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktorClien
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomVersion" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomVersion" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomVersion" }
+room-gradle-plugin = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "roomGradlePlugin" }
 
 #DataStore
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
@@ -66,29 +67,42 @@ material3-window-size-classs = { module = "androidx.compose.material3:material3-
 #SplashScreen
 core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 
+agp = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
-ext-junit = { module = "androidx.test.ext:junit", version.ref = "junitVersion" }
-junit = { module = "junit:junit", version.ref = "junit" }
 lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 material3 = { module = "androidx.compose.material3:material3" }
-ui = { module = "androidx.compose.ui:ui" }
-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
-material = { module = "com.google.android.material:material", version.ref = "material" }
 
+ext-junit = { module = "androidx.test.ext:junit", version.ref = "junitVersion" }
+junit = { module = "junit:junit", version.ref = "junit" }
+ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
+ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
+
+[bundles]
+sora-editor = ["sora-editor", "sora-editor-textmate"]
+ktor = ["ktor-server-content-negotiation", "ktor-serialization-kotlinx-json", "ktor-client-cio"]
+datastore = ["datastore-preferences", "datastore"]
 
 [plugins]
-android-application = { id = "com.android.application", version.ref = "androidApplicationPlugin" }
+android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-android-library = { id = "com.android.library", version.ref = "androidLibraryVersion" }
+android-library = { id = "com.android.library", version.ref = "agp" }
 google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "kspVersion" }
 androidx-room = { id = "androidx.room", version.ref = "roomVersion" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
+
+# Plugins defined by this project
+queryquill-android-room = { id = "queryquill.android.room", version = "unspecified" }
+queryquill-android-application = { id = "queryquill.android.application", version = "unspecified" }
+queryquill-android-application-compose = { id = "queryquill.android.application.compose", version = "unspecified" }
+queryquill-android-library = { id = "queryquill.android.library", version = "unspecified" }
+queryquill-android-library-compose = { id = "queryquill.android.library.compose", version = "unspecified" }

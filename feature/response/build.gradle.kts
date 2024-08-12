@@ -1,78 +1,18 @@
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.queryquill.android.library)
+    alias(libs.plugins.queryquill.android.library.compose)
 }
 
 android {
     namespace = "com.yas.response"
-    compileSdk = 34
-
-    defaultConfig {
-        minSdk = 29
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
-    buildFeatures {
-        compose = true
-    }
-}
-composeCompiler{
-    metricsDestination =  layout.buildDirectory.dir("compose_compiler")
-    reportsDestination = layout.buildDirectory.dir("compose_compiler")
 }
 
 dependencies {
-
-    implementation(libs.core.ktx)
-    implementation(libs.appcompat)
-    implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.ext.junit)
-    androidTestImplementation(libs.espresso.core)
-
-    implementation(libs.lifecycle.runtime.ktx)
-    implementation(libs.activity.compose)
-    implementation(platform(libs.compose.bom))
-    implementation(libs.ui)
-    implementation(libs.ui.graphics)
-    implementation(libs.ui.tooling.preview)
-    implementation(libs.material3)
-    androidTestImplementation(platform(libs.compose.bom))
-    androidTestImplementation(libs.ui.test.junit4)
-    debugImplementation(libs.ui.tooling)
-    debugImplementation(libs.ui.test.manifest)
-
-    //Coroutines
     implementation(libs.kotlinx.coroutines.android)
-
-    //Koin
     implementation(libs.koin.androidx.compose)
 
-    //CoreLibraryDesugaring
-    coreLibraryDesugaring(libs.desugar.jdk.libs)
-
-    implementation(project(":core:ui"))
-    implementation(project(":core:model"))
-    implementation(project(":core:utils"))
-    implementation(project(":data:requests"))
+    implementation(projects.core.ui)
+    implementation(projects.core.model)
+    implementation(projects.core.utils)
+    implementation(projects.data.requests)
 }

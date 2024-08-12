@@ -7,4 +7,5 @@ plugins {
     alias(libs.plugins.google.devtools.ksp) apply false
     alias(libs.plugins.androidx.room) apply false
     alias(libs.plugins.serialization) apply false
+    alias(libs.plugins.jetbrains.kotlin.jvm) apply false
 }

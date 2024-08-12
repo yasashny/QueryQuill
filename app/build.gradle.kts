@@ -1,75 +1,38 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.google.devtools.ksp)
-    alias(libs.plugins.serialization)
+    alias(libs.plugins.queryquill.android.application)
+    alias(libs.plugins.queryquill.android.application.compose)
 }
 
 android {
     namespace = "com.yas.queryquill"
-    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.yas.queryquill"
-        minSdk = 29
-        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
-    }
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
-    buildFeatures {
-        compose = true
     }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-}
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+            )
+        }
+    }
 
-composeCompiler{
-    metricsDestination =  layout.buildDirectory.dir("compose_compiler")
-    reportsDestination = layout.buildDirectory.dir("compose_compiler")
 }
 dependencies {
 
-    implementation(libs.core.ktx)
-    implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.activity.compose)
-    implementation(platform(libs.compose.bom))
-    implementation(libs.ui)
-    implementation(libs.ui.graphics)
-    implementation(libs.ui.tooling.preview)
-    implementation(libs.material3)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.ext.junit)
-    androidTestImplementation(libs.espresso.core)
-    androidTestImplementation(platform(libs.compose.bom))
-    androidTestImplementation(libs.ui.test.junit4)
-    debugImplementation(libs.ui.tooling)
-    debugImplementation(libs.ui.test.manifest)
 
     //Coroutines
     implementation(libs.kotlinx.coroutines.android)
@@ -79,12 +42,6 @@ dependencies {
 
     //Navigation
     implementation(libs.navigation.compose)
-
-    //Serialization
-    implementation(libs.kotlinx.serialization.json)
-
-    //CoreLibraryDesugaring
-    coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     //SoraEditor
     implementation(platform(libs.sora.editor.bom))
@@ -97,19 +54,18 @@ dependencies {
     //SplashScreen
     implementation(libs.core.splashscreen)
 
-    implementation(project(":data:settings"))
-    implementation(project(":feature:settings"))
-    implementation(project(":core:model"))
-    implementation(project(":data:requests"))
-    implementation(project(":core:model"))
-    implementation(project(":feature:response"))
-    implementation(project(":core:ui"))
-    implementation(project(":feature:new-transaction"))
-    implementation(project(":feature:request-code-editor"))
-    implementation(project(":feature:request"))
-    implementation(project(":core:utils"))
-    implementation(project(":feature:transaction"))
-    implementation(project(":core:domain"))
-    implementation(project(":core:common"))
+    implementation(projects.data.settings)
+    implementation(projects.data.requests)
+    implementation(projects.core.model)
+    implementation(projects.core.ui)
+    implementation(projects.core.domain)
+    implementation(projects.core.common)
+    implementation(projects.core.utils)
+    implementation(projects.feature.settings)
+    implementation(projects.feature.response)
+    implementation(projects.feature.newTransaction)
+    implementation(projects.feature.requestCodeEditor)
+    implementation(projects.feature.request)
+    implementation(projects.feature.transaction)
 
 }
