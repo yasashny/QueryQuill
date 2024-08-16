@@ -21,7 +21,7 @@ sealed interface AuthState : BasicState {
         }
     }
 
-    override fun isDefault(): Boolean {
+    fun isDefault(): Boolean {
         return when (this) {
             is Basic -> this == Basic.default()
             NoAuth -> true

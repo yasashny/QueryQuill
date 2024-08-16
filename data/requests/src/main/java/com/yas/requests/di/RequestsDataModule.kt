@@ -33,6 +33,6 @@ val requestsDataModule = module {
         TransactionsRepository(get(), get(), get(), get(), get(named(QQDispatchers.IO)))
     }
     single<SendRequestRepository> {
-        SendRequestRepository(get(), get(), get(named(QQDispatchers.IO)))
+        SendRequestRepository(get(), get(), get(), get(named(QQDispatchers.IO)))
     }
 }

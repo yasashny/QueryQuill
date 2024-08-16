@@ -38,7 +38,10 @@ private fun BodyState.toDTO(): BodyStateDTO {
         is BodyState.FormUrlEncoded -> BodyStateDTO.FormUrlEncoded(list = list.list.map { it.toDTO() })
         is BodyState.MultipartForm -> BodyStateDTO.MultipartForm(multipart = multipart.list.map { it.toDTO() })
         BodyState.NoBody -> BodyStateDTO.NoBody
-        is BodyState.Text -> BodyStateDTO.Text(text = text, textType = textType.toDTO())
+        is BodyState.Text -> BodyStateDTO.Text(
+            textFileName = textFileName,
+            textType = textType.toDTO()
+        )
     }
 }
 

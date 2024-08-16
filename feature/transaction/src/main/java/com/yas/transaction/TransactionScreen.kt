@@ -33,7 +33,9 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun TransactionScreen(
-    screenState: ScreenState, navigateToEditor: () -> Unit, navigateToSettings: () -> Unit
+    screenState: ScreenState,
+    navigateToEditor: (textFileName: String, languageType: String) -> Unit,
+    navigateToSettings: () -> Unit
 ) {
 
     val vm = koinViewModel<TransactionViewModel>()
@@ -91,6 +93,7 @@ fun TransactionScreen(
                                                 navigateToEditor = navigateToEditor,
                                                 requestModel = requestState.request,
                                                 updateRequest = vm::updateRequest,
+                                                getTextFileUri = vm::getTextFileUri,
                                                 sendRequest = { requestModel: RequestModel, requestSent: () -> Unit ->
                                                     vm.sendRequest(requestModel) {
                                                         requestSent()
@@ -118,6 +121,7 @@ fun TransactionScreen(
                                         navigateToEditor = navigateToEditor,
                                         requestModel = requestState.request,
                                         updateRequest = vm::updateRequest,
+                                        getTextFileUri = vm::getTextFileUri,
                                         sendRequest = vm::sendRequest
                                     )
                                     Box(
@@ -143,6 +147,7 @@ fun TransactionScreen(
                                         navigateToEditor = navigateToEditor,
                                         requestModel = requestState.request,
                                         updateRequest = vm::updateRequest,
+                                        getTextFileUri = vm::getTextFileUri,
                                         sendRequest = vm::sendRequest
                                     )
                                     Box(

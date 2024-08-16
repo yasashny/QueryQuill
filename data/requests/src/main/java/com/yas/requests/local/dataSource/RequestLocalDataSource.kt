@@ -9,8 +9,10 @@ import com.yas.requests.models.HttpTypeDTO
 import com.yas.requests.models.KeyValueDTO
 import com.yas.requests.models.RequestDBO
 import kotlinx.coroutines.flow.Flow
+import java.io.File
+import java.net.URI
 
-internal class RequestLocalDataSource(context: Context) {
+internal class RequestLocalDataSource(private val context: Context) {
 
     private val db = Room.databaseBuilder(
         context, RequestsDataBase::class.java, "request.db"
@@ -42,5 +44,13 @@ internal class RequestLocalDataSource(context: Context) {
 
     suspend fun delete(id: Long) {
         db.requestDao.deleteRequest(id)
+    }
+
+    fun getRequestTextFileUri(textFileName: String): URI {
+        val file = File(context.filesDir, textFileName)
+        if (!file.exists()) {
+            file.writeText("")
+        }
+        return file.toURI()
     }
 }

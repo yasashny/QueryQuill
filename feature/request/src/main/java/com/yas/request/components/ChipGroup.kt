@@ -16,12 +16,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.yas.model.BasicState
 import com.yas.model.ImmutableList
 
 @Composable
-internal fun ChipGroup(
-    currentState: BasicState, options: ImmutableList<BasicState>, onClick: (BasicState) -> Unit
+internal fun <T : Enum<T>> ChipGroup(
+    currentState: T, options: ImmutableList<T>, onClick: (T) -> Unit
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Row(
@@ -33,9 +32,9 @@ internal fun ChipGroup(
                 InputChip(modifier = Modifier.padding(horizontal = 4.dp),
                     onClick = { onClick(chipState) },
                     label = { Text(chipState.name) },
-                    selected = currentState::class == chipState::class,
+                    selected = currentState == chipState,
                     leadingIcon = {
-                        if (currentState::class == chipState::class) {
+                        if (currentState == chipState) {
                             Icon(
                                 imageVector = Icons.Filled.Done,
                                 contentDescription = null,

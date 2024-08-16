@@ -26,10 +26,16 @@ import com.yas.request.body.text.BodyScreenText
 import com.yas.request.components.BinaryFileElement
 import com.yas.request.components.ChipGroup
 import com.yas.request.components.editableList
+import java.io.File
+import java.net.URI
 
 
 internal fun LazyListScope.bodyScreen(
-    bodyState: BodyState, navigateToEditor: () -> Unit, updateRequest: (BodyState) -> Unit
+    bodyState: BodyState,
+    getTextFileUri: (textFileName: String) -> URI,
+    requestId: Long,
+    navigateToEditor: (textFileName: String, languageType: String) -> Unit,
+    updateRequest: (BodyState) -> Unit
 ) {
     item {
         Column {
@@ -47,25 +53,46 @@ internal fun LazyListScope.bodyScreen(
                         ChangeTypeAlertDialog(
                             openDialog, title = stringResource(R.string.body)
                         ) { basicState ->
+                            when(bodyState){
+                                is BodyState.BinaryFile -> {}
+                                is BodyState.FormUrlEncoded -> {}
+                                is BodyState.MultipartForm -> {}
+                                BodyState.NoBody -> {}
+                                is BodyState.Text -> {
+                                    val file = File(getTextFileUri(bodyState.textFileName))
+                                    file.delete()
+                                }
+                            }
                             updateRequest(basicState as BodyState)
                         }
                     }
                     ChipGroup(
-                        currentState = bodyState, options = ImmutableList(
+                        currentState = bodyState.toEnum(), options = ImmutableList(
                             listOf(
-                                BodyState.NoBody,
-                                BodyState.Text.default(),
-                                BodyState.FormUrlEncoded.default(),
-                                BodyState.MultipartForm.default(),
-                                BodyState.BinaryFile.default()
+                                EnumBodyState.NoBody,
+                                EnumBodyState.Text,
+                                EnumBodyState.FormUrlEncoded,
+                                EnumBodyState.MultipartForm,
+                                EnumBodyState.BinaryFile
                             )
                         )
-                    ) { newState ->
-                        if (bodyState::class != newState::class) {
-                            if (bodyState.isDefault()) {
-                                updateRequest(newState as BodyState)
+                    ) { newEnumState: EnumBodyState ->
+                        val newState = newEnumState.toBodyState(requestId)
+                        if (bodyState != newState) {
+                            if (when (bodyState) {
+                                    is BodyState.BinaryFile -> bodyState == BodyState.BinaryFile.default()
+                                    is BodyState.FormUrlEncoded -> bodyState == BodyState.FormUrlEncoded.default()
+                                    is BodyState.MultipartForm -> bodyState == BodyState.MultipartForm.default()
+                                    BodyState.NoBody -> true
+                                    is BodyState.Text -> {
+                                        val file = File(getTextFileUri(bodyState.textFileName))
+                                        file.length() == 0L
+                                    }
+                                }
+                            ) {
+                                updateRequest(newState)
                             } else {
-                                openDialog.value = Pair(true, newState as BodyState)
+                                openDialog.value = Pair(true, newState)
                             }
                         }
                     }

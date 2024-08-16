@@ -28,8 +28,11 @@ import io.ktor.http.HttpMethod
 import io.ktor.http.Parameters
 import io.ktor.http.contentType
 import io.ktor.util.InternalAPI
+import io.ktor.util.cio.readChannel
 import io.ktor.util.network.UnresolvedAddressException
+import java.io.File
 import java.net.ConnectException
+import java.net.URI
 import java.net.UnknownHostException
 
 internal class SendRequestLocalDataSource(
@@ -37,7 +40,7 @@ internal class SendRequestLocalDataSource(
 ) {
 
     @OptIn(InternalAPI::class)
-    suspend fun sendRequest(model: RequestDTO): ResponseDTO {
+    suspend fun sendRequest(model: RequestDTO, requestModelUri: URI?): ResponseDTO {
         try {
             val url = if (model.url.startsWith("http://") || model.url.startsWith("https://")) {
                 model.url
@@ -76,7 +79,7 @@ internal class SendRequestLocalDataSource(
                     is BodyStateDTO.BinaryFile -> {
                         if (bodyState.uri != Uri.EMPTY) {
                             fileNameByUri(context.contentResolver, bodyState.uri)
-                            body = fileFromContentUri(context = context, bodyState.uri).readBytes()
+                            body = fileFromContentUri(context = context, bodyState.uri).readChannel()
                         }
                     }
 
@@ -136,7 +139,7 @@ internal class SendRequestLocalDataSource(
                     }
 
                     is BodyStateDTO.Text -> {
-                        body = bodyState.text
+                        body = File(requestModelUri!!).readChannel()
                     }
                 }
 

@@ -44,7 +44,9 @@ private fun BodyStateDTO.toModel(): BodyState {
         is BodyStateDTO.FormUrlEncoded -> BodyState.FormUrlEncoded(list = ImmutableList(list.map { it.toModel() }))
         is BodyStateDTO.MultipartForm -> BodyState.MultipartForm(multipart = ImmutableList(multipart.map { it.toModel() }))
         BodyStateDTO.NoBody -> BodyState.NoBody
-        is BodyStateDTO.Text -> BodyState.Text(text = text, textType = textType.toModel())
+        is BodyStateDTO.Text -> BodyState.Text(
+            textFileName = textFileName, textType = textType.toModel()
+        )
     }
 }
 

@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import java.net.URI
 
 class TransactionsRepository internal constructor(
     private val requestLocalDataSource: RequestLocalDataSource,
@@ -109,5 +110,9 @@ class TransactionsRepository internal constructor(
         withContext(ioDispatcher) {
             transactionLocalDataSource.update(model.toDBO())
         }
+    }
+
+    fun getRequestTextFileUri(textFileName: String): URI {
+        return requestLocalDataSource.getRequestTextFileUri(textFileName)
     }
 }

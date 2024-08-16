@@ -8,7 +8,7 @@ internal sealed interface BodyStateDTO {
 
 
     @Serializable
-    data class Text(val text: String, val textType: TextTypeDTO) : BodyStateDTO
+    data class Text(val textFileName: String, val textType: TextTypeDTO) : BodyStateDTO
 
     @Serializable
     data class MultipartForm(val multipart: List<MultipartFormStateDTO>) : BodyStateDTO

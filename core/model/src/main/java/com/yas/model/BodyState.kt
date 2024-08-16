@@ -7,13 +7,13 @@ sealed interface BodyState : BasicState {
     override val name: String
 
 
-    data class Text(val text: String, val textType: TextType) : BodyState {
+    data class Text(val textFileName: String, val textType: TextType) : BodyState {
         override val name: String
             get() = "Text"
 
         companion object {
-            fun default(): Text {
-                return Text("", TextType.JSON)
+            fun default(id: Long): Text {
+                return Text("${id}_request.txt", TextType.JSON)
             }
         }
     }
@@ -60,15 +60,5 @@ sealed interface BodyState : BasicState {
     data object NoBody : BodyState {
         override val name: String
             get() = "No Body"
-    }
-
-    override fun isDefault(): Boolean {
-        return when (this) {
-            is Text -> this == Text.default()
-            is MultipartForm -> this == MultipartForm.default()
-            is FormUrlEncoded -> this == FormUrlEncoded.default()
-            is BinaryFile -> this == BinaryFile.default()
-            is NoBody -> true
-        }
     }
 }

@@ -27,7 +27,9 @@ import com.yas.request.components.ChipGroup
 
 @Composable
 internal fun BodyScreenText(
-    bodyState: BodyState.Text, updateRequest: (BodyState.Text) -> Unit, navigateToEditor: () -> Unit
+    bodyState: BodyState.Text,
+    updateRequest: (BodyState.Text) -> Unit,
+    navigateToEditor: (textFileName: String, languageType: String) -> Unit
 ) {
     Column {
         Row {
@@ -44,8 +46,8 @@ internal fun BodyScreenText(
                         )
                     )
                 ) { newState ->
-                    if (bodyState.textType::class != newState::class) {
-                        updateRequest(BodyState.Text(bodyState.text, newState as TextType))
+                    if (bodyState.textType != newState) {
+                        updateRequest(BodyState.Text(bodyState.textFileName, newState))
                     }
                 }
             }
@@ -57,7 +59,7 @@ internal fun BodyScreenText(
                 .height(60.dp)
                 .padding(horizontal = 15.dp)
                 .clickable {
-                    navigateToEditor()
+                    navigateToEditor(bodyState.textFileName, bodyState.textType.title)
                 },
             border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outline),
             shape = RoundedCornerShape(8.dp)

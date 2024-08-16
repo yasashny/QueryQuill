@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.net.URI
 
 internal class TransactionViewModel(
     private val transactionsRepository: TransactionsRepository,
@@ -141,4 +142,8 @@ internal class TransactionViewModel(
     val responseModel = transactionsRepository.getCurrentResponseOrNull().map { responseOrNull ->
         responseOrNull ?: ResponseModel.default()
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), ResponseModel.default())
+
+    fun getTextFileUri(textFileName: String): URI {
+        return transactionsRepository.getRequestTextFileUri(textFileName)
+    }
 }

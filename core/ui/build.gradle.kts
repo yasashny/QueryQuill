@@ -8,8 +8,8 @@ android {
 }
 
 dependencies {
-    implementation(platform(libs.sora.editor.bom))
-    implementation(libs.bundles.sora.editor)
+    api(platform(libs.sora.editor.bom))
+    api(libs.bundles.sora.editor)
 
-    implementation(projects.core.model)
+    api(projects.core.model)
 }

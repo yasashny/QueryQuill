@@ -5,5 +5,4 @@ import androidx.compose.runtime.Stable
 @Stable
 interface BasicState {
     val name: String
-    fun isDefault(): Boolean
 }

@@ -34,6 +34,7 @@ import com.yas.request.utils.Constants
 import com.yas.request.utils.changeContentType
 import com.yas.utils.vibration
 import kotlinx.coroutines.cancel
+import java.net.URI
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -41,7 +42,8 @@ internal fun HttpRequestScreen(
     requestModel: RequestModel,
     updateRequest: (UpdateRequestModel) -> Unit,
     sendRequest: (RequestModel, () -> Unit) -> Unit,
-    navigateToEditor: () -> Unit
+    getTextFileUri: (textFileName: String) -> URI,
+    navigateToEditor: (textFileName: String, languageType: String) -> Unit
 ) {
     val context = LocalContext.current
     val openChangeContentTypeDialog = remember {
@@ -103,7 +105,10 @@ internal fun HttpRequestScreen(
                 }
                 when (httpRequestHeaderState.value) {
                     HttpRequestHeaderState.BODY -> bodyScreen(
-                        bodyState = requestModel.bodyState, navigateToEditor = navigateToEditor
+                        bodyState = requestModel.bodyState,
+                        getTextFileUri = getTextFileUri,
+                        requestId = requestModel.id,
+                        navigateToEditor = navigateToEditor
                     ) { bodyState ->
                         changeContentType(
                             requestModel = requestModel,

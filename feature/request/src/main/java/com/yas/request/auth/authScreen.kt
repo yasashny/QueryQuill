@@ -39,17 +39,18 @@ internal fun LazyListScope.authScreen(
                     }
                 }
                 ChipGroup(
-                    currentState = authState, options = ImmutableList(
+                    currentState = authState.toEnum(), options = ImmutableList(
                         listOf(
-                            AuthState.NoAuth, AuthState.Basic.default()
+                            EnumAuthState.NoAuth, EnumAuthState.Basic
                         )
                     )
-                ) { newState ->
+                ) { newEnumState ->
+                    val newState = newEnumState.toAuthState()
                     if (authState::class != newState::class) {
                         if (authState.isDefault()) {
-                            updateRequest(newState as AuthState)
+                            updateRequest(newState)
                         } else {
-                            openDialog.value = Pair(true, newState as AuthState)
+                            openDialog.value = Pair(true, newState)
                         }
                     }
                 }

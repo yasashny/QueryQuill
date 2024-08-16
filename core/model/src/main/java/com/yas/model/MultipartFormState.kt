@@ -31,11 +31,4 @@ sealed interface MultipartFormState : BasicState {
             }
         }
     }
-
-    override fun isDefault(): Boolean {
-        return when (this) {
-            is BinaryFile -> this == BinaryFile.default()
-            is Text -> this == Text.default()
-        }
-    }
 }

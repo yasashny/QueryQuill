@@ -14,7 +14,7 @@ sealed class Destinations(
     val route: String
 ) {
     data object MainScreenRoute : Destinations(route = "main")
-    data object EditorScreenRoute : Destinations(route = "editor")
+    data object EditorScreenRoute : Destinations(route = "editor/{textFileName}/{languageType}")
     data object SettingsScreenRoute : Destinations(route = "settings")
 }
 
@@ -24,14 +24,19 @@ fun Navigation(navController: NavHostController, screenState: ScreenState) {
 
     NavHost(navController = navController, startDestination = Destinations.MainScreenRoute.route) {
         composable(Destinations.MainScreenRoute.route) {
-            TransactionScreen(screenState = screenState, navigateToEditor = {
-                navController.navigate(Destinations.EditorScreenRoute.route)
-            }, navigateToSettings = {
-                navController.navigate(Destinations.SettingsScreenRoute.route)
-            })
+            TransactionScreen(screenState = screenState,
+                navigateToEditor = { textFileName, languageType ->
+                    navController.navigate("editor/${textFileName}/${languageType}")
+                },
+                navigateToSettings = {
+                    navController.navigate(Destinations.SettingsScreenRoute.route)
+                })
         }
-        composable(Destinations.EditorScreenRoute.route) {
-            RequestCodeEditorScreen {
+        composable(Destinations.EditorScreenRoute.route) { backStackEntry ->
+            RequestCodeEditorScreen(
+                backStackEntry.arguments?.getString("textFileName")!!,
+                backStackEntry.arguments?.getString("languageType")!!
+            ) {
                 navController.navigateUp()
             }
         }
