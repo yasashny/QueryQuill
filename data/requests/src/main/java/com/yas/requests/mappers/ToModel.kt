@@ -95,7 +95,7 @@ private fun AuthStateDTO.toModel(): AuthState {
 internal fun ResponseDBO.toModel(): ResponseModel {
     return ResponseModel(
         status = status,
-        body = ImmutableByteArray(body),
+        fileName = fileName,
         contentLength = contentLength,
         time = time,
         contentType = contentType,

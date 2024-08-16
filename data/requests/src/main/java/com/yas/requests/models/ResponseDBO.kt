@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 internal data class ResponseDBO(
     @PrimaryKey val id: Long,
     val status: String,
-    val body: ByteArray,
+    val fileName: String,
     val contentLength: String,
     val time: String,
     val contentType: String?,

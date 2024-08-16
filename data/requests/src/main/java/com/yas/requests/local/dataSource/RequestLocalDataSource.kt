@@ -45,12 +45,4 @@ internal class RequestLocalDataSource(private val context: Context) {
     suspend fun delete(id: Long) {
         db.requestDao.deleteRequest(id)
     }
-
-    fun getRequestTextFileUri(textFileName: String): URI {
-        val file = File(context.filesDir, textFileName)
-        if (!file.exists()) {
-            file.writeText("")
-        }
-        return file.toURI()
-    }
 }

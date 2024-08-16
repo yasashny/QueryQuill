@@ -8,7 +8,7 @@ internal class RequestCodeEditorViewModel(private val repository: TransactionsRe
     ViewModel() {
 
     fun getTextFileUri(textFileName: String): URI {
-        return repository.getRequestTextFileUri(textFileName)
+        return repository.getFileUriByName(textFileName)
     }
 
 }

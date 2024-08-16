@@ -24,7 +24,7 @@ internal fun Base64ImageDisplay(base64String: String, utf8String: String) {
                 .padding(16.dp)
         )
     } else {
-        ResponseScreenSource(text = utf8String, languageType = LanguageType.PLAIN)
+        //ResponseScreenSource(fileName = utf8String, languageType = LanguageType.PLAIN)
     }
 
 

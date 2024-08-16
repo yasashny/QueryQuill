@@ -1,8 +1,8 @@
-package com.yas.response
+package com.yas.model
 
 // For preview
 
-internal sealed interface ContentType {
+sealed interface ContentType {
     data object Image {
         data object JPEG : ContentType
         data object PNG : ContentType

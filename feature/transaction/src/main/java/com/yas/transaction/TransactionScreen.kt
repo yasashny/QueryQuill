@@ -93,7 +93,7 @@ fun TransactionScreen(
                                                 navigateToEditor = navigateToEditor,
                                                 requestModel = requestState.request,
                                                 updateRequest = vm::updateRequest,
-                                                getTextFileUri = vm::getTextFileUri,
+                                                getTextFileUri = vm::getFileUriByName,
                                                 sendRequest = { requestModel: RequestModel, requestSent: () -> Unit ->
                                                     vm.sendRequest(requestModel) {
                                                         requestSent()
@@ -105,7 +105,8 @@ fun TransactionScreen(
 
                                         TabsScreenState.RESPONSE -> {
                                             ResponseScreen(
-                                                modifier = Modifier.fillMaxSize(), responseModel
+                                                modifier = Modifier.fillMaxSize(), responseModel,
+                                                vm::getFileUriByName
                                             )
                                         }
                                     }
@@ -121,7 +122,7 @@ fun TransactionScreen(
                                         navigateToEditor = navigateToEditor,
                                         requestModel = requestState.request,
                                         updateRequest = vm::updateRequest,
-                                        getTextFileUri = vm::getTextFileUri,
+                                        getTextFileUri = vm::getFileUriByName,
                                         sendRequest = vm::sendRequest
                                     )
                                     Box(
@@ -133,7 +134,8 @@ fun TransactionScreen(
                                     ResponseScreen(
                                         modifier = Modifier
                                             .fillMaxSize()
-                                            .weight(1f), responseModel
+                                            .weight(1f), responseModel,
+                                        vm::getFileUriByName
                                     )
                                 }
                             }
@@ -147,7 +149,7 @@ fun TransactionScreen(
                                         navigateToEditor = navigateToEditor,
                                         requestModel = requestState.request,
                                         updateRequest = vm::updateRequest,
-                                        getTextFileUri = vm::getTextFileUri,
+                                        getTextFileUri = vm::getFileUriByName,
                                         sendRequest = vm::sendRequest
                                     )
                                     Box(
@@ -159,7 +161,8 @@ fun TransactionScreen(
                                     ResponseScreen(
                                         modifier = Modifier
                                             .fillMaxSize()
-                                            .weight(1f), responseModel
+                                            .weight(1f), responseModel,
+                                        vm::getFileUriByName
                                     )
                                 }
                             }

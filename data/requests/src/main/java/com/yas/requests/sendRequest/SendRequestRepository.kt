@@ -2,6 +2,7 @@ package com.yas.requests.sendRequest
 
 import com.yas.model.BodyState
 import com.yas.model.RequestModel
+import com.yas.requests.local.TransactionsRepository
 import com.yas.requests.local.dataSource.RequestLocalDataSource
 import com.yas.requests.local.dataSource.ResponseLocalDataSource
 import com.yas.requests.mappers.toDBO
@@ -13,7 +14,7 @@ import java.net.URI
 class SendRequestRepository internal constructor(
     private val dataSource: SendRequestLocalDataSource,
     private val responseLocalDataSource: ResponseLocalDataSource,
-    private val requestLocalDataSource: RequestLocalDataSource,
+    private val repository: TransactionsRepository,
     private val ioDispatcher: CoroutineDispatcher
 ) {
 
@@ -21,7 +22,7 @@ class SendRequestRepository internal constructor(
         withContext(ioDispatcher) {
             var requestModelUri: URI? = null
             if (model.bodyState::class == BodyState.Text::class){
-                requestModelUri = requestLocalDataSource.getRequestTextFileUri((model.bodyState as BodyState.Text).textFileName)
+                requestModelUri = repository.getFileUriByName((model.bodyState as BodyState.Text).textFileName)
             }
             dataSource.sendRequest(model.toDTO(), requestModelUri).let { responseDTO ->
                 responseLocalDataSource.update(responseDTO.toDBO(model.id))

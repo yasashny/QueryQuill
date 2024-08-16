@@ -143,7 +143,7 @@ internal class TransactionViewModel(
         responseOrNull ?: ResponseModel.default()
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), ResponseModel.default())
 
-    fun getTextFileUri(textFileName: String): URI {
-        return transactionsRepository.getRequestTextFileUri(textFileName)
+    fun getFileUriByName(textFileName: String): URI {
+        return transactionsRepository.getFileUriByName(textFileName)
     }
 }

@@ -1,5 +1,6 @@
 package com.yas.requests.local
 
+import android.content.Context
 import com.yas.model.GetTransactionModel
 import com.yas.model.ImmutableList
 import com.yas.model.NewTransactionModel
@@ -23,9 +24,11 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import java.io.File
 import java.net.URI
 
 class TransactionsRepository internal constructor(
+    private val context: Context,
     private val requestLocalDataSource: RequestLocalDataSource,
     private val currentTransactionIdLocalDataSource: CurrentTransactionIdLocalDataSource,
     private val transactionLocalDataSource: TransactionLocalDataSource,
@@ -112,7 +115,11 @@ class TransactionsRepository internal constructor(
         }
     }
 
-    fun getRequestTextFileUri(textFileName: String): URI {
-        return requestLocalDataSource.getRequestTextFileUri(textFileName)
+    fun getFileUriByName(fileName: String): URI {
+        val file = File(context.filesDir, fileName)
+        if (!file.exists()) {
+            file.writeText("")
+        }
+        return file.toURI()
     }
 }

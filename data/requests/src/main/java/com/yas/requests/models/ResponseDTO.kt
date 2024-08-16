@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 internal data class ResponseDTO(
     val status: String,
-    val body: ByteArray,
+    val fileName: String,
     val contentLength: String,
     val time: String,
     val contentType: String?,
@@ -14,7 +14,7 @@ internal data class ResponseDTO(
 ) {
     companion object {
 
-        fun errorType(message: ByteArray): ResponseDTO {
+        fun errorType(message: String): ResponseDTO {
             return ResponseDTO("ERROR", message, "--", "--", null, null, emptyList())
         }
     }

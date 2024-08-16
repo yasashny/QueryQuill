@@ -3,7 +3,16 @@ package com.yas.ui
 import android.content.Context
 import android.graphics.Typeface
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
@@ -13,6 +22,10 @@ import io.github.rosemoe.sora.langs.textmate.TextMateColorScheme
 import io.github.rosemoe.sora.langs.textmate.TextMateLanguage
 import io.github.rosemoe.sora.langs.textmate.registry.ThemeRegistry
 import io.github.rosemoe.sora.widget.CodeEditor
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.InputStream
 
 @Composable
 fun CodeEditor(
@@ -20,11 +33,33 @@ fun CodeEditor(
     state: CodeEditorState,
     isEditable: Boolean = true,
     isBasicDisplayMode: Boolean,
-    languageType: LanguageType
+    languageType: LanguageType,
+    file: File
 ) {
     val context = LocalContext.current
-    AndroidView(
-        factory = {
+    val inputStream = file.inputStream()
+    var isLoading by remember {
+        mutableStateOf(true)
+    }
+    LaunchedEffect(Unit) {
+        withContext(Dispatchers.IO) {
+            inputStream.readInChunks(10000).forEach {
+                withContext(Dispatchers.Main) {
+                    val line = state.content.lineCount - 1
+                    val column = state.content.getColumnCount(line)
+                    state.content.insert(line, column, it)
+                }
+            }
+        }
+        inputStream.close()
+        isLoading = false
+    }
+    if (isLoading) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
+    } else {
+        AndroidView(factory = {
             setCodeEditorFactory(
                 languageType = languageType,
                 context = context,
@@ -32,15 +67,12 @@ fun CodeEditor(
                 isEditable = isEditable,
                 isBasicDisplayMode = isBasicDisplayMode
             )
-        },
-        modifier = modifier,
-        onRelease = {
+        }, modifier = modifier, onRelease = {
             it.release()
-        },
-        update = {
+        }, update = {
             it.setText(state.content)
-        }
-    )
+        })
+    }
 }
 
 
@@ -74,42 +106,11 @@ private fun setCodeEditorFactory(
     return editor
 }
 
+internal fun InputStream.readInChunks(chunkSize: Int = 100): Sequence<String> = sequence {
+    val buffer = ByteArray(chunkSize)
+    var bytesRead: Int
 
-//@Composable
-//fun CodeEditor(
-//    modifier: Modifier = Modifier,
-//    content: Content,
-//    isEditable: Boolean = true,
-//    isBasicDisplayMode: Boolean,
-//    languageType: LanguageType
-//) {
-//
-//    AndroidView(factory = { cxt ->
-//        CodeEditor(cxt)
-//    }, modifier = modifier, update = {
-//        it.isEditable = isEditable
-//        it.colorScheme = TextMateColorScheme.create(ThemeRegistry.getInstance())
-//        it.isBasicDisplayMode = isBasicDisplayMode
-//        val languageScopeName = languageType.code
-//        if (languageScopeName != null) {
-//            val language = TextMateLanguage.create(
-//                languageScopeName, true
-//            )
-//            it.setEditorLanguage(language)
-//        }
-//
-//        it.isScalable = false
-//        it.typefaceText = Typeface.MONOSPACE
-//        it.nonPrintablePaintingFlags =
-//            CodeEditor.FLAG_DRAW_WHITESPACE_LEADING or CodeEditor.FLAG_DRAW_LINE_SEPARATOR or CodeEditor.FLAG_DRAW_WHITESPACE_IN_SELECTION
-//        it.layoutParams = ViewGroup.LayoutParams(
-//            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
-//        )
-//        it.setText(content)
-//        it.isWordwrap = true
-//
-//
-//    }, onRelease = {
-//        it.release()
-//    })
-//}
+    while (this@readInChunks.read(buffer).also { bytesRead = it } != -1) {
+        yield(String(buffer, 0, bytesRead))
+    }
+}

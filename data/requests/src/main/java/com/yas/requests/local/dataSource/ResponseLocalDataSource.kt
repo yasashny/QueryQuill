@@ -5,8 +5,10 @@ import androidx.room.Room
 import com.yas.requests.local.db.RequestsDataBase
 import com.yas.requests.models.ResponseDBO
 import kotlinx.coroutines.flow.Flow
+import java.io.File
+import java.net.URI
 
-internal class ResponseLocalDataSource(context: Context) {
+internal class ResponseLocalDataSource(private val context: Context) {
 
     private val db = Room.databaseBuilder(
         context, RequestsDataBase::class.java, "request.db"
@@ -17,7 +19,7 @@ internal class ResponseLocalDataSource(context: Context) {
             ResponseDBO(
                 id = id,
                 status = "--",
-                body = byteArrayOf(),
+                fileName = "default.txt",
                 contentLength = "--",
                 time = "--",
                 contentType = null,
@@ -37,5 +39,12 @@ internal class ResponseLocalDataSource(context: Context) {
 
     suspend fun delete(id: Long) {
         db.responseDao.deleteResponse(id)
+    }
+    fun getResponseTextFileUri(textFileName: String): URI {
+        val file = File(context.filesDir, textFileName)
+        if (!file.exists()) {
+            file.writeText("")
+        }
+        return file.toURI()
     }
 }

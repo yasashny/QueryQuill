@@ -7,7 +7,7 @@ internal fun ResponseDTO.toDBO(id: Long): ResponseDBO {
     return ResponseDBO(
         id = id,
         status = status,
-        body = body,
+        fileName = fileName,
         contentLength = contentLength,
         time = time,
         contentType = contentType,

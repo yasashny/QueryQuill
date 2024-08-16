@@ -24,13 +24,13 @@ val requestsDataModule = module {
     single<HttpClient> {
         HttpClient(CIO) {
             install(HttpTimeout) {
-                requestTimeoutMillis = 30000
+                requestTimeoutMillis = 3000000
             }
             followRedirects = true
         }
     }
     single<TransactionsRepository> {
-        TransactionsRepository(get(), get(), get(), get(), get(named(QQDispatchers.IO)))
+        TransactionsRepository(get(), get(), get(), get(), get(), get(named(QQDispatchers.IO)))
     }
     single<SendRequestRepository> {
         SendRequestRepository(get(), get(), get(), get(named(QQDispatchers.IO)))

@@ -2,6 +2,7 @@ package com.yas.requests.sendRequest
 
 import android.content.Context
 import android.net.Uri
+import com.yas.model.ContentType
 import com.yas.requests.models.AuthStateDTO
 import com.yas.requests.models.BodyStateDTO
 import com.yas.requests.models.HttpTypeDTO
@@ -13,15 +14,16 @@ import com.yas.requests.utils.encodeBase64
 import com.yas.requests.utils.fileFromContentUri
 import com.yas.requests.utils.fileNameByUri
 import com.yas.requests.utils.getMIMEType
+import com.yas.utils.mimeTypeToContentType
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.plugins.RedirectResponseException
 import io.ktor.client.plugins.ResponseException
 import io.ktor.client.request.forms.FormDataContent
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.headers
-import io.ktor.client.request.request
-import io.ktor.client.statement.readBytes
+import io.ktor.client.request.prepareGet
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
@@ -30,6 +32,9 @@ import io.ktor.http.contentType
 import io.ktor.util.InternalAPI
 import io.ktor.util.cio.readChannel
 import io.ktor.util.network.UnresolvedAddressException
+import io.ktor.utils.io.ByteReadChannel
+import io.ktor.utils.io.core.isEmpty
+import io.ktor.utils.io.core.readBytes
 import java.io.File
 import java.net.ConnectException
 import java.net.URI
@@ -47,7 +52,7 @@ internal class SendRequestLocalDataSource(
             } else {
                 "http://" + model.url
             }
-            val response = client.request(url) {
+            val request = client.prepareGet(url) {
 
                 url {
                     model.query.forEach { keyValue ->
@@ -79,7 +84,8 @@ internal class SendRequestLocalDataSource(
                     is BodyStateDTO.BinaryFile -> {
                         if (bodyState.uri != Uri.EMPTY) {
                             fileNameByUri(context.contentResolver, bodyState.uri)
-                            body = fileFromContentUri(context = context, bodyState.uri).readChannel()
+                            body =
+                                fileFromContentUri(context = context, bodyState.uri).readChannel()
                         }
                     }
 
@@ -154,14 +160,70 @@ internal class SendRequestLocalDataSource(
                     AuthStateDTO.NoAuth -> {}
                 }
             }
+            var fileName = "${model.id}_response.txt"
+            val file = File(context.filesDir, fileName)
+            file.writeText("")
+            val response = request.execute { httpResponse ->
+                val channel: ByteReadChannel = httpResponse.body()
+                while (!channel.isClosedForRead) {
+                    val packet = channel.readRemaining(DEFAULT_BUFFER_SIZE.toLong())
+                    while (!packet.isEmpty) {
+                        val bytes = packet.readBytes()
+                        file.appendBytes(bytes)
+                    }
+                }
+                return@execute httpResponse
+            }
             val requestTime = response.requestTime
             val responseTime = response.responseTime
             val elapsedTime = (responseTime.timestamp - requestTime.timestamp).toString()
-            val body = response.readBytes()
-            val contentLength = body.size.toString()
+            val contentLength = file.length().toString()
             val status = response.status.value.toString()
             val contentType = response.contentType()?.contentType
             val contentSubtype = response.contentType()?.contentSubtype
+
+            when (mimeTypeToContentType("${contentType}/${contentSubtype}")) {
+                ContentType.Text.HTML -> {
+                    fileName = "${model.id}_response.html"
+                    val newFile = File(file.parentFile, fileName)
+                    file.renameTo(newFile)
+                }
+
+                ContentType.Image.JPEG -> {
+                    fileName = "${model.id}_response.jpeg"
+                    val newFile = File(file.parentFile, fileName)
+                    file.renameTo(newFile)
+                }
+
+                ContentType.Application.JSON -> {
+                    fileName = "${model.id}_response.json"
+                    val newFile = File(file.parentFile, fileName)
+                    file.renameTo(newFile)
+                }
+
+                ContentType.Text.PLAIN -> {}
+                ContentType.Image.PNG -> {
+                    fileName = "${model.id}_response.png"
+                    val newFile = File(file.parentFile, fileName)
+                    file.renameTo(newFile)
+                }
+
+                ContentType.Image.WEBP -> {
+                    fileName = "${model.id}_response.webp"
+                    val newFile = File(file.parentFile, fileName)
+                    file.renameTo(newFile)
+                }
+
+                ContentType.Text.XML -> {
+                    fileName = "${model.id}_response.xml"
+                    val newFile = File(file.parentFile, fileName)
+                    file.renameTo(newFile)
+                }
+
+                null -> {}
+            }
+
+
             val headers = mutableListOf<KeyValueDTO>()
             response.headers.forEach { key, values ->
                 values.forEach { value ->
@@ -171,7 +233,7 @@ internal class SendRequestLocalDataSource(
 
             return ResponseDTO(
                 status = status,
-                body = body,
+                fileName = fileName,
                 contentLength = contentLength,
                 time = elapsedTime,
                 contentType = contentType,
@@ -180,19 +242,40 @@ internal class SendRequestLocalDataSource(
             )
 
         } catch (e: ConnectException) {
-            return ResponseDTO.errorType(e.message.toString().encodeToByteArray())
+            val fileName = "${model.id}_response.txt"
+            val file = File(context.filesDir, fileName)
+            file.writeText(e.message.toString())
+            return ResponseDTO.errorType(fileName)
         } catch (e: UnknownHostException) {
-            return ResponseDTO.errorType(e.message.toString().encodeToByteArray())
+            val fileName = "${model.id}_response.txt"
+            val file = File(context.filesDir, fileName)
+            file.writeText(e.message.toString())
+            return ResponseDTO.errorType(fileName)
         } catch (e: RedirectResponseException) {
-            return ResponseDTO.errorType(e.message.encodeToByteArray())
+            val fileName = "${model.id}_response.txt"
+            val file = File(context.filesDir, fileName)
+            file.writeText(e.message)
+            return ResponseDTO.errorType(fileName)
         } catch (e: ResponseException) {
-            return ResponseDTO.errorType(e.message.toString().encodeToByteArray())
+            val fileName = "${model.id}_response.txt"
+            val file = File(context.filesDir, fileName)
+            file.writeText(e.message.toString())
+            return ResponseDTO.errorType(fileName)
         } catch (e: UnresolvedAddressException) {
-            return ResponseDTO.errorType("Couldn't resolve host name".encodeToByteArray())
+            val fileName = "${model.id}_response.txt"
+            val file = File(context.filesDir, fileName)
+            file.writeText("Couldn't resolve host name")
+            return ResponseDTO.errorType(fileName)
         } catch (e: NullPointerException) {
-            return ResponseDTO.errorType("File not found".encodeToByteArray())
+            val fileName = "${model.id}_response.txt"
+            val file = File(context.filesDir, fileName)
+            file.writeText("File not found")
+            return ResponseDTO.errorType(fileName)
         } catch (e: Exception) {
-            return ResponseDTO.errorType(e.message.toString().encodeToByteArray())
+            val fileName = "${model.id}_response.txt"
+            val file = File(context.filesDir, fileName)
+            file.writeText(e.message.toString())
+            return ResponseDTO.errorType(fileName)
         }
     }
 }

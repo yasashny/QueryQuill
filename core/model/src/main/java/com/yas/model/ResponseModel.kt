@@ -2,7 +2,7 @@ package com.yas.model
 
 data class ResponseModel(
     val status: String,
-    val body: ImmutableByteArray,
+    val fileName: String,
     val contentLength: String,
     val time: String,
     val contentType: String?,
@@ -13,7 +13,7 @@ data class ResponseModel(
         fun default(): ResponseModel {
             return ResponseModel(
                 "--",
-                ImmutableByteArray(byteArrayOf()),
+                "default.txt",
                 "--",
                 "--",
                 null,
