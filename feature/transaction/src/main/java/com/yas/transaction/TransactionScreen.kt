@@ -24,18 +24,23 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.yas.model.RequestModel
+import com.yas.model.ResponseModel
 import com.yas.model.ScreenState
-import com.yas.new_transaction.NewRequestScreen
-import com.yas.request.RequestScreen
-import com.yas.response.ResponseScreen
+import com.yas.model.UpdateRequestModel
 import com.yas.transaction.navigationDrawer.NavigationDrawer
 import org.koin.androidx.compose.koinViewModel
+import java.net.URI
 
 @Composable
 fun TransactionScreen(
     screenState: ScreenState,
     navigateToEditor: (textFileName: String, languageType: String) -> Unit,
-    navigateToSettings: () -> Unit
+    navigateToSettings: () -> Unit,
+    goToRequestScreen: @Composable (
+        modifier: Modifier, navigateToEditor: (textFileName: String, languageType: String) -> Unit, requestModel: RequestModel, getTextFileUri: (textFileName: String) -> URI, updateRequest: (UpdateRequestModel) -> Unit, sendRequest: (RequestModel, () -> Unit) -> Unit
+    ) -> Unit,
+    goToResponseScreen: @Composable (modifier: Modifier, responseModel: ResponseModel, getTextFileUri: (textFileName: String) -> URI) -> Unit,
+    goToNewTransactionScreen: @Composable () -> Unit
 ) {
 
     val vm = koinViewModel<TransactionViewModel>()
@@ -76,7 +81,7 @@ fun TransactionScreen(
                 when (requestState) {
                     RequestUiState.Loading -> {}
                     RequestUiState.NewRequest -> {
-                        NewRequestScreen()
+                        goToNewTransactionScreen()
                     }
 
                     is RequestUiState.Success -> {
@@ -89,23 +94,24 @@ fun TransactionScreen(
                                     PrimaryTextTabs(tabsScreenState)
                                     when (tabsScreenState.value) {
                                         TabsScreenState.REQUEST -> {
-                                            RequestScreen(modifier = Modifier.fillMaxSize(),
-                                                navigateToEditor = navigateToEditor,
-                                                requestModel = requestState.request,
-                                                updateRequest = vm::updateRequest,
-                                                getTextFileUri = vm::getFileUriByName,
-                                                sendRequest = { requestModel: RequestModel, requestSent: () -> Unit ->
-                                                    vm.sendRequest(requestModel) {
-                                                        requestSent()
-                                                        tabsScreenState.value =
-                                                            TabsScreenState.RESPONSE
-                                                    }
-                                                })
+                                            goToRequestScreen(
+                                                Modifier.fillMaxSize(),
+                                                navigateToEditor,
+                                                requestState.request,
+                                                vm::getFileUriByName,
+                                                vm::updateRequest
+                                            ) { requestModel: RequestModel, requestSent: () -> Unit ->
+                                                vm.sendRequest(requestModel) {
+                                                    requestSent()
+                                                    tabsScreenState.value = TabsScreenState.RESPONSE
+                                                }
+                                            }
                                         }
 
                                         TabsScreenState.RESPONSE -> {
-                                            ResponseScreen(
-                                                modifier = Modifier.fillMaxSize(), responseModel,
+                                            goToResponseScreen(
+                                                Modifier.fillMaxSize(),
+                                                responseModel,
                                                 vm::getFileUriByName
                                             )
                                         }
@@ -115,15 +121,15 @@ fun TransactionScreen(
 
                             ScreenState.ROW_SCREEN -> {
                                 Row {
-                                    RequestScreen(
-                                        modifier = Modifier
+                                    goToRequestScreen(
+                                        Modifier
                                             .fillMaxSize()
                                             .weight(1f),
-                                        navigateToEditor = navigateToEditor,
-                                        requestModel = requestState.request,
-                                        updateRequest = vm::updateRequest,
-                                        getTextFileUri = vm::getFileUriByName,
-                                        sendRequest = vm::sendRequest
+                                        navigateToEditor,
+                                        requestState.request,
+                                        vm::getFileUriByName,
+                                        vm::updateRequest,
+                                        vm::sendRequest
                                     )
                                     Box(
                                         Modifier
@@ -131,10 +137,11 @@ fun TransactionScreen(
                                             .width(1.dp)
                                             .background(MaterialTheme.colorScheme.outlineVariant)
                                     )
-                                    ResponseScreen(
-                                        modifier = Modifier
+                                    goToResponseScreen(
+                                        Modifier
                                             .fillMaxSize()
-                                            .weight(1f), responseModel,
+                                            .weight(1f),
+                                        responseModel,
                                         vm::getFileUriByName
                                     )
                                 }
@@ -142,15 +149,15 @@ fun TransactionScreen(
 
                             ScreenState.COLUMN_SCREEN -> {
                                 Column {
-                                    RequestScreen(
-                                        modifier = Modifier
+                                    goToRequestScreen(
+                                        Modifier
                                             .fillMaxSize()
                                             .weight(1f),
-                                        navigateToEditor = navigateToEditor,
-                                        requestModel = requestState.request,
-                                        updateRequest = vm::updateRequest,
-                                        getTextFileUri = vm::getFileUriByName,
-                                        sendRequest = vm::sendRequest
+                                        navigateToEditor,
+                                        requestState.request,
+                                        vm::getFileUriByName,
+                                        vm::updateRequest,
+                                        vm::sendRequest
                                     )
                                     Box(
                                         Modifier
@@ -158,10 +165,11 @@ fun TransactionScreen(
                                             .height(1.dp)
                                             .background(MaterialTheme.colorScheme.outlineVariant)
                                     )
-                                    ResponseScreen(
-                                        modifier = Modifier
+                                    goToResponseScreen(
+                                        Modifier
                                             .fillMaxSize()
-                                            .weight(1f), responseModel,
+                                            .weight(1f),
+                                        responseModel,
                                         vm::getFileUriByName
                                     )
                                 }

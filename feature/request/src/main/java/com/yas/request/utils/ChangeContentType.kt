@@ -7,7 +7,7 @@ import com.yas.model.BodyState
 import com.yas.model.KeyValue
 import com.yas.model.RequestModel
 import com.yas.model.TextType
-import com.yas.request.UpdateRequestModel
+import com.yas.model.UpdateRequestModel
 import com.yas.requests.utils.getMIMEType
 
 internal fun changeContentType(

@@ -53,7 +53,7 @@ internal fun LazyListScope.bodyScreen(
                         ChangeTypeAlertDialog(
                             openDialog, title = stringResource(R.string.body)
                         ) { basicState ->
-                            when(bodyState){
+                            when (bodyState) {
                                 is BodyState.BinaryFile -> {}
                                 is BodyState.FormUrlEncoded -> {}
                                 is BodyState.MultipartForm -> {}

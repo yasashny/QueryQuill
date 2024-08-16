@@ -1,9 +1,4 @@
-package com.yas.request
-
-import com.yas.model.AuthState
-import com.yas.model.BodyState
-import com.yas.model.HttpType
-import com.yas.model.KeyValue
+package com.yas.model
 
 sealed interface UpdateRequestModel {
     data class Body(val bodyState: BodyState) :

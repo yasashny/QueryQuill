@@ -3,7 +3,6 @@ package com.yas.requests.sendRequest
 import com.yas.model.BodyState
 import com.yas.model.RequestModel
 import com.yas.requests.local.TransactionsRepository
-import com.yas.requests.local.dataSource.RequestLocalDataSource
 import com.yas.requests.local.dataSource.ResponseLocalDataSource
 import com.yas.requests.mappers.toDBO
 import com.yas.requests.mappers.toDTO
@@ -21,8 +20,9 @@ class SendRequestRepository internal constructor(
     suspend fun sendRequest(model: RequestModel) {
         withContext(ioDispatcher) {
             var requestModelUri: URI? = null
-            if (model.bodyState::class == BodyState.Text::class){
-                requestModelUri = repository.getFileUriByName((model.bodyState as BodyState.Text).textFileName)
+            if (model.bodyState::class == BodyState.Text::class) {
+                requestModelUri =
+                    repository.getFileUriByName((model.bodyState as BodyState.Text).textFileName)
             }
             dataSource.sendRequest(model.toDTO(), requestModelUri).let { responseDTO ->
                 responseLocalDataSource.update(responseDTO.toDBO(model.id))

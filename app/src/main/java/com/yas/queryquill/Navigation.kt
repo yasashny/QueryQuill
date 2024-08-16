@@ -5,7 +5,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.yas.model.ScreenState
+import com.yas.new_transaction.NewTransactionScreen
+import com.yas.request.RequestScreen
 import com.yas.request_code_editor.RequestCodeEditorScreen
+import com.yas.response.ResponseScreen
 import com.yas.settings.SettingsScreen
 import com.yas.transaction.TransactionScreen
 
@@ -30,6 +33,24 @@ fun Navigation(navController: NavHostController, screenState: ScreenState) {
                 },
                 navigateToSettings = {
                     navController.navigate(Destinations.SettingsScreenRoute.route)
+                },
+                goToRequestScreen = { modifier, navigateToEditor, requestModel, getTextFileUri, updateReques, sendRequest ->
+                    RequestScreen(
+                        modifier = modifier,
+                        navigateToEditor = navigateToEditor,
+                        requestModel = requestModel,
+                        getTextFileUri = getTextFileUri,
+                        updateRequest = updateReques,
+                        sendRequest = sendRequest
+                    )
+                },
+                goToNewTransactionScreen = { NewTransactionScreen() },
+                goToResponseScreen = { modifier, responseModel, getTextFileUri ->
+                    ResponseScreen(
+                        modifier = modifier,
+                        responseModel = responseModel,
+                        getTextFileUri = getTextFileUri
+                    )
                 })
         }
         composable(Destinations.EditorScreenRoute.route) { backStackEntry ->

@@ -26,14 +26,18 @@ import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun NewRequestScreen() {
+fun NewTransactionScreen() {
 
     val vm = koinViewModel<NewTransactionViewModel>()
     var label by remember {
         mutableStateOf("New Request")
     }
     Box(
-        Modifier.fillMaxSize().wrapContentWidth().widthIn(max = 500.dp), contentAlignment = Alignment.Center
+        Modifier
+            .fillMaxSize()
+            .wrapContentWidth()
+            .widthIn(max = 500.dp),
+        contentAlignment = Alignment.Center
     ) {
         OutlinedCard(
             modifier = Modifier

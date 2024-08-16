@@ -3,7 +3,6 @@ package com.yas.requests.mappers
 import com.yas.model.AuthState
 import com.yas.model.BodyState
 import com.yas.model.HttpType
-import com.yas.model.ImmutableByteArray
 import com.yas.model.ImmutableList
 import com.yas.model.ImmutableUri
 import com.yas.model.KeyValue

@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.yas.model.ImmutableList
 import com.yas.model.RequestModel
 import com.yas.model.ResponseModel
-import com.yas.request.UpdateRequestModel
+import com.yas.model.UpdateRequestModel
 import com.yas.requests.local.TransactionsRepository
 import com.yas.requests.sendRequest.SendRequestRepository
 import com.yas.transaction.navigationDrawer.TransactionsUiState

@@ -2,7 +2,7 @@ package com.yas.request.query
 
 import androidx.compose.foundation.lazy.LazyListScope
 import com.yas.model.RequestModel
-import com.yas.request.UpdateRequestModel
+import com.yas.model.UpdateRequestModel
 import com.yas.request.components.editableList
 
 

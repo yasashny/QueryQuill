@@ -11,7 +11,11 @@ import java.io.File
 import java.net.URI
 
 @Composable
-internal fun ResponseScreenSource(fileName: String, languageType: LanguageType, getTextFileUri: (textFileName: String) -> URI) {
+internal fun ResponseScreenSource(
+    fileName: String,
+    languageType: LanguageType,
+    getTextFileUri: (textFileName: String) -> URI
+) {
     val file = File(getTextFileUri(fileName))
     val state = rememberCodeEditorState()
     Text(text = fileName)

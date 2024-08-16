@@ -22,25 +22,25 @@ dependencies {
     implementation(libs.room.gradle.plugin)
 }
 
-gradlePlugin{
-    plugins{
-        register("androidRoom"){
+gradlePlugin {
+    plugins {
+        register("androidRoom") {
             id = "queryquill.android.room"
             implementationClass = "AndroidRoomConventionPlugin"
         }
-        register("androidApplication"){
+        register("androidApplication") {
             id = "queryquill.android.application"
             implementationClass = "AndroidApplicationConventionPlugin"
         }
-        register("androidApplicationCompose"){
+        register("androidApplicationCompose") {
             id = "queryquill.android.application.compose"
             implementationClass = "AndroidApplicationComposeConventionPlugin"
         }
-        register("androidLibrary"){
+        register("androidLibrary") {
             id = "queryquill.android.library"
             implementationClass = "AndroidLibraryConventionPlugin"
         }
-        register("androidLibraryCompose"){
+        register("androidLibraryCompose") {
             id = "queryquill.android.library.compose"
             implementationClass = "AndroidLibraryComposeConventionPlugin"
         }

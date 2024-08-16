@@ -1,6 +1,5 @@
 package com.yas.model
 
-// For preview
 
 sealed interface ContentType {
     data object Image {

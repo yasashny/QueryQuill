@@ -9,8 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
-import com.yas.model.LanguageType
-import com.yas.response.ResponseScreenSource
 
 @Composable
 internal fun Base64ImageDisplay(base64String: String, utf8String: String) {

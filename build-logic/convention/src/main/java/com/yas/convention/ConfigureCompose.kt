@@ -5,14 +5,15 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 
 internal fun Project.configureCompose(
-    commonExtension: CommonExtension<*, *, *, *, *, *>, ) {
+    commonExtension: CommonExtension<*, *, *, *, *, *>,
+) {
 
     commonExtension.apply {
-        buildFeatures{
+        buildFeatures {
             compose = true
         }
     }
-    dependencies{
+    dependencies {
         implementation(platform(libs.compose.bom))
         androidTestImplementation(platform(libs.compose.bom))
         debugImplementation(libs.ui.tooling)

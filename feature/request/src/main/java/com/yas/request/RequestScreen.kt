@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.yas.model.RequestModel
+import com.yas.model.UpdateRequestModel
 import java.net.URI
 
 @Composable

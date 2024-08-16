@@ -21,7 +21,10 @@ import com.yas.request.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun LoadingAlertDialog(openDialog: MutableState<Boolean>, isJobCancel: MutableState<Boolean>) {
+internal fun LoadingAlertDialog(
+    openDialog: MutableState<Boolean>,
+    isJobCancel: MutableState<Boolean>
+) {
     if (openDialog.value) {
         BasicAlertDialog(onDismissRequest = {
             isJobCancel.value = true

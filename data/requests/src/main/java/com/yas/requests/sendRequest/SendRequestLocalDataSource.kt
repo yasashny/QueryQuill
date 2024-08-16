@@ -182,47 +182,18 @@ internal class SendRequestLocalDataSource(
             val contentType = response.contentType()?.contentType
             val contentSubtype = response.contentType()?.contentSubtype
 
-            when (mimeTypeToContentType("${contentType}/${contentSubtype}")) {
-                ContentType.Text.HTML -> {
-                    fileName = "${model.id}_response.html"
-                    val newFile = File(file.parentFile, fileName)
-                    file.renameTo(newFile)
-                }
-
-                ContentType.Image.JPEG -> {
-                    fileName = "${model.id}_response.jpeg"
-                    val newFile = File(file.parentFile, fileName)
-                    file.renameTo(newFile)
-                }
-
-                ContentType.Application.JSON -> {
-                    fileName = "${model.id}_response.json"
-                    val newFile = File(file.parentFile, fileName)
-                    file.renameTo(newFile)
-                }
-
-                ContentType.Text.PLAIN -> {}
-                ContentType.Image.PNG -> {
-                    fileName = "${model.id}_response.png"
-                    val newFile = File(file.parentFile, fileName)
-                    file.renameTo(newFile)
-                }
-
-                ContentType.Image.WEBP -> {
-                    fileName = "${model.id}_response.webp"
-                    val newFile = File(file.parentFile, fileName)
-                    file.renameTo(newFile)
-                }
-
-                ContentType.Text.XML -> {
-                    fileName = "${model.id}_response.xml"
-                    val newFile = File(file.parentFile, fileName)
-                    file.renameTo(newFile)
-                }
-
-                null -> {}
+            fileName = when (mimeTypeToContentType("${contentType}/${contentSubtype}")) {
+                ContentType.Text.HTML -> "${model.id}_response.html"
+                ContentType.Image.JPEG -> "${model.id}_response.jpeg"
+                ContentType.Application.JSON -> "${model.id}_response.json"
+                ContentType.Text.PLAIN -> fileName
+                ContentType.Image.PNG -> "${model.id}_response.png"
+                ContentType.Image.WEBP -> "${model.id}_response.webp"
+                ContentType.Text.XML -> "${model.id}_response.xml"
+                null -> fileName
             }
-
+            val newFile = File(file.parentFile, fileName)
+            file.renameTo(newFile)
 
             val headers = mutableListOf<KeyValueDTO>()
             response.headers.forEach { key, values ->

@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.yas.model.KeyValue
 import com.yas.model.RequestModel
+import com.yas.model.UpdateRequestModel
 import com.yas.request.alertDialog.ChangeContentTypeDialog
 import com.yas.request.alertDialog.LoadingAlertDialog
 import com.yas.request.auth.authScreen

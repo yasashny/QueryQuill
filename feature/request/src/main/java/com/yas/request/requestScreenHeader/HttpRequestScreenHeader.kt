@@ -17,8 +17,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.yas.model.HttpType
 import com.yas.model.ImmutableList
+import com.yas.model.UpdateRequestModel
 import com.yas.request.R
-import com.yas.request.UpdateRequestModel
 import com.yas.request.components.DynamicSelectTextField
 import com.yas.request.components.SegmentedButtonSingleSelect
 
@@ -47,7 +47,8 @@ internal fun HttpRequestScreenHeader(
         ) { httpType ->
             updateRequest(UpdateRequestModel.Type(httpType))
         }
-        OutlinedTextField(value = url,
+        OutlinedTextField(
+            value = url,
             onValueChange = { updateRequest(UpdateRequestModel.Url(it)) },
             label = @Composable { Text(text = stringResource(R.string.url)) },
             modifier = Modifier

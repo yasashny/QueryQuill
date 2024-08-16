@@ -15,7 +15,4 @@ dependencies {
     implementation(projects.core.model)
     implementation(projects.core.utils)
     implementation(projects.data.requests)
-    implementation(projects.feature.request)
-    implementation(projects.feature.newTransaction)
-    implementation(projects.feature.response)
 }

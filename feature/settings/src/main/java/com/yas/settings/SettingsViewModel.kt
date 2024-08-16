@@ -30,7 +30,7 @@ internal class SettingsViewModel(
                     when (updateSettings) {
                         is UpdateSettings.UpdateTheme -> {
                             state.settingsModel.copy(themeState = updateSettings.theme)
-                                .let {repository.changeSettings(it) }
+                                .let { repository.changeSettings(it) }
                         }
                     }
                 }

@@ -9,10 +9,8 @@ import com.yas.requests.models.HttpTypeDTO
 import com.yas.requests.models.KeyValueDTO
 import com.yas.requests.models.RequestDBO
 import kotlinx.coroutines.flow.Flow
-import java.io.File
-import java.net.URI
 
-internal class RequestLocalDataSource(private val context: Context) {
+internal class RequestLocalDataSource(context: Context) {
 
     private val db = Room.databaseBuilder(
         context, RequestsDataBase::class.java, "request.db"
