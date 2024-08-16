@@ -11,7 +11,6 @@ internal fun ResponseDTO.toDBO(id: Long): ResponseDBO {
         contentLength = contentLength,
         time = time,
         contentType = contentType,
-        contentSubtype = contentSubtype,
         headers = headers
     )
 }

@@ -1,8 +1,8 @@
-package com.yas.utils
+package com.yas.requests.utils
 
 import com.yas.model.ContentType
 
-fun mimeTypeToContentType(mimeType: String?): ContentType? {
+internal fun mimeTypeToContentType(mimeType: String?): ContentType? {
     return when (mimeType) {
         "text/html" -> ContentType.Text.HTML
         "text/plain" -> ContentType.Text.PLAIN

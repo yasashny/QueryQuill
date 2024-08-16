@@ -98,7 +98,6 @@ internal fun ResponseDBO.toModel(): ResponseModel {
         contentLength = contentLength,
         time = time,
         contentType = contentType,
-        contentSubtype = contentSubtype,
         headers = ImmutableList(headers.map { it.toModel() })
     )
 }
@@ -106,3 +105,5 @@ internal fun ResponseDBO.toModel(): ResponseModel {
 internal fun TransactionDBO.toModel(): Transaction {
     return Transaction(id = id, label = label)
 }
+
+

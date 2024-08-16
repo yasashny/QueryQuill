@@ -2,6 +2,7 @@ package com.yas.requests.local.dataSource
 
 import android.content.Context
 import androidx.room.Room
+import com.yas.model.ContentType
 import com.yas.requests.local.db.RequestsDataBase
 import com.yas.requests.models.ResponseDBO
 import kotlinx.coroutines.flow.Flow
@@ -20,8 +21,7 @@ internal class ResponseLocalDataSource(context: Context) {
                 fileName = "default.txt",
                 contentLength = "--",
                 time = "--",
-                contentType = null,
-                contentSubtype = null,
+                contentType = ContentType.Text.PLAIN,
                 headers = emptyList()
             )
         )

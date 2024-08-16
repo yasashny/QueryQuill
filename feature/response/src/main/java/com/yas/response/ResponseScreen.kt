@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.yas.model.ImmutableList
 import com.yas.model.ResponseModel
 import com.yas.response.components.SegmentedButtonResponse
-import com.yas.utils.mimeTypeToLanguageType
+import com.yas.utils.contentTypeToLanguageType
 import java.net.URI
 
 @Composable
@@ -99,18 +99,15 @@ fun ResponseScreen(
             when (responseSegmentedButtonState) {
                 ResponseSegmentedButtonState.PREVIEW -> {
 //                    ResponseScreenPreview(
-//                        body = responseModel.fileName,
-//                        mimeType = responseModel.contentType,
-//                        contentSubtype = responseModel.contentSubtype
+//                        fileName = responseModel.fileName, contentType = responseModel.contentType
 //                    )
                 }
 
                 ResponseSegmentedButtonState.SOURCE -> {
-                    val languageType =
-                        mimeTypeToLanguageType("${responseModel.contentType}/${responseModel.contentSubtype}")
+                    println(responseModel.contentType)
+                    val languageType = contentTypeToLanguageType(responseModel.contentType)
                     ResponseScreenSource(
-                        responseModel.fileName, languageType,
-                        getTextFileUri
+                        responseModel.fileName, languageType, getTextFileUri
                     )
                 }
 

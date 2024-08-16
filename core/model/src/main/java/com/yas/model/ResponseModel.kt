@@ -5,8 +5,7 @@ data class ResponseModel(
     val fileName: String,
     val contentLength: String,
     val time: String,
-    val contentType: String?,
-    val contentSubtype: String?,
+    val contentType: ContentType,
     val headers: ImmutableList<KeyValue>
 ) {
     companion object {
@@ -16,8 +15,7 @@ data class ResponseModel(
                 "default.txt",
                 "--",
                 "--",
-                null,
-                null,
+                ContentType.Text.PLAIN,
                 ImmutableList(emptyList())
             )
         }

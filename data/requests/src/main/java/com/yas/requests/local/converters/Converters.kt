@@ -1,6 +1,7 @@
 package com.yas.requests.local.converters
 
 import androidx.room.TypeConverter
+import com.yas.model.ContentType
 import com.yas.requests.models.AuthStateDTO
 import com.yas.requests.models.BodyStateDTO
 import com.yas.requests.models.HttpTypeDTO
@@ -86,6 +87,14 @@ internal object Converters {
     @TypeConverter
     @JvmStatic
     fun toAuth(value: String): AuthStateDTO = jsonSerializer.decodeFromString<AuthStateDTO>(value)
+
+    @TypeConverter
+    @JvmStatic
+    fun fromContentType(contentType: ContentType): String = jsonSerializer.encodeToString(contentType)
+
+    @TypeConverter
+    @JvmStatic
+    fun toContentType(value: String): ContentType = jsonSerializer.decodeFromString<ContentType>(value)
 
 }
 

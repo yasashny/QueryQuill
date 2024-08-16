@@ -106,3 +106,4 @@ internal fun RequestModel.toDTO(): RequestDTO {
 internal fun Transaction.toDBO(): TransactionDBO {
     return TransactionDBO(id = id, label = label)
 }
+

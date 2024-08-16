@@ -14,7 +14,7 @@ import com.yas.requests.utils.encodeBase64
 import com.yas.requests.utils.fileFromContentUri
 import com.yas.requests.utils.fileNameByUri
 import com.yas.requests.utils.getMIMEType
-import com.yas.utils.mimeTypeToContentType
+import com.yas.requests.utils.mimeTypeToContentType
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.RedirectResponseException
@@ -23,7 +23,7 @@ import io.ktor.client.request.forms.FormDataContent
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.headers
-import io.ktor.client.request.prepareGet
+import io.ktor.client.request.prepareRequest
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
@@ -52,7 +52,7 @@ internal class SendRequestLocalDataSource(
             } else {
                 "http://" + model.url
             }
-            val request = client.prepareGet(url) {
+            val request = client.prepareRequest(url) {
 
                 url {
                     model.query.forEach { keyValue ->
@@ -179,18 +179,43 @@ internal class SendRequestLocalDataSource(
             val elapsedTime = (responseTime.timestamp - requestTime.timestamp).toString()
             val contentLength = file.length().toString()
             val status = response.status.value.toString()
-            val contentType = response.contentType()?.contentType
-            val contentSubtype = response.contentType()?.contentSubtype
+            val contentTypeStr = response.contentType()?.contentType
+            val contentSubtypeStr = response.contentType()?.contentSubtype
+            var contentType: ContentType = ContentType.Text.PLAIN
 
-            fileName = when (mimeTypeToContentType("${contentType}/${contentSubtype}")) {
-                ContentType.Text.HTML -> "${model.id}_response.html"
-                ContentType.Image.JPEG -> "${model.id}_response.jpeg"
-                ContentType.Application.JSON -> "${model.id}_response.json"
-                ContentType.Text.PLAIN -> fileName
-                ContentType.Image.PNG -> "${model.id}_response.png"
-                ContentType.Image.WEBP -> "${model.id}_response.webp"
-                ContentType.Text.XML -> "${model.id}_response.xml"
-                null -> fileName
+            when (mimeTypeToContentType("${contentTypeStr}/${contentSubtypeStr}")) {
+                ContentType.Text.HTML -> {
+                    contentType = ContentType.Text.HTML
+                    fileName = "${model.id}_response.html"
+                }
+
+                ContentType.Image.JPEG -> {
+                    contentType = ContentType.Image.JPEG
+                    fileName = "${model.id}_response.jpeg"
+                }
+
+                ContentType.Application.JSON -> {
+                    contentType = ContentType.Application.JSON
+                    fileName = "${model.id}_response.json"
+                }
+
+                ContentType.Text.PLAIN -> {}
+                ContentType.Image.PNG -> {
+                    contentType = ContentType.Image.PNG
+                    fileName = "${model.id}_response.png"
+                }
+
+                ContentType.Image.WEBP -> {
+                    contentType = ContentType.Image.WEBP
+                    fileName = "${model.id}_response.webp"
+                }
+
+                ContentType.Text.XML -> {
+                    contentType = ContentType.Text.XML
+                    fileName = "${model.id}_response.xml"
+                }
+
+                null -> {}
             }
             val newFile = File(file.parentFile, fileName)
             file.renameTo(newFile)
@@ -208,7 +233,6 @@ internal class SendRequestLocalDataSource(
                 contentLength = contentLength,
                 time = elapsedTime,
                 contentType = contentType,
-                contentSubtype = contentSubtype,
                 headers = headers
             )
 

@@ -36,12 +36,14 @@ fun CodeEditor(
     languageType: LanguageType,
     file: File
 ) {
+
     val context = LocalContext.current
     val inputStream = file.inputStream()
     var isLoading by remember {
         mutableStateOf(true)
     }
-    LaunchedEffect(Unit) {
+    LaunchedEffect(file) {
+        isLoading = true
         withContext(Dispatchers.IO) {
             inputStream.readInChunks(10000).forEach {
                 withContext(Dispatchers.Main) {
