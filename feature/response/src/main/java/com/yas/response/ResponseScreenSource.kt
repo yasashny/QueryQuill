@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import com.yas.model.CodeEditorState
 import com.yas.model.LanguageType
@@ -18,7 +19,7 @@ internal fun ResponseScreenSource(
     languageType: LanguageType,
     getTextFileUri: (textFileName: String) -> URI
 ) {
-    val file = File(getTextFileUri(fileName))
+    val file = rememberUpdatedState(newValue = File(getTextFileUri(fileName)))
     val state = CodeEditorState()
     CodeEditor(
         state = state,
@@ -26,6 +27,6 @@ internal fun ResponseScreenSource(
         isEditable = false,
         languageType = languageType,
         isBasicDisplayMode = true,
-        file = file
+        file = file.value
     )
 }

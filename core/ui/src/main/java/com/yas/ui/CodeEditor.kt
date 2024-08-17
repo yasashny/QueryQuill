@@ -3,6 +3,7 @@ package com.yas.ui
 import android.content.Context
 import android.graphics.Typeface
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
@@ -18,9 +19,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import com.yas.model.CodeEditorState
 import com.yas.model.LanguageType
+import io.github.rosemoe.sora.lang.EmptyLanguage
 import io.github.rosemoe.sora.langs.textmate.TextMateColorScheme
 import io.github.rosemoe.sora.langs.textmate.TextMateLanguage
 import io.github.rosemoe.sora.langs.textmate.registry.ThemeRegistry
+import io.github.rosemoe.sora.text.Content
+import io.github.rosemoe.sora.text.ContentListener
 import io.github.rosemoe.sora.widget.CodeEditor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -34,7 +38,8 @@ fun CodeEditor(
     isEditable: Boolean = true,
     isBasicDisplayMode: Boolean,
     languageType: LanguageType,
-    file: File
+    file: File,
+    isWordWrap : Boolean = true,
 ) {
 
     val context = LocalContext.current
@@ -67,7 +72,8 @@ fun CodeEditor(
                 context = context,
                 state = state,
                 isEditable = isEditable,
-                isBasicDisplayMode = isBasicDisplayMode
+                isBasicDisplayMode = isBasicDisplayMode,
+                isWordWrap = isWordWrap
             )
         }, modifier = modifier, onRelease = {
             it.release()
@@ -79,21 +85,18 @@ fun CodeEditor(
 
 
 private fun setCodeEditorFactory(
-    languageType: LanguageType, context: Context, state: CodeEditorState, isEditable: Boolean,
+    languageType: LanguageType,
+    context: Context,
+    state: CodeEditorState,
+    isEditable: Boolean,
     isBasicDisplayMode: Boolean,
+    isWordWrap: Boolean
 ): CodeEditor {
     val editor = CodeEditor(context)
     editor.apply {
         this.isEditable = isEditable
         colorScheme = TextMateColorScheme.create(ThemeRegistry.getInstance())
         this.isBasicDisplayMode = isBasicDisplayMode
-        val languageScopeName = languageType.code
-        if (languageScopeName != null) {
-            val language = TextMateLanguage.create(
-                languageScopeName, true
-            )
-            setEditorLanguage(language)
-        }
 
         isScalable = false
         typefaceText = Typeface.MONOSPACE
@@ -102,9 +105,17 @@ private fun setCodeEditorFactory(
         layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
         )
-        isWordwrap = true
+        this.isWordwrap = isWordWrap
     }
     state.editor = editor
+    enableDisableHighlighting(
+        state.content, state.editor!!, context, languageType, isBasicDisplayMode
+    )
+    state.content.addContentListener(
+        QQContentListener(
+            state.editor!!, languageType, context, isBasicDisplayMode
+        )
+    )
     return editor
 }
 
@@ -114,5 +125,71 @@ internal fun InputStream.readInChunks(chunkSize: Int = 100): Sequence<String> = 
 
     while (this@readInChunks.read(buffer).also { bytesRead = it } != -1) {
         yield(String(buffer, 0, bytesRead))
+    }
+}
+
+private class QQContentListener(
+    private val editor: CodeEditor,
+    private val languageType: LanguageType,
+    private val context: Context,
+    private val isBasicDisplayMode: Boolean
+) : ContentListener {
+    override fun beforeReplace(content: Content) {
+
+    }
+
+    override fun afterInsert(
+        content: Content,
+        startLine: Int,
+        startColumn: Int,
+        endLine: Int,
+        endColumn: Int,
+        insertedContent: CharSequence
+    ) {
+        enableDisableHighlighting(content, editor, context, languageType, isBasicDisplayMode)
+    }
+
+    override fun afterDelete(
+        content: Content,
+        startLine: Int,
+        startColumn: Int,
+        endLine: Int,
+        endColumn: Int,
+        deletedContent: CharSequence
+    ) {
+
+    }
+}
+
+private fun enableDisableHighlighting(
+    content: Content,
+    editor: CodeEditor,
+    context: Context,
+    languageType: LanguageType,
+    isBasicDisplayMode: Boolean
+) {
+    if (content.length > 10000000) {
+        if (editor.editorLanguage::class != EmptyLanguage::class) {
+            editor.setEditorLanguage(null)
+            editor.isBasicDisplayMode = true
+            Toast.makeText(
+                context,
+                "The file is too big. Syntax highlighting is disabled for performance reasons",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    } else {
+        if (editor.editorLanguage::class == EmptyLanguage::class) {
+            if (!isBasicDisplayMode) {
+                editor.isBasicDisplayMode = false
+            }
+            val languageScopeName = languageType.code
+            if (languageScopeName != null) {
+                val language = TextMateLanguage.create(
+                    languageScopeName, true
+                )
+                editor.setEditorLanguage(language)
+            }
+        }
     }
 }
