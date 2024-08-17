@@ -8,8 +8,11 @@ android {
 }
 
 dependencies {
+    implementation(libs.activity.compose)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.koin.androidx.compose)
+
+    implementation(libs.coil.compose)
 
     implementation(projects.core.ui)
     implementation(projects.core.model)

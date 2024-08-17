@@ -216,6 +216,10 @@ internal class SendRequestLocalDataSource(
                 }
 
                 null -> {}
+                ContentType.Image.BMP -> {
+                    contentType= ContentType.Image.BMP
+                    fileName = "${model.id}_response.bmp"
+                }
             }
             val newFile = File(file.parentFile, fileName)
             file.renameTo(newFile)

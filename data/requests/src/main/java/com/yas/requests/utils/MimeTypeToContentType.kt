@@ -11,6 +11,7 @@ internal fun mimeTypeToContentType(mimeType: String?): ContentType? {
         "image/jpeg" -> ContentType.Image.JPEG
         "image/png" -> ContentType.Image.PNG
         "image/webp" -> ContentType.Image.WEBP
+        "image/bmp" -> ContentType.Image.BMP
         else -> null
     }
 }

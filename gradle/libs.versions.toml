@@ -1,6 +1,7 @@
 [versions]
 activityCompose = "1.9.1"
 appcompat = "1.7.0"
+coilBom = "2.7.0"
 coreSplashscreen = "1.0.1"
 sora-editor-bom = "0.23.4"
 composeBom = "2024.06.00"
@@ -66,6 +67,10 @@ material3-window-size-classs = { module = "androidx.compose.material3:material3-
 
 #SplashScreen
 core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
+
+#Coil
+#coil-bom = { module = "io.coil-kt:coil-bom", version.ref = "coilBom" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilBom" }
 
 agp = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }

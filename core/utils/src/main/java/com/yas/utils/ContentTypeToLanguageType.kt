@@ -13,5 +13,6 @@ fun contentTypeToLanguageType(contentType: ContentType): LanguageType {
         ContentType.Image.PNG -> LanguageType.OTHER
         ContentType.Image.WEBP -> LanguageType.OTHER
         ContentType.Text.XML -> LanguageType.XML
+        ContentType.Image.BMP -> LanguageType.OTHER
     }
 }

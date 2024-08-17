@@ -14,6 +14,9 @@ sealed interface ContentType {
 
         @Serializable
         data object WEBP : ContentType
+
+        @Serializable
+        data object BMP : ContentType
     }
 
     @Serializable
