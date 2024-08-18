@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.queryquill.android.application)
     alias(libs.plugins.queryquill.android.application.compose)
+    id("com.google.android.gms.oss-licenses-plugin")
 }
 
 android {

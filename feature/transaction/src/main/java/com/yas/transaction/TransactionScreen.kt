@@ -16,8 +16,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
@@ -35,13 +37,22 @@ import java.net.URI
 fun TransactionScreen(
     screenState: ScreenState,
     navigateToEditor: (textFileName: String, languageType: String) -> Unit,
-    navigateToSettings: () -> Unit,
+    navigateToSettings: @Composable (() -> Unit) -> Unit,
     goToRequestScreen: @Composable (
         modifier: Modifier, navigateToEditor: (textFileName: String, languageType: String) -> Unit, requestModel: RequestModel, getTextFileUri: (textFileName: String) -> URI, updateRequest: (UpdateRequestModel) -> Unit, sendRequest: (RequestModel, () -> Unit) -> Unit
     ) -> Unit,
     goToResponseScreen: @Composable (modifier: Modifier, responseModel: ResponseModel, getTextFileUri: (textFileName: String) -> URI) -> Unit,
     goToNewTransactionScreen: @Composable () -> Unit
 ) {
+
+    var openSettings by remember {
+        mutableStateOf(false)
+    }
+    if (openSettings) {
+        navigateToSettings {
+            openSettings = false
+        }
+    }
 
     val vm = koinViewModel<TransactionViewModel>()
 
@@ -61,7 +72,7 @@ fun TransactionScreen(
 
     NavigationDrawer(
         transactions = transactions,
-        navigateToSettings = { navigateToSettings() },
+        navigateToSettings = { openSettings = true },
         onEvent = vm::onEvent
     ) { drawerState ->
         Scaffold(topBar = {

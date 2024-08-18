@@ -3,6 +3,8 @@ activityCompose = "1.9.1"
 appcompat = "1.7.0"
 coilBom = "2.7.0"
 coreSplashscreen = "1.0.1"
+ossLicensesPlugin = "0.10.6"
+playServicesOssLicenses = "17.1.0"
 sora-editor-bom = "0.23.4"
 composeBom = "2024.06.00"
 coreKtx = "1.13.1"
@@ -83,6 +85,8 @@ material3 = { module = "androidx.compose.material3:material3" }
 ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+oss-licenses-plugin = { module = "com.google.android.gms:oss-licenses-plugin", version.ref = "ossLicensesPlugin" }
+play-services-oss-licenses = { module = "com.google.android.gms:play-services-oss-licenses", version.ref = "playServicesOssLicenses" }
 
 ext-junit = { module = "androidx.test.ext:junit", version.ref = "junitVersion" }
 junit = { module = "junit:junit", version.ref = "junit" }

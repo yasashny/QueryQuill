@@ -9,6 +9,7 @@ android {
 
 dependencies {
     implementation(libs.koin.androidx.compose)
+    implementation(libs.play.services.oss.licenses)
 
     implementation(projects.core.ui)
     implementation(projects.core.model)

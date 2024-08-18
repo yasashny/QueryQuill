@@ -9,7 +9,7 @@ import com.yas.new_transaction.NewTransactionScreen
 import com.yas.request.RequestScreen
 import com.yas.request_code_editor.RequestCodeEditorScreen
 import com.yas.response.ResponseScreen
-import com.yas.settings.SettingsScreen
+import com.yas.settings.SettingsDialog
 import com.yas.transaction.TransactionScreen
 
 
@@ -18,7 +18,6 @@ sealed class Destinations(
 ) {
     data object MainScreenRoute : Destinations(route = "main")
     data object EditorScreenRoute : Destinations(route = "editor/{textFileName}/{languageType}")
-    data object SettingsScreenRoute : Destinations(route = "settings")
 }
 
 
@@ -31,16 +30,16 @@ fun Navigation(navController: NavHostController, screenState: ScreenState) {
                 navigateToEditor = { textFileName, languageType ->
                     navController.navigate("editor/${textFileName}/${languageType}")
                 },
-                navigateToSettings = {
-                    navController.navigate(Destinations.SettingsScreenRoute.route)
+                navigateToSettings = { onDismiss ->
+                    SettingsDialog(onDismiss)
                 },
-                goToRequestScreen = { modifier, navigateToEditor, requestModel, getTextFileUri, updateReques, sendRequest ->
+                goToRequestScreen = { modifier, navigateToEditor, requestModel, getTextFileUri, updateRequest, sendRequest ->
                     RequestScreen(
                         modifier = modifier,
                         navigateToEditor = navigateToEditor,
                         requestModel = requestModel,
                         getTextFileUri = getTextFileUri,
-                        updateRequest = updateReques,
+                        updateRequest = updateRequest,
                         sendRequest = sendRequest
                     )
                 },
@@ -58,11 +57,6 @@ fun Navigation(navController: NavHostController, screenState: ScreenState) {
                 backStackEntry.arguments?.getString("textFileName")!!,
                 backStackEntry.arguments?.getString("languageType")!!
             ) {
-                navController.navigateUp()
-            }
-        }
-        composable(Destinations.SettingsScreenRoute.route) {
-            SettingsScreen {
                 navController.navigateUp()
             }
         }
