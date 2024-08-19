@@ -1,53 +1,53 @@
 package com.yas.response.preview
 
-import android.graphics.BitmapFactory
-import android.util.Base64
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
+import coil.compose.SubcomposeAsyncImage
+import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
-import com.yas.response.R
+import coil.size.Size
+import com.yas.model.LanguageType
+import com.yas.response.ResponseScreenSource
 import java.io.File
+import java.net.URI
 
 @Composable
-internal fun Base64ImageDisplay(file: File) {
+internal fun Base64ImageDisplay(
+    fileName: String, getTextFileUri: (textFileName: String) -> URI
+) {
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(file)
-                .crossfade(true)
-                .build(),
+        val file = File(getTextFileUri(fileName))
+        SubcomposeAsyncImage(
+            model = ImageRequest.Builder(LocalContext.current).data(file).size(Size.ORIGINAL)
+                .crossfade(true).build(),
             contentDescription = null,
-
             modifier = Modifier.fillMaxSize()
-        )
-    }
+        ) {
+            val state = painter.state
+            when (state) {
+                AsyncImagePainter.State.Empty -> {}
+                is AsyncImagePainter.State.Error -> {
+                    ResponseScreenSource(
+                        fileName, LanguageType.PLAIN, getTextFileUri
+                    )
+                }
 
+                is AsyncImagePainter.State.Loading -> {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator()
+                    }
+                }
 
-
-
-
-}
-
-private fun String.toBitmap(): android.graphics.Bitmap? {
-    return try {
-        val decodedBytes = Base64.decode(this, Base64.DEFAULT)
-        BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
-    } catch (e: Exception) {
-        e.printStackTrace()
-        null
+                is AsyncImagePainter.State.Success -> {
+                    SubcomposeAsyncImageContent()
+                }
+            }
+        }
     }
 }

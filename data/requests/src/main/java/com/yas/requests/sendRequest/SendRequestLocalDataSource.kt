@@ -217,8 +217,18 @@ internal class SendRequestLocalDataSource(
 
                 null -> {}
                 ContentType.Image.BMP -> {
-                    contentType= ContentType.Image.BMP
+                    contentType = ContentType.Image.BMP
                     fileName = "${model.id}_response.bmp"
+                }
+
+                ContentType.Image.HEIC -> {
+                    contentType = ContentType.Image.HEIC
+                    fileName = "${model.id}_response.heic"
+                }
+
+                ContentType.Image.HEIF -> {
+                    contentType = ContentType.Image.HEIF
+                    fileName = "${model.id}_response.heif"
                 }
             }
             val newFile = File(file.parentFile, fileName)

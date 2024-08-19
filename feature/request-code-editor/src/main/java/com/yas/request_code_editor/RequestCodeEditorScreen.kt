@@ -1,5 +1,6 @@
 package com.yas.request_code_editor
 
+import android.os.Build
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -30,8 +31,18 @@ fun RequestCodeEditorScreen(
 ) {
 
     val languageType = when (stringLanguageType) {
-        "Json" -> LanguageType.JSON
-        "Xml" -> LanguageType.XML
+        "Json" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            LanguageType.JSON
+        } else {
+            LanguageType.OTHER
+        }
+
+        "Xml" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            LanguageType.XML
+        } else {
+            LanguageType.OTHER
+        }
+
         "Plain" -> LanguageType.PLAIN
         "Other" -> LanguageType.OTHER
         else -> {
@@ -61,10 +72,7 @@ fun RequestCodeEditorScreen(
 
             val state = rememberCodeEditorState()
             CodeEditor(
-                state = state,
-                isBasicDisplayMode = false,
-                languageType = languageType,
-                file = file
+                state = state, isBasicDisplayMode = false, languageType = languageType, file = file
             )
 
             val lifecycleOwner = LocalLifecycleOwner.current

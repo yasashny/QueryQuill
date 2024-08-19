@@ -17,6 +17,12 @@ sealed interface ContentType {
 
         @Serializable
         data object BMP : ContentType
+
+        @Serializable
+        data object HEIF : ContentType
+
+        @Serializable
+        data object HEIC : ContentType
     }
 
     @Serializable
