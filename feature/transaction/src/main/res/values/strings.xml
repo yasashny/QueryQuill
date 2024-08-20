@@ -8,4 +8,6 @@
     <string name="request">Request</string>
     <string name="response">Response</string>
     <string name="queryquill">QueryQuill</string>
+    <string name="add_request">Add Request</string>
+    <string name="settings">Settings</string>
 </resources>
