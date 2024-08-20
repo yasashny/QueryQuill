@@ -14,7 +14,6 @@ import com.yas.requests.local.dataSource.TransactionLocalDataSource
 import com.yas.requests.mappers.toDBO
 import com.yas.requests.mappers.toDTO
 import com.yas.requests.mappers.toModel
-import com.yas.requests.models.RequestDBO
 import com.yas.requests.models.ResponseDBO
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -48,16 +47,13 @@ class TransactionsRepository internal constructor(
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     fun getCurrentRequestOrNull(): Flow<RequestModel?> {
         return currentTransactionIdLocalDataSource.getId().flowOn(ioDispatcher)
-            .flatMapLatest { value: Long? ->
+            .map { value: Long? ->
                 if (value != null) {
-                    requestLocalDataSource.read(id = value).map { requestDBO: RequestDBO? ->
-                        requestDBO?.toModel()
-                    }
+                    requestLocalDataSource.read(id = value)?.toModel()
                 } else {
-                    flowOf(null)
+                    null
                 }
             }
     }

@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.yas.model.ScreenState
+import com.yas.new_transaction.AddTransactionDialog
 import com.yas.new_transaction.NewTransactionScreen
 import com.yas.request.RequestScreen
 import com.yas.request_code_editor.RequestCodeEditorScreen
@@ -33,22 +34,21 @@ fun Navigation(navController: NavHostController, screenState: ScreenState) {
                 navigateToSettings = { onDismiss ->
                     SettingsDialog(onDismiss)
                 },
-                goToRequestScreen = { modifier, navigateToEditor, requestModel, getTextFileUri, updateRequest, sendRequest ->
+                openAddTransactionDialog = { onDismiss ->
+                    AddTransactionDialog(onDismiss)
+
+                },
+                navigateToRequestScreen = { modifier, navigateToEditor, onRequestSent ->
                     RequestScreen(
                         modifier = modifier,
                         navigateToEditor = navigateToEditor,
-                        requestModel = requestModel,
-                        getTextFileUri = getTextFileUri,
-                        updateRequest = updateRequest,
-                        sendRequest = sendRequest
+                        onRequestSent = onRequestSent
                     )
                 },
                 goToNewTransactionScreen = { NewTransactionScreen() },
-                goToResponseScreen = { modifier, responseModel, getTextFileUri ->
+                goToResponseScreen = { modifier ->
                     ResponseScreen(
-                        modifier = modifier,
-                        responseModel = responseModel,
-                        getTextFileUri = getTextFileUri
+                        modifier = modifier
                     )
                 })
         }

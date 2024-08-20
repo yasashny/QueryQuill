@@ -1,11 +1,9 @@
 package com.yas.response
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,20 +28,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.yas.model.ImmutableList
-import com.yas.model.ResponseModel
 import com.yas.response.components.SegmentedButtonResponse
 import com.yas.response.preview.ResponseScreenPreview
 import com.yas.response.preview.saveFile
 import com.yas.utils.contentTypeToLanguageType
+import org.koin.androidx.compose.koinViewModel
 import java.io.File
-import java.net.URI
 
 @Composable
 fun ResponseScreen(
-    modifier: Modifier, responseModel: ResponseModel, getTextFileUri: (textFileName: String) -> URI
+    modifier: Modifier
 ) {
     Box(modifier = modifier) {
-        val file = File(getTextFileUri(responseModel.fileName))
+        val vm = koinViewModel<ResponseViewModel>()
+        val responseModel = vm.responseModel.collectAsState().value
+        val file = File(vm.getFileUriByName(responseModel.fileName))
         val saveFile = saveFile(file)
 
         Column(Modifier.fillMaxSize()) {
@@ -123,15 +123,14 @@ fun ResponseScreen(
                     ResponseScreenPreview(
                         fileName = responseModel.fileName,
                         contentType = responseModel.contentType,
-                        getTextFileUri
+                        vm::getFileUriByName
                     )
                 }
 
                 ResponseSegmentedButtonState.SOURCE -> {
-                    println(responseModel.contentType)
                     val languageType = contentTypeToLanguageType(responseModel.contentType)
                     ResponseScreenSource(
-                        responseModel.fileName, languageType, getTextFileUri
+                        responseModel.fileName, languageType, vm::getFileUriByName
                     )
                 }
 

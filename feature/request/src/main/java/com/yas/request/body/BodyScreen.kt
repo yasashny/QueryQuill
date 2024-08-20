@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -20,7 +22,7 @@ import com.yas.model.BodyState
 import com.yas.model.ImmutableList
 import com.yas.model.ImmutableUri
 import com.yas.request.R
-import com.yas.request.alertDialog.ChangeTypeAlertDialog
+import com.yas.request.alertDialog.ChangeTypeDialog
 import com.yas.request.body.multipartForm.bodyScreenMultipartForm
 import com.yas.request.body.text.BodyScreenText
 import com.yas.request.components.BinaryFileElement
@@ -46,13 +48,13 @@ internal fun LazyListScope.bodyScreen(
                         .fillMaxWidth()
                         .padding(bottom = 15.dp, top = 15.dp)
                 ) {
-                    val openDialog = remember {
+                    var openChangeTypeDialog by remember {
                         mutableStateOf(Pair(false, bodyState as BasicState))
                     }
-                    if (openDialog.value.first) {
-                        ChangeTypeAlertDialog(
-                            openDialog, title = stringResource(R.string.body)
-                        ) { basicState ->
+                    if (openChangeTypeDialog.first) {
+                        ChangeTypeDialog(title = stringResource(R.string.body), onDismiss = {
+                            openChangeTypeDialog = Pair(false, openChangeTypeDialog.second)
+                        }, onConfirm = {
                             when (bodyState) {
                                 is BodyState.BinaryFile -> {}
                                 is BodyState.FormUrlEncoded -> {}
@@ -63,8 +65,9 @@ internal fun LazyListScope.bodyScreen(
                                     file.delete()
                                 }
                             }
-                            updateRequest(basicState as BodyState)
-                        }
+                            updateRequest(openChangeTypeDialog.second as BodyState)
+                            openChangeTypeDialog = Pair(false, openChangeTypeDialog.second)
+                        })
                     }
                     ChipGroup(
                         currentState = bodyState.toEnum(), options = ImmutableList(
@@ -92,7 +95,7 @@ internal fun LazyListScope.bodyScreen(
                             ) {
                                 updateRequest(newState)
                             } else {
-                                openDialog.value = Pair(true, newState)
+                                openChangeTypeDialog = Pair(true, newState)
                             }
                         }
                     }

@@ -14,34 +14,29 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import com.yas.model.RequestModel
-import com.yas.model.ResponseModel
 import com.yas.model.ScreenState
-import com.yas.model.UpdateRequestModel
 import com.yas.transaction.navigationDrawer.NavigationDrawer
+import com.yas.transaction.navigationDrawer.TransactionsUiState
 import org.koin.androidx.compose.koinViewModel
-import java.net.URI
 
 @Composable
 fun TransactionScreen(
     screenState: ScreenState,
     navigateToEditor: (textFileName: String, languageType: String) -> Unit,
     navigateToSettings: @Composable (() -> Unit) -> Unit,
-    goToRequestScreen: @Composable (
-        modifier: Modifier, navigateToEditor: (textFileName: String, languageType: String) -> Unit, requestModel: RequestModel, getTextFileUri: (textFileName: String) -> URI, updateRequest: (UpdateRequestModel) -> Unit, sendRequest: (RequestModel, () -> Unit) -> Unit
+    navigateToRequestScreen: @Composable (
+        modifier: Modifier, navigateToEditor: (textFileName: String, languageType: String) -> Unit, onRequestSent: () -> Unit
     ) -> Unit,
-    goToResponseScreen: @Composable (modifier: Modifier, responseModel: ResponseModel, getTextFileUri: (textFileName: String) -> URI) -> Unit,
+    goToResponseScreen: @Composable (modifier: Modifier) -> Unit,
+    openAddTransactionDialog: @Composable (() -> Unit) -> Unit,
     goToNewTransactionScreen: @Composable () -> Unit
 ) {
 
@@ -56,24 +51,13 @@ fun TransactionScreen(
 
     val vm = koinViewModel<TransactionViewModel>()
 
-    val lifecycleOwner = LocalLifecycleOwner.current
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_STOP) {
-                vm.saveRequest()
-            }
-        }
-        lifecycleOwner.lifecycle.addObserver(observer)
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
-    }
     val transactions = vm.transactions.collectAsState().value
 
     NavigationDrawer(
         transactions = transactions,
         navigateToSettings = { openSettings = true },
-        onEvent = vm::onEvent
+        onEvent = vm::onEvent,
+        addTransactionDialog = openAddTransactionDialog
     ) { drawerState ->
         Scaffold(topBar = {
             TransactionTopBar(transactions = transactions,
@@ -87,102 +71,87 @@ fun TransactionScreen(
                     .padding(paddingValues)
                     .fillMaxSize()
             ) {
-                val requestState = vm.requestState.collectAsState().value
-                val responseModel = vm.responseModel.collectAsState().value
-                when (requestState) {
-                    RequestUiState.Loading -> {}
-                    RequestUiState.NewRequest -> {
-                        goToNewTransactionScreen()
+                when (transactions) {
+                    TransactionsUiState.Loading -> {
+                        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+
+                        }
                     }
 
-                    is RequestUiState.Success -> {
-                        when (screenState) {
-                            ScreenState.SINGLE_SCREEN -> {
-                                Column {
-                                    val tabsScreenState = remember {
-                                        mutableStateOf(TabsScreenState.REQUEST)
-                                    }
-                                    PrimaryTextTabs(tabsScreenState)
-                                    when (tabsScreenState.value) {
-                                        TabsScreenState.REQUEST -> {
-                                            goToRequestScreen(
-                                                Modifier.fillMaxSize(),
-                                                navigateToEditor,
-                                                requestState.request,
-                                                vm::getFileUriByName,
-                                                vm::updateRequest
-                                            ) { requestModel: RequestModel, requestSent: () -> Unit ->
-                                                vm.sendRequest(requestModel) {
-                                                    requestSent()
-                                                    tabsScreenState.value = TabsScreenState.RESPONSE
+                    is TransactionsUiState.Success -> {
+                        when (transactions.currentId) {
+                            null -> {
+                                goToNewTransactionScreen()
+                            }
+
+                            else -> {
+                                when (screenState) {
+                                    ScreenState.SINGLE_SCREEN -> {
+                                        Column {
+                                            val tabsScreenState = remember {
+                                                mutableStateOf(TabsScreenState.REQUEST)
+                                            }
+                                            PrimaryTextTabs(tabsScreenState)
+                                            when (tabsScreenState.value) {
+                                                TabsScreenState.REQUEST -> {
+                                                    navigateToRequestScreen(
+                                                        Modifier.fillMaxSize(), navigateToEditor
+                                                    ) {
+                                                        tabsScreenState.value =
+                                                            TabsScreenState.RESPONSE
+                                                    }
+                                                }
+
+                                                TabsScreenState.RESPONSE -> {
+                                                    goToResponseScreen(
+                                                        Modifier.fillMaxSize()
+                                                    )
                                                 }
                                             }
                                         }
+                                    }
 
-                                        TabsScreenState.RESPONSE -> {
+                                    ScreenState.ROW_SCREEN -> {
+                                        Row {
+                                            navigateToRequestScreen(
+                                                Modifier
+                                                    .fillMaxSize()
+                                                    .weight(1f), navigateToEditor
+                                            ) {}
+                                            Box(
+                                                Modifier
+                                                    .fillMaxHeight()
+                                                    .width(1.dp)
+                                                    .background(MaterialTheme.colorScheme.outlineVariant)
+                                            )
                                             goToResponseScreen(
-                                                Modifier.fillMaxSize(),
-                                                responseModel,
-                                                vm::getFileUriByName
+                                                Modifier
+                                                    .fillMaxSize()
+                                                    .weight(1f)
                                             )
                                         }
                                     }
-                                }
-                            }
 
-                            ScreenState.ROW_SCREEN -> {
-                                Row {
-                                    goToRequestScreen(
-                                        Modifier
-                                            .fillMaxSize()
-                                            .weight(1f),
-                                        navigateToEditor,
-                                        requestState.request,
-                                        vm::getFileUriByName,
-                                        vm::updateRequest,
-                                        vm::sendRequest
-                                    )
-                                    Box(
-                                        Modifier
-                                            .fillMaxHeight()
-                                            .width(1.dp)
-                                            .background(MaterialTheme.colorScheme.outlineVariant)
-                                    )
-                                    goToResponseScreen(
-                                        Modifier
-                                            .fillMaxSize()
-                                            .weight(1f),
-                                        responseModel,
-                                        vm::getFileUriByName
-                                    )
-                                }
-                            }
-
-                            ScreenState.COLUMN_SCREEN -> {
-                                Column {
-                                    goToRequestScreen(
-                                        Modifier
-                                            .fillMaxSize()
-                                            .weight(1f),
-                                        navigateToEditor,
-                                        requestState.request,
-                                        vm::getFileUriByName,
-                                        vm::updateRequest,
-                                        vm::sendRequest
-                                    )
-                                    Box(
-                                        Modifier
-                                            .fillMaxWidth()
-                                            .height(1.dp)
-                                            .background(MaterialTheme.colorScheme.outlineVariant)
-                                    )
-                                    goToResponseScreen(
-                                        Modifier
-                                            .fillMaxSize()
-                                            .weight(1f),
-                                        responseModel,
-                                        vm::getFileUriByName
-                                    )
+                                    ScreenState.COLUMN_SCREEN -> {
+                                        Column {
+                                            navigateToRequestScreen(
+                                                Modifier
+                                                    .fillMaxSize()
+                                                    .weight(1f), navigateToEditor
+                                            ) {}
+                                            Box(
+                                                Modifier
+                                                    .fillMaxWidth()
+                                                    .height(1.dp)
+                                                    .background(MaterialTheme.colorScheme.outlineVariant)
+                                            )
+                                            goToResponseScreen(
+                                                Modifier
+                                                    .fillMaxSize()
+                                                    .weight(1f)
+                                            )
+                                        }
+                                    }
                                 }
                             }
                         }

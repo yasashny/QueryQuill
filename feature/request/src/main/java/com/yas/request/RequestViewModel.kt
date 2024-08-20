@@ -1,0 +1,127 @@
+package com.yas.request
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.yas.model.ImmutableList
+import com.yas.model.RequestModel
+import com.yas.model.UpdateRequestModel
+import com.yas.requests.local.TransactionsRepository
+import com.yas.requests.sendRequest.SendRequestRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+import java.net.URI
+
+internal class RequestViewModel(
+    private val transactionsRepository: TransactionsRepository,
+    private val sendRequestRepository: SendRequestRepository
+) : ViewModel() {
+    private val _requestState = MutableStateFlow<RequestUiState>(RequestUiState.Loading)
+    val requestState = _requestState.asStateFlow()
+
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            transactionsRepository.getCurrentRequestOrNull().map { requestOrNull ->
+                if (requestOrNull != null) {
+                    RequestUiState.Success(request = requestOrNull)
+                } else {
+                    RequestUiState.Loading
+                }
+            }.collect { value ->
+                if (value is RequestUiState.Success) {
+                    saveRequest(_requestState.value)
+                }
+                _requestState.value = value
+            }
+        }
+    }
+
+    private var sendRequestScope: CoroutineScope? = null
+
+    fun sendRequest(requestModel: RequestModel, onRequestSent: () -> Unit) {
+        sendRequestScope = CoroutineScope(Job() + Dispatchers.IO)
+        sendRequestScope?.launch {
+            sendRequestRepository.sendRequest(requestModel)
+            onRequestSent()
+        }
+    }
+
+    fun cancelRequest(onRequestSent: () -> Unit) {
+        sendRequestScope?.cancel()
+        onRequestSent()
+    }
+
+    fun saveRequest(requestUiState: RequestUiState) {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (requestUiState) {
+                RequestUiState.Loading -> {}
+                is RequestUiState.Success -> {
+                    transactionsRepository.updateRequest(requestUiState.request)
+                }
+            }
+        }
+    }
+
+    fun updateRequest(updateRequestModel: UpdateRequestModel) {
+        when (val request = requestState.value) {
+            RequestUiState.Loading -> {}
+            is RequestUiState.Success -> {
+                when (updateRequestModel) {
+                    is UpdateRequestModel.Body -> {
+                        _requestState.value =
+                            RequestUiState.Success(request.request.copy(bodyState = updateRequestModel.bodyState))
+                    }
+
+                    is UpdateRequestModel.Header -> {
+                        _requestState.value = RequestUiState.Success(
+                            request.request.copy(
+                                header = ImmutableList(
+                                    updateRequestModel.header
+                                )
+                            )
+                        )
+                    }
+
+                    is UpdateRequestModel.Query -> {
+                        _requestState.value = RequestUiState.Success(
+                            request.request.copy(
+                                query = ImmutableList(
+                                    updateRequestModel.query
+                                )
+                            )
+                        )
+                    }
+
+                    is UpdateRequestModel.Type -> {
+                        _requestState.value =
+                            RequestUiState.Success(request.request.copy(type = updateRequestModel.type))
+                    }
+
+                    is UpdateRequestModel.Url -> {
+                        _requestState.value =
+                            RequestUiState.Success(request.request.copy(url = updateRequestModel.url))
+                    }
+
+                    is UpdateRequestModel.Auth -> {
+                        _requestState.value =
+                            RequestUiState.Success(request.request.copy(auth = updateRequestModel.authState))
+                    }
+                }
+            }
+        }
+    }
+
+    fun getFileUriByName(textFileName: String): URI {
+        return transactionsRepository.getFileUriByName(textFileName)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        sendRequestScope?.cancel()
+    }
+}

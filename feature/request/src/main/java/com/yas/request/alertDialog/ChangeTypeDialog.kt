@@ -8,30 +8,30 @@ import androidx.compose.ui.res.stringResource
 import com.yas.request.R
 
 @Composable
-internal fun ChangeContentTypeDialog(
-    newContentType: String, onDismiss: () -> Unit, onConfirm: () -> Unit
+internal fun ChangeTypeDialog(
+    title: String, onDismiss: () -> Unit, onConfirm: () -> Unit
 ) {
     AlertDialog(onDismissRequest = {
         onDismiss()
     }, title = {
-        Text(text = stringResource(R.string.change_content_type))
+        Text(text = stringResource(R.string.switch_type, title))
     }, text = {
         Text(
             text = stringResource(
-                R.string.do_you_want_set_the_content_type_header_to, newContentType
+                R.string.current_will_be_lost_are_you_sure_you_want_to_continue, title
             )
         )
     }, confirmButton = {
         TextButton(onClick = {
             onConfirm()
         }) {
-            Text(stringResource(R.string.ok))
+            Text(stringResource(id = R.string.ok))
         }
     }, dismissButton = {
         TextButton(onClick = {
             onDismiss()
         }) {
-            Text(stringResource(R.string.cancel))
+            Text(stringResource(id = R.string.cancel))
         }
     })
 }

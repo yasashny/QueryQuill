@@ -5,6 +5,7 @@ import com.yas.common.commonModule
 import com.yas.domain.di.domainModule
 import com.yas.new_transaction.di.newTransactionModule
 import com.yas.queryquill.di.appModule
+import com.yas.request.di.requestModule
 import com.yas.request_code_editor.di.requestCodeEditorModule
 import com.yas.requests.di.requestsDataModule
 import com.yas.response.di.responseModule
@@ -30,7 +31,8 @@ class App : Application() {
                     transactionModule,
                     requestCodeEditorModule,
                     domainModule,
-                    commonModule
+                    commonModule,
+                    requestModule
                 )
             )
         }

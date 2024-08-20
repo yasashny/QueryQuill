@@ -8,9 +8,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import com.yas.model.Transaction
@@ -60,25 +62,22 @@ internal fun TransactionTopBar(
                 when (val id = transactions.currentId) {
                     null -> {}
                     else -> {
-                        val openDialog = remember {
+                        var openChangeLabelDialog by remember {
                             mutableStateOf(false)
                         }
-                        val flag = remember {
-                            mutableStateOf<String?>(null)
-                        }
-                        if (flag.value != null) {
-                            updateTransaction(
-                                Transaction(
-                                    id = id, label = flag.value as String
-                                )
-                            )
-                            flag.value = null
-                        }
-                        if (openDialog.value) {
-                            ChangeLabelAlertDialog(openDialog, flag)
+                        if (openChangeLabelDialog) {
+                            ChangeLabelAlertDialog(onDismiss = { openChangeLabelDialog = false },
+                                onConfirm = { newLabel: String ->
+                                    updateTransaction(
+                                        Transaction(
+                                            id = id, label = newLabel
+                                        )
+                                    )
+                                    openChangeLabelDialog = false
+                                })
                         }
                         IconButton(onClick = {
-                            openDialog.value = true
+                            openChangeLabelDialog = true
                         }) {
                             Icon(
                                 imageVector = Icons.Outlined.Edit, contentDescription = null

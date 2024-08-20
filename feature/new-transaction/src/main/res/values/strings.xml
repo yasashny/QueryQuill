@@ -3,4 +3,5 @@
     <string name="new_request">New Request</string>
     <string name="label">Label</string>
     <string name="add_request">Add request</string>
+    <string name="cancel">Cancel</string>
 </resources>

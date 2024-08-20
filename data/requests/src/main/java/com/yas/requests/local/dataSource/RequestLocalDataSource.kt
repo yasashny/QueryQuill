@@ -8,7 +8,6 @@ import com.yas.requests.models.BodyStateDTO
 import com.yas.requests.models.HttpTypeDTO
 import com.yas.requests.models.KeyValueDTO
 import com.yas.requests.models.RequestDBO
-import kotlinx.coroutines.flow.Flow
 
 internal class RequestLocalDataSource(context: Context) {
 
@@ -30,7 +29,7 @@ internal class RequestLocalDataSource(context: Context) {
         )
     }
 
-    fun read(id: Long): Flow<RequestDBO?> {
+    suspend fun read(id: Long): RequestDBO? {
         return db.requestDao.getRequest(id)
     }
 

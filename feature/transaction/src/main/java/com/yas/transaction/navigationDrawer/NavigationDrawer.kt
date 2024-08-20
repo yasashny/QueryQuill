@@ -49,6 +49,7 @@ internal fun NavigationDrawer(
     transactions: TransactionsUiState,
     navigateToSettings: () -> Unit,
     onEvent: (TransactionEvent) -> Unit,
+    addTransactionDialog: @Composable (() -> Unit) -> Unit,
     composable: @Composable (drawerState: DrawerState) -> Unit
 ) {
     val context = LocalContext.current
@@ -90,8 +91,8 @@ internal fun NavigationDrawer(
                     selected = false,
                     onClick = {
                         settingsScope.launch {
-                            navigateToSettings()
                             drawerState.close()
+                            navigateToSettings()
                         }
                     },
                     icon = {
@@ -99,6 +100,14 @@ internal fun NavigationDrawer(
                     },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
+                var openAddTransactionDialog by remember {
+                    mutableStateOf(false)
+                }
+                if (openAddTransactionDialog) {
+                    addTransactionDialog {
+                        openAddTransactionDialog = false
+                    }
+                }
                 NavigationDrawerItem(
                     label = { Text(text = stringResource(R.string.add_request)) },
                     selected = when (transactions) {
@@ -109,7 +118,7 @@ internal fun NavigationDrawer(
                         scope.launch {
                             vibration(context = context)
                             drawerState.close()
-                            onEvent(TransactionEvent.SetTransaction(null))
+                            openAddTransactionDialog = true
                         }
                     },
                     icon = {

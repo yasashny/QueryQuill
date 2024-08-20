@@ -13,7 +13,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -22,31 +21,27 @@ import com.yas.request.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun LoadingAlertDialog(
-    openDialog: MutableState<Boolean>,
-    isJobCancel: MutableState<Boolean>
+    onDismiss: () -> Unit
 ) {
-    if (openDialog.value) {
-        BasicAlertDialog(onDismissRequest = {
-            isJobCancel.value = true
-            openDialog.value = false
-        }) {
-            Surface(
-                modifier = Modifier
-                    .wrapContentWidth()
-                    .wrapContentHeight(),
-                shape = MaterialTheme.shapes.large,
-                tonalElevation = AlertDialogDefaults.TonalElevation
-            ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    CircularProgressIndicator(modifier = Modifier.padding(16.dp))
-                    TextButton(onClick = {
-                        isJobCancel.value = true
-                        openDialog.value = false
-                    }) {
-                        Text(stringResource(id = R.string.cancel))
-                    }
+    BasicAlertDialog(onDismissRequest = {
+        onDismiss()
+    }) {
+        Surface(
+            modifier = Modifier
+                .wrapContentWidth()
+                .wrapContentHeight(),
+            shape = MaterialTheme.shapes.large,
+            tonalElevation = AlertDialogDefaults.TonalElevation
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                CircularProgressIndicator(modifier = Modifier.padding(16.dp))
+                TextButton(onClick = {
+                    onDismiss()
+                }) {
+                    Text(stringResource(id = R.string.cancel))
                 }
             }
         }
+
     }
 }
