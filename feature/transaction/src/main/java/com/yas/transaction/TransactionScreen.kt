@@ -1,5 +1,6 @@
 package com.yas.transaction
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -50,8 +51,11 @@ fun TransactionScreen(
     }
 
     val vm = koinViewModel<TransactionViewModel>()
-
+    var currentId: Long? by remember {
+        mutableStateOf(null)
+    }
     val transactions = vm.transactions.collectAsState().value
+
 
     NavigationDrawer(
         transactions = transactions,
@@ -79,77 +83,92 @@ fun TransactionScreen(
                     }
 
                     is TransactionsUiState.Success -> {
-                        when (transactions.currentId) {
-                            null -> {
-                                goToNewTransactionScreen()
-                            }
 
-                            else -> {
-                                when (screenState) {
-                                    ScreenState.SINGLE_SCREEN -> {
-                                        Column {
-                                            val tabsScreenState = remember {
-                                                mutableStateOf(TabsScreenState.REQUEST)
-                                            }
-                                            PrimaryTextTabs(tabsScreenState)
-                                            when (tabsScreenState.value) {
-                                                TabsScreenState.REQUEST -> {
-                                                    navigateToRequestScreen(
-                                                        Modifier.fillMaxSize(), navigateToEditor
-                                                    ) {
-                                                        tabsScreenState.value =
-                                                            TabsScreenState.RESPONSE
+                        currentId = transactions.currentId
+
+                        Crossfade(targetState = currentId, label = "transactions") { cId ->
+                            when (cId) {
+                                null -> {
+                                    goToNewTransactionScreen()
+                                }
+
+                                else -> {
+                                    when (screenState) {
+                                        ScreenState.SINGLE_SCREEN -> {
+                                            Column {
+                                                val tabsScreenState = remember {
+                                                    mutableStateOf(TabsScreenState.REQUEST)
+                                                }
+                                                PrimaryTextTabs(tabsScreenState)
+                                                Crossfade(
+                                                    targetState = tabsScreenState.value,
+                                                    label = "tabs"
+                                                ) { screenState ->
+
+
+                                                    when (screenState) {
+                                                        TabsScreenState.REQUEST -> {
+                                                            navigateToRequestScreen(
+                                                                Modifier.fillMaxSize(),
+                                                                navigateToEditor
+                                                            ) {
+                                                                tabsScreenState.value =
+                                                                    TabsScreenState.RESPONSE
+                                                            }
+                                                        }
+
+                                                        TabsScreenState.RESPONSE -> {
+                                                            goToResponseScreen(
+                                                                Modifier.fillMaxSize()
+                                                            )
+                                                        }
                                                     }
                                                 }
-
-                                                TabsScreenState.RESPONSE -> {
-                                                    goToResponseScreen(
-                                                        Modifier.fillMaxSize()
-                                                    )
-                                                }
                                             }
                                         }
-                                    }
 
-                                    ScreenState.ROW_SCREEN -> {
-                                        Row {
-                                            navigateToRequestScreen(
-                                                Modifier
-                                                    .fillMaxSize()
-                                                    .weight(1f), navigateToEditor
-                                            ) {}
-                                            Box(
-                                                Modifier
-                                                    .fillMaxHeight()
-                                                    .width(1.dp)
-                                                    .background(MaterialTheme.colorScheme.outlineVariant)
-                                            )
-                                            goToResponseScreen(
-                                                Modifier
-                                                    .fillMaxSize()
-                                                    .weight(1f)
-                                            )
+                                        ScreenState.ROW_SCREEN -> {
+                                            Row {
+                                                navigateToRequestScreen(
+                                                    Modifier
+                                                        .fillMaxSize()
+                                                        .weight(1f),
+                                                    navigateToEditor
+                                                ) {}
+                                                Box(
+                                                    Modifier
+                                                        .fillMaxHeight()
+                                                        .width(1.dp)
+                                                        .background(MaterialTheme.colorScheme.outlineVariant)
+                                                )
+                                                goToResponseScreen(
+                                                    Modifier
+                                                        .fillMaxSize()
+                                                        .weight(1f)
+                                                )
+                                            }
                                         }
-                                    }
 
-                                    ScreenState.COLUMN_SCREEN -> {
-                                        Column {
-                                            navigateToRequestScreen(
-                                                Modifier
-                                                    .fillMaxSize()
-                                                    .weight(1f), navigateToEditor
-                                            ) {}
-                                            Box(
-                                                Modifier
-                                                    .fillMaxWidth()
-                                                    .height(1.dp)
-                                                    .background(MaterialTheme.colorScheme.outlineVariant)
-                                            )
-                                            goToResponseScreen(
-                                                Modifier
-                                                    .fillMaxSize()
-                                                    .weight(1f)
-                                            )
+                                        ScreenState.COLUMN_SCREEN -> {
+                                            Column {
+                                                navigateToRequestScreen(
+                                                    Modifier
+                                                        .fillMaxSize()
+                                                        .weight(1f),
+                                                    navigateToEditor
+                                                ) {}
+                                                Box(
+                                                    Modifier
+                                                        .fillMaxWidth()
+                                                        .height(1.dp)
+                                                        .background(MaterialTheme.colorScheme.outlineVariant)
+                                                )
+                                                goToResponseScreen(
+                                                    Modifier
+                                                        .fillMaxSize()
+                                                        .weight(1f)
+                                                )
+                                            }
                                         }
                                     }
                                 }

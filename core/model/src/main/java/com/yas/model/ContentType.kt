@@ -1,7 +1,9 @@
 package com.yas.model
 
+import androidx.compose.runtime.Stable
 import kotlinx.serialization.Serializable
 
+@Stable
 @Serializable
 sealed interface ContentType {
     @Serializable

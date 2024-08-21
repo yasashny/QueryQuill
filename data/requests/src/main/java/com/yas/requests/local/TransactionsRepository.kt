@@ -37,14 +37,12 @@ class TransactionsRepository internal constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     fun getTransactions(): Flow<GetTransactionModel> {
-        return transactionLocalDataSource.getTransactions().flowOn(ioDispatcher).map { list ->
-            list.map { it.toModel() }
-        }.flatMapLatest { list ->
-            currentTransactionIdLocalDataSource.getId().map {
-                GetTransactionModel(ImmutableList(list), it)
+        return currentTransactionIdLocalDataSource.getId().flowOn(ioDispatcher)
+            .flatMapLatest { id ->
+                transactionLocalDataSource.getTransactions().map { list ->
+                    GetTransactionModel(ImmutableList(list.map { it.toModel() }), id)
+                }
             }
-
-        }
     }
 
     fun getCurrentRequestOrNull(): Flow<RequestModel?> {

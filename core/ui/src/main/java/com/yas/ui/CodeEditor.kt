@@ -39,7 +39,7 @@ fun CodeEditor(
     isBasicDisplayMode: Boolean,
     languageType: LanguageType,
     file: File,
-    isWordWrap : Boolean = true,
+    isWordWrap: Boolean = true,
 ) {
 
     val context = LocalContext.current

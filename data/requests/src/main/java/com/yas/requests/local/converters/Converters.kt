@@ -90,11 +90,13 @@ internal object Converters {
 
     @TypeConverter
     @JvmStatic
-    fun fromContentType(contentType: ContentType): String = jsonSerializer.encodeToString(contentType)
+    fun fromContentType(contentType: ContentType): String =
+        jsonSerializer.encodeToString(contentType)
 
     @TypeConverter
     @JvmStatic
-    fun toContentType(value: String): ContentType = jsonSerializer.decodeFromString<ContentType>(value)
+    fun toContentType(value: String): ContentType =
+        jsonSerializer.decodeFromString<ContentType>(value)
 
 }
 

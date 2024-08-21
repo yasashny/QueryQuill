@@ -31,19 +31,20 @@ internal fun ResponseScreenSource(
 ) {
     val context = LocalContext.current
     val file = rememberUpdatedState(newValue = File(getTextFileUri(fileName)))
-    if (file.value.length() > 5242880){
 
-    }
     if (file.value.length() > 104857600) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text(text = "Files larger than 100 megabytes cannot be previewed due to performance reasons. You can download the file.", Modifier.padding(15.dp))
+            Text(
+                text = "Files larger than 100 megabytes cannot be previewed due to performance reasons. You can download the file.",
+                Modifier.padding(15.dp)
+            )
         }
-    } else{
-        if (file.value.length() > 5242880){
+    } else {
+        if (file.value.length() > 5242880) {
             var showAnyway by remember {
                 mutableStateOf(false)
             }
-            if (showAnyway){
+            if (showAnyway) {
                 if (file.value.length() > 52428800) {
                     val state = CodeEditorState()
                     CodeEditor(
@@ -71,11 +72,13 @@ internal fun ResponseScreenSource(
                         file = file.value
                     )
                 }
-            }
-            else{
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+            } else {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Column {
-                        Text(text = "A file larger than 5 MB is hidden for performance reasons", Modifier.padding(15.dp))
+                        Text(
+                            text = "A file larger than 5 MB is hidden for performance reasons",
+                            Modifier.padding(15.dp)
+                        )
                         OutlinedButton(onClick = { showAnyway = true }, Modifier.padding(15.dp)) {
                             Text(text = "Show anyway")
                         }
@@ -85,8 +88,7 @@ internal fun ResponseScreenSource(
                 }
             }
 
-        }
-        else{
+        } else {
             val state = CodeEditorState()
             CodeEditor(
                 state = state,

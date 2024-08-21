@@ -12,7 +12,7 @@
     <string name="name">Name</string>
     <string name="value">Value</string>
     <string name="type">Type</string>
-    <string name="input_your_body_here">Input your body here...</string>
+    <string name="input_your_body_here">Input your body here…</string>
     <string name="body">body</string>
     <string name="select_file">Select file</string>
     <string name="url">Url</string>
