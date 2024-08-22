@@ -1,4 +1,4 @@
-package com.yas.queryquill.ui.theme
+package com.yas.designsystem
 
 import androidx.compose.ui.graphics.Color
 

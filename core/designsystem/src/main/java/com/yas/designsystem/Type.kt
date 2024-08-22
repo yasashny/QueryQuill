@@ -1,4 +1,4 @@
-package com.yas.queryquill.ui.theme
+package com.yas.designsystem
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

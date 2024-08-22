@@ -67,5 +67,6 @@ dependencies {
     implementation(projects.feature.requestCodeEditor)
     implementation(projects.feature.request)
     implementation(projects.feature.transaction)
+    implementation(projects.core.designsystem)
 
 }

@@ -1,7 +1,6 @@
 package com.yas.response.preview
 
 import android.annotation.SuppressLint
-import android.net.Uri
 import android.view.ViewGroup
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -14,12 +13,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import java.io.File
-import java.net.URI
 
 
 @SuppressLint("SetJavaScriptEnabled", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-internal fun WebViewPage(fileName: String, getTextFileUri: (textFileName: String) -> URI) {
+internal fun WebViewPage(file: File) {
     Scaffold {
         Box {
             val context = LocalContext.current
@@ -33,7 +31,7 @@ internal fun WebViewPage(fileName: String, getTextFileUri: (textFileName: String
                     )
                 }
             }
-            val fileUri = Uri.fromFile(File(getTextFileUri(fileName))).toString()
+            val fileUri = file.toURI().toString()
             AndroidView(modifier = Modifier.fillMaxSize(), factory = { webView }, update = {
                 it.loadUrl(fileUri)
             })

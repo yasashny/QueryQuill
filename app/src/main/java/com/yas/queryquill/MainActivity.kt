@@ -9,7 +9,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import com.yas.model.ThemeState
-import com.yas.queryquill.ui.theme.QueryQuillTheme
+import com.yas.designsystem.QueryQuillTheme
 import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
