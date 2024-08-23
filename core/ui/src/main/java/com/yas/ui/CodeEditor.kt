@@ -47,20 +47,23 @@ fun CodeEditor(
     var isLoading by remember {
         mutableStateOf(true)
     }
-    LaunchedEffect(file) {
-        isLoading = true
-        withContext(Dispatchers.IO) {
-            inputStream.readInChunks(10000).forEach {
-                withContext(Dispatchers.Main) {
-                    val line = state.content.lineCount - 1
-                    val column = state.content.getColumnCount(line)
-                    state.content.insert(line, column, it)
+    if (state.content.isEmpty()) {
+        LaunchedEffect(file) {
+            isLoading = true
+            withContext(Dispatchers.IO) {
+                inputStream.readInChunks(10000).forEach {
+                    withContext(Dispatchers.Main) {
+                        val line = state.content.lineCount - 1
+                        val column = state.content.getColumnCount(line)
+                        state.content.insert(line, column, it)
+                    }
                 }
             }
+            inputStream.close()
+            isLoading = false
         }
-        inputStream.close()
-        isLoading = false
     }
+    
     if (isLoading) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()

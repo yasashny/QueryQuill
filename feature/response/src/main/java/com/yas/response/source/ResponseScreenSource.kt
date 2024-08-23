@@ -9,15 +9,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import com.yas.model.CodeEditorState
 import com.yas.model.LanguageType
+import com.yas.response.R
 import com.yas.response.utils.RestrictiveConstants
 import com.yas.ui.CodeEditor
 import java.io.File
 
 @Composable
 internal fun ResponseScreenSource(
-    languageType: LanguageType, file: File
+    languageType: LanguageType, file: File, state: CodeEditorState
 ) {
     val context = LocalContext.current
 
@@ -30,32 +32,22 @@ internal fun ResponseScreenSource(
         }
 
         if (confirmFileOpening) {
+
+            CodeEditor(
+                state = state,
+                modifier = Modifier.fillMaxSize(),
+                isEditable = false,
+                languageType = languageType,
+                isBasicDisplayMode = true,
+                file = file,
+                isWordWrap = file.length() <= RestrictiveConstants.DISABLE_WORD_WRAP
+            )
             if (file.length() > RestrictiveConstants.DISABLE_WORD_WRAP) {
-                val state = CodeEditorState()
-                CodeEditor(
-                    state = state,
-                    modifier = Modifier.fillMaxSize(),
-                    isEditable = false,
-                    languageType = languageType,
-                    isBasicDisplayMode = true,
-                    file = file,
-                    isWordWrap = false
-                )
                 Toast.makeText(
                     context,
-                    "The file is too big. Wordwrap is disabled for performance reasons",
+                    stringResource(R.string.the_file_is_too_big_wordwrap_is_disabled_for_performance_reasons),
                     Toast.LENGTH_LONG
                 ).show()
-            } else {
-                val state = CodeEditorState()
-                CodeEditor(
-                    state = state,
-                    modifier = Modifier.fillMaxSize(),
-                    isEditable = false,
-                    languageType = languageType,
-                    isBasicDisplayMode = true,
-                    file = file
-                )
             }
         } else {
             ConfirmFileOpeningScreen {

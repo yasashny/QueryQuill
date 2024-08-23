@@ -10,8 +10,7 @@ import java.io.File
 import java.io.InputStream
 
 @Composable
-fun saveFile(file: File):
-        ManagedActivityResultLauncher<String, Uri?> {
+internal fun saveFileLauncher(file: File): ManagedActivityResultLauncher<String, Uri?> {
     val context = LocalContext.current
     return rememberLauncherForActivityResult(contract = ActivityResultContracts.CreateDocument("*/*")) { uri: Uri? ->
         uri?.let {
@@ -22,5 +21,4 @@ fun saveFile(file: File):
             }
         }
     }
-
 }

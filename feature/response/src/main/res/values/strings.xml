@@ -2,4 +2,8 @@
 <resources>
     <string name="ms">%1$s ms</string>
     <string name="bytes">%1$s bytes</string>
+    <string name="files_larger_than_100_megabytes_cannot_be_previewed_due_to_performance_reasons_you_can_download_the_file">Files larger than 100 megabytes cannot be previewed due to performance reasons. You can download the file.</string>
+    <string name="a_file_larger_than_5_mb_is_hidden_for_performance_reasons">A file larger than 5 MB is hidden for performance reasons</string>
+    <string name="show_anyway">Show anyway</string>
+    <string name="the_file_is_too_big_wordwrap_is_disabled_for_performance_reasons">The file is too big. Wordwrap is disabled for performance reasons</string>
 </resources>

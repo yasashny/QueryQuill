@@ -9,20 +9,24 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.yas.response.R
 
 @Composable
-fun ConfirmFileOpeningScreen(onConfirm: () -> Unit) {
+internal fun ConfirmFileOpeningScreen(onConfirm: () -> Unit) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column {
+        Column(Modifier.padding(15.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
-                text = "A file larger than 5 MB is hidden for performance reasons",
-                Modifier.padding(15.dp)
+                text = stringResource(R.string.a_file_larger_than_5_mb_is_hidden_for_performance_reasons),
+                Modifier.padding(15.dp),
+                textAlign = TextAlign.Center
             )
             Button(
-                onClick = { onConfirm() }, Modifier.padding(15.dp)
+                onClick = { onConfirm() }, modifier = Modifier.padding(top = 15.dp)
             ) {
-                Text(text = "Show anyway")
+                Text(text = stringResource(R.string.show_anyway))
             }
         }
     }

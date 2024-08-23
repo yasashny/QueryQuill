@@ -12,13 +12,14 @@ import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
 import coil.size.Size
+import com.yas.model.CodeEditorState
 import com.yas.model.LanguageType
 import com.yas.response.source.ResponseScreenSource
 import java.io.File
 
 @Composable
 internal fun Base64ImageDisplay(
-    file: File
+    file: File, codeEditorState: CodeEditorState
 ) {
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         SubcomposeAsyncImage(
@@ -32,7 +33,7 @@ internal fun Base64ImageDisplay(
                 AsyncImagePainter.State.Empty -> {}
                 is AsyncImagePainter.State.Error -> {
                     ResponseScreenSource(
-                        LanguageType.PLAIN, file
+                        LanguageType.PLAIN, file, codeEditorState
                     )
                 }
 

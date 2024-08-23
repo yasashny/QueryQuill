@@ -7,16 +7,15 @@ import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.yas.model.ImmutableList
-import com.yas.response.ResponseSegmentedButtonState
+import com.yas.response.model.SegmentedButtonState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun SegmentedButtonResponse(
-    currentState: ResponseSegmentedButtonState,
-    options: ImmutableList<ResponseSegmentedButtonState>,
-    onClick: (ResponseSegmentedButtonState) -> Unit
+internal fun SegmentedButton(
+    currentState: SegmentedButtonState,
+    options: ImmutableList<SegmentedButtonState>,
+    onClick: (SegmentedButtonState) -> Unit
 ) {
-
     SingleChoiceSegmentedButtonRow {
         options.list.forEachIndexed { index, chipState ->
             SegmentedButton(

@@ -9,10 +9,12 @@ data class ResponseModel(
     val headers: ImmutableList<KeyValue>
 ) {
     companion object {
+        const val DEFAULT_FILE_NAME = "default.txt"
+
         fun default(): ResponseModel {
             return ResponseModel(
                 "--",
-                "default.txt",
+                DEFAULT_FILE_NAME,
                 "--",
                 "--",
                 ContentType.Text.PLAIN,

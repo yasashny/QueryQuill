@@ -1,4 +1,4 @@
-package com.yas.response
+package com.yas.response.headers
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,7 +20,7 @@ import com.yas.model.ImmutableList
 import com.yas.model.KeyValue
 
 @Composable
-internal fun ResponseScreenHeaders(headers: ImmutableList<KeyValue>) {
+internal fun HeadersScreen(headers: ImmutableList<KeyValue>) {
 
     LazyColumn {
         items(headers.list) { item ->

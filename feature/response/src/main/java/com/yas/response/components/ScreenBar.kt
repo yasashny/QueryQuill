@@ -20,14 +20,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.yas.model.ResponseModel
 import com.yas.response.R
-import com.yas.response.preview.saveFile
+import com.yas.response.preview.saveFileLauncher
 import java.io.File
 
 @Composable
-fun ResponseScreenBar(status: String, time: String, contentLength: String, file: File) {
+internal fun ScreenBar(status: String, time: String, contentLength: String, file: File) {
 
-    val saveFile = saveFile(file)
+    val saveFile = saveFileLauncher(file)
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -62,7 +63,8 @@ fun ResponseScreenBar(status: String, time: String, contentLength: String, file:
             VerticalDivider(color = MaterialTheme.colorScheme.outline)
             Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                 IconButton(
-                    onClick = { saveFile.launch(file.name) }, enabled = file.name != "default.txt"
+                    onClick = { saveFile.launch(file.name) },
+                    enabled = file.name != ResponseModel.DEFAULT_FILE_NAME
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.download),
