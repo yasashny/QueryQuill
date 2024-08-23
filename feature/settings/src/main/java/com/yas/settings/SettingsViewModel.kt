@@ -3,28 +3,23 @@ package com.yas.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 internal class SettingsViewModel(
     private val repository: SettingsRepository
 ) : ViewModel() {
 
-    private val _settingsUiState = MutableStateFlow<SettingsUiState>(SettingsUiState.Loading)
-    val settingsState = _settingsUiState.asStateFlow()
+    val settingsUiState = repository.getSettings().map { newSettingsModel ->
+        SettingsUiState.Success(newSettingsModel)
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), SettingsUiState.Loading)
 
-    init {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.getSettings().collect { newSettingsModel ->
-                _settingsUiState.value = SettingsUiState.Success(newSettingsModel)
-            }
-        }
-    }
 
     fun updateModel(updateSettings: UpdateSettings) {
         viewModelScope.launch(Dispatchers.IO) {
-            when (val state = settingsState.value) {
+            when (val state = settingsUiState.value) {
                 SettingsUiState.Loading -> {}
                 is SettingsUiState.Success -> {
                     when (updateSettings) {

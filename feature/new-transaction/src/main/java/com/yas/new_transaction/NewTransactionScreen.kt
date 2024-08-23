@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -42,13 +43,12 @@ fun NewTransactionScreen() {
             )
             Button(onClick = { openAddTransactionDialog = true }) {
                 Text(
-                    text = "Create New Request",
+                    text = stringResource(R.string.create_new_request),
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.padding(horizontal = 15.dp)
                 )
             }
             Spacer(modifier = Modifier.height(65.dp))
         }
-
     }
 }

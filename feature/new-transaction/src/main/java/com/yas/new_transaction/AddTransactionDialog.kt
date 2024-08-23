@@ -21,7 +21,10 @@ fun AddTransactionDialog(onDismiss: () -> Unit) {
         mutableStateOf("New Request")
     }
     AlertDialog(title = {
-        Text(text = "Add Request", style = MaterialTheme.typography.titleLarge)
+        Text(
+            text = stringResource(id = R.string.add_request),
+            style = MaterialTheme.typography.titleLarge
+        )
     }, onDismissRequest = { onDismiss() }, confirmButton = {
         TextButton(onClick = {
             vm.addNewTransaction(label)

@@ -3,6 +3,7 @@ package com.yas.queryquill
 import android.content.Context
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
+import com.yas.model.ThemeState
 import io.github.rosemoe.sora.langs.textmate.registry.FileProviderRegistry
 import io.github.rosemoe.sora.langs.textmate.registry.GrammarRegistry
 import io.github.rosemoe.sora.langs.textmate.registry.ThemeRegistry
@@ -11,7 +12,7 @@ import io.github.rosemoe.sora.langs.textmate.registry.provider.AssetsFileResolve
 import org.eclipse.tm4e.core.registry.IThemeSource
 
 @Composable
-fun TextMateInit(applicationContext: Context, theme: com.yas.model.ThemeState) {
+fun TextMateInit(applicationContext: Context, theme: ThemeState) {
     FileProviderRegistry.getInstance().addFileProvider(
         AssetsFileResolver(
             applicationContext.assets
@@ -19,9 +20,9 @@ fun TextMateInit(applicationContext: Context, theme: com.yas.model.ThemeState) {
     )
     val themeRegistry = ThemeRegistry.getInstance()
     val isDarkTheme = when (theme) {
-        com.yas.model.ThemeState.SYSTEM -> isSystemInDarkTheme()
-        com.yas.model.ThemeState.DARK -> true
-        com.yas.model.ThemeState.LIGHT -> false
+        ThemeState.SYSTEM -> isSystemInDarkTheme()
+        ThemeState.DARK -> true
+        ThemeState.LIGHT -> false
     }
     val name = if (isDarkTheme) {
         "darcula"

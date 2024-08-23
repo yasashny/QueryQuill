@@ -50,7 +50,7 @@ fun SettingsDialog(onDismiss: () -> Unit) {
 
         val vm = koinViewModel<SettingsViewModel>()
 
-        when (val settingsState = vm.settingsState.collectAsState().value) {
+        when (val settingsState = vm.settingsUiState.collectAsState().value) {
             SettingsUiState.Loading -> {
                 Box(modifier = Modifier.height(300.dp), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
@@ -84,10 +84,10 @@ fun SettingsDialog(onDismiss: () -> Unit) {
                                     )
                                 )
                             }) {
-                                Text(text = "Licenses")
+                                Text(text = stringResource(R.string.licenses))
                             }
                             TextButton(onClick = { }) {
-                                Text(text = "Private policy")
+                                Text(text = stringResource(R.string.private_policy))
                             }
                         }
                         Row(
@@ -95,7 +95,7 @@ fun SettingsDialog(onDismiss: () -> Unit) {
                             modifier = Modifier.fillMaxSize()
                         ) {
                             TextButton(onClick = { }) {
-                                Text(text = "Feedback")
+                                Text(text = stringResource(R.string.feedback))
                             }
                         }
                     }
