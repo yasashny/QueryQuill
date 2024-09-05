@@ -18,20 +18,60 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.yas.model.BasicBinaryFile
+import com.yas.model.BodyState
+import com.yas.model.ImmutableUri
 import com.yas.request.R
+import com.yas.request.alertDialog.ChangeContentTypeDialog
 import com.yas.request.utils.fileNameByUri
+import com.yas.requests.utils.getMIMEType
 
 @Composable
 internal fun BinaryFileElement(
-    currentState: BasicBinaryFile, updateRequest: (selectedUri: Uri, fileName: String) -> Unit
+    currentState: BasicBinaryFile,
+    updateRequest: (selectedUri: Uri, fileName: String, isChangeType: Boolean, contentType: String) -> Unit,
+    isContentTypeInHeaders: (String) -> Boolean
 ) {
     val context = LocalContext.current
+
+
+    var openChangeContentTypeDialog by remember {
+        mutableStateOf(Triple(false, "", BodyState.BinaryFile.default()))
+    }
+    if (openChangeContentTypeDialog.first) {
+        ChangeContentTypeDialog(newContentType = openChangeContentTypeDialog.second, onDismiss = {
+            updateRequest(
+                openChangeContentTypeDialog.third.uri.uri,
+                openChangeContentTypeDialog.third.fileName,
+                false,
+                openChangeContentTypeDialog.second
+            )
+            openChangeContentTypeDialog = Triple(
+                false, openChangeContentTypeDialog.second, openChangeContentTypeDialog.third
+            )
+        }, onConfirm = {
+            updateRequest(
+                openChangeContentTypeDialog.third.uri.uri,
+                openChangeContentTypeDialog.third.fileName,
+                true,
+                openChangeContentTypeDialog.second
+            )
+            openChangeContentTypeDialog = Triple(
+                false, openChangeContentTypeDialog.second, openChangeContentTypeDialog.third
+            )
+        })
+    }
+
+
     val getContent =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.OpenDocument(),
             onResult = { uri: Uri? ->
@@ -40,7 +80,21 @@ internal fun BinaryFileElement(
                     val takeFlags: Int =
                         Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                     contentResolver.takePersistableUriPermission(selectedUri, takeFlags)
-                    updateRequest(selectedUri, fileNameByUri(context.contentResolver, selectedUri))
+                    if (!isContentTypeInHeaders(getMIMEType(context, selectedUri))) {
+                        openChangeContentTypeDialog = Triple(
+                            true, getMIMEType(context, selectedUri), BodyState.BinaryFile(
+                                ImmutableUri(selectedUri),
+                                fileNameByUri(contentResolver, selectedUri)
+                            )
+                        )
+                    } else {
+                        updateRequest(
+                            selectedUri,
+                            fileNameByUri(contentResolver, selectedUri),
+                            false,
+                            getMIMEType(context, uri)
+                        )
+                    }
                 }
             })
     OutlinedCard(
@@ -66,7 +120,7 @@ internal fun BinaryFileElement(
             )
             IconButton(modifier = Modifier, onClick = {
                 updateRequest(
-                    Uri.EMPTY, ""
+                    Uri.EMPTY, "", false, "application/octet-stream"
                 )
             }, enabled = currentState.uri.uri != Uri.EMPTY) {
                 Icon(imageVector = Icons.Outlined.Delete, contentDescription = null)

@@ -62,8 +62,10 @@ fun CodeEditor(
             inputStream.close()
             isLoading = false
         }
+    } else {
+        isLoading = false
     }
-    
+
     if (isLoading) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()

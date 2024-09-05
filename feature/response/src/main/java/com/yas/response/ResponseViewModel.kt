@@ -28,13 +28,11 @@ internal class ResponseViewModel(private val transactionsRepository: Transaction
     }
 
     var segmentedButtonState by mutableStateOf(SegmentedButtonState.PREVIEW)
-        private set
 
     fun updateSegmentedButtonState(newState: SegmentedButtonState) {
         segmentedButtonState = newState
     }
 
     var codeEditorState by mutableStateOf(CodeEditorState())
-        private set
 
 }

@@ -1,7 +1,7 @@
 package com.yas.request.auth
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.yas.model.AuthState
-import com.yas.model.BasicState
 import com.yas.model.ImmutableList
 import com.yas.request.R
 import com.yas.request.alertDialog.ChangeTypeDialog
@@ -21,23 +20,27 @@ import com.yas.request.components.ChipGroup
 
 
 internal fun LazyListScope.authScreen(
-    authState: AuthState, updateRequest: (AuthState) -> Unit
+    getAuthState: () -> AuthState,
+    changeAuthType: (EnumAuthState) -> Unit,
+    updateBasicAuth: (AuthState.Basic) -> Unit
 ) {
     item {
-        Row {
+        Column {
+            val authState = getAuthState()
+
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 15.dp, top = 15.dp)
             ) {
                 var openChangeTypeDialog by remember {
-                    mutableStateOf(Pair(false, authState as BasicState))
+                    mutableStateOf(Pair(false, authState.toEnum()))
                 }
                 if (openChangeTypeDialog.first) {
                     ChangeTypeDialog(title = stringResource(R.string.auth), onDismiss = {
                         openChangeTypeDialog = Pair(false, openChangeTypeDialog.second)
                     }, onConfirm = {
-                        updateRequest(openChangeTypeDialog.second as AuthState)
+                        changeAuthType(openChangeTypeDialog.second)
                         openChangeTypeDialog = Pair(false, openChangeTypeDialog.second)
                     })
                 }
@@ -48,24 +51,20 @@ internal fun LazyListScope.authScreen(
                         )
                     )
                 ) { newEnumState ->
-                    val newState = newEnumState.toAuthState()
-                    if (authState::class != newState::class) {
+                    if (newEnumState != authState.toEnum()) {
                         if (authState.isDefault()) {
-                            updateRequest(newState)
+                            changeAuthType(newEnumState)
                         } else {
-                            openChangeTypeDialog = Pair(true, newState)
+                            openChangeTypeDialog = Pair(true, newEnumState)
                         }
                     }
                 }
             }
-        }
-    }
-
-    when (authState) {
-        AuthState.NoAuth -> {}
-        is AuthState.Basic -> {
-            item {
-                AuthScreenBasic(authState = authState, updateRequest)
+            when (authState) {
+                AuthState.NoAuth -> {}
+                is AuthState.Basic -> {
+                    AuthScreenBasic(authState = authState, updateAuth = updateBasicAuth)
+                }
             }
         }
     }

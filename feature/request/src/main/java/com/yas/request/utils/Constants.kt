@@ -1,5 +1,5 @@
 package com.yas.request.utils
 
-object Constants {
+internal object Constants {
     const val CONTENT_TYPE = "Content-Type"
 }

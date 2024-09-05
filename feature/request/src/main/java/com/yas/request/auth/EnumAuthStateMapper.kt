@@ -8,11 +8,3 @@ internal fun AuthState.toEnum(): EnumAuthState {
         AuthState.NoAuth -> EnumAuthState.NoAuth
     }
 }
-
-internal fun EnumAuthState.toAuthState(): AuthState {
-    return when (this) {
-        EnumAuthState.Basic -> AuthState.Basic.default()
-        EnumAuthState.NoAuth -> AuthState.NoAuth
-    }
-
-}

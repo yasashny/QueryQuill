@@ -13,12 +13,12 @@ import com.yas.model.AuthState
 import com.yas.request.R
 
 @Composable
-internal fun AuthScreenBasic(authState: AuthState.Basic, updateRequest: (AuthState.Basic) -> Unit) {
+internal fun AuthScreenBasic(authState: AuthState.Basic, updateAuth: (AuthState.Basic) -> Unit) {
     Column {
         OutlinedTextField(
             value = authState.userName,
             onValueChange = { userName ->
-                updateRequest(
+                updateAuth(
                     AuthState.Basic(
                         userName, authState.password
                     )
@@ -32,7 +32,7 @@ internal fun AuthScreenBasic(authState: AuthState.Basic, updateRequest: (AuthSta
         OutlinedTextField(
             value = authState.password,
             onValueChange = { password ->
-                updateRequest(
+                updateAuth(
                     AuthState.Basic(
                         authState.userName, password
                     )

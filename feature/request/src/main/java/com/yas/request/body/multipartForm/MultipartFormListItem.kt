@@ -72,8 +72,7 @@ internal fun MultipartFormListItem(
         }
         when (multipartFormState) {
             is MultipartFormState.BinaryFile -> {
-                OutlinedTextField(
-                    value = multipartFormState.title,
+                OutlinedTextField(value = multipartFormState.title,
                     onValueChange = { newTitle ->
                         onTextChanged(
                             MultipartFormState.BinaryFile(
@@ -88,20 +87,21 @@ internal fun MultipartFormListItem(
                         .fillMaxWidth()
                         .padding(horizontal = 15.dp)
                 )
-                BinaryFileElement(currentState = multipartFormState) { uri, fileName ->
-                    onTextChanged(
-                        MultipartFormState.BinaryFile(
-                            uri = ImmutableUri(uri),
-                            title = multipartFormState.title,
-                            fileName = fileName
-                        ), true
-                    )
-                }
+                BinaryFileElement(currentState = multipartFormState,
+                    isContentTypeInHeaders = { true },
+                    updateRequest = { selectedUri, fileName, _, _ ->
+                        onTextChanged(
+                            MultipartFormState.BinaryFile(
+                                uri = ImmutableUri(selectedUri),
+                                title = multipartFormState.title,
+                                fileName = fileName
+                            ), true
+                        )
+                    })
             }
 
             is MultipartFormState.Text -> {
-                OutlinedTextField(
-                    value = multipartFormState.keyValue.key,
+                OutlinedTextField(value = multipartFormState.keyValue.key,
                     onValueChange = {
                         onTextChanged(
                             MultipartFormState.Text(
@@ -117,8 +117,7 @@ internal fun MultipartFormListItem(
                         .padding(start = 15.dp, end = 15.dp)
 
                 )
-                OutlinedTextField(
-                    value = multipartFormState.keyValue.value,
+                OutlinedTextField(value = multipartFormState.keyValue.value,
                     onValueChange = {
                         onTextChanged(
                             MultipartFormState.Text(

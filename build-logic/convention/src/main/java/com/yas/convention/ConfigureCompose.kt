@@ -3,9 +3,7 @@ package com.yas.convention
 import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Action
 import org.gradle.api.Project
-import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.assign
-import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
 
@@ -25,13 +23,15 @@ internal fun Project.configureCompose(
         implementation(libs.ui.tooling.preview)
         implementation(libs.material3)
     }
-    composeCompiler{
+    composeCompiler {
         enableStrongSkippingMode = true
-        metricsDestination =  layout.buildDirectory.dir("compose_compiler")
+        metricsDestination = layout.buildDirectory.dir("compose_compiler")
         reportsDestination = layout.buildDirectory.dir("compose_compiler")
     }
 
 }
 
 fun Project.composeCompiler(configure: Action<ComposeCompilerGradlePluginExtension>): Unit =
-    (this as org.gradle.api.plugins.ExtensionAware).extensions.configure("composeCompiler", configure)
+    (this as org.gradle.api.plugins.ExtensionAware).extensions.configure(
+        "composeCompiler", configure
+    )

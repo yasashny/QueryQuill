@@ -28,7 +28,7 @@ import com.yas.request.components.ChipGroup
 @Composable
 internal fun BodyScreenText(
     bodyState: BodyState.Text,
-    updateRequest: (BodyState.Text) -> Unit,
+    updateTextType: (TextType) -> Unit,
     navigateToEditor: (textFileName: String, languageType: String) -> Unit
 ) {
     Column {
@@ -47,7 +47,7 @@ internal fun BodyScreenText(
                     )
                 ) { newState ->
                     if (bodyState.textType != newState) {
-                        updateRequest(BodyState.Text(bodyState.textFileName, newState))
+                        updateTextType(newState)
                     }
                 }
             }

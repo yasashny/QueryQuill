@@ -11,11 +11,15 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.yas.model.ImmutableList
 import com.yas.model.KeyValue
-import com.yas.model.RequestModel
 
-internal fun LazyListScope.queryPreview(requestModel: RequestModel) {
+internal fun LazyListScope.queryPreview(
+    getUrl: () -> String, getQuery: () -> ImmutableList<KeyValue>
+) {
     item {
+        val url = getUrl()
+        val query = getQuery()
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -26,24 +30,24 @@ internal fun LazyListScope.queryPreview(requestModel: RequestModel) {
         ) {
             val pattern = Regex(".*\\?.*=.*")
             val text = "${
-                if (!requestModel.url.startsWith("http://") && !requestModel.url.startsWith("https://")) {
+                if (!url.startsWith("http://") && !url.startsWith("https://")) {
                     "http://"
 
                 } else {
                     ""
                 }
-            }${requestModel.url}${
-                if (pattern.containsMatchIn(requestModel.url)) {
+            }${url}${
+                if (pattern.containsMatchIn(url)) {
                     "&"
                 } else {
-                    if (requestModel.query.list.any { keyValue: KeyValue -> keyValue != KeyValue.empty() }) {
+                    if (query.list.any { keyValue: KeyValue -> keyValue != KeyValue.empty() }) {
                         "?"
                     } else {
                         ""
                     }
                 }
             }${
-                requestModel.query.list.filter { keyValue: KeyValue -> keyValue != KeyValue.empty() }
+                query.list.filter { keyValue: KeyValue -> keyValue != KeyValue.empty() }
                     .joinToString(separator = "&") { keyValue: KeyValue -> "${keyValue.key}=${keyValue.value}" }
             }"
             Text(text = text, color = MaterialTheme.colorScheme.onSecondaryContainer)
