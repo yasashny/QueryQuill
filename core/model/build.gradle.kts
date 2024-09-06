@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.yas.model"
+    namespace = "org.queryquill.app.core.model"
 }
 dependencies {
     api(platform(libs.sora.editor.bom))

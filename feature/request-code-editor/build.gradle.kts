@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.yas.request_code_editor"
+    namespace = "org.queryquill.app.feature.request_code_editor"
 }
 
 dependencies {

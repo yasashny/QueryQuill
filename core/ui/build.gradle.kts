@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.yas.ui"
+    namespace = "org.queryquill.app.core.ui"
 }
 
 dependencies {

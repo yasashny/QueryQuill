@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.yas.requests"
+    namespace = "org.queryquill.app.data.requests"
 }
 
 dependencies {

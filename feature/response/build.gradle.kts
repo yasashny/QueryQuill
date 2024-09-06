@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.yas.response"
+    namespace = "org.queryquill.app.feature.response"
 }
 
 dependencies {

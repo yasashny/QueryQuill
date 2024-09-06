@@ -1,13 +1,13 @@
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
-import com.yas.convention.configureKotlinAndroid
-import com.yas.convention.implementation
-import com.yas.convention.libs
 import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
+import org.queryquill.app.configureKotlinAndroid
+import org.queryquill.app.implementation
+import org.queryquill.app.libs
 
 class AndroidApplicationConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -33,5 +33,5 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
     }
 }
 
-private fun BaseAppModuleExtension.kotlinOptions(configure: Action<org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions>): Unit =
+fun BaseAppModuleExtension.kotlinOptions(configure: Action<org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions>): Unit =
     (this as org.gradle.api.plugins.ExtensionAware).extensions.configure("kotlinOptions", configure)

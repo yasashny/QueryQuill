@@ -5,12 +5,12 @@ plugins {
 }
 
 android {
-    namespace = "com.yas.queryquill"
+    namespace = "org.queryquill.app"
 
     defaultConfig {
-        applicationId = "com.yas.queryquill"
+        applicationId = "org.queryquill.app"
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
 
         vectorDrawables {
             useSupportLibrary = true

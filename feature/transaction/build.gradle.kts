@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.yas.transaction"
+    namespace = "org.queryquill.app.feature.transaction"
 }
 
 dependencies {

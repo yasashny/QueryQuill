@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.yas.designsystem"
+    namespace = "org.queryquill.app.core.designsystem"
 }
 dependencies {
     api(projects.core.model)

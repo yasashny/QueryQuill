@@ -1,10 +1,10 @@
 import com.android.build.gradle.LibraryExtension
-import com.yas.convention.configureKotlinAndroid
-import com.yas.convention.libs
 import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
+import org.queryquill.app.configureKotlinAndroid
+import org.queryquill.app.libs
 
 class AndroidLibraryConventionPlugin : Plugin<Project> {
 

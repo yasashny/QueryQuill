@@ -1,0 +1,34 @@
+package org.queryquill.app.core.model
+
+import android.net.Uri
+
+
+sealed interface MultipartFormState : BasicState {
+    override val name: String
+
+
+    data class Text(val keyValue: KeyValue) : MultipartFormState {
+        override val name: String
+            get() = "TEXT"
+
+        companion object {
+            fun default(): Text {
+                return Text(KeyValue.empty())
+            }
+        }
+    }
+
+
+    data class BinaryFile(
+        override val uri: ImmutableUri, val title: String, override val fileName: String
+    ) : MultipartFormState, BasicBinaryFile() {
+        override val name: String
+            get() = "FILE"
+
+        companion object {
+            fun default(): BinaryFile {
+                return BinaryFile(ImmutableUri(Uri.EMPTY), "", "")
+            }
+        }
+    }
+}

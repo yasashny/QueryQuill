@@ -1,9 +1,9 @@
 import com.android.build.api.dsl.ApplicationExtension
-import com.yas.convention.configureCompose
-import com.yas.convention.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
+import org.queryquill.app.configureCompose
+import org.queryquill.app.libs
 
 
 class AndroidApplicationComposeConventionPlugin : Plugin<Project> {

@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.yas.settings"
+    namespace = "org.queryquill.app.data.settings"
 }
 
 dependencies {

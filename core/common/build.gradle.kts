@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.yas.common"
+    namespace = "org.queryquill.app.core.common"
 }
 
 dependencies {

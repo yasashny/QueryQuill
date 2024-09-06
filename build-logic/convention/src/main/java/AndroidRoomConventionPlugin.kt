@@ -1,12 +1,12 @@
 import androidx.room.gradle.RoomExtension
-import com.yas.convention.annotationProcessor
-import com.yas.convention.implementation
-import com.yas.convention.ksp
-import com.yas.convention.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
+import org.queryquill.app.annotationProcessor
+import org.queryquill.app.implementation
+import org.queryquill.app.ksp
+import org.queryquill.app.libs
 
 class AndroidRoomConventionPlugin : Plugin<Project> {
 
