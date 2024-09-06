@@ -1,6 +1,10 @@
 package org.queryquill.app.feature.settings
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,10 +21,12 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
@@ -30,6 +36,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
@@ -70,6 +77,7 @@ fun SettingsDialog(onDismiss: () -> Unit) {
                         ThemeSection(currentThemeState = settingsState.settingsModel.themeState) { newThemeState ->
                             vm.updateModel(UpdateSettings.UpdateTheme(newThemeState))
                         }
+                        FeedbackSection()
                         HorizontalDivider()
                         Row(
                             horizontalArrangement = Arrangement.Center,
@@ -93,8 +101,8 @@ fun SettingsDialog(onDismiss: () -> Unit) {
                             horizontalArrangement = Arrangement.Center,
                             modifier = Modifier.fillMaxSize()
                         ) {
-                            TextButton(onClick = { }) {
-                                Text(text = stringResource(R.string.feedback))
+                            TextButton(onClick = { }, enabled = false) {
+                                AppVersionText()
                             }
                         }
                     }
@@ -129,6 +137,35 @@ private fun ThemeSection(currentThemeState: ThemeState, updateTheme: (ThemeState
 }
 
 @Composable
+private fun FeedbackSection() {
+    Text(
+        text = stringResource(id = R.string.feedback),
+        style = MaterialTheme.typography.titleMedium,
+        modifier = Modifier.padding(top = 16.dp, bottom = 8.dp),
+    )
+    Row(
+        verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(bottom = 8.dp)
+    ) {
+        val context = LocalContext.current
+        Icon(
+            painter = painterResource(id = R.drawable.mail),
+            contentDescription = null,
+            modifier = Modifier.padding(start = 16.dp)
+        )
+        SelectionContainer {
+            TextButton(onClick = {
+                val clipboardManager =
+                    context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+                val clipData: ClipData = ClipData.newPlainText("text", "support@queryquill.org")
+                clipboardManager.setPrimaryClip(clipData)
+            }) {
+                Text("support@queryquill.org")
+            }
+        }
+    }
+}
+
+@Composable
 private fun ChooseRow(
     text: String,
     selected: Boolean,
@@ -152,4 +189,19 @@ private fun ChooseRow(
         Spacer(Modifier.width(8.dp))
         Text(text)
     }
+}
+
+@Composable
+private fun AppVersionText() {
+    val context = LocalContext.current
+    val packageManager = context.packageManager
+    val packageInfo = try {
+        packageManager.getPackageInfo(context.packageName, 0)
+    } catch (e: PackageManager.NameNotFoundException) {
+        null
+    }
+
+    val versionName = packageInfo?.versionName ?: "Unknown"
+
+    Text(text = "Version: $versionName")
 }
