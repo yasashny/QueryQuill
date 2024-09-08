@@ -1,6 +1,5 @@
 package org.queryquill.app.feature.request
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -25,13 +23,12 @@ import org.queryquill.app.feature.request.auth.authScreen
 import org.queryquill.app.feature.request.body.bodyScreen
 import org.queryquill.app.feature.request.components.ScreenBar
 import org.queryquill.app.feature.request.components.SegmentedButtonScreenState
-import org.queryquill.app.feature.request.components.SendRequestButton
 import org.queryquill.app.feature.request.components.editableList
 import org.queryquill.app.feature.request.query.queryScreen
 import org.queryquill.app.feature.request.utils.Constants
 import org.queryquill.app.feature.request.utils.SaveRequestOnStop
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+
 @Composable
 fun RequestScreen(
     modifier: Modifier,
@@ -64,15 +61,7 @@ fun RequestScreen(
                 }
             }
 
-            Scaffold(modifier = modifier, floatingActionButton = {
-                SendRequestButton {
-                    openLoadingDialog = true
-                    vm.sendRequest {
-                        openLoadingDialog = false
-                        onRequestSent()
-                    }
-                }
-            }) {
+            Box(modifier = modifier) {
                 val requestModel = requestUiState.request
 
                 LazyColumn {
@@ -84,7 +73,13 @@ fun RequestScreen(
                             },
                             updateUrl = {
                                 vm.updateRequest(UpdateRequestModel.Url(it))
-                            })
+                            }){
+                            openLoadingDialog = true
+                            vm.sendRequest {
+                                openLoadingDialog = false
+                                onRequestSent()
+                            }
+                        }
                     }
                     item {
                         SegmentedButtonScreenState(screenState = vm.screenState) {

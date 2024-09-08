@@ -74,7 +74,7 @@ internal fun NavigationDrawer(
                 )
                 Text(
                     text = stringResource(id = R.string.queryquill),
-                    Modifier.padding(start = 27.dp, top = 8.dp, bottom = 14.dp),
+                    Modifier.padding(start = 27.dp, top = 18.dp, bottom = 14.dp),
                     style = TextStyle(
                         fontFamily = kulimparkBold,
                         fontWeight = FontWeight.Bold,
