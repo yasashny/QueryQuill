@@ -32,7 +32,7 @@ internal fun ScreenBar(status: String, time: String, contentLength: String, file
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 15.dp, top = 23.dp, end = 15.dp, bottom = 15.dp)
+            .padding(start = 15.dp, top = 18.dp, end = 15.dp, bottom = 15.dp)
             .height(56.dp)
             .border(
                 1.dp, MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(4.dp)

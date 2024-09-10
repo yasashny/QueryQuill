@@ -9,9 +9,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Send
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,7 +36,8 @@ internal fun ScreenBar(
     val type = getType()
     val url = getUrl()
     Row(
-        Modifier.padding(15.dp), verticalAlignment = Alignment.CenterVertically
+        Modifier.padding(horizontal = 15.dp, vertical = 10.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         DynamicSelectTextField(
             selectedValue = type, options = ImmutableList(
@@ -55,7 +55,7 @@ internal fun ScreenBar(
             updateType(httpType)
         }
         val context = LocalContext.current
-        OutlinedButton(
+        Button(
             modifier = Modifier
                 .width(140.dp)
                 .padding(start = 15.dp, top = 7.dp)
@@ -73,10 +73,9 @@ internal fun ScreenBar(
                 Icon(
                     imageVector = Icons.AutoMirrored.Outlined.Send,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
                     modifier = Modifier.padding(end = 10.dp)
                 )
-                Text("Send", color = MaterialTheme.colorScheme.onPrimaryContainer, fontSize = 14.sp)
+                Text("Send", fontSize = 15.sp)
             }
         }
     }
@@ -85,8 +84,7 @@ internal fun ScreenBar(
         onValueChange = { updateUrl(it) },
         label = @Composable { Text(text = stringResource(R.string.url)) },
         modifier = Modifier
-            .padding(start = 15.dp, end = 15.dp, bottom = 19.dp)
+            .padding(start = 15.dp, end = 15.dp, bottom = 15.dp)
             .fillMaxWidth()
     )
-
 }

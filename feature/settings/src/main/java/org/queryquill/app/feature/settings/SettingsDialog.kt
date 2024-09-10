@@ -26,7 +26,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
@@ -36,7 +35,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
@@ -147,18 +145,14 @@ private fun FeedbackSection() {
         verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(bottom = 8.dp)
     ) {
         val context = LocalContext.current
-        Icon(
-            painter = painterResource(id = R.drawable.mail),
-            contentDescription = null,
-            modifier = Modifier.padding(start = 16.dp)
-        )
+
         SelectionContainer {
             TextButton(onClick = {
                 val clipboardManager =
                     context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
                 val clipData: ClipData = ClipData.newPlainText("text", "support@queryquill.org")
                 clipboardManager.setPrimaryClip(clipData)
-            }) {
+            }, modifier = Modifier.padding(start = 5.dp)) {
                 Text("support@queryquill.org")
             }
         }
