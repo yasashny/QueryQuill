@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.queryquill.android.application)
     alias(libs.plugins.queryquill.android.application.compose)
+    alias(libs.plugins.firebase.crashlytics)
     id("com.google.android.gms.oss-licenses-plugin")
 }
 
@@ -53,6 +54,11 @@ dependencies {
 
     //SplashScreen
     implementation(libs.core.splashscreen)
+
+    //Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
 
     implementation(projects.data.settings)
     implementation(projects.data.requests)

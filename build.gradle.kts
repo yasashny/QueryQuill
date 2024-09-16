@@ -19,4 +19,6 @@ plugins {
     alias(libs.plugins.androidx.room) apply false
     alias(libs.plugins.serialization) apply false
     alias(libs.plugins.jetbrains.kotlin.jvm) apply false
+    alias(libs.plugins.google.servises) apply false
+    alias(libs.plugins.firebase.crashlytics) apply false
 }

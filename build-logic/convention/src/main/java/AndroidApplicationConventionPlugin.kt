@@ -15,6 +15,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply(libs.plugins.android.application.get().pluginId)
                 apply(libs.plugins.kotlin.android.get().pluginId)
+                apply(libs.plugins.google.servises.get().pluginId)
 
             }
             extensions.configure<ApplicationExtension> {
