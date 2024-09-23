@@ -10,6 +10,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -29,6 +30,7 @@ import java.io.File
 fun RequestCodeEditorScreen(
     textFileName: String, stringLanguageType: String, navigateUp: () -> Unit
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     val languageType = when (stringLanguageType) {
         "Json" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -58,7 +60,10 @@ fun RequestCodeEditorScreen(
                 text = "Text/${stringLanguageType}"
             )
         }, navigationIcon = {
-            TextButton(onClick = { navigateUp() }) {
+            TextButton(onClick = {
+                keyboardController?.hide()
+                navigateUp()
+            }) {
                 Text(text = stringResource(R.string.done))
             }
         })
