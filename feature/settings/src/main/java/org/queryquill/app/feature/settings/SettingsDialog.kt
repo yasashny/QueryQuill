@@ -35,6 +35,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
@@ -91,7 +92,10 @@ fun SettingsDialog(onDismiss: () -> Unit) {
                             }) {
                                 Text(text = stringResource(R.string.licenses))
                             }
-                            TextButton(onClick = { }) {
+                            val uriHandler = LocalUriHandler.current
+                            TextButton(onClick = {
+                                uriHandler.openUri(PRIVATE_POLICY_URL)
+                            }) {
                                 Text(text = stringResource(R.string.private_policy))
                             }
                         }
@@ -199,3 +203,6 @@ private fun AppVersionText() {
 
     Text(text = "Version: $versionName")
 }
+
+private const val PRIVATE_POLICY_URL =
+    "https://fancy-wombat-5c5.notion.site/Private-Policy-113654c8fbee80478663cba5a60a3a62?pvs=74"
