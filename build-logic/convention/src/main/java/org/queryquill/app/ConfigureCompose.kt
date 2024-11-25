@@ -24,7 +24,6 @@ internal fun Project.configureCompose(
         implementation(libs.material3)
     }
     composeCompiler {
-        enableStrongSkippingMode = true
         metricsDestination = layout.buildDirectory.dir("compose_compiler")
         reportsDestination = layout.buildDirectory.dir("compose_compiler")
     }

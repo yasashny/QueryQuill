@@ -16,12 +16,12 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.http.Parameters
 import io.ktor.http.contentType
-import io.ktor.util.InternalAPI
 import io.ktor.util.cio.readChannel
 import io.ktor.util.network.UnresolvedAddressException
 import io.ktor.utils.io.ByteReadChannel
-import io.ktor.utils.io.core.isEmpty
-import io.ktor.utils.io.core.readBytes
+import io.ktor.utils.io.InternalAPI
+import io.ktor.utils.io.readRemaining
+import kotlinx.io.readByteArray
 import org.queryquill.app.core.model.ContentType
 import org.queryquill.app.data.requests.models.AuthStateDTO
 import org.queryquill.app.data.requests.models.BodyStateDTO
@@ -167,8 +167,8 @@ internal class SendRequestLocalDataSource(
                 val channel: ByteReadChannel = httpResponse.body()
                 while (!channel.isClosedForRead) {
                     val packet = channel.readRemaining(DEFAULT_BUFFER_SIZE.toLong())
-                    while (!packet.isEmpty) {
-                        val bytes = packet.readBytes()
+                    while (!packet.exhausted()) {
+                        val bytes = packet.readByteArray()
                         file.appendBytes(bytes)
                     }
                 }
