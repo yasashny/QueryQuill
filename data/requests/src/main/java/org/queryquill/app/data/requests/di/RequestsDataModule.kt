@@ -1,5 +1,6 @@
 package org.queryquill.app.data.requests.di
 
+import androidx.room.Room
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.HttpTimeout
@@ -12,6 +13,7 @@ import org.queryquill.app.data.requests.local.dataSource.CurrentTransactionIdLoc
 import org.queryquill.app.data.requests.local.dataSource.RequestLocalDataSource
 import org.queryquill.app.data.requests.local.dataSource.ResponseLocalDataSource
 import org.queryquill.app.data.requests.local.dataSource.TransactionLocalDataSource
+import org.queryquill.app.data.requests.local.db.RequestsDataBase
 import org.queryquill.app.data.requests.sendRequest.SendRequestLocalDataSource
 import org.queryquill.app.data.requests.sendRequest.SendRequestRepository
 
@@ -34,5 +36,10 @@ val requestsDataModule = module {
     }
     single<SendRequestRepository> {
         SendRequestRepository(get(), get(), get(), get(named(QQDispatchers.IO)))
+    }
+    single<RequestsDataBase> {
+        Room.databaseBuilder(
+            get(), RequestsDataBase::class.java, "request.db"
+        ).build()
     }
 }
