@@ -13,19 +13,13 @@ import org.queryquill.app.core.model.CodeEditorState
 import org.queryquill.app.core.model.ResponseModel
 import org.queryquill.app.data.requests.local.TransactionsRepository
 import org.queryquill.app.feature.response.model.SegmentedButtonState
-import java.net.URI
 
-internal class ResponseViewModel(private val transactionsRepository: TransactionsRepository) :
-    ViewModel() {
+internal class ResponseViewModel(transactionsRepository: TransactionsRepository) : ViewModel() {
 
     val responseModel = transactionsRepository.getCurrentResponseOrNull().map { responseOrNull ->
         responseOrNull ?: ResponseModel.default()
     }.onEach { codeEditorState = CodeEditorState() }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), ResponseModel.default())
-
-    fun getFileUriByName(textFileName: String): URI {
-        return transactionsRepository.getFileUriByName(textFileName)
-    }
 
     var segmentedButtonState by mutableStateOf(SegmentedButtonState.PREVIEW)
 

@@ -25,8 +25,6 @@ import org.queryquill.app.feature.request.auth.EnumAuthState
 import org.queryquill.app.feature.request.body.EnumBodyState
 import org.queryquill.app.feature.request.utils.Constants
 import org.queryquill.app.feature.request.utils.toMimeType
-import java.io.File
-import java.net.URI
 
 internal class RequestViewModel(
     private val transactionsRepository: TransactionsRepository,
@@ -125,11 +123,6 @@ internal class RequestViewModel(
                     }
 
                     is UpdateRequestModel.Body.ChangeType -> {
-                        if (request.request.bodyState is BodyState.Text) {
-                            val file =
-                                File(getFileUriByName((request.request.bodyState as BodyState.Text).textFileName))
-                            file.delete()
-                        }
                         when (updateRequestModel.newState) {
                             EnumBodyState.NoBody -> {
                                 _requestState.update {
@@ -307,10 +300,6 @@ internal class RequestViewModel(
                 }
             }
         }
-    }
-
-    fun getFileUriByName(textFileName: String): URI {
-        return transactionsRepository.getFileUriByName(textFileName)
     }
 
     var screenState by mutableStateOf(ScreenState.BODY)

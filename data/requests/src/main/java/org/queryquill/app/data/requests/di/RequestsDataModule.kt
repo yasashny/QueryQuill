@@ -32,10 +32,10 @@ val requestsDataModule = module {
         }
     }
     single<TransactionsRepository> {
-        TransactionsRepository(get(), get(), get(), get(), get(), get(named(QQDispatchers.IO)))
+        TransactionsRepository(get(), get(), get(), get(), get(named(QQDispatchers.IO)))
     }
     single<SendRequestRepository> {
-        SendRequestRepository(get(), get(), get(), get(named(QQDispatchers.IO)))
+        SendRequestRepository(get(), get(), get(named(QQDispatchers.IO)))
     }
     single<RequestsDataBase> {
         Room.databaseBuilder(

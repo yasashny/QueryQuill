@@ -10,6 +10,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.Lifecycle
@@ -17,7 +18,6 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
-import org.koin.androidx.compose.koinViewModel
 import org.queryquill.app.core.model.CodeEditorState
 import org.queryquill.app.core.model.LanguageType
 import org.queryquill.app.core.ui.CodeEditor
@@ -52,8 +52,6 @@ fun RequestCodeEditorScreen(
         }
     }
 
-    val vm = koinViewModel<RequestCodeEditorViewModel>()
-
     Scaffold(topBar = {
         QueryQuillTopBar(title = {
             Text(
@@ -73,7 +71,11 @@ fun RequestCodeEditorScreen(
                 .padding(paddingValues)
                 .fillMaxSize()
         ) {
-            val file = File(vm.getTextFileUri(textFileName))
+            val ctx = LocalContext.current
+            val file = File(ctx.filesDir, textFileName)
+            if (!file.exists()) {
+                file.writeText("")
+            }
 
             val state = rememberCodeEditorState()
             CodeEditor(

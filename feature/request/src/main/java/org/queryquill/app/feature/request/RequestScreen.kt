@@ -73,7 +73,7 @@ fun RequestScreen(
                             },
                             updateUrl = {
                                 vm.updateRequest(UpdateRequestModel.Url(it))
-                            }){
+                            }) {
                             openLoadingDialog = true
                             vm.sendRequest {
                                 openLoadingDialog = false
@@ -91,7 +91,6 @@ fun RequestScreen(
                     }
                     when (vm.screenState) {
                         ScreenState.BODY -> bodyScreen(bodyState = requestModel.bodyState,
-                            getTextFileUri = vm::getFileUriByName,
                             requestId = requestModel.id,
                             navigateToEditor = navigateToEditor,
                             changeBodyType = {

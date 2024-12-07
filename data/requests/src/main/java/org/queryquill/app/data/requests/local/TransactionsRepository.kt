@@ -1,6 +1,5 @@
 package org.queryquill.app.data.requests.local
 
-import android.content.Context
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -23,11 +22,8 @@ import org.queryquill.app.data.requests.mappers.toDBO
 import org.queryquill.app.data.requests.mappers.toDTO
 import org.queryquill.app.data.requests.mappers.toModel
 import org.queryquill.app.data.requests.models.ResponseDBO
-import java.io.File
-import java.net.URI
 
 class TransactionsRepository internal constructor(
-    private val context: Context,
     private val requestLocalDataSource: RequestLocalDataSource,
     private val currentTransactionIdLocalDataSource: CurrentTransactionIdLocalDataSource,
     private val transactionLocalDataSource: TransactionLocalDataSource,
@@ -107,13 +103,5 @@ class TransactionsRepository internal constructor(
         withContext(ioDispatcher) {
             transactionLocalDataSource.update(model.toDBO())
         }
-    }
-
-    fun getFileUriByName(fileName: String): URI {
-        val file = File(context.filesDir, fileName)
-        if (!file.exists()) {
-            file.writeText("")
-        }
-        return file.toURI()
     }
 }

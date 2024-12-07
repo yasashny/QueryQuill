@@ -13,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.queryquill.app.core.model.BodyState
@@ -28,12 +29,10 @@ import org.queryquill.app.feature.request.components.BinaryFileElement
 import org.queryquill.app.feature.request.components.ChipGroup
 import org.queryquill.app.feature.request.components.editableList
 import java.io.File
-import java.net.URI
 
 
 internal fun LazyListScope.bodyScreen(
     bodyState: BodyState,
-    getTextFileUri: (textFileName: String) -> URI,
     navigateToEditor: (textFileName: String, languageType: String) -> Unit,
     changeBodyType: (EnumBodyState) -> Unit,
     requestId: Long,
@@ -52,6 +51,7 @@ internal fun LazyListScope.bodyScreen(
                     .fillMaxWidth()
                     .padding(bottom = 15.dp, top = 15.dp)
             ) {
+                val context = LocalContext.current
                 var openChangeTypeDialog by remember {
                     mutableStateOf(Pair(false, bodyState.toEnum()))
                 }
@@ -59,6 +59,10 @@ internal fun LazyListScope.bodyScreen(
                     ChangeTypeDialog(title = stringResource(R.string.body), onDismiss = {
                         openChangeTypeDialog = Pair(false, openChangeTypeDialog.second)
                     }, onConfirm = {
+                        if (bodyState is BodyState.Text) {
+                            val file = File(context.filesDir, bodyState.textFileName)
+                            file.delete()
+                        }
                         changeBodyType(openChangeTypeDialog.second)
                         openChangeTypeDialog = Pair(false, openChangeTypeDialog.second)
                     })
@@ -83,7 +87,7 @@ internal fun LazyListScope.bodyScreen(
                                 is BodyState.MultipartForm -> bodyState == BodyState.MultipartForm.default()
                                 BodyState.NoBody -> true
                                 is BodyState.Text -> {
-                                    val file = File(getTextFileUri(bodyState.textFileName))
+                                    val file = File(context.filesDir, bodyState.textFileName)
                                     file.length() == 0L
                                 }
                             }
