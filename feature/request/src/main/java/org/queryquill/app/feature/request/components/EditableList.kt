@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.queryquill.app.core.model.KeyValue
+import org.queryquill.app.core.ui.KeyValueItem
 
 
 internal fun LazyListScope.editableList(

@@ -8,6 +8,7 @@ import org.queryquill.app.core.domain.di.domainModule
 import org.queryquill.app.data.requests.di.requestsDataModule
 import org.queryquill.app.data.settings.di.settingsDataModule
 import org.queryquill.app.di.appModule
+import org.queryquill.app.feature.cookie.di.cookieModule
 import org.queryquill.app.feature.new_transaction.di.newTransactionModule
 import org.queryquill.app.feature.request.di.requestModule
 import org.queryquill.app.feature.request_code_editor.di.requestCodeEditorModule
@@ -32,7 +33,8 @@ class App : Application() {
                     requestCodeEditorModule,
                     domainModule,
                     commonModule,
-                    requestModule
+                    requestModule,
+                    cookieModule
                 )
             )
         }

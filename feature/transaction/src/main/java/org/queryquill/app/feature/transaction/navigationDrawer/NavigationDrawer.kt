@@ -48,6 +48,7 @@ import org.queryquill.app.feature.transaction.TransactionEvent
 internal fun NavigationDrawer(
     transactions: TransactionsUiState,
     navigateToSettings: () -> Unit,
+    navigateToCookie: () -> Unit,
     onEvent: (TransactionEvent) -> Unit,
     addTransactionDialog: @Composable (() -> Unit) -> Unit,
     composable: @Composable (drawerState: DrawerState) -> Unit
@@ -100,6 +101,26 @@ internal fun NavigationDrawer(
                     },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
+
+                val cookieScope = rememberCoroutineScope()
+                NavigationDrawerItem(
+                    label = { Text(text = stringResource(R.string.cookie)) },
+                    selected = false,
+                    onClick = {
+                        cookieScope.launch {
+                            drawerState.close()
+                            navigateToCookie()
+                        }
+                    },
+                    icon = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.cookie_icon),
+                            contentDescription = null
+                        )
+                    },
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                )
+
                 var openAddTransactionDialog by remember {
                     mutableStateOf(false)
                 }

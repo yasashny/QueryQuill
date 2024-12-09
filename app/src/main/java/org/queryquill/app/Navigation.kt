@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import org.queryquill.app.core.model.ScreenState
+import org.queryquill.app.feature.cookie.CookieDialog
 import org.queryquill.app.feature.new_transaction.AddTransactionDialog
 import org.queryquill.app.feature.new_transaction.NewTransactionScreen
 import org.queryquill.app.feature.request.RequestScreen
@@ -33,6 +34,9 @@ fun Navigation(navController: NavHostController, screenState: ScreenState) {
                 },
                 navigateToSettings = { onDismiss ->
                     SettingsDialog(onDismiss)
+                },
+                navigateToCookie = { onDismiss ->
+                    CookieDialog(onDismiss)
                 },
                 openAddTransactionDialog = { onDismiss ->
                     AddTransactionDialog(onDismiss)

@@ -74,5 +74,5 @@ dependencies {
     implementation(projects.feature.request)
     implementation(projects.feature.transaction)
     implementation(projects.core.designsystem)
-
+    implementation(projects.feature.cookie)
 }
