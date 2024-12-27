@@ -4,9 +4,11 @@ import android.app.Application
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
 import org.queryquill.app.core.common.commonModule
+import org.queryquill.app.core.data.di.dataCoreModule
+import org.queryquill.app.core.database.di.databaseCoreModule
+import org.queryquill.app.core.datastore.di.dataStoreCoreModule
 import org.queryquill.app.core.domain.di.domainModule
-import org.queryquill.app.data.requests.di.requestsDataModule
-import org.queryquill.app.data.settings.di.settingsDataModule
+import org.queryquill.app.core.network.di.networkCoreModule
 import org.queryquill.app.di.appModule
 import org.queryquill.app.feature.cookie.di.cookieModule
 import org.queryquill.app.feature.new_transaction.di.newTransactionModule
@@ -24,8 +26,6 @@ class App : Application() {
             modules(
                 listOf(
                     appModule,
-                    requestsDataModule,
-                    settingsDataModule,
                     settingsModule,
                     responseModule,
                     newTransactionModule,
@@ -34,7 +34,11 @@ class App : Application() {
                     domainModule,
                     commonModule,
                     requestModule,
-                    cookieModule
+                    cookieModule,
+                    databaseCoreModule,
+                    dataStoreCoreModule,
+                    networkCoreModule,
+                    dataCoreModule
                 )
             )
         }

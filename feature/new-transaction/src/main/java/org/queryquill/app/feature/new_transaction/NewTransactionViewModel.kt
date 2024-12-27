@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.queryquill.app.core.model.NewTransactionModel
-import org.queryquill.app.data.requests.local.TransactionsRepository
+import org.queryquill.app.core.data.TransactionsRepository
 
 internal class NewTransactionViewModel(private val repository: TransactionsRepository) :
     ViewModel() {

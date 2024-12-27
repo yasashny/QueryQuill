@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import org.queryquill.app.core.model.BasicBinaryFile
 import org.queryquill.app.core.model.BodyState
 import org.queryquill.app.core.model.ImmutableUri
-import org.queryquill.app.data.requests.utils.getMIMEType
+import org.queryquill.app.core.utils.getMIMEType
 import org.queryquill.app.feature.request.R
 import org.queryquill.app.feature.request.alertDialog.ChangeContentTypeDialog
 import org.queryquill.app.feature.request.utils.fileNameByUri
@@ -80,9 +80,15 @@ internal fun BinaryFileElement(
                     val takeFlags: Int =
                         Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                     contentResolver.takePersistableUriPermission(selectedUri, takeFlags)
-                    if (!isContentTypeInHeaders(getMIMEType(context, selectedUri))) {
+                    if (!isContentTypeInHeaders(
+                            getMIMEType(
+                                context,
+                                selectedUri
+                            )
+                        )) {
                         openChangeContentTypeDialog = Triple(
-                            true, getMIMEType(context, selectedUri), BodyState.BinaryFile(
+                            true,
+                            getMIMEType(context, selectedUri), BodyState.BinaryFile(
                                 ImmutableUri(selectedUri),
                                 fileNameByUri(contentResolver, selectedUri)
                             )

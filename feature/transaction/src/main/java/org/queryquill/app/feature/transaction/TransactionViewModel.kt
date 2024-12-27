@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.queryquill.app.data.requests.local.TransactionsRepository
+import org.queryquill.app.core.data.TransactionsRepository
 import org.queryquill.app.feature.transaction.navigationDrawer.TransactionsUiState
 
 internal class TransactionViewModel(

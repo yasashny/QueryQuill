@@ -24,11 +24,12 @@ navigationCompose = "2.8.4"
 roomVersion = "2.6.1"
 agp = "8.7.2"
 kotlin = "2.0.21"
-kspVersion = "2.0.20-1.0.24"
+kspVersion = "2.0.21-1.0.28"
 jetbrainsKotlinJvm = "2.0.21"
 roomGradlePlugin = "2.6.1"
 googleServises = "4.4.2"
 firebaseCrashlytics = "3.0.2"
+material = "1.12.0"
 
 
 [libraries]
@@ -100,6 +101,7 @@ junit = { module = "junit:junit", version.ref = "junit" }
 ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [bundles]
 sora-editor = ["sora-editor", "sora-editor-textmate"]

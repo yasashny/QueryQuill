@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.queryquill.app.data.settings.SettingsRepository
+import org.queryquill.app.core.data.SettingsRepository
 
 internal class SettingsViewModel(
     private val repository: SettingsRepository

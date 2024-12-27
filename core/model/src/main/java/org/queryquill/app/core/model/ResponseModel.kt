@@ -1,6 +1,7 @@
 package org.queryquill.app.core.model
 
 data class ResponseModel(
+    val id: Long,
     val status: String,
     val fileName: String,
     val contentLength: String,
@@ -13,6 +14,7 @@ data class ResponseModel(
 
         fun default(): ResponseModel {
             return ResponseModel(
+                -1,
                 "--",
                 DEFAULT_FILE_NAME,
                 "--",

@@ -60,8 +60,8 @@ dependencies {
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
 
-    implementation(projects.data.settings)
-    implementation(projects.data.requests)
+
+
     implementation(projects.core.model)
     implementation(projects.core.ui)
     implementation(projects.core.domain)
@@ -75,4 +75,8 @@ dependencies {
     implementation(projects.feature.transaction)
     implementation(projects.core.designsystem)
     implementation(projects.feature.cookie)
+    implementation(projects.core.database)
+    implementation(projects.core.datastore)
+    implementation(projects.core.network)
+    implementation(projects.core.data)
 }

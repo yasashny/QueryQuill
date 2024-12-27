@@ -19,8 +19,8 @@ import org.queryquill.app.core.model.BodyState
 import org.queryquill.app.core.model.ImmutableList
 import org.queryquill.app.core.model.ImmutableUri
 import org.queryquill.app.core.model.KeyValue
-import org.queryquill.app.data.requests.local.TransactionsRepository
-import org.queryquill.app.data.requests.sendRequest.SendRequestRepository
+import org.queryquill.app.core.data.TransactionsRepository
+import org.queryquill.app.core.data.SendRequestRepository
 import org.queryquill.app.feature.request.auth.EnumAuthState
 import org.queryquill.app.feature.request.body.EnumBodyState
 import org.queryquill.app.feature.request.utils.Constants
@@ -42,7 +42,13 @@ internal class RequestViewModel(
                     RequestUiState.Loading
                 }
             }.collect { value ->
-                _requestState.value = value
+                when (val state = requestState.value) {
+                    RequestUiState.Loading -> {}
+                    is RequestUiState.Success -> {
+                        transactionsRepository.updateRequest(state.request)
+                    }
+                }
+                _requestState.update { value }
             }
         }
     }

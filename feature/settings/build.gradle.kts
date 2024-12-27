@@ -13,5 +13,5 @@ dependencies {
 
     implementation(projects.core.ui)
     implementation(projects.core.model)
-    implementation(projects.data.settings)
+    implementation(projects.core.data)
 }
