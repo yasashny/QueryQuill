@@ -19,15 +19,13 @@ internal class SettingsViewModel(
 
 
     fun updateModel(updateSettings: UpdateSettings) {
-        viewModelScope.launch(Dispatchers.IO) {
-            when (val state = settingsUiState.value) {
-                SettingsUiState.Loading -> {}
-                is SettingsUiState.Success -> {
-                    when (updateSettings) {
-                        is UpdateSettings.UpdateTheme -> {
-                            state.settingsModel.copy(themeState = updateSettings.theme)
-                                .let { repository.changeSettings(it) }
-                        }
+        viewModelScope.launch{
+            val state = settingsUiState.value
+            if (state is SettingsUiState.Success) {
+                when (updateSettings) {
+                    is UpdateSettings.UpdateTheme -> {
+                        state.settingsModel.copy(themeState = updateSettings.theme)
+                            .let { repository.changeSettings(it) }
                     }
                 }
             }
