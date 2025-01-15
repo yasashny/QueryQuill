@@ -38,14 +38,24 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import org.koin.androidx.compose.koinViewModel
+import org.queryquill.app.core.model.SettingsModel
 import org.queryquill.app.core.model.ThemeState
 
 @Composable
 fun SettingsDialog(onDismiss: () -> Unit) {
+    val viewModel = koinViewModel<SettingsViewModel>()
+    val settingsState = viewModel.settingsUiState.collectAsState().value
+    SettingsDialog(onDismiss, settingsState, viewModel::updateModel)
+}
 
+@Composable
+private fun SettingsDialog(
+    onDismiss: () -> Unit, settingsState: SettingsUiState, updateModel: (UpdateSettings) -> Unit
+) {
     AlertDialog(onDismissRequest = { onDismiss() }, title = {
         Text(
             text = stringResource(id = R.string.settings),
@@ -53,11 +63,14 @@ fun SettingsDialog(onDismiss: () -> Unit) {
         )
     }, modifier = Modifier.padding(vertical = 30.dp), text = {
 
-        val vm = koinViewModel<SettingsViewModel>()
-
-        when (val settingsState = vm.settingsUiState.collectAsState().value) {
+        when (settingsState) {
             SettingsUiState.Loading -> {
-                Box(modifier = Modifier.height(300.dp), contentAlignment = Alignment.Center) {
+                Box(
+                    modifier = Modifier
+                        .height(300.dp)
+                        .fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
                     CircularProgressIndicator()
                 }
             }
@@ -74,39 +87,12 @@ fun SettingsDialog(onDismiss: () -> Unit) {
                     ) {
                         HorizontalDivider()
                         ThemeSection(currentThemeState = settingsState.settingsModel.themeState) { newThemeState ->
-                            vm.updateModel(UpdateSettings.UpdateTheme(newThemeState))
+                            updateModel(UpdateSettings.UpdateTheme(newThemeState))
                         }
+                        HorizontalDivider(Modifier.padding(top = 5.dp))
+                        BottomButtonsSection()
                         FeedbackSection()
-                        HorizontalDivider()
-                        Row(
-                            horizontalArrangement = Arrangement.Center,
-                            modifier = Modifier.fillMaxSize()
-                        ) {
-                            val context = LocalContext.current
-                            TextButton(onClick = {
-                                context.startActivity(
-                                    Intent(
-                                        context, OssLicensesMenuActivity::class.java
-                                    )
-                                )
-                            }) {
-                                Text(text = stringResource(R.string.licenses))
-                            }
-                            val uriHandler = LocalUriHandler.current
-                            TextButton(onClick = {
-                                uriHandler.openUri(PRIVATE_POLICY_URL)
-                            }) {
-                                Text(text = stringResource(R.string.private_policy))
-                            }
-                        }
-                        Row(
-                            horizontalArrangement = Arrangement.Center,
-                            modifier = Modifier.fillMaxSize()
-                        ) {
-                            TextButton(onClick = { }, enabled = false) {
-                                AppVersionText()
-                            }
-                        }
+                        VersionSection()
                     }
                 }
             }
@@ -118,6 +104,62 @@ fun SettingsDialog(onDismiss: () -> Unit) {
     })
 }
 
+@Composable
+fun BottomButtonsSection() {
+    Row(
+        horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()
+    ) {
+        val context = LocalContext.current
+        TextButton(onClick = {
+            context.startActivity(
+                Intent(
+                    context, OssLicensesMenuActivity::class.java
+                )
+            )
+        }) {
+            Text(text = stringResource(R.string.licenses))
+        }
+        val uriHandler = LocalUriHandler.current
+        TextButton(onClick = {
+            uriHandler.openUri(PRIVATE_POLICY_URL)
+        }) {
+            Text(text = stringResource(R.string.private_policy))
+        }
+    }
+}
+
+@Composable
+fun FeedbackSection() {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        val context = LocalContext.current
+
+        SelectionContainer {
+            TextButton(onClick = {
+                val clipboardManager =
+                    context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+                val clipData: ClipData = ClipData.newPlainText("text", CONTACT_EMAIL)
+                clipboardManager.setPrimaryClip(clipData)
+            }) {
+                Text(CONTACT_EMAIL)
+            }
+        }
+    }
+}
+
+@Composable
+fun VersionSection() {
+    Row(
+        horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxSize()
+    ) {
+        TextButton(onClick = { }, enabled = false) {
+            AppVersionText()
+        }
+    }
+}
 
 @Composable
 private fun ThemeSection(currentThemeState: ThemeState, updateTheme: (ThemeState) -> Unit) {
@@ -134,31 +176,6 @@ private fun ThemeSection(currentThemeState: ThemeState, updateTheme: (ThemeState
                 selected = currentThemeState == themeState,
                 onClick = { updateTheme(themeState) },
             )
-        }
-    }
-}
-
-@Composable
-private fun FeedbackSection() {
-    Text(
-        text = stringResource(id = R.string.feedback),
-        style = MaterialTheme.typography.titleMedium,
-        modifier = Modifier.padding(top = 16.dp, bottom = 8.dp),
-    )
-    Row(
-        verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(bottom = 8.dp)
-    ) {
-        val context = LocalContext.current
-
-        SelectionContainer {
-            TextButton(onClick = {
-                val clipboardManager =
-                    context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-                val clipData: ClipData = ClipData.newPlainText("text", "support@queryquill.org")
-                clipboardManager.setPrimaryClip(clipData)
-            }, modifier = Modifier.padding(start = 5.dp)) {
-                Text("support@queryquill.org")
-            }
         }
     }
 }
@@ -204,5 +221,21 @@ private fun AppVersionText() {
     Text(text = "Version: $versionName")
 }
 
+@Preview
+@Composable
+private fun PreviewSettingsDialog() {
+    SettingsDialog(settingsState = SettingsUiState.Success(SettingsModel(ThemeState.LIGHT)),
+        onDismiss = {},
+        updateModel = {})
+}
+
+@Preview
+@Composable
+private fun PreviewSettingsDialogLoading() {
+    SettingsDialog(settingsState = SettingsUiState.Loading, onDismiss = {}, updateModel = {})
+}
+
 private const val PRIVATE_POLICY_URL =
-    "https://fancy-wombat-5c5.notion.site/Private-Policy-113654c8fbee80478663cba5a60a3a62?pvs=74"
+    "https://pewter-brow-ce5.notion.site/Private-Policy-127ace70ed4a8035abedc09a2751c51e"
+
+private const val CONTACT_EMAIL = "support@queryquill.org"

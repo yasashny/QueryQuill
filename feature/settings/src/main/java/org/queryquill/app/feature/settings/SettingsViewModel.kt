@@ -2,7 +2,6 @@ package org.queryquill.app.feature.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -19,7 +18,7 @@ internal class SettingsViewModel(
 
 
     fun updateModel(updateSettings: UpdateSettings) {
-        viewModelScope.launch{
+        viewModelScope.launch {
             val state = settingsUiState.value
             if (state is SettingsUiState.Success) {
                 when (updateSettings) {
