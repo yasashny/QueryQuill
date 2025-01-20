@@ -11,12 +11,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import org.koin.androidx.compose.koinViewModel
+import org.queryquill.app.core.designsystem.QueryQuillTheme
 
 @Composable
 fun AddTransactionDialog(onDismiss: () -> Unit) {
-
     val vm = koinViewModel<NewTransactionViewModel>()
+    AddTransactionDialog(onDismiss, vm::addNewTransaction)
+}
+
+@Composable
+private fun AddTransactionDialog(onDismiss: () -> Unit, addNewTransaction: (String) -> Unit) {
     var label by remember {
         mutableStateOf("New Request")
     }
@@ -27,7 +33,7 @@ fun AddTransactionDialog(onDismiss: () -> Unit) {
         )
     }, onDismissRequest = { onDismiss() }, confirmButton = {
         TextButton(onClick = {
-            vm.addNewTransaction(label)
+            addNewTransaction(label)
             onDismiss()
         }, enabled = label.isNotEmpty()) {
             Text(text = stringResource(id = R.string.add_request))
@@ -46,4 +52,12 @@ fun AddTransactionDialog(onDismiss: () -> Unit) {
             textStyle = MaterialTheme.typography.titleMedium
         )
     })
+}
+
+@Preview
+@Composable
+private fun PreviewAddTransactionDialog() {
+    QueryQuillTheme {
+        AddTransactionDialog(onDismiss = {}, addNewTransaction = {})
+    }
 }

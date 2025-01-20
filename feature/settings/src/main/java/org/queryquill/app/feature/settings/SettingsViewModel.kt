@@ -14,7 +14,7 @@ internal class SettingsViewModel(
 
     val settingsUiState = repository.getSettings().map { newSettingsModel ->
         SettingsUiState.Success(newSettingsModel)
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), SettingsUiState.Loading)
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), SettingsUiState.Loading)
 
 
     fun updateModel(updateSettings: UpdateSettings) {

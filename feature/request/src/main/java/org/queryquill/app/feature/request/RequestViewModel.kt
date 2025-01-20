@@ -10,17 +10,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.queryquill.app.core.data.SendRequestRepository
+import org.queryquill.app.core.data.TransactionsRepository
 import org.queryquill.app.core.model.AuthState
 import org.queryquill.app.core.model.BodyState
 import org.queryquill.app.core.model.ImmutableList
 import org.queryquill.app.core.model.ImmutableUri
 import org.queryquill.app.core.model.KeyValue
-import org.queryquill.app.core.data.TransactionsRepository
-import org.queryquill.app.core.data.SendRequestRepository
 import org.queryquill.app.feature.request.auth.EnumAuthState
 import org.queryquill.app.feature.request.body.EnumBodyState
 import org.queryquill.app.feature.request.utils.Constants
@@ -31,10 +33,11 @@ internal class RequestViewModel(
     private val sendRequestRepository: SendRequestRepository
 ) : ViewModel() {
     private val _requestState = MutableStateFlow<RequestUiState>(RequestUiState.Loading)
-    val requestState = _requestState.asStateFlow()
+    val requestState = _requestState.onStart { loadData() }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), RequestUiState.Loading)
 
-    init {
-        viewModelScope.launch(Dispatchers.IO) {
+    private fun loadData() {
+        viewModelScope.launch {
             transactionsRepository.getCurrentRequestOrNull().map { requestOrNull ->
                 if (requestOrNull != null) {
                     RequestUiState.Success(request = requestOrNull)

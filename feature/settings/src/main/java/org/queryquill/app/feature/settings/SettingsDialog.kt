@@ -31,7 +31,6 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -40,15 +39,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import org.koin.androidx.compose.koinViewModel
+import org.queryquill.app.core.designsystem.QueryQuillTheme
 import org.queryquill.app.core.model.SettingsModel
 import org.queryquill.app.core.model.ThemeState
 
 @Composable
 fun SettingsDialog(onDismiss: () -> Unit) {
     val viewModel = koinViewModel<SettingsViewModel>()
-    val settingsState = viewModel.settingsUiState.collectAsState().value
+    val settingsState = viewModel.settingsUiState.collectAsStateWithLifecycle().value
     SettingsDialog(onDismiss, settingsState, viewModel::updateModel)
 }
 
@@ -224,15 +225,19 @@ private fun AppVersionText() {
 @Preview
 @Composable
 private fun PreviewSettingsDialog() {
-    SettingsDialog(settingsState = SettingsUiState.Success(SettingsModel(ThemeState.LIGHT)),
-        onDismiss = {},
-        updateModel = {})
+    QueryQuillTheme {
+        SettingsDialog(settingsState = SettingsUiState.Success(SettingsModel(ThemeState.LIGHT)),
+            onDismiss = {},
+            updateModel = {})
+    }
 }
 
 @Preview
 @Composable
 private fun PreviewSettingsDialogLoading() {
-    SettingsDialog(settingsState = SettingsUiState.Loading, onDismiss = {}, updateModel = {})
+    QueryQuillTheme {
+        SettingsDialog(settingsState = SettingsUiState.Loading, onDismiss = {}, updateModel = {})
+    }
 }
 
 private const val PRIVATE_POLICY_URL =

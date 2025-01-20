@@ -5,9 +5,10 @@ import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
+import org.queryquill.app.core.designsystem.QueryQuillTheme
 import org.queryquill.app.core.model.ImmutableList
 import org.queryquill.app.feature.request.ScreenState
-
 
 @Composable
 internal fun SegmentedButton(
@@ -23,5 +24,17 @@ internal fun SegmentedButton(
                 Text(element.title)
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewSegmentedButton() {
+    QueryQuillTheme {
+        SegmentedButton(selectedIndex = ScreenState.BODY, options = ImmutableList(
+            listOf(
+                ScreenState.BODY, ScreenState.AUTH, ScreenState.HEADER, ScreenState.QUERY
+            )
+        ), onClick = {})
     }
 }

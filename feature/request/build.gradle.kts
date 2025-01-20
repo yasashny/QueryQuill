@@ -16,4 +16,5 @@ dependencies {
     implementation(projects.core.model)
     implementation(projects.core.utils)
     implementation(projects.core.data)
+    implementation(projects.core.designsystem)
 }
