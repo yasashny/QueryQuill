@@ -54,8 +54,6 @@ class SettingsViewModelTest {
             viewModel.settingsUiState.value,
         )
         settingsRepository.changeSettings(SettingsModel(ThemeState.LIGHT))
-
-
         viewModel.updateModel(UpdateSettings.UpdateTheme(ThemeState.DARK))
 
         assertEquals(

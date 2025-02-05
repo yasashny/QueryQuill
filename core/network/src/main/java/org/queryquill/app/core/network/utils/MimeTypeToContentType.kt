@@ -2,7 +2,7 @@ package org.queryquill.app.core.network.utils
 
 import org.queryquill.app.core.model.ContentType
 
-internal fun mimeTypeToContentType(mimeType: String?): ContentType? {
+internal fun mimeTypeToContentType(mimeType: String?): ContentType {
     return when (mimeType) {
         "text/html" -> ContentType.Text.HTML
         "text/plain" -> ContentType.Text.PLAIN
@@ -14,6 +14,6 @@ internal fun mimeTypeToContentType(mimeType: String?): ContentType? {
         "image/bmp" -> ContentType.Image.BMP
         "image/heif" -> ContentType.Image.HEIF
         "image/heic" -> ContentType.Image.HEIC
-        else -> null
+        else -> ContentType.Text.PLAIN
     }
 }

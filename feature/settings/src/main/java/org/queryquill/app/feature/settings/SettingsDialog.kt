@@ -124,7 +124,7 @@ fun BottomButtonsSection() {
         TextButton(onClick = {
             uriHandler.openUri(PRIVATE_POLICY_URL)
         }) {
-            Text(text = stringResource(R.string.private_policy))
+            Text(text = stringResource(R.string.privacy_policy))
         }
     }
 }
