@@ -111,6 +111,7 @@ material = { group = "com.google.android.material", name = "material", version.r
 sora-editor = ["sora-editor", "sora-editor-textmate"]
 ktor = ["ktor-server-content-negotiation", "ktor-serialization-kotlinx-json", "ktor-client-cio"]
 datastore = ["datastore-preferences", "datastore"]
+androidx-compose-ui-test = ["ui-test-junit4", "ui-test-manifest"]
 
 [plugins]
 firebase-crashlytics = {id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlytics"}

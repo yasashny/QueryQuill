@@ -35,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,6 +46,7 @@ import org.koin.androidx.compose.koinViewModel
 import org.queryquill.app.core.designsystem.QueryQuillTheme
 import org.queryquill.app.core.model.SettingsModel
 import org.queryquill.app.core.model.ThemeState
+import org.queryquill.app.feature.settings.util.TestTags
 
 @Composable
 fun SettingsDialog(onDismiss: () -> Unit) {
@@ -54,7 +56,7 @@ fun SettingsDialog(onDismiss: () -> Unit) {
 }
 
 @Composable
-private fun SettingsDialog(
+internal fun SettingsDialog(
     onDismiss: () -> Unit, settingsState: SettingsUiState, updateModel: (UpdateSettings) -> Unit
 ) {
     AlertDialog(onDismissRequest = { onDismiss() }, title = {
@@ -72,7 +74,7 @@ private fun SettingsDialog(
                         .fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator()
+                    CircularProgressIndicator(Modifier.testTag(TestTags.CIRCULAR_PROGRESS_INDICATOR))
                 }
             }
 

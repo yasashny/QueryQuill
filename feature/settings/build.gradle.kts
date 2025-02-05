@@ -17,4 +17,5 @@ dependencies {
     implementation(projects.core.designsystem)
 
     testImplementation(projects.core.testing)
+    androidTestImplementation(libs.bundles.androidx.compose.ui.test)
 }

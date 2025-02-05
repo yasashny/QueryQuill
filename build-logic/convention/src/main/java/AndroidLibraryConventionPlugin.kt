@@ -16,6 +16,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 apply(libs.plugins.kotlin.android.get().pluginId)
             }
             extensions.configure<LibraryExtension> {
+                defaultConfig.targetSdk = 35
                 configureKotlinAndroid(this)
                 kotlinOptions {
                     jvmTarget = "17"
