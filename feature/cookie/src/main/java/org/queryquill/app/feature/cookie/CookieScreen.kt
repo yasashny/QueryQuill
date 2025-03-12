@@ -1,0 +1,128 @@
+package org.queryquill.app.feature.cookie
+
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.koin.androidx.compose.koinViewModel
+import org.queryquill.app.core.ui.QueryQuillTopBar
+import org.queryquill.app.core.ui.SaveDataOnStop
+
+@Composable
+fun CookieScreen(navigateUp: () -> Unit) {
+    val vm = koinViewModel<CookieViewModel>()
+    val cookieUiState = vm.cookieState.collectAsStateWithLifecycle().value
+    CookieScreen(cookieUiState, vm::onEvent, navigateUp, vm::saveCookie)
+}
+
+@Composable
+internal fun CookieScreen(
+    uiState: CookieUiState,
+    onEvent: (UpdateCookie) -> Unit,
+    navigateUp: () -> Unit,
+    saveCookieOnStop: () -> Unit
+) {
+    Scaffold(topBar = {
+        QueryQuillTopBar(title = {
+            Text(
+                text = stringResource(R.string.cookie)
+            )
+        }, navigationIcon = {
+            TextButton(onClick = {
+                navigateUp()
+            }) {
+                Text(text = stringResource(R.string.done))
+            }
+        }, actions = {
+            IconButton(onClick = {
+                onEvent(UpdateCookie.Add)
+            }) {
+                Icon(imageVector = Icons.Outlined.Add, contentDescription = null)
+            }
+        })
+    }) { paddingValues ->
+        Surface(
+            Modifier
+                .padding(paddingValues)
+                .fillMaxSize()
+        ) {
+            Box(
+                modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter
+            ) {
+                when (uiState) {
+                    CookieUiState.Loading -> {
+                        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                            CircularProgressIndicator()
+                        }
+                    }
+
+                    is CookieUiState.Success -> {
+                        LazyColumn(modifier = Modifier.widthIn(max = 1000.dp)) {
+                            item {
+                                InfoMessage()
+                            }
+                            itemsIndexed(
+                                uiState.list, key = { _, item -> item.id }) { index, item ->
+                                CookieListItem(
+                                    modifier = Modifier
+                                        .padding(
+                                            start = 15.dp, top = 15.dp, end = 15.dp
+                                        )
+                                        .animateItem(), item, index, onEvent
+                                )
+                            }
+                        }
+                    }
+                }
+                SaveDataOnStop { saveCookieOnStop() }
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CookieScreenPreview() {
+    CookieScreen(
+        uiState = CookieUiState.Success(
+        listOf(
+            CookieModel(0, "cookie1"),
+            CookieModel(1, "cookie2"),
+            CookieModel(2, "cookie3"),
+            CookieModel(3, "cookie4"),
+            CookieModel(4, "cookie5"),
+        )
+    ), onEvent = {}, navigateUp = {}, saveCookieOnStop = {})
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CookieScreenLoadingPreview() {
+    CookieScreen(
+        uiState = CookieUiState.Loading,
+        onEvent = {},
+        navigateUp = {},
+        saveCookieOnStop = {})
+}
+
+
+
+

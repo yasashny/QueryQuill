@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cookie">Cookie</string>
+    <string name="done">Done</string>
+    <string name="cookie_automatically_send_with_relevant_request">Cookie automatically send with relevant request</string>
+</resources>

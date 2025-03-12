@@ -5,7 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import org.queryquill.app.core.model.ScreenState
-import org.queryquill.app.feature.cookie.CookieDialog
+import org.queryquill.app.feature.cookie.CookieScreen
 import org.queryquill.app.feature.new_transaction.AddTransactionDialog
 import org.queryquill.app.feature.new_transaction.NewTransactionScreen
 import org.queryquill.app.feature.request.RequestScreen
@@ -20,6 +20,7 @@ sealed class Destinations(
 ) {
     data object MainScreenRoute : Destinations(route = "main")
     data object EditorScreenRoute : Destinations(route = "editor/{textFileName}/{languageType}")
+    data object CookieScreenRoute: Destinations(route = "cookie")
 }
 
 
@@ -35,8 +36,8 @@ fun Navigation(navController: NavHostController, screenState: ScreenState) {
                 navigateToSettings = { onDismiss ->
                     SettingsDialog(onDismiss)
                 },
-                navigateToCookie = { onDismiss ->
-                    CookieDialog(onDismiss)
+                navigateToCookie = {
+                    navController.navigate(Destinations.CookieScreenRoute.route)
                 },
                 openAddTransactionDialog = { onDismiss ->
                     AddTransactionDialog(onDismiss)
@@ -61,6 +62,11 @@ fun Navigation(navController: NavHostController, screenState: ScreenState) {
                 backStackEntry.arguments?.getString("textFileName")!!,
                 backStackEntry.arguments?.getString("languageType")!!
             ) {
+                navController.navigateUp()
+            }
+        }
+        composable(Destinations.CookieScreenRoute.route) {
+            CookieScreen {
                 navController.navigateUp()
             }
         }

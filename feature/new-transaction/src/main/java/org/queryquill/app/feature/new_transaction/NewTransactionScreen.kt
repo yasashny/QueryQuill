@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -43,7 +43,7 @@ fun NewTransactionScreen() {
                 tint = MaterialTheme.colorScheme.surfaceTint,
                 modifier = Modifier.size(350.dp)
             )
-            Button(onClick = { openAddTransactionDialog = true }) {
+            FilledTonalButton(onClick = { openAddTransactionDialog = true }) {
                 Text(
                     text = stringResource(R.string.create_new_request),
                     style = MaterialTheme.typography.titleMedium,

@@ -1,31 +1,25 @@
 package org.queryquill.app.core.datastore
 
-import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.queryquill.app.core.model.SettingsModel
 import org.queryquill.app.core.model.ThemeState
 
-class SettingsDataSource(private val context: Context) {
-
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
-
+class SettingsDataSource(private val preferences: DataStore<Preferences>) {
     companion object {
-        private const val THEME = "theme"
+        private val THEME_KEY = stringPreferencesKey("theme")
         private const val DARK = "dark"
         private const val LIGHT = "light"
         private const val SYSTEM = "system"
     }
 
-
     fun getSettings(): Flow<SettingsModel> {
-        return context.dataStore.data.map { pref ->
-            val prefTheme = pref[stringPreferencesKey(THEME)]
+        return preferences.data.map { pref ->
+            val prefTheme = pref[THEME_KEY]
             val theme = when (prefTheme) {
                 null -> ThemeState.SYSTEM
                 DARK -> ThemeState.DARK
@@ -37,10 +31,9 @@ class SettingsDataSource(private val context: Context) {
         }
     }
 
-
     suspend fun updateSettings(model: SettingsModel) {
-        context.dataStore.edit { pref ->
-            pref[stringPreferencesKey(THEME)] = when (model.themeState) {
+        preferences.edit { pref ->
+            pref[THEME_KEY] = when (model.themeState) {
                 ThemeState.SYSTEM -> SYSTEM
                 ThemeState.DARK -> DARK
                 ThemeState.LIGHT -> LIGHT

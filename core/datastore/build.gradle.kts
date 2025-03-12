@@ -9,7 +9,10 @@ android {
 dependencies {
     implementation(libs.koin.androidx.compose)
     implementation(libs.bundles.datastore)
+    implementation(libs.kotlinx.serialization.json)
 
     implementation(projects.core.model)
     implementation(projects.core.common)
+
+    testImplementation(projects.core.testing)
 }

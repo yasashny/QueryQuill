@@ -25,3 +25,6 @@ fun DependencyHandler.debugImplementation(dependencyNotation: Any): Dependency? 
 
 fun DependencyHandler.coreLibraryDesugaring(dependencyNotation: Any): Dependency? =
     add("coreLibraryDesugaring", dependencyNotation)
+
+fun DependencyHandler.testImplementation(dependencyNotation: Any): Dependency? =
+    add("testImplementation", dependencyNotation)

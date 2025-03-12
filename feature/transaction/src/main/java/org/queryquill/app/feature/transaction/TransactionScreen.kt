@@ -33,7 +33,7 @@ fun TransactionScreen(
     screenState: ScreenState,
     navigateToEditor: (textFileName: String, languageType: String) -> Unit,
     navigateToSettings: @Composable (() -> Unit) -> Unit,
-    navigateToCookie: @Composable (() -> Unit) -> Unit,
+    navigateToCookie: () -> Unit,
     navigateToRequestScreen: @Composable (
         modifier: Modifier, navigateToEditor: (textFileName: String, languageType: String) -> Unit, onRequestSent: () -> Unit
     ) -> Unit,
@@ -51,15 +51,6 @@ fun TransactionScreen(
         }
     }
 
-    var openCookie by remember {
-        mutableStateOf(false)
-    }
-    if (openCookie) {
-        navigateToCookie {
-            openCookie = false
-        }
-    }
-
     val vm = koinViewModel<TransactionViewModel>()
     var currentId: Long? by remember {
         mutableStateOf(null)
@@ -69,7 +60,7 @@ fun TransactionScreen(
 
     NavigationDrawer(transactions = transactions,
         navigateToSettings = { openSettings = true },
-        navigateToCookie = { openCookie = true },
+        navigateToCookie = { navigateToCookie() },
         onEvent = vm::onEvent,
         addTransactionDialog = openAddTransactionDialog
     ) { drawerState ->
