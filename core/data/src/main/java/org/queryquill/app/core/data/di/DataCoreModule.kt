@@ -27,6 +27,7 @@ val dataCoreModule = module {
         SendRequestRepository(
             get(),
             get(),
+            get(),
             get(named(QQDispatchers.IO))
         )
     }

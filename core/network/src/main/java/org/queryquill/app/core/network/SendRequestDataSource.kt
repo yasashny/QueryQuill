@@ -19,6 +19,7 @@ import org.queryquill.app.core.network.prepareRequest.applyBody
 import org.queryquill.app.core.network.prepareRequest.applyHeaders
 import org.queryquill.app.core.network.prepareRequest.applyMethod
 import org.queryquill.app.core.network.prepareRequest.applyUrlParameters
+import org.queryquill.app.core.network.utils.CookieChecker
 import org.queryquill.app.core.network.utils.calculateElapsedTime
 import org.queryquill.app.core.network.utils.createErrorResponse
 import org.queryquill.app.core.network.utils.extractHeaders
@@ -27,10 +28,11 @@ import org.queryquill.app.core.network.utils.mimeTypeToContentType
 import java.io.File
 
 class SendRequestDataSource(
-    private val client: HttpClient, private val context: Context
+    private val client: HttpClient,
+    private val context: Context
 ) {
 
-    suspend fun sendRequest(model: RequestModel): ResponseModel {
+    suspend fun sendRequest(model: RequestModel, cookies: List<String>): ResponseModel {
         val fileNamePrefix = "${model.id}_response"
         return try {
             val file = File(context.filesDir, "$fileNamePrefix.txt").apply { writeText("") }
@@ -41,6 +43,10 @@ class SendRequestDataSource(
                 applyHeaders(model.header.list)
                 applyBody(model.bodyState, context)
                 applyAuth(model.auth)
+                val relCookie = CookieChecker.getRelevantCookies(formatUrl(model.url), cookies)
+                if (relCookie.isNotEmpty()) {
+                    headers.append("Cookie", relCookie.joinToString("; "))
+                }
             }
             val response = executeRequest(request, file)
             processResponse(response, file, fileNamePrefix, model.id)
@@ -75,7 +81,6 @@ class SendRequestDataSource(
         val newFile = File(file.parentFile, fileName)
         file.renameTo(newFile)
         val headers = extractHeaders(response.headers)
-
         return ResponseModel(
             id = requestId,
             status = status,
