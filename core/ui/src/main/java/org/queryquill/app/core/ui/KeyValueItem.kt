@@ -16,6 +16,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.queryquill.app.core.model.KeyValue
 
@@ -35,12 +37,9 @@ fun KeyValueItem(
         Column(modifier = Modifier.padding(15.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 OutlinedTextField(
-                    value = keyValue.key,
-                    onValueChange = {
-                        onTextChanged(KeyValue(it, keyValue.value))
-                    },
-                    label = { Text(text = text1) },
-                    modifier = Modifier
+                    value = keyValue.key, onValueChange = {
+                    onTextChanged(KeyValue(it, keyValue.value))
+                }, label = { Text(text = text1) }, modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f)
                 )
@@ -48,7 +47,9 @@ fun KeyValueItem(
                     FilledTonalIconButton(
                         onClick = { deleteItem() },
                         enabled = deleteButtonEnabled(),
-                        modifier = Modifier.padding(start = 15.dp)
+                        modifier = Modifier
+                            .padding(start = 15.dp)
+                            .testTag("Delete Button")
                     ) {
                         Icon(imageVector = Icons.Outlined.Delete, contentDescription = null)
                     }
@@ -67,4 +68,13 @@ fun KeyValueItem(
             )
         }
     }
+}
+
+@Composable
+@Preview
+private fun KeyValueItemPreview() {
+    KeyValueItem(
+        keyValue = KeyValue(key = "Sample Key", value = "Sample Value"),
+        onTextChanged = {},
+        deleteItem = {})
 }

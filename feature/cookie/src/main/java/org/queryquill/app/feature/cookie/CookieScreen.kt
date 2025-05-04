@@ -18,6 +18,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -48,13 +49,15 @@ internal fun CookieScreen(
         }, navigationIcon = {
             TextButton(onClick = {
                 navigateUp()
-            }) {
+            }, modifier = Modifier.testTag("navigate_up_button")) {
                 Text(text = stringResource(R.string.done))
             }
         }, actions = {
-            IconButton(onClick = {
-                onEvent(UpdateCookie.Add)
-            }) {
+            IconButton(
+                onClick = {
+                    onEvent(UpdateCookie.Add)
+                }, modifier = Modifier.testTag("add_cookie_button")
+            ) {
                 Icon(imageVector = Icons.Outlined.Add, contentDescription = null)
             }
         })
@@ -70,7 +73,9 @@ internal fun CookieScreen(
                 when (uiState) {
                     CookieUiState.Loading -> {
                         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                            CircularProgressIndicator()
+                            CircularProgressIndicator(
+                                modifier = Modifier.testTag("loading_indicator")
+                            )
                         }
                     }
 

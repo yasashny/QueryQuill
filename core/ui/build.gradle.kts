@@ -12,4 +12,6 @@ dependencies {
     api(libs.bundles.sora.editor)
 
     api(projects.core.model)
+    testImplementation(projects.core.testing)
+    androidTestImplementation(libs.bundles.androidx.compose.ui.test)
 }

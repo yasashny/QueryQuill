@@ -9,4 +9,5 @@ android {
 dependencies {
     implementation(projects.core.model)
     implementation(libs.bundles.ktor)
+    testImplementation(projects.core.testing)
 }

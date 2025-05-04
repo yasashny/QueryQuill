@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,10 +42,14 @@ internal fun CookieListItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
+                    .testTag("cookie_input")
             )
             FilledTonalIconButton(
                 onClick = { onEvent(UpdateCookie.Delete(index)) },
-                modifier = Modifier.padding(start = 15.dp)
+                modifier = Modifier
+                    .padding(start = 15.dp)
+                    .testTag("delete_cookie")
+
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Delete, contentDescription = null

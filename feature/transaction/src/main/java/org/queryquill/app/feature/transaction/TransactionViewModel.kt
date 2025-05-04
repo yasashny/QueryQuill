@@ -7,14 +7,14 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.queryquill.app.core.data.TransactionsRepository
+import org.queryquill.app.core.data.TransactionRepository
 import org.queryquill.app.feature.transaction.navigationDrawer.TransactionsUiState
 
 internal class TransactionViewModel(
-    private val transactionsRepository: TransactionsRepository
+    private val transactionRepository: TransactionRepository
 ) : ViewModel() {
 
-    val transactions = transactionsRepository.getTransactions().map { getTransactionModel ->
+    val transactions = transactionRepository.getTransactions().map { getTransactionModel ->
         TransactionsUiState.Success(getTransactionModel.list.list, getTransactionModel.currentId)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), TransactionsUiState.Loading)
 
@@ -23,19 +23,19 @@ internal class TransactionViewModel(
 
             is TransactionEvent.DeleteTransaction -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    transactionsRepository.deleteTransaction(transactionEvent.id)
+                    transactionRepository.deleteTransaction(transactionEvent.id)
                 }
             }
 
             is TransactionEvent.SetTransaction -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    transactionsRepository.changeCurrentTransaction(transactionEvent.id)
+                    transactionRepository.changeCurrentTransaction(transactionEvent.id)
                 }
             }
 
             is TransactionEvent.UpdateTransaction -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    transactionsRepository.updateTransaction(transactionEvent.transaction)
+                    transactionRepository.updateTransaction(transactionEvent.transaction)
                 }
             }
         }

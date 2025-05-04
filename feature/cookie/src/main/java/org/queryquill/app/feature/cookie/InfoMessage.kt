@@ -48,6 +48,6 @@ internal fun InfoMessage() {
 
 @Preview
 @Composable
-private fun InfoMessagePreview(){
+private fun InfoMessagePreview() {
     InfoMessage()
 }

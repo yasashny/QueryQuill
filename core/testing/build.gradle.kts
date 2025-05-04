@@ -12,4 +12,6 @@ dependencies {
     api(libs.junit)
     api(libs.androidx.test.rules)
     api(libs.kotlinx.coroutines.test)
+    api(libs.robolectric)
+    api(libs.androidx.core.ktx)
 }

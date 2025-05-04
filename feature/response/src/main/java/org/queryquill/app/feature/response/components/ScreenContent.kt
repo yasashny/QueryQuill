@@ -12,11 +12,11 @@ import org.queryquill.app.core.model.CodeEditorState
 import org.queryquill.app.core.model.ContentType
 import org.queryquill.app.core.model.ImmutableList
 import org.queryquill.app.core.model.KeyValue
-import org.queryquill.app.core.utils.contentTypeToLanguageType
 import org.queryquill.app.feature.response.headers.HeadersScreen
 import org.queryquill.app.feature.response.model.SegmentedButtonState
 import org.queryquill.app.feature.response.preview.PreviewScreen
 import org.queryquill.app.feature.response.source.ResponseScreenSource
+import org.queryquill.app.feature.response.utils.contentTypeToLanguageType
 import java.io.File
 
 @Composable

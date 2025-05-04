@@ -12,7 +12,7 @@ dependencies {
     implementation(libs.bundles.ktor)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.koin.androidx.compose)
-    implementation(libs.bundles.datastore)
+    implementation(libs.datastore.preferences)
 
     implementation(projects.core.model)
     implementation(projects.core.common)

@@ -16,4 +16,7 @@ dependencies {
     implementation(projects.core.model)
     implementation(projects.core.data)
     implementation(projects.core.designsystem)
+    testImplementation(projects.core.testing)
+    implementation(libs.androidx.lifecycle.runtime.testing)
+    androidTestImplementation(libs.bundles.androidx.compose.ui.test)
 }

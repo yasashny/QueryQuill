@@ -15,6 +15,12 @@ internal fun Project.configureCompose(
         buildFeatures {
             compose = true
         }
+        testOptions {
+            unitTests {
+                // For Robolectric
+                isIncludeAndroidResources = true
+            }
+        }
     }
     dependencies {
         implementation(platform(libs.compose.bom))

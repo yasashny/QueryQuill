@@ -9,7 +9,7 @@ playServicesOssLicenses = "17.1.0"
 sora-editor-bom = "0.23.4"
 composeBom = "2025.04.01"
 coreKtx = "1.16.0"
-datastorePreferences = "1.1.3"
+datastorePreferences = "1.1.4"
 desugar_jdk_libs = "2.1.5"
 espressoCore = "3.6.1"
 junit = "4.13.2"
@@ -31,6 +31,9 @@ googleServises = "4.4.2"
 firebaseCrashlytics = "3.0.3"
 material = "1.12.0"
 androidxTestRules = "1.6.1"
+robolectric = "4.14.1"
+coreKtxVersion = "1.6.1"
+lifecycleRuntimeTesting = "2.8.7"
 
 
 [libraries]
@@ -70,7 +73,6 @@ room-gradle-plugin = { group = "androidx.room", name = "room-gradle-plugin", ver
 
 #DataStore
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
-datastore = { module = "androidx.datastore:datastore", version.ref = "datastorePreferences" }
 
 #WindowSizeClass
 material3-window-size-classs = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "material3WindowSizeClass" }
@@ -102,16 +104,18 @@ junit = { module = "junit:junit", version.ref = "junit" }
 androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "androidxTestRules" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesAndroid" }
 kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
+robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
 
 ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "coreKtxVersion" }
+androidx-lifecycle-runtime-testing = { group = "androidx.lifecycle", name = "lifecycle-runtime-testing", version.ref = "lifecycleRuntimeTesting" }
 
 [bundles]
 sora-editor = ["sora-editor", "sora-editor-textmate"]
 ktor = ["ktor-server-content-negotiation", "ktor-serialization-kotlinx-json", "ktor-client-cio"]
-datastore = ["datastore-preferences", "datastore"]
 androidx-compose-ui-test = ["ui-test-junit4", "ui-test-manifest"]
 
 [plugins]

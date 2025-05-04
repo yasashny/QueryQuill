@@ -9,12 +9,12 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import org.queryquill.app.core.data.TransactionRepository
 import org.queryquill.app.core.model.CodeEditorState
 import org.queryquill.app.core.model.ResponseModel
-import org.queryquill.app.core.data.TransactionsRepository
 import org.queryquill.app.feature.response.model.SegmentedButtonState
 
-internal class ResponseViewModel(transactionsRepository: TransactionsRepository) : ViewModel() {
+internal class ResponseViewModel(transactionsRepository: TransactionRepository) : ViewModel() {
 
     val responseModel = transactionsRepository.getCurrentResponseOrNull().map { responseOrNull ->
         responseOrNull ?: ResponseModel.default()

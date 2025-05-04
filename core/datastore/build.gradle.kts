@@ -8,7 +8,7 @@ android {
 
 dependencies {
     implementation(libs.koin.androidx.compose)
-    implementation(libs.bundles.datastore)
+    implementation(libs.datastore.preferences)
     implementation(libs.kotlinx.serialization.json)
 
     implementation(projects.core.model)

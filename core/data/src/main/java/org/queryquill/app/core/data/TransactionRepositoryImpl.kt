@@ -19,16 +19,16 @@ import org.queryquill.app.core.model.RequestModel
 import org.queryquill.app.core.model.ResponseModel
 import org.queryquill.app.core.model.Transaction
 
-class TransactionsRepository internal constructor(
+class TransactionRepositoryImpl internal constructor(
     private val requestDataSource: RequestDataSource,
     private val currentTransactionIdDataSource: CurrentTransactionIdDataSource,
     private val transactionDataSource: TransactionDataSource,
     private val responseDataSource: ResponseDataSource,
     private val ioDispatcher: CoroutineDispatcher
-) {
+) : TransactionRepository {
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun getTransactions(): Flow<GetTransactionModel> {
+    override fun getTransactions(): Flow<GetTransactionModel> {
         return currentTransactionIdDataSource.getId().flowOn(ioDispatcher)
             .flatMapLatest { id ->
                 transactionDataSource.getTransactions().map { list ->
@@ -37,7 +37,7 @@ class TransactionsRepository internal constructor(
             }
     }
 
-    fun getCurrentRequestOrNull(): Flow<RequestModel?> {
+    override fun getCurrentRequestOrNull(): Flow<RequestModel?> {
         return currentTransactionIdDataSource.getId().flowOn(ioDispatcher)
             .map { value: Long? ->
                 if (value != null) {
@@ -49,7 +49,7 @@ class TransactionsRepository internal constructor(
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun getCurrentResponseOrNull(): Flow<ResponseModel?> {
+    override fun getCurrentResponseOrNull(): Flow<ResponseModel?> {
         return currentTransactionIdDataSource.getId().flowOn(ioDispatcher)
             .flatMapLatest { value: Long? ->
                 if (value != null) {
@@ -60,14 +60,14 @@ class TransactionsRepository internal constructor(
             }
     }
 
-    suspend fun changeCurrentTransaction(id: Long?) {
+    override suspend fun changeCurrentTransaction(id: Long?) {
         withContext(ioDispatcher) {
             currentTransactionIdDataSource.saveId(id)
         }
     }
 
 
-    suspend fun addTransaction(model: NewTransactionModel) {
+    override suspend fun addTransaction(model: NewTransactionModel) {
         withContext(ioDispatcher) {
             transactionDataSource.create(model).let { id ->
                 requestDataSource.create(id)
@@ -77,14 +77,14 @@ class TransactionsRepository internal constructor(
         }
     }
 
-    suspend fun updateRequest(model: RequestModel) {
+    override suspend fun updateRequest(model: RequestModel) {
         withContext(ioDispatcher) {
             requestDataSource.update(model)
         }
     }
 
 
-    suspend fun deleteTransaction(id: Long) {
+    override suspend fun deleteTransaction(id: Long) {
         withContext(ioDispatcher) {
             transactionDataSource.delete(id).let {
                 requestDataSource.delete(id)
@@ -93,7 +93,7 @@ class TransactionsRepository internal constructor(
         }
     }
 
-    suspend fun updateTransaction(model: Transaction) {
+    override suspend fun updateTransaction(model: Transaction) {
         withContext(ioDispatcher) {
             transactionDataSource.update(model)
         }

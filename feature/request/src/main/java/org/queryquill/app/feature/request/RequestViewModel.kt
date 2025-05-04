@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.queryquill.app.core.data.SendRequestRepository
-import org.queryquill.app.core.data.TransactionsRepository
+import org.queryquill.app.core.data.TransactionRepositoryImpl
 import org.queryquill.app.core.model.AuthState
 import org.queryquill.app.core.model.BodyState
 import org.queryquill.app.core.model.ImmutableList
@@ -29,7 +29,7 @@ import org.queryquill.app.feature.request.utils.Constants
 import org.queryquill.app.feature.request.utils.toMimeType
 
 internal class RequestViewModel(
-    private val transactionsRepository: TransactionsRepository,
+    private val transactionsRepository: TransactionRepositoryImpl,
     private val sendRequestRepository: SendRequestRepository
 ) : ViewModel() {
     private val _requestState = MutableStateFlow<RequestUiState>(RequestUiState.Loading)
