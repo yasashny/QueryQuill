@@ -1,3 +1,19 @@
+/*
+ * QueryQuill - Api client
+ * Copyright (C) 2025 Max Yasashny
+ *
+ * This program is free software: you can redistribute it and/or modify it under the terms of
+ * the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with this program.
+ * If not, see https://www.gnu.org/licenses/.
+ */
+
 package org.queryquill.app.feature.request
 
 import androidx.compose.runtime.getValue
@@ -17,7 +33,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.queryquill.app.core.data.SendRequestRepository
-import org.queryquill.app.core.data.TransactionRepositoryImpl
+import org.queryquill.app.core.data.TransactionRepository
 import org.queryquill.app.core.model.AuthState
 import org.queryquill.app.core.model.BodyState
 import org.queryquill.app.core.model.ImmutableList
@@ -29,7 +45,7 @@ import org.queryquill.app.feature.request.utils.Constants
 import org.queryquill.app.feature.request.utils.toMimeType
 
 internal class RequestViewModel(
-    private val transactionsRepository: TransactionRepositoryImpl,
+    private val transactionRepository: TransactionRepository,
     private val sendRequestRepository: SendRequestRepository
 ) : ViewModel() {
     private val _requestState = MutableStateFlow<RequestUiState>(RequestUiState.Loading)
@@ -38,7 +54,7 @@ internal class RequestViewModel(
 
     private fun loadData() {
         viewModelScope.launch {
-            transactionsRepository.getCurrentRequestOrNull().map { requestOrNull ->
+            transactionRepository.getCurrentRequestOrNull().map { requestOrNull ->
                 if (requestOrNull != null) {
                     RequestUiState.Success(request = requestOrNull)
                 } else {
@@ -48,7 +64,7 @@ internal class RequestViewModel(
                 when (val state = requestState.value) {
                     RequestUiState.Loading -> {}
                     is RequestUiState.Success -> {
-                        transactionsRepository.updateRequest(state.request)
+                        transactionRepository.updateRequest(state.request)
                     }
                 }
                 _requestState.update { value }
@@ -81,7 +97,7 @@ internal class RequestViewModel(
             when (val state = requestState.value) {
                 RequestUiState.Loading -> {}
                 is RequestUiState.Success -> {
-                    transactionsRepository.updateRequest(state.request)
+                    transactionRepository.updateRequest(state.request)
                 }
             }
         }
@@ -103,14 +119,15 @@ internal class RequestViewModel(
                             _requestState.update {
                                 RequestUiState.Success(
                                     request.request.copy(
-                                        header = ImmutableList(listOf(
-                                            KeyValue(
-                                                Constants.CONTENT_TYPE,
-                                                updateRequestModel.contentType
-                                            )
-                                        ) + request.request.header.list.filter { keyValue ->
-                                            keyValue.key != Constants.CONTENT_TYPE
-                                        }), bodyState = BodyState.BinaryFile(
+                                        header = ImmutableList(
+                                            listOf(
+                                                KeyValue(
+                                                    Constants.CONTENT_TYPE,
+                                                    updateRequestModel.contentType
+                                                )
+                                            ) + request.request.header.list.filter { keyValue ->
+                                                keyValue.key != Constants.CONTENT_TYPE
+                                            }), bodyState = BodyState.BinaryFile(
                                             ImmutableUri(updateRequestModel.uri),
                                             updateRequestModel.fileName
                                         )
@@ -150,12 +167,13 @@ internal class RequestViewModel(
                                         request.request.copy(
                                             bodyState = BodyState.Text.default(
                                                 request.request.id
-                                            ), header = ImmutableList(listOf(
-                                                KeyValue(
-                                                    Constants.CONTENT_TYPE,
-                                                    BodyState.Text.default(request.request.id).textType.toMimeType()
-                                                )
-                                            ) + request.request.header.list.filter { keyValue -> keyValue.key != Constants.CONTENT_TYPE })
+                                            ), header = ImmutableList(
+                                                listOf(
+                                                    KeyValue(
+                                                        Constants.CONTENT_TYPE,
+                                                        BodyState.Text.default(request.request.id).textType.toMimeType()
+                                                    )
+                                                ) + request.request.header.list.filter { keyValue -> keyValue.key != Constants.CONTENT_TYPE })
                                         )
                                     )
                                 }
@@ -166,12 +184,13 @@ internal class RequestViewModel(
                                     RequestUiState.Success(
                                         request.request.copy(
                                             bodyState = BodyState.FormUrlEncoded.default(),
-                                            header = ImmutableList(listOf(
-                                                KeyValue(
-                                                    Constants.CONTENT_TYPE,
-                                                    "application/x-www-form-urlencoded"
-                                                )
-                                            ) + request.request.header.list.filter { keyValue -> keyValue.key != Constants.CONTENT_TYPE })
+                                            header = ImmutableList(
+                                                listOf(
+                                                    KeyValue(
+                                                        Constants.CONTENT_TYPE,
+                                                        "application/x-www-form-urlencoded"
+                                                    )
+                                                ) + request.request.header.list.filter { keyValue -> keyValue.key != Constants.CONTENT_TYPE })
                                         )
                                     )
                                 }
@@ -182,12 +201,13 @@ internal class RequestViewModel(
                                     RequestUiState.Success(
                                         request.request.copy(
                                             bodyState = BodyState.MultipartForm.default(),
-                                            header = ImmutableList(listOf(
-                                                KeyValue(
-                                                    Constants.CONTENT_TYPE,
-                                                    "multipart/form-data"
-                                                )
-                                            ) + request.request.header.list.filter { keyValue -> keyValue.key != Constants.CONTENT_TYPE })
+                                            header = ImmutableList(
+                                                listOf(
+                                                    KeyValue(
+                                                        Constants.CONTENT_TYPE,
+                                                        "multipart/form-data"
+                                                    )
+                                                ) + request.request.header.list.filter { keyValue -> keyValue.key != Constants.CONTENT_TYPE })
                                         )
                                     )
                                 }
@@ -198,12 +218,13 @@ internal class RequestViewModel(
                                     RequestUiState.Success(
                                         request.request.copy(
                                             bodyState = BodyState.BinaryFile.default(),
-                                            header = ImmutableList(listOf(
-                                                KeyValue(
-                                                    Constants.CONTENT_TYPE,
-                                                    "application/octet-stream"
-                                                )
-                                            ) + request.request.header.list.filter { keyValue -> keyValue.key != Constants.CONTENT_TYPE })
+                                            header = ImmutableList(
+                                                listOf(
+                                                    KeyValue(
+                                                        Constants.CONTENT_TYPE,
+                                                        "application/octet-stream"
+                                                    )
+                                                ) + request.request.header.list.filter { keyValue -> keyValue.key != Constants.CONTENT_TYPE })
                                         )
                                     )
                                 }
@@ -294,12 +315,13 @@ internal class RequestViewModel(
                                 RequestUiState.Success(
                                     request.request.copy(
                                         bodyState = textBodyState.copy(textType = updateRequestModel.textType),
-                                        header = ImmutableList(listOf(
-                                            KeyValue(
-                                                Constants.CONTENT_TYPE,
-                                                updateRequestModel.textType.toMimeType()
-                                            )
-                                        ) + request.request.header.list.filter { keyValue -> keyValue.key != Constants.CONTENT_TYPE })
+                                        header = ImmutableList(
+                                            listOf(
+                                                KeyValue(
+                                                    Constants.CONTENT_TYPE,
+                                                    updateRequestModel.textType.toMimeType()
+                                                )
+                                            ) + request.request.header.list.filter { keyValue -> keyValue.key != Constants.CONTENT_TYPE })
                                     )
                                 )
                             }
