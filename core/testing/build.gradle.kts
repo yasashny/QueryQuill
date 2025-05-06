@@ -20,6 +20,11 @@ plugins {
 
 android {
     namespace = "org.queryquill.app.core.testing"
+    packaging {
+        resources {
+            pickFirsts.add("META-INF/versions/9/OSGI-INF/MANIFEST.MF")
+        }
+    }
 }
 dependencies {
     api(projects.core.common)
