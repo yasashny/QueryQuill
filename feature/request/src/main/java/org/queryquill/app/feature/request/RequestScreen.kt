@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import org.queryquill.app.core.model.KeyValue
+import org.queryquill.app.core.ui.SaveDataOnStop
 import org.queryquill.app.feature.request.alertDialog.LoadingAlertDialog
 import org.queryquill.app.feature.request.auth.authScreen
 import org.queryquill.app.feature.request.body.bodyScreen
@@ -42,7 +43,6 @@ import org.queryquill.app.feature.request.components.SegmentedButtonScreenState
 import org.queryquill.app.feature.request.components.editableList
 import org.queryquill.app.feature.request.query.queryScreen
 import org.queryquill.app.feature.request.utils.Constants
-import org.queryquill.app.feature.request.utils.SaveRequestOnStop
 
 
 @Composable
@@ -54,7 +54,7 @@ fun RequestScreen(
     val vm = koinViewModel<RequestViewModel>()
     val requestUiState = vm.requestState.collectAsStateWithLifecycle().value
 
-    SaveRequestOnStop {
+    SaveDataOnStop {
         vm.saveRequest()
     }
 

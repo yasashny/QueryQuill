@@ -18,4 +18,11 @@ package org.queryquill.app.feature.settings.util
 
 object TestTags {
     const val CIRCULAR_PROGRESS_INDICATOR = "cpi"
+    const val VERSION_TEXT = "version_text"
+    const val THEME_SECTION = "theme_section"
+    const val VERSION_BUTTON = "version_button"
+    const val FEEDBACK_BUTTON = "feedback_button"
+    const val PRIVACY_POLICY_BUTTON = "privacy_policy_button"
+    const val SOURCE_CODE_BUTTON = "source_code_button"
+
 }

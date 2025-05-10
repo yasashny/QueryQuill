@@ -14,25 +14,25 @@
  * If not, see https://www.gnu.org/licenses/.
  */
 
-plugins {
-    alias(libs.plugins.queryquill.android.library)
-    alias(libs.plugins.queryquill.android.library.compose)
-}
+package org.queryquill.app.feature.request_code_editor
 
-android {
-    namespace = "org.queryquill.app.feature.request_code_editor"
-}
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.queryquill.app.core.model.CodeEditorState
+import java.io.File
 
-dependencies {
-    implementation(libs.activity.compose)
-    implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.koin.androidx.compose)
-
-    implementation(projects.core.ui)
-    implementation(projects.core.model)
-    implementation(projects.core.utils)
-    implementation(projects.core.data)
-
-    testImplementation(projects.core.testing)
-    androidTestImplementation(libs.bundles.androidx.compose.ui.test)
+internal suspend fun saveFile(file: File, state: CodeEditorState) {
+    withContext(Dispatchers.IO){
+        file.writeText("")
+        var start = 0
+        val end = state.content.length
+        while (start < end) {
+            file.appendBytes(
+                state.content.substring(
+                    start, if (start + 10000 > end) end else start + 10000
+                ).toByteArray()
+            )
+            start += 10000
+        }
+    }
 }

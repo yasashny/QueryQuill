@@ -42,6 +42,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import org.queryquill.app.core.ui.QueryQuillTopBar
 import org.queryquill.app.core.ui.SaveDataOnStop
+import org.queryquill.app.feature.cookie.util.TestTags
 
 @Composable
 fun CookieScreen(navigateUp: () -> Unit) {
@@ -65,14 +66,14 @@ internal fun CookieScreen(
         }, navigationIcon = {
             TextButton(onClick = {
                 navigateUp()
-            }, modifier = Modifier.testTag("navigate_up_button")) {
+            }, modifier = Modifier.testTag(TestTags.CookieScreen.NAVIGATE_UP_BUTTON)) {
                 Text(text = stringResource(R.string.done))
             }
         }, actions = {
             IconButton(
                 onClick = {
                     onEvent(UpdateCookie.Add)
-                }, modifier = Modifier.testTag("add_cookie_button")
+                }, modifier = Modifier.testTag(TestTags.CookieScreen.ADD_COOKIE_BUTTON)
             ) {
                 Icon(imageVector = Icons.Outlined.Add, contentDescription = null)
             }
@@ -90,7 +91,7 @@ internal fun CookieScreen(
                     CookieUiState.Loading -> {
                         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                             CircularProgressIndicator(
-                                modifier = Modifier.testTag("loading_indicator")
+                                modifier = Modifier.testTag(TestTags.CookieScreen.LOADING_INDICATOR)
                             )
                         }
                     }

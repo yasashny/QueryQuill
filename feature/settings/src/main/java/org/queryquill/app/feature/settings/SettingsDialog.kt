@@ -124,7 +124,7 @@ internal fun SettingsDialog(
 }
 
 @Composable
-fun BottomButtonsSection() {
+private fun BottomButtonsSection() {
     Row(
         horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()
     ) {
@@ -135,20 +135,20 @@ fun BottomButtonsSection() {
                     context, OssLicensesMenuActivity::class.java
                 )
             )
-        }) {
+        }, modifier = Modifier.testTag(TestTags.SOURCE_CODE_BUTTON)) {
             Text(text = stringResource(R.string.licenses))
         }
         val uriHandler = LocalUriHandler.current
         TextButton(onClick = {
             uriHandler.openUri(PRIVATE_POLICY_URL)
-        }) {
+        }, modifier = Modifier.testTag(TestTags.PRIVACY_POLICY_BUTTON)) {
             Text(text = stringResource(R.string.privacy_policy))
         }
     }
 }
 
 @Composable
-fun FeedbackSection() {
+private fun FeedbackSection() {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth(),
@@ -162,7 +162,7 @@ fun FeedbackSection() {
                     context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
                 val clipData: ClipData = ClipData.newPlainText("text", CONTACT_EMAIL)
                 clipboardManager.setPrimaryClip(clipData)
-            }) {
+            }, modifier = Modifier.testTag(TestTags.FEEDBACK_BUTTON)) {
                 Text(CONTACT_EMAIL)
             }
         }
@@ -170,11 +170,13 @@ fun FeedbackSection() {
 }
 
 @Composable
-fun VersionSection() {
+private fun VersionSection() {
     Row(
         horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxSize()
     ) {
-        TextButton(onClick = { }, enabled = false) {
+        TextButton(
+            onClick = { }, enabled = false, modifier = Modifier.testTag(TestTags.VERSION_BUTTON)
+        ) {
             AppVersionText()
         }
     }
@@ -188,7 +190,11 @@ private fun ThemeSection(currentThemeState: ThemeState, updateTheme: (ThemeState
         modifier = Modifier.padding(top = 16.dp, bottom = 8.dp),
     )
     val radioOptions = listOf(ThemeState.SYSTEM, ThemeState.DARK, ThemeState.LIGHT)
-    Column(Modifier.selectableGroup()) {
+    Column(
+        Modifier
+            .selectableGroup()
+            .testTag(TestTags.THEME_SECTION)
+    ) {
         radioOptions.forEach { themeState ->
             ChooseRow(
                 text = themeState.title,
@@ -217,8 +223,7 @@ private fun ChooseRow(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         RadioButton(
-            selected = selected,
-            onClick = null,
+            selected = selected, onClick = null
         )
         Spacer(Modifier.width(8.dp))
         Text(text)
@@ -237,14 +242,15 @@ private fun AppVersionText() {
 
     val versionName = packageInfo?.versionName ?: "Unknown"
 
-    Text(text = "Version: $versionName")
+    Text(text = "Version: $versionName", modifier = Modifier.testTag(TestTags.VERSION_TEXT))
 }
 
 @Preview
 @Composable
 private fun PreviewSettingsDialog() {
     QueryQuillTheme {
-        SettingsDialog(settingsState = SettingsUiState.Success(SettingsModel(ThemeState.LIGHT)),
+        SettingsDialog(
+            settingsState = SettingsUiState.Success(SettingsModel(ThemeState.LIGHT)),
             onDismiss = {},
             updateModel = {})
     }
@@ -261,4 +267,4 @@ private fun PreviewSettingsDialogLoading() {
 private const val PRIVATE_POLICY_URL =
     "https://pewter-brow-ce5.notion.site/Private-Policy-127ace70ed4a8035abedc09a2751c51e"
 
-private const val CONTACT_EMAIL = "support@queryquill.org"
+internal const val CONTACT_EMAIL = "support@queryquill.org"

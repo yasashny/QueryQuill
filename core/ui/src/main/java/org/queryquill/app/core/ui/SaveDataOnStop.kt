@@ -21,8 +21,6 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.launch
 
 @Composable
 fun SaveDataOnStop(saveData: () -> Unit) {
@@ -30,13 +28,12 @@ fun SaveDataOnStop(saveData: () -> Unit) {
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_STOP) {
-                lifecycleOwner.lifecycleScope.launch {
-                    saveData()
-                }
+                saveData()
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
         onDispose {
+            saveData()
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }

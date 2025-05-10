@@ -14,25 +14,17 @@
  * If not, see https://www.gnu.org/licenses/.
  */
 
-plugins {
-    alias(libs.plugins.queryquill.android.library)
-    alias(libs.plugins.queryquill.android.library.compose)
-}
+package org.queryquill.app.feature.cookie.util
 
-android {
-    namespace = "org.queryquill.app.feature.request_code_editor"
-}
+internal object TestTags {
+    object CookieScreen {
+        const val LOADING_INDICATOR = "loading_indicator"
+        const val ADD_COOKIE_BUTTON = "add_cookie_button"
+        const val NAVIGATE_UP_BUTTON = "navigate_up_button"
+    }
 
-dependencies {
-    implementation(libs.activity.compose)
-    implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.koin.androidx.compose)
-
-    implementation(projects.core.ui)
-    implementation(projects.core.model)
-    implementation(projects.core.utils)
-    implementation(projects.core.data)
-
-    testImplementation(projects.core.testing)
-    androidTestImplementation(libs.bundles.androidx.compose.ui.test)
+    object CookieList {
+        const val COOKIE_INPUT = "cookie_input"
+        const val DELETE_COOKIE = "delete_cookie"
+    }
 }

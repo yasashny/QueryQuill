@@ -14,9 +14,9 @@
  * If not, see https://www.gnu.org/licenses/.
  */
 
-package org.queryquill.app.feature.request_code_editor.di
+package org.queryquill.app.feature.request_code_editor.util
 
-import org.koin.dsl.module
-
-
-val requestCodeEditorModule = module {}
+object TestTags {
+    const val DONE_BUTTON = "done_button"
+    const val TOP_BAR_NAME = "top_bar_name"
+}

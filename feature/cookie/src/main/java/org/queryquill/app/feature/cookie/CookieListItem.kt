@@ -35,6 +35,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.queryquill.app.core.designsystem.QueryQuillTheme
+import org.queryquill.app.feature.cookie.util.TestTags
 
 @Composable
 internal fun CookieListItem(
@@ -58,13 +59,13 @@ internal fun CookieListItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
-                    .testTag("cookie_input")
+                    .testTag(TestTags.CookieList.COOKIE_INPUT)
             )
             FilledTonalIconButton(
                 onClick = { onEvent(UpdateCookie.Delete(index)) },
                 modifier = Modifier
                     .padding(start = 15.dp)
-                    .testTag("delete_cookie")
+                    .testTag(TestTags.CookieList.DELETE_COOKIE)
 
             ) {
                 Icon(

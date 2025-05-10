@@ -23,6 +23,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextReplacement
 import org.junit.Rule
 import org.junit.Test
+import org.queryquill.app.feature.cookie.util.TestTags
 
 class CookieListItemTest {
     @get:Rule
@@ -35,7 +36,7 @@ class CookieListItemTest {
             CookieListItem(
                 item = testCookie, index = 0, onEvent = {})
         }
-        composeTestRule.onNodeWithTag("cookie_input").assertIsDisplayed()
+        composeTestRule.onNodeWithTag(TestTags.CookieList.COOKIE_INPUT).assertIsDisplayed()
     }
 
     @Test
@@ -46,14 +47,14 @@ class CookieListItemTest {
             CookieListItem(
                 item = testCookie, index = 0, onEvent = { event -> lastEvent = event })
         }
-        composeTestRule.onNodeWithTag("cookie_input").performTextReplacement("New Value")
+        composeTestRule.onNodeWithTag(TestTags.CookieList.COOKIE_INPUT)
+            .performTextReplacement("New Value")
         assert(lastEvent is UpdateCookie.Update)
         val updateEvent = lastEvent as UpdateCookie.Update
         assert(updateEvent.id == 0)
         assert(updateEvent.newCookieState.id == testCookie.id)
         assert(updateEvent.newCookieState.cookie == "New Value")
     }
-
 
     @Test
     fun cookieListItem_triggersDeleteEventOnButtonClick() {
@@ -63,7 +64,7 @@ class CookieListItemTest {
             CookieListItem(
                 item = testCookie, index = 0, onEvent = { event -> lastEvent = event })
         }
-        composeTestRule.onNodeWithTag("delete_cookie").performClick()
+        composeTestRule.onNodeWithTag(TestTags.CookieList.DELETE_COOKIE).performClick()
         assert(lastEvent is UpdateCookie.Delete)
         val deleteEvent = lastEvent as UpdateCookie.Delete
         assert(deleteEvent.id == 0)

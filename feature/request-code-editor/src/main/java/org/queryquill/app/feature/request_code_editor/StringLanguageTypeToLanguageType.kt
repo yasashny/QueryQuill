@@ -14,25 +14,27 @@
  * If not, see https://www.gnu.org/licenses/.
  */
 
-plugins {
-    alias(libs.plugins.queryquill.android.library)
-    alias(libs.plugins.queryquill.android.library.compose)
-}
+package org.queryquill.app.feature.request_code_editor
 
-android {
-    namespace = "org.queryquill.app.feature.request_code_editor"
-}
+import android.os.Build
+import org.queryquill.app.core.model.LanguageType
 
-dependencies {
-    implementation(libs.activity.compose)
-    implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.koin.androidx.compose)
+internal fun stringLanguageTypeToLanguageType(stringLanguageType: String) = when (stringLanguageType) {
+    "Json" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        LanguageType.JSON
+    } else {
+        LanguageType.OTHER
+    }
 
-    implementation(projects.core.ui)
-    implementation(projects.core.model)
-    implementation(projects.core.utils)
-    implementation(projects.core.data)
+    "Xml" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        LanguageType.XML
+    } else {
+        LanguageType.OTHER
+    }
 
-    testImplementation(projects.core.testing)
-    androidTestImplementation(libs.bundles.androidx.compose.ui.test)
+    "Plain" -> LanguageType.PLAIN
+    "Other" -> LanguageType.OTHER
+    else -> {
+        LanguageType.OTHER
+    }
 }

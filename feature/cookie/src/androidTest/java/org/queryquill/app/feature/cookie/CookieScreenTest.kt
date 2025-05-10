@@ -27,6 +27,7 @@ import androidx.lifecycle.testing.TestLifecycleOwner
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import org.queryquill.app.feature.cookie.util.TestTags
 
 class CookieScreenTest {
     @get:Rule
@@ -38,7 +39,7 @@ class CookieScreenTest {
         composeTestRule.setContent {
             CookieScreen(uiState = uiState, onEvent = {}, navigateUp = {}, saveCookieOnStop = {})
         }
-        composeTestRule.onNodeWithTag("loading_indicator").assertExists()
+        composeTestRule.onNodeWithTag(TestTags.CookieScreen.LOADING_INDICATOR).assertExists()
     }
 
     @Test
@@ -65,7 +66,7 @@ class CookieScreenTest {
                 navigateUp = {},
                 saveCookieOnStop = {})
         }
-        composeTestRule.onNodeWithTag("add_cookie_button").performClick()
+        composeTestRule.onNodeWithTag(TestTags.CookieScreen.ADD_COOKIE_BUTTON).performClick()
         assert(capturedEvent == UpdateCookie.Add)
     }
 
@@ -81,7 +82,7 @@ class CookieScreenTest {
                 saveCookieOnStop = {})
         }
         composeTestRule.onNodeWithTag(
-            "navigate_up_button"
+            TestTags.CookieScreen.NAVIGATE_UP_BUTTON
         ).performClick()
         assert(navigateUpCalled) { "Navigate up should be called when back button is clicked" }
     }
