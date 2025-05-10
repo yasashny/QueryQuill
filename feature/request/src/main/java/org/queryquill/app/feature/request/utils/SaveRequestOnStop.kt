@@ -27,12 +27,13 @@ internal fun SaveRequestOnStop(saveRequest: () -> Unit) {
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_STOP) {
+            if (event == Lifecycle.Event.ON_PAUSE) {
                 saveRequest()
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
         onDispose {
+            saveRequest()
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }

@@ -20,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -29,13 +30,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.queryquill.app.core.model.Transaction
 import org.queryquill.app.core.ui.QueryQuillTopBar
 import org.queryquill.app.feature.transaction.navigationDrawer.TransactionsUiState
+import org.queryquill.app.feature.transaction.util.TestTags
 
 @Composable
 internal fun TransactionTopBar(
@@ -43,8 +48,6 @@ internal fun TransactionTopBar(
     drawerState: DrawerState,
     updateTransaction: (transaction: Transaction) -> Unit
 ) {
-
-
     QueryQuillTopBar(title = {
         when (transactions) {
             TransactionsUiState.Loading -> {
@@ -68,7 +71,10 @@ internal fun TransactionTopBar(
     }, navigationIcon = {
         val scope = rememberCoroutineScope()
 
-        IconButton(onClick = { scope.launch(Dispatchers.IO) { drawerState.open() } }) {
+        IconButton(
+            onClick = { scope.launch(Dispatchers.IO) { drawerState.open() } },
+            modifier = Modifier.testTag(TestTags.TransactionTopBar.MENU_BUTTON)
+        ) {
             Icon(imageVector = Icons.Filled.Menu, contentDescription = null)
         }
     }, actions = {
@@ -82,7 +88,8 @@ internal fun TransactionTopBar(
                             mutableStateOf(false)
                         }
                         if (openChangeLabelDialog) {
-                            ChangeLabelAlertDialog(onDismiss = { openChangeLabelDialog = false },
+                            ChangeLabelAlertDialog(
+                                onDismiss = { openChangeLabelDialog = false },
                                 onConfirm = { newLabel: String ->
                                     updateTransaction(
                                         Transaction(
@@ -92,9 +99,12 @@ internal fun TransactionTopBar(
                                     openChangeLabelDialog = false
                                 })
                         }
-                        IconButton(onClick = {
-                            openChangeLabelDialog = true
-                        }) {
+                        IconButton(
+                            onClick = {
+                                openChangeLabelDialog = true
+                            },
+                            modifier = Modifier.testTag(TestTags.TransactionTopBar.CHANGE_LABEL_BUTTON)
+                        ) {
                             Icon(
                                 imageVector = Icons.Outlined.Edit, contentDescription = null
                             )
@@ -104,4 +114,12 @@ internal fun TransactionTopBar(
             }
         }
     })
+}
+
+@Preview
+@Composable
+private fun PreviewTransactionTopBar() {
+    TransactionTopBar(
+        TransactionsUiState.Success(listOf(), null), DrawerState(DrawerValue.Closed)
+    ) {}
 }

@@ -53,9 +53,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
+import org.queryquill.app.core.model.Transaction
 import org.queryquill.app.core.utils.vibration
 import org.queryquill.app.feature.transaction.R
 import org.queryquill.app.feature.transaction.TransactionEvent
@@ -67,10 +69,11 @@ internal fun NavigationDrawer(
     navigateToCookie: () -> Unit,
     onEvent: (TransactionEvent) -> Unit,
     addTransactionDialog: @Composable (() -> Unit) -> Unit,
+    drawerValue: DrawerValue = DrawerValue.Closed,
     composable: @Composable (drawerState: DrawerState) -> Unit
 ) {
     val context = LocalContext.current
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val drawerState = rememberDrawerState(drawerValue)
     val scope = rememberCoroutineScope()
 
     var gesturesState by remember {
@@ -82,7 +85,8 @@ internal fun NavigationDrawer(
     if (drawerState.isClosed) {
         gesturesState = false
     }
-    ModalNavigationDrawer(drawerState = drawerState,
+    ModalNavigationDrawer(
+        drawerState = drawerState,
         gesturesEnabled = gesturesState,
         drawerContent = {
             ModalDrawerSheet {
@@ -225,4 +229,23 @@ internal fun NavigationDrawer(
         content = {
             composable(drawerState)
         })
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun NavigationDrawerPreview() {
+    val sampleTransactions = listOf(
+        Transaction(id = 1, label = "First Request"), Transaction(id = 2, label = "Second Request")
+    )
+    val transactionsState = TransactionsUiState.Success(
+        list = sampleTransactions, currentId = 1
+    )
+    NavigationDrawer(
+        transactions = transactionsState,
+        navigateToSettings = {},
+        navigateToCookie = {},
+        onEvent = {},
+        addTransactionDialog = {},
+        drawerValue = DrawerValue.Open
+    ) {}
 }

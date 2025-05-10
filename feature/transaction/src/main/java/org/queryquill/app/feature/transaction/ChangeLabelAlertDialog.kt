@@ -27,7 +27,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import org.queryquill.app.feature.transaction.util.TestTags
 
 @Composable
 internal fun ChangeLabelAlertDialog(
@@ -39,14 +43,22 @@ internal fun ChangeLabelAlertDialog(
     AlertDialog(title = {
         Text(
             text = stringResource(id = R.string.change_label),
-            style = MaterialTheme.typography.titleLarge
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier.testTag(TestTags.ChangeLabelDialog.LABEL_INPUT)
         )
     }, onDismissRequest = { onDismiss() }, confirmButton = {
-        TextButton(onClick = { onConfirm(newLabel) }, enabled = newLabel.isNotEmpty()) {
+        TextButton(
+            onClick = { onConfirm(newLabel) },
+            enabled = newLabel.isNotEmpty(),
+            modifier = Modifier.testTag(TestTags.ChangeLabelDialog.CONFIRM_BUTTON)
+        ) {
             Text(text = stringResource(id = R.string.change_label))
         }
     }, dismissButton = {
-        TextButton(onClick = { onDismiss() }) {
+        TextButton(
+            onClick = { onDismiss() },
+            modifier = Modifier.testTag(TestTags.ChangeLabelDialog.CANCEL_BUTTON)
+        ) {
             Text(text = stringResource(id = R.string.cancel))
         }
     }, text = {
@@ -55,8 +67,15 @@ internal fun ChangeLabelAlertDialog(
                 value = newLabel,
                 onValueChange = { newLabel = it },
                 label = { Text(text = stringResource(R.string.label)) },
-                textStyle = MaterialTheme.typography.titleMedium
+                textStyle = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.testTag(TestTags.ChangeLabelDialog.LABEL_TEXT)
             )
         }
     })
+}
+
+@Preview
+@Composable
+private fun PreviewChangeLabelAlertDialog() {
+    ChangeLabelAlertDialog(onDismiss = {}, onConfirm = {})
 }

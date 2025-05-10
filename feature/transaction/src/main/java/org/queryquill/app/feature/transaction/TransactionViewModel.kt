@@ -18,7 +18,6 @@ package org.queryquill.app.feature.transaction
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -32,25 +31,25 @@ internal class TransactionViewModel(
 
     val transactions = transactionRepository.getTransactions().map { getTransactionModel ->
         TransactionsUiState.Success(getTransactionModel.list.list, getTransactionModel.currentId)
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), TransactionsUiState.Loading)
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), TransactionsUiState.Loading)
 
     fun onEvent(transactionEvent: TransactionEvent) {
         when (transactionEvent) {
 
             is TransactionEvent.DeleteTransaction -> {
-                viewModelScope.launch(Dispatchers.IO) {
+                viewModelScope.launch {
                     transactionRepository.deleteTransaction(transactionEvent.id)
                 }
             }
 
             is TransactionEvent.SetTransaction -> {
-                viewModelScope.launch(Dispatchers.IO) {
+                viewModelScope.launch {
                     transactionRepository.changeCurrentTransaction(transactionEvent.id)
                 }
             }
 
             is TransactionEvent.UpdateTransaction -> {
-                viewModelScope.launch(Dispatchers.IO) {
+                viewModelScope.launch {
                     transactionRepository.updateTransaction(transactionEvent.transaction)
                 }
             }

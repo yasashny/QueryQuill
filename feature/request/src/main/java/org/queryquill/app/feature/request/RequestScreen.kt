@@ -24,7 +24,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import org.queryquill.app.core.model.KeyValue
 import org.queryquill.app.feature.request.alertDialog.LoadingAlertDialog
@@ -52,7 +52,7 @@ fun RequestScreen(
     onRequestSent: () -> Unit
 ) {
     val vm = koinViewModel<RequestViewModel>()
-    val requestUiState = vm.requestState.collectAsState().value
+    val requestUiState = vm.requestState.collectAsStateWithLifecycle().value
 
     SaveRequestOnStop {
         vm.saveRequest()
@@ -82,7 +82,8 @@ fun RequestScreen(
 
                 LazyColumn {
                     item {
-                        ScreenBar(getType = { requestModel.type },
+                        ScreenBar(
+                            getType = { requestModel.type },
                             getUrl = { requestModel.url },
                             updateType = {
                                 vm.updateRequest(UpdateRequestModel.Type(it))
@@ -106,7 +107,8 @@ fun RequestScreen(
                         HorizontalDivider()
                     }
                     when (vm.screenState) {
-                        ScreenState.BODY -> bodyScreen(bodyState = requestModel.bodyState,
+                        ScreenState.BODY -> bodyScreen(
+                            bodyState = requestModel.bodyState,
                             requestId = requestModel.id,
                             navigateToEditor = navigateToEditor,
                             changeBodyType = {
@@ -155,7 +157,8 @@ fun RequestScreen(
                                 )
                             })
 
-                        ScreenState.AUTH -> authScreen(getAuthState = { requestModel.auth },
+                        ScreenState.AUTH -> authScreen(
+                            getAuthState = { requestModel.auth },
                             changeAuthType = {
                                 vm.updateRequest(
                                     UpdateRequestModel.Auth.ChangeType(it)
@@ -167,7 +170,8 @@ fun RequestScreen(
                             vm.updateRequest(UpdateRequestModel.Header(keyValueList))
                         }
 
-                        ScreenState.QUERY -> queryScreen(getUrl = { requestModel.url },
+                        ScreenState.QUERY -> queryScreen(
+                            getUrl = { requestModel.url },
                             getQuery = { requestModel.query },
                             updateQuery = {
                                 vm.updateRequest(UpdateRequestModel.Query(it))

@@ -14,16 +14,23 @@
  * If not, see https://www.gnu.org/licenses/.
  */
 
-package org.queryquill.app.feature.transaction
+package org.queryquill.app.feature.transaction.util
 
-internal enum class TabsScreenState(val pageIndex: Int) {
-    REQUEST(0), RESPONSE(1)
-}
-
-internal fun selectPage(page: Int): TabsScreenState {
-    return when (page) {
-        0 -> TabsScreenState.REQUEST
-        else -> TabsScreenState.RESPONSE
+internal object TestTags {
+    object ChangeLabelDialog {
+        const val LABEL_INPUT = "labelInput"
+        const val CANCEL_BUTTON = "cancelButton"
+        const val CONFIRM_BUTTON = "confirmButton"
+        const val LABEL_TEXT = "labelText"
+    }
+    object TransactionTopBar{
+        const val CHANGE_LABEL_BUTTON = "clb"
+        const val MENU_BUTTON = "mb"
+    }
+    object TransactionScreen{
+        const val LOADING_STATE = "loadingState"
+        const val SINGLE_SCREEN = "singleScreen"
+        const val ROW_SCREEN = "rowScreen"
+        const val COLUMN_SCREEN = "columnScreen"
     }
 }
-

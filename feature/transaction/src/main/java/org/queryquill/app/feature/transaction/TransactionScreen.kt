@@ -31,18 +31,21 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import org.queryquill.app.core.model.ScreenState
 import org.queryquill.app.feature.transaction.navigationDrawer.NavigationDrawer
 import org.queryquill.app.feature.transaction.navigationDrawer.TransactionsUiState
+import org.queryquill.app.feature.transaction.util.TestTags
 
 @Composable
 fun TransactionScreen(
@@ -57,6 +60,38 @@ fun TransactionScreen(
     openAddTransactionDialog: @Composable (() -> Unit) -> Unit,
     goToNewTransactionScreen: @Composable () -> Unit
 ) {
+    val vm = koinViewModel<TransactionViewModel>()
+    val transactions = vm.transactions.collectAsStateWithLifecycle().value
+
+    TransactionScreen(
+        screenState = screenState,
+        navigateToEditor = navigateToEditor,
+        navigateToSettings = navigateToSettings,
+        navigateToCookie = navigateToCookie,
+        navigateToRequestScreen = navigateToRequestScreen,
+        goToResponseScreen = goToResponseScreen,
+        openAddTransactionDialog = openAddTransactionDialog,
+        goToNewTransactionScreen = goToNewTransactionScreen,
+        transactions = transactions,
+        onEvent = vm::onEvent,
+    )
+}
+
+@Composable
+internal fun TransactionScreen(
+    screenState: ScreenState,
+    navigateToEditor: (textFileName: String, languageType: String) -> Unit,
+    navigateToSettings: @Composable (() -> Unit) -> Unit,
+    navigateToCookie: () -> Unit,
+    navigateToRequestScreen: @Composable (
+        modifier: Modifier, navigateToEditor: (textFileName: String, languageType: String) -> Unit, onRequestSent: () -> Unit
+    ) -> Unit,
+    goToResponseScreen: @Composable (modifier: Modifier) -> Unit,
+    openAddTransactionDialog: @Composable (() -> Unit) -> Unit,
+    goToNewTransactionScreen: @Composable () -> Unit,
+    transactions: TransactionsUiState,
+    onEvent: (TransactionEvent) -> Unit
+) {
 
     var openSettings by remember {
         mutableStateOf(false)
@@ -66,25 +101,23 @@ fun TransactionScreen(
             openSettings = false
         }
     }
-
-    val vm = koinViewModel<TransactionViewModel>()
     var currentId: Long? by remember {
         mutableStateOf(null)
     }
-    val transactions = vm.transactions.collectAsState().value
 
-
-    NavigationDrawer(transactions = transactions,
+    NavigationDrawer(
+        transactions = transactions,
         navigateToSettings = { openSettings = true },
         navigateToCookie = { navigateToCookie() },
-        onEvent = vm::onEvent,
+        onEvent = onEvent,
         addTransactionDialog = openAddTransactionDialog
     ) { drawerState ->
         Scaffold(topBar = {
-            TransactionTopBar(transactions = transactions,
+            TransactionTopBar(
+                transactions = transactions,
                 drawerState = drawerState,
                 updateTransaction = { newTransaction ->
-                    vm.onEvent(TransactionEvent.UpdateTransaction(newTransaction))
+                    onEvent(TransactionEvent.UpdateTransaction(newTransaction))
                 })
         }) { paddingValues ->
             Surface(
@@ -94,7 +127,12 @@ fun TransactionScreen(
             ) {
                 when (transactions) {
                     TransactionsUiState.Loading -> {
-                        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Box(
+                            Modifier
+                                .fillMaxSize()
+                                .testTag(TestTags.TransactionScreen.LOADING_STATE),
+                            contentAlignment = Alignment.Center
+                        ) {
 
                         }
                     }
@@ -112,7 +150,7 @@ fun TransactionScreen(
                                 else -> {
                                     when (screenState) {
                                         ScreenState.SINGLE_SCREEN -> {
-                                            Column {
+                                            Column(modifier = Modifier.testTag(TestTags.TransactionScreen.SINGLE_SCREEN)) {
                                                 val tabsScreenState = remember {
                                                     mutableStateOf(TabsScreenState.REQUEST)
                                                 }
@@ -145,7 +183,7 @@ fun TransactionScreen(
                                         }
 
                                         ScreenState.ROW_SCREEN -> {
-                                            Row {
+                                            Row(modifier = Modifier.testTag(TestTags.TransactionScreen.ROW_SCREEN)) {
                                                 navigateToRequestScreen(
                                                     Modifier
                                                         .fillMaxSize()
@@ -167,7 +205,7 @@ fun TransactionScreen(
                                         }
 
                                         ScreenState.COLUMN_SCREEN -> {
-                                            Column {
+                                            Column(modifier = Modifier.testTag(TestTags.TransactionScreen.COLUMN_SCREEN)) {
                                                 navigateToRequestScreen(
                                                     Modifier
                                                         .fillMaxSize()
@@ -196,4 +234,20 @@ fun TransactionScreen(
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PreviewTransactionScreen() {
+    TransactionScreen(
+        screenState = ScreenState.SINGLE_SCREEN,
+        navigateToEditor = { _, _ -> },
+        navigateToSettings = {},
+        navigateToCookie = { },
+        navigateToRequestScreen = { _, _, _ -> },
+        goToResponseScreen = {},
+        openAddTransactionDialog = {},
+        goToNewTransactionScreen = {},
+        transactions = TransactionsUiState.Success(emptyList(), currentId = 1L),
+        onEvent = {})
 }
