@@ -21,7 +21,6 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -52,9 +51,9 @@ class TransactionTopBarTest {
             TransactionTopBar(TransactionsUiState.Loading, drawerState) {}
         }
         composeTestRule.onNodeWithTag(TestTags.TransactionTopBar.MENU_BUTTON).performClick()
-        runBlocking {
-            assertEquals(DrawerValue.Open, drawerState.currentValue)
-        }
+        composeTestRule.waitForIdle()
+        assertEquals(DrawerValue.Open, drawerState.currentValue)
+
     }
 
     @Test

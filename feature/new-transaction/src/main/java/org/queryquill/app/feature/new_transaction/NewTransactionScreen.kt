@@ -43,7 +43,7 @@ import org.queryquill.app.core.designsystem.QueryQuillTheme
 
 @Composable
 fun NewTransactionScreen() {
-    val imageVector = painterResource(id = R.drawable.logoaddrequest)
+    val imageVector = painterResource(id = R.drawable.logo_add_request)
     var openAddTransactionDialog by remember {
         mutableStateOf(false)
     }

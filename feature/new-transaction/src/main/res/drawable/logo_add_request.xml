@@ -22,11 +22,11 @@
     android:height="288dp"
     android:viewportWidth="288"
     android:viewportHeight="288">
-    <path
-        android:pathData="M144,144m-96,0a96,96 0,1 1,192 0a96,96 0,1 1,-192 0"
-        android:fillColor="@color/logo_color"
-        android:fillAlpha="0.05" />
-    <path
-        android:pathData="M137.32,87.96L164.44,69.22L175.11,95.98L171.46,115.66L160.2,104.33L168.3,126.89L157.22,183.8L144.3,190.88L137.85,194.41L127.89,216.25L125.69,218.98L125.69,215.51L127.57,192.32L123.76,186.69L116.13,175.43L119.23,164.63L138.1,148.48L122.29,151.76L137.32,87.96Z"
-        android:fillColor="@color/logo_color" />
+  <path
+      android:pathData="M144,144m-96,0a96,96 0,1 1,192 0a96,96 0,1 1,-192 0"
+      android:fillColor="@color/logo_color"
+      android:fillAlpha="0.07"/>
+  <path
+      android:pathData="M137.29,87.94L164.39,69.21L175.05,95.95L170.19,118.72L157.75,111.88L165.83,137.38L157.18,183.7L144.27,190.77L137.82,194.3L127.87,216.12L125.68,218.84L125.68,215.38L127.56,192.21L123.75,186.59L116.13,175.34L119.22,164.55L138.07,148.41L123.44,147.33L137.29,87.94Z"
+      android:fillColor="@color/logo_color"/>
 </vector>
