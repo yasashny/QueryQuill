@@ -45,7 +45,7 @@ import org.queryquill.app.feature.request.components.ChipGroup
 internal fun BodyScreenText(
     bodyState: BodyState.Text,
     updateTextType: (TextType) -> Unit,
-    navigateToEditor: (textFileName: String, languageType: String) -> Unit
+    navigateToEditor: (fileName: String, textType: TextType) -> Unit
 ) {
     Column {
         Row {
@@ -75,7 +75,7 @@ internal fun BodyScreenText(
                 .height(60.dp)
                 .padding(horizontal = 15.dp)
                 .clickable {
-                    navigateToEditor(bodyState.textFileName, bodyState.textType.title)
+                    navigateToEditor(bodyState.textFileName, bodyState.textType)
                 },
             border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outline),
             shape = RoundedCornerShape(8.dp)

@@ -49,7 +49,7 @@ import java.io.File
 
 internal fun LazyListScope.bodyScreen(
     bodyState: BodyState,
-    navigateToEditor: (textFileName: String, languageType: String) -> Unit,
+    navigateToEditor: (fileName: String, textType: TextType) -> Unit,
     changeBodyType: (EnumBodyState) -> Unit,
     requestId: Long,
     updateTextType: (TextType) -> Unit,

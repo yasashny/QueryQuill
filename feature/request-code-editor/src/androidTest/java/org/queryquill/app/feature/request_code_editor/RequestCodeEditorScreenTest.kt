@@ -27,6 +27,7 @@ import io.github.rosemoe.sora.text.Content
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import org.queryquill.app.core.model.TextType
 import org.queryquill.app.core.ui.rememberCodeEditorState
 import org.queryquill.app.feature.request_code_editor.util.TestTags
 import java.io.File
@@ -47,7 +48,7 @@ class RequestCodeEditorScreenTest {
         }
         composeTestRule.setContent {
             RequestCodeEditorScreen(
-                textFileName = fileName, stringLanguageType = "plaintext", navigateUp = {})
+                fileName = fileName, textType = TextType.PLAIN, navigateUp = {})
         }
         composeTestRule.waitForIdle()
         assert(file.exists()) { "File should be created if it does not exist." }
@@ -70,10 +71,7 @@ class RequestCodeEditorScreenTest {
                 content = Content("Updated Content")
             }
             RequestCodeEditorScreen(
-                textFileName = fileName,
-                stringLanguageType = "plaintext",
-                navigateUp = {},
-                state = state
+                fileName = fileName, textType = TextType.PLAIN, navigateUp = {}, state = state
             )
         }
         composeTestRule.activityRule.scenario.moveToState(Lifecycle.State.CREATED)
@@ -87,8 +85,8 @@ class RequestCodeEditorScreenTest {
         var navigateUpCalled = false
         composeTestRule.setContent {
             RequestCodeEditorScreen(
-                textFileName = "test.txt",
-                stringLanguageType = "plaintext",
+                fileName = "test.txt",
+                textType = TextType.PLAIN,
                 navigateUp = { navigateUpCalled = true })
         }
         composeTestRule.waitForIdle()
@@ -102,9 +100,9 @@ class RequestCodeEditorScreenTest {
     fun testTopBarLabel() {
         composeTestRule.setContent {
             RequestCodeEditorScreen(
-                textFileName = "test.txt", stringLanguageType = "plaintext", navigateUp = {})
+                fileName = "test.txt", textType = TextType.PLAIN, navigateUp = {})
         }
         composeTestRule.waitForIdle()
-        composeTestRule.onNodeWithText("Text/plaintext").assertExists()
+        composeTestRule.onNodeWithText("Text/PLAIN").assertExists()
     }
 }

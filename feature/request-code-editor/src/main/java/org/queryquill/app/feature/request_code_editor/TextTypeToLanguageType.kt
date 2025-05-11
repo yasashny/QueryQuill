@@ -18,23 +18,21 @@ package org.queryquill.app.feature.request_code_editor
 
 import android.os.Build
 import org.queryquill.app.core.model.LanguageType
+import org.queryquill.app.core.model.TextType
 
-internal fun stringLanguageTypeToLanguageType(stringLanguageType: String) = when (stringLanguageType) {
-    "Json" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+internal fun TextType.toLanguageType() = when (this) {
+    TextType.JSON -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         LanguageType.JSON
     } else {
         LanguageType.OTHER
     }
 
-    "Xml" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+    TextType.XML -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         LanguageType.XML
     } else {
         LanguageType.OTHER
     }
 
-    "Plain" -> LanguageType.PLAIN
-    "Other" -> LanguageType.OTHER
-    else -> {
-        LanguageType.OTHER
-    }
+    TextType.PLAIN -> LanguageType.PLAIN
+    TextType.OTHER -> LanguageType.OTHER
 }

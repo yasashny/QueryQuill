@@ -21,8 +21,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
-import androidx.compose.runtime.collectAsState
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import org.koin.androidx.compose.koinViewModel
 import org.queryquill.app.core.designsystem.QueryQuillTheme
@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
 
             val vm = koinViewModel<MainViewModel>()
-            val theme = vm.themeState.collectAsState().value
+            val theme = vm.themeState.collectAsStateWithLifecycle().value
 
             splashScreen.setKeepOnScreenCondition { theme == null }
 

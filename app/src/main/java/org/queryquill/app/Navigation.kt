@@ -18,9 +18,13 @@ package org.queryquill.app
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
+import kotlinx.serialization.Serializable
 import org.queryquill.app.core.model.ScreenState
+import org.queryquill.app.core.model.TextType
 import org.queryquill.app.feature.cookie.CookieScreen
 import org.queryquill.app.feature.new_transaction.AddTransactionDialog
 import org.queryquill.app.feature.new_transaction.NewTransactionScreen
@@ -29,31 +33,36 @@ import org.queryquill.app.feature.request_code_editor.RequestCodeEditorScreen
 import org.queryquill.app.feature.response.ResponseScreen
 import org.queryquill.app.feature.settings.SettingsDialog
 import org.queryquill.app.feature.transaction.TransactionScreen
+import kotlin.reflect.typeOf
 
+@Serializable
+private data object MainScreenRoute
 
-sealed class Destinations(
-    val route: String
-) {
-    data object MainScreenRoute : Destinations(route = "main")
-    data object EditorScreenRoute : Destinations(route = "editor/{textFileName}/{languageType}")
-    data object CookieScreenRoute: Destinations(route = "cookie")
-}
+@Serializable
+private data class EditorScreenRoute(
+    val fileName: String, val textType: TextType
+)
 
+@Serializable
+private data object CookieScreenRoute
 
 @Composable
 fun Navigation(navController: NavHostController, screenState: ScreenState) {
 
-    NavHost(navController = navController, startDestination = Destinations.MainScreenRoute.route) {
-        composable(Destinations.MainScreenRoute.route) {
-            TransactionScreen(screenState = screenState,
-                navigateToEditor = { textFileName, languageType ->
-                    navController.navigate("editor/${textFileName}/${languageType}")
+    NavHost(navController = navController, startDestination = MainScreenRoute) {
+        composable<MainScreenRoute> {
+            TransactionScreen(
+                screenState = screenState,
+                navigateToEditor = { fileName, textType ->
+                    navController.navigate(
+                        EditorScreenRoute(fileName, textType)
+                    )
                 },
                 navigateToSettings = { onDismiss ->
                     SettingsDialog(onDismiss)
                 },
                 navigateToCookie = {
-                    navController.navigate(Destinations.CookieScreenRoute.route)
+                    navController.navigate(CookieScreenRoute)
                 },
                 openAddTransactionDialog = { onDismiss ->
                     AddTransactionDialog(onDismiss)
@@ -73,15 +82,19 @@ fun Navigation(navController: NavHostController, screenState: ScreenState) {
                     )
                 })
         }
-        composable(Destinations.EditorScreenRoute.route) { backStackEntry ->
+        composable<EditorScreenRoute>(
+            typeMap = mapOf(
+                typeOf<TextType>() to NavType.EnumType(TextType::class.java)
+            )
+        ) {
+            val arguments = it.toRoute<EditorScreenRoute>()
             RequestCodeEditorScreen(
-                backStackEntry.arguments?.getString("textFileName")!!,
-                backStackEntry.arguments?.getString("languageType")!!
+                arguments.fileName, arguments.textType
             ) {
                 navController.navigateUp()
             }
         }
-        composable(Destinations.CookieScreenRoute.route) {
+        composable<CookieScreenRoute> {
             CookieScreen {
                 navController.navigateUp()
             }

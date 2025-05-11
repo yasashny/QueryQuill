@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import org.queryquill.app.core.model.ScreenState
+import org.queryquill.app.core.model.TextType
 import org.queryquill.app.feature.transaction.navigationDrawer.NavigationDrawer
 import org.queryquill.app.feature.transaction.navigationDrawer.TransactionsUiState
 import org.queryquill.app.feature.transaction.util.TestTags
@@ -50,11 +51,11 @@ import org.queryquill.app.feature.transaction.util.TestTags
 @Composable
 fun TransactionScreen(
     screenState: ScreenState,
-    navigateToEditor: (textFileName: String, languageType: String) -> Unit,
+    navigateToEditor: (fileName: String, textType: TextType) -> Unit,
     navigateToSettings: @Composable (() -> Unit) -> Unit,
     navigateToCookie: () -> Unit,
     navigateToRequestScreen: @Composable (
-        modifier: Modifier, navigateToEditor: (textFileName: String, languageType: String) -> Unit, onRequestSent: () -> Unit
+        modifier: Modifier, navigateToEditor: (fileName: String, textType: TextType) -> Unit, onRequestSent: () -> Unit
     ) -> Unit,
     goToResponseScreen: @Composable (modifier: Modifier) -> Unit,
     openAddTransactionDialog: @Composable (() -> Unit) -> Unit,
@@ -80,11 +81,11 @@ fun TransactionScreen(
 @Composable
 internal fun TransactionScreen(
     screenState: ScreenState,
-    navigateToEditor: (textFileName: String, languageType: String) -> Unit,
+    navigateToEditor: (fileName: String, textType: TextType) -> Unit,
     navigateToSettings: @Composable (() -> Unit) -> Unit,
     navigateToCookie: () -> Unit,
     navigateToRequestScreen: @Composable (
-        modifier: Modifier, navigateToEditor: (textFileName: String, languageType: String) -> Unit, onRequestSent: () -> Unit
+        modifier: Modifier, navigateToEditor: (fileName: String, textType: TextType) -> Unit, onRequestSent: () -> Unit
     ) -> Unit,
     goToResponseScreen: @Composable (modifier: Modifier) -> Unit,
     openAddTransactionDialog: @Composable (() -> Unit) -> Unit,

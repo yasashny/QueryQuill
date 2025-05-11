@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.launch
 import org.queryquill.app.core.model.CodeEditorState
+import org.queryquill.app.core.model.TextType
 import org.queryquill.app.core.ui.CodeEditor
 import org.queryquill.app.core.ui.SaveDataOnStop
 import org.queryquill.app.core.ui.rememberCodeEditorState
@@ -38,22 +39,22 @@ import java.io.File
 
 @Composable
 fun RequestCodeEditorScreen(
-    textFileName: String, stringLanguageType: String, navigateUp: () -> Unit
+    fileName: String, textType: TextType, navigateUp: () -> Unit
 ) {
     val state = rememberCodeEditorState()
-    RequestCodeEditorScreen(textFileName, stringLanguageType, navigateUp, state)
+    RequestCodeEditorScreen(fileName, textType, navigateUp, state)
 }
 
 
 @Composable
 internal fun RequestCodeEditorScreen(
-    textFileName: String, stringLanguageType: String, navigateUp: () -> Unit, state: CodeEditorState
+    fileName: String, textType: TextType, navigateUp: () -> Unit, state: CodeEditorState
 ) {
-    val languageType = stringLanguageTypeToLanguageType(stringLanguageType)
+    val languageType = textType.toLanguageType()
 
     val ctx = LocalContext.current
     val file = remember {
-        File(ctx.filesDir, textFileName)
+        File(ctx.filesDir, fileName)
     }
     var isFileReady by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
@@ -63,7 +64,7 @@ internal fun RequestCodeEditorScreen(
         isFileReady = true
     }
     Scaffold(topBar = {
-        RequestCodeEditorTopBar(stringLanguageType, navigateUp)
+        RequestCodeEditorTopBar(languageType.name, navigateUp)
     }) { paddingValues ->
         Surface(
             Modifier

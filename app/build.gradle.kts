@@ -18,6 +18,7 @@ plugins {
     alias(libs.plugins.queryquill.android.application)
     alias(libs.plugins.queryquill.android.application.compose)
     alias(libs.plugins.firebase.crashlytics)
+    alias(libs.plugins.serialization)
     id("com.google.android.gms.oss-licenses-plugin")
 }
 
@@ -76,6 +77,7 @@ dependencies {
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
 
+    implementation(libs.kotlinx.serialization.json)
 
 
     implementation(projects.core.model)

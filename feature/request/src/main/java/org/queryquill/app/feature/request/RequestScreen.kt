@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import org.queryquill.app.core.model.KeyValue
+import org.queryquill.app.core.model.TextType
 import org.queryquill.app.core.ui.SaveDataOnStop
 import org.queryquill.app.feature.request.alertDialog.LoadingAlertDialog
 import org.queryquill.app.feature.request.auth.authScreen
@@ -48,7 +49,7 @@ import org.queryquill.app.feature.request.utils.Constants
 @Composable
 fun RequestScreen(
     modifier: Modifier,
-    navigateToEditor: (textFileName: String, languageType: String) -> Unit,
+    navigateToEditor: (fileName: String, textType: TextType) -> Unit,
     onRequestSent: () -> Unit
 ) {
     val vm = koinViewModel<RequestViewModel>()

@@ -46,15 +46,16 @@ fun TextMateInit(applicationContext: Context, theme: ThemeState) {
         "quietlight"
     }
     val themeAssetsPath = "textmate/$name.json"
-    themeRegistry.loadTheme(ThemeModel(
-        IThemeSource.fromInputStream(
-            FileProviderRegistry.getInstance().tryGetInputStream(themeAssetsPath),
-            themeAssetsPath,
-            null
-        ), name
-    ).apply {
-        isDark = isDarkTheme
-    })
+    themeRegistry.loadTheme(
+        ThemeModel(
+            IThemeSource.fromInputStream(
+                FileProviderRegistry.getInstance().tryGetInputStream(themeAssetsPath),
+                themeAssetsPath,
+                null
+            ), name
+        ).apply {
+            isDark = isDarkTheme
+        })
     ThemeRegistry.getInstance().setTheme(name)
     GrammarRegistry.getInstance().loadGrammars("textmate/languages.json")
 
