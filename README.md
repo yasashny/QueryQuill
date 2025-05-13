@@ -90,6 +90,3 @@ QueryQuill brings together all the tools you need for comprehensive API testingâ
 - Kotlinx Serialization  
 - Navigation Compose  
 - Material3  
-
----
-![Y](readme/y.svg "Y")
