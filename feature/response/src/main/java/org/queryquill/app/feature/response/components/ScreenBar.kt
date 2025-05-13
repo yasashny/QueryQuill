@@ -38,13 +38,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.queryquill.app.core.model.ResponseModel
 import org.queryquill.app.feature.response.R
-import org.queryquill.app.feature.response.preview.saveFileLauncher
-import java.io.File
 
 @Composable
-internal fun ScreenBar(status: String, time: String, contentLength: String, file: File) {
-
-    val saveFile = saveFileLauncher(file)
+internal fun ScreenBar(
+    status: String, time: String, contentLength: String, onSaveClick: () -> Unit, fileName: String
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -53,7 +51,6 @@ internal fun ScreenBar(status: String, time: String, contentLength: String, file
             .border(
                 1.dp, MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(4.dp)
             )
-
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -79,8 +76,8 @@ internal fun ScreenBar(status: String, time: String, contentLength: String, file
             VerticalDivider(color = MaterialTheme.colorScheme.outline)
             Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                 IconButton(
-                    onClick = { saveFile.launch(file.name) },
-                    enabled = file.name != ResponseModel.DEFAULT_FILE_NAME
+                    onClick = { onSaveClick() },
+                    enabled = fileName != ResponseModel.DEFAULT_FILE_NAME
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.download),

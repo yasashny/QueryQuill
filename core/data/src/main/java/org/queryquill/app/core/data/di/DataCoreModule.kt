@@ -21,6 +21,7 @@ import org.koin.dsl.module
 import org.queryquill.app.core.common.QQDispatchers
 import org.queryquill.app.core.data.CookieRepository
 import org.queryquill.app.core.data.CookieRepositoryImpl
+import org.queryquill.app.core.data.FileRepository
 import org.queryquill.app.core.data.SendRequestRepository
 import org.queryquill.app.core.data.SettingsRepository
 import org.queryquill.app.core.data.SettingsRepositoryImpl
@@ -43,5 +44,8 @@ val dataCoreModule = module {
     }
     single<CookieRepository> {
         CookieRepositoryImpl(get(), get(named(QQDispatchers.IO)))
+    }
+    single<FileRepository>{
+        FileRepository(get(), get(named(QQDispatchers.IO)))
     }
 }

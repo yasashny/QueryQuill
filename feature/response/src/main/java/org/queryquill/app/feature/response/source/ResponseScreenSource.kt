@@ -31,20 +31,23 @@ import org.queryquill.app.core.model.LanguageType
 import org.queryquill.app.core.ui.CodeEditor
 import org.queryquill.app.feature.response.R
 import org.queryquill.app.feature.response.utils.RestrictiveConstants
-import java.io.File
 
 @Composable
 internal fun ResponseScreenSource(
-    languageType: LanguageType, file: File, state: CodeEditorState
+    languageType: LanguageType,
+    state: CodeEditorState,
+    fileLength: Long,
+    transferFileToCodeEditorState: () -> Unit,
+    codeEditorLoadingState: Boolean,
 ) {
     val context = LocalContext.current
 
-    if (file.length() > RestrictiveConstants.FILE_CANNOT_BE_OPENED) {
+    if (fileLength > RestrictiveConstants.FILE_CANNOT_BE_OPENED) {
         FileCannotBeOpenedScreen()
     } else {
 
         var confirmFileOpening by remember {
-            mutableStateOf(file.length() <= RestrictiveConstants.CONFIRM_FILE_OPENING)
+            mutableStateOf(fileLength <= RestrictiveConstants.CONFIRM_FILE_OPENING)
         }
 
         if (confirmFileOpening) {
@@ -55,10 +58,11 @@ internal fun ResponseScreenSource(
                 isEditable = false,
                 languageType = languageType,
                 isBasicDisplayMode = true,
-                file = file,
-                isWordWrap = file.length() <= RestrictiveConstants.DISABLE_WORD_WRAP
+                transferFileToCodeEditorState = transferFileToCodeEditorState,
+                isWordWrap = fileLength <= RestrictiveConstants.DISABLE_WORD_WRAP,
+                isLoading = codeEditorLoadingState
             )
-            if (file.length() > RestrictiveConstants.DISABLE_WORD_WRAP) {
+            if (fileLength > RestrictiveConstants.DISABLE_WORD_WRAP) {
                 Toast.makeText(
                     context,
                     stringResource(R.string.the_file_is_too_big_wordwrap_is_disabled_for_performance_reasons),

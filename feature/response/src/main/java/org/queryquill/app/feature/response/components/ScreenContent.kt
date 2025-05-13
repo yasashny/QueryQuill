@@ -16,6 +16,7 @@
 
 package org.queryquill.app.feature.response.components
 
+import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,16 +34,18 @@ import org.queryquill.app.feature.response.model.SegmentedButtonState
 import org.queryquill.app.feature.response.preview.PreviewScreen
 import org.queryquill.app.feature.response.source.ResponseScreenSource
 import org.queryquill.app.feature.response.utils.contentTypeToLanguageType
-import java.io.File
 
 @Composable
 internal fun ScreenContent(
     contentType: ContentType,
-    file: File,
     headers: ImmutableList<KeyValue>,
     segmentedButtonState: SegmentedButtonState,
     updateSegmentedButtonState: (SegmentedButtonState) -> Unit,
-    codeEditorState: CodeEditorState
+    codeEditorState: CodeEditorState,
+    fileLength: Long,
+    transferFileToCodeEditorState: () -> Unit,
+    codeEditorLoadingState: Boolean,
+    fileUri: Uri
 ) {
     Row {
         Box(
@@ -70,14 +73,23 @@ internal fun ScreenContent(
     when (segmentedButtonState) {
         SegmentedButtonState.PREVIEW -> {
             PreviewScreen(
-                contentType = contentType, file = file, codeEditorState
+                contentType = contentType,
+                codeEditorState,
+                fileLength,
+                transferFileToCodeEditorState,
+                fileUri,
+                codeEditorLoadingState
             )
         }
 
         SegmentedButtonState.SOURCE -> {
             val languageType = contentTypeToLanguageType(contentType)
             ResponseScreenSource(
-                languageType, file, codeEditorState
+                languageType,
+                codeEditorState,
+                fileLength,
+                transferFileToCodeEditorState,
+                codeEditorLoadingState
             )
         }
 

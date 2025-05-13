@@ -24,11 +24,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -40,12 +35,9 @@ import io.github.rosemoe.sora.langs.textmate.registry.ThemeRegistry
 import io.github.rosemoe.sora.text.Content
 import io.github.rosemoe.sora.text.ContentListener
 import io.github.rosemoe.sora.widget.CodeEditor
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.queryquill.app.core.model.CodeEditorState
 import org.queryquill.app.core.model.LanguageType
-import java.io.File
-import java.io.InputStream
+
 
 @Composable
 fun CodeEditor(
@@ -54,32 +46,15 @@ fun CodeEditor(
     isEditable: Boolean = true,
     isBasicDisplayMode: Boolean,
     languageType: LanguageType,
-    file: File,
+    transferFileToCodeEditorState: () -> Unit,
+    isLoading: Boolean,
     isWordWrap: Boolean = true,
 ) {
 
     val context = LocalContext.current
-    val inputStream = file.inputStream()
-    var isLoading by remember {
-        mutableStateOf(true)
-    }
-    if (state.content.isEmpty()) {
-        LaunchedEffect(file) {
-            isLoading = true
-            withContext(Dispatchers.IO) {
-                inputStream.readInChunks(10000).forEach {
-                    withContext(Dispatchers.Main) {
-                        val line = state.content.lineCount - 1
-                        val column = state.content.getColumnCount(line)
-                        state.content.insert(line, column, it)
-                    }
-                }
-            }
-            inputStream.close()
-            isLoading = false
-        }
-    } else {
-        isLoading = false
+
+    if (isLoading) {
+        transferFileToCodeEditorState()
     }
 
     if (isLoading) {
@@ -138,15 +113,6 @@ private fun setCodeEditorFactory(
         )
     )
     return editor
-}
-
-internal fun InputStream.readInChunks(chunkSize: Int = 100): Sequence<String> = sequence {
-    val buffer = ByteArray(chunkSize)
-    var bytesRead: Int
-
-    while (this@readInChunks.read(buffer).also { bytesRead = it } != -1) {
-        yield(String(buffer, 0, bytesRead))
-    }
 }
 
 private class QQContentListener(

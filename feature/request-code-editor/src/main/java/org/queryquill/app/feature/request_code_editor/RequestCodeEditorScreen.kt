@@ -21,48 +21,42 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 import org.queryquill.app.core.model.CodeEditorState
 import org.queryquill.app.core.model.TextType
 import org.queryquill.app.core.ui.CodeEditor
 import org.queryquill.app.core.ui.SaveDataOnStop
-import org.queryquill.app.core.ui.rememberCodeEditorState
-import java.io.File
 
 @Composable
 fun RequestCodeEditorScreen(
     fileName: String, textType: TextType, navigateUp: () -> Unit
 ) {
-    val state = rememberCodeEditorState()
-    RequestCodeEditorScreen(fileName, textType, navigateUp, state)
+    val vm = koinViewModel<RequestCodeEditorViewModel>()
+    RequestCodeEditorScreen(
+        fileName,
+        textType,
+        navigateUp,
+        vm.codeEditorState,
+        codeEditorLoadingState = vm.codeEditorLoadingState,
+        transferFileToCodeEditorState = vm::transferFileToCodeEditorState,
+        saveData = vm::saveData
+    )
 }
 
 
 @Composable
 internal fun RequestCodeEditorScreen(
-    fileName: String, textType: TextType, navigateUp: () -> Unit, state: CodeEditorState
+    fileName: String,
+    textType: TextType,
+    navigateUp: () -> Unit,
+    state: CodeEditorState,
+    codeEditorLoadingState: Boolean,
+    transferFileToCodeEditorState: (fileName: String) -> Unit,
+    saveData: (fileName: String) -> Unit
 ) {
     val languageType = textType.toLanguageType()
 
-    val ctx = LocalContext.current
-    val file = remember {
-        File(ctx.filesDir, fileName)
-    }
-    var isFileReady by remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) {
-        if (!file.exists()) {
-            file.writeText("")
-        }
-        isFileReady = true
-    }
     Scaffold(topBar = {
         RequestCodeEditorTopBar(languageType.name, navigateUp)
     }) { paddingValues ->
@@ -71,19 +65,18 @@ internal fun RequestCodeEditorScreen(
                 .padding(paddingValues)
                 .fillMaxSize()
         ) {
-            if (isFileReady) {
-                CodeEditor(
-                    state = state,
-                    isBasicDisplayMode = false,
-                    languageType = languageType,
-                    file = file
-                )
-                val scope = rememberCoroutineScope()
-                SaveDataOnStop {
-                    scope.launch {
-                        saveFile(file, state)
-                    }
-                }
+            CodeEditor(
+                state = state,
+                isBasicDisplayMode = false,
+                languageType = languageType,
+                transferFileToCodeEditorState = {
+                    transferFileToCodeEditorState(fileName)
+                },
+                isLoading = codeEditorLoadingState
+            )
+
+            SaveDataOnStop {
+                saveData(fileName)
             }
         }
     }

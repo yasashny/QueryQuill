@@ -29,6 +29,7 @@ import org.queryquill.app.di.appModule
 import org.queryquill.app.feature.cookie.di.cookieModule
 import org.queryquill.app.feature.new_transaction.di.newTransactionModule
 import org.queryquill.app.feature.request.di.requestModule
+import org.queryquill.app.feature.request_code_editor.di.requestCodeEditorModule
 import org.queryquill.app.feature.response.di.responseModule
 import org.queryquill.app.feature.settings.di.settingsModule
 import org.queryquill.app.feature.transaction.di.transactionModule
@@ -52,7 +53,8 @@ class App : Application() {
                     databaseCoreModule,
                     dataStoreCoreModule,
                     networkCoreModule,
-                    dataCoreModule
+                    dataCoreModule,
+                    requestCodeEditorModule
                 )
             )
         }

@@ -14,50 +14,24 @@
  * If not, see https://www.gnu.org/licenses/.
  */
 
-package org.queryquill.app.feature.response
+package org.queryquill.app.feature.request_code_editor
 
-import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import org.queryquill.app.core.data.FileRepository
-import org.queryquill.app.core.data.TransactionRepository
 import org.queryquill.app.core.model.CodeEditorState
-import org.queryquill.app.core.model.ResponseModel
-import org.queryquill.app.feature.response.model.SegmentedButtonState
 
-internal class ResponseViewModel(
-    transactionsRepository: TransactionRepository, private val fileRepository: FileRepository
-) : ViewModel() {
-
-    val responseModel = transactionsRepository.getCurrentResponseOrNull().map { responseOrNull ->
-        responseOrNull ?: ResponseModel.default()
-    }.onEach {
-        codeEditorState = CodeEditorState()
-        codeEditorLoadingState = true
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), ResponseModel.default())
-
-    var segmentedButtonState by mutableStateOf(SegmentedButtonState.PREVIEW)
-
-    fun updateSegmentedButtonState(newState: SegmentedButtonState) {
-        segmentedButtonState = newState
-    }
-
-    fun getFileLength(fileName: String) = fileRepository.getFileLength(fileName).getOrDefault(0)
-
-    fun getFileUri(fileName: String): Uri =
-        fileRepository.getFileUri(fileName).getOrDefault(Uri.EMPTY)
-
+internal class RequestCodeEditorViewModel(private val fileRepository: FileRepository) :
+    ViewModel() {
 
     fun transferFileToCodeEditorState(fileName: String) {
         viewModelScope.launch {
+            fileRepository.createFileIfNotExist(fileName)
             val newCodeEditorState = CodeEditorState()
             fileRepository.getChunkedText(fileName).collect {
                 val line = codeEditorState.content.lineCount - 1
@@ -71,11 +45,24 @@ internal class ResponseViewModel(
 
     var codeEditorState by mutableStateOf(CodeEditorState())
 
-    var codeEditorLoadingState by mutableStateOf(false)
+    var codeEditorLoadingState by mutableStateOf(true)
 
-    fun saveFileLauncher(fileName: String, uri: Uri) {
+    fun saveData(fileName: String) {
         viewModelScope.launch {
-            fileRepository.saveFileLauncher(fileName, uri)
+            val flow = flow {
+                var start = 0
+                val end = codeEditorState.content.length
+                while (start < end) {
+                    emit(
+                        codeEditorState.content.substring(
+                            start, if (start + 10000 > end) end else start + 10000
+                        ).toByteArray()
+                    )
+                    start += 10000
+                }
+            }
+            fileRepository.saveFileFromFlow(fileName, flow)
         }
+
     }
 }

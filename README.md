@@ -3,7 +3,7 @@
 
 **QueryQuill** is a modern, flexible, and extensible open-source Android app that turns your device into a full-fledged API-testing tool. Now everything you need is at your fingertips—anytime, anywhere.
 
-[![QueryQuill](readme/download.svg "QueryQuill")](https://github.com/yasashny/QueryQuill/releases/download/v0.1.0-alpha/QueryQuill_0_1_0.apk)
+[![QueryQuill](readme/download.svg "QueryQuill")](https://github.com/yasashny/QueryQuill/releases)
 
 ## Key Features
 

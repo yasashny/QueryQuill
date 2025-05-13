@@ -14,25 +14,12 @@
  * If not, see https://www.gnu.org/licenses/.
  */
 
-package org.queryquill.app.feature.request_code_editor
+package org.queryquill.app.feature.request_code_editor.di
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import org.queryquill.app.core.model.CodeEditorState
-import java.io.File
+import org.koin.core.module.dsl.viewModelOf
+import org.koin.dsl.module
+import org.queryquill.app.feature.request_code_editor.RequestCodeEditorViewModel
 
-internal suspend fun saveFile(file: File, state: CodeEditorState) {
-    withContext(Dispatchers.IO){
-        file.writeText("")
-        var start = 0
-        val end = state.content.length
-        while (start < end) {
-            file.appendBytes(
-                state.content.substring(
-                    start, if (start + 10000 > end) end else start + 10000
-                ).toByteArray()
-            )
-            start += 10000
-        }
-    }
+val requestCodeEditorModule = module {
+    viewModelOf(::RequestCodeEditorViewModel)
 }

@@ -17,6 +17,7 @@
 package org.queryquill.app.feature.response.preview
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.view.ViewGroup
 import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
@@ -30,11 +31,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
-import java.io.File
 
 @SuppressLint("SetJavaScriptEnabled", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-internal fun WebViewPage(file: File) {
+internal fun WebViewPage(fileUri: Uri) {
     Scaffold {
         Box {
             val context = LocalContext.current
@@ -48,17 +48,15 @@ internal fun WebViewPage(file: File) {
                     )
                     webViewClient = object : WebViewClient() {
                         override fun shouldOverrideUrlLoading(
-                            view: WebView?,
-                            request: WebResourceRequest?
+                            view: WebView?, request: WebResourceRequest?
                         ): Boolean {
                             return true
                         }
                     }
                 }
             }
-            val fileUri = file.toURI().toString()
             AndroidView(modifier = Modifier.fillMaxSize(), factory = { webView }, update = {
-                it.loadUrl(fileUri)
+                it.loadUrl(fileUri.toString())
             })
         }
     }
