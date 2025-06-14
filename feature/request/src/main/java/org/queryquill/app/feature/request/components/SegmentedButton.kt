@@ -16,26 +16,45 @@
 
 package org.queryquill.app.feature.request.components
 
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ButtonGroupDefaults
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Text
+import androidx.compose.material3.ToggleButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import org.queryquill.app.core.designsystem.QueryQuillTheme
 import org.queryquill.app.core.model.ImmutableList
 import org.queryquill.app.feature.request.ScreenState
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 internal fun SegmentedButton(
     selectedIndex: ScreenState, options: ImmutableList<ScreenState>, onClick: (ScreenState) -> Unit
 ) {
-    SingleChoiceSegmentedButtonRow {
+    Row(
+        Modifier.padding(horizontal = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
+    ) {
         options.list.forEachIndexed { index, element ->
-            SegmentedButton(
-                shape = SegmentedButtonDefaults.itemShape(index = index, count = options.list.size),
-                onClick = { onClick(element) },
-                selected = element == selectedIndex
+            ToggleButton(
+                checked = selectedIndex == element,
+                onCheckedChange = { onClick(element) },
+                modifier = Modifier
+                    .weight(1f)
+                    .semantics { role = Role.RadioButton },
+                shapes = when (index) {
+                    0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
+                    options.list.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
+                    else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
+                }
             ) {
                 Text(element.title)
             }
@@ -47,10 +66,11 @@ internal fun SegmentedButton(
 @Composable
 private fun PreviewSegmentedButton() {
     QueryQuillTheme {
-        SegmentedButton(selectedIndex = ScreenState.BODY, options = ImmutableList(
-            listOf(
-                ScreenState.BODY, ScreenState.AUTH, ScreenState.HEADER, ScreenState.QUERY
-            )
-        ), onClick = {})
+        SegmentedButton(
+            selectedIndex = ScreenState.BODY, options = ImmutableList(
+                listOf(
+                    ScreenState.BODY, ScreenState.AUTH, ScreenState.HEADER, ScreenState.QUERY
+                )
+            ), onClick = {})
     }
 }

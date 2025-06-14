@@ -23,6 +23,7 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,8 +34,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.queryquill.app.core.model.Transaction
@@ -59,12 +65,26 @@ internal fun TransactionTopBar(
             }
 
             is TransactionsUiState.Success -> {
-                Text(
-                    transactions.list.find { it.id == transactions.currentId }?.label
-                        ?: stringResource(R.string.queryquill),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+                val label = transactions.list.find { it.id == transactions.currentId }?.label
+                if (label != null) {
+                    Text(
+                        label, maxLines = 1, overflow = TextOverflow.Ellipsis
+                    )
+                } else {
+                    val kulimparkBold = FontFamily(
+                        Font(R.font.kulimpark_bold, FontWeight.Bold)
+                    )
+                    Text(
+                        text = stringResource(id = R.string.queryquill), style = TextStyle(
+                            fontFamily = kulimparkBold,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 25.sp,
+                            lineHeight = 24.sp,
+                            letterSpacing = 0.sp
+                        ), color = MaterialTheme.colorScheme.secondary
+                    )
+                }
+
 
             }
         }

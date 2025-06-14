@@ -27,7 +27,8 @@ fun adaptiveScreenManager(windowSizeClass: WindowSizeClass): ScreenState {
     } else {
         if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Medium) {
             return if (windowSizeClass.heightSizeClass == WindowHeightSizeClass.Expanded) {
-                ScreenState.COLUMN_SCREEN
+                //ScreenState.COLUMN_SCREEN
+                ScreenState.SINGLE_SCREEN
             } else {
                 ScreenState.SINGLE_SCREEN
             }

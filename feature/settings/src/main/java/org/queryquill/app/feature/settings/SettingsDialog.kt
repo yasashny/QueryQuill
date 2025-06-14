@@ -40,8 +40,9 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
@@ -71,6 +72,7 @@ fun SettingsDialog(onDismiss: () -> Unit) {
     SettingsDialog(onDismiss, settingsState, viewModel::updateModel)
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 internal fun SettingsDialog(
     onDismiss: () -> Unit, settingsState: SettingsUiState, updateModel: (UpdateSettings) -> Unit
@@ -90,7 +92,7 @@ internal fun SettingsDialog(
                         .fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator(Modifier.testTag(TestTags.CIRCULAR_PROGRESS_INDICATOR))
+                    LoadingIndicator(Modifier.testTag(TestTags.CIRCULAR_PROGRESS_INDICATOR))
                 }
             }
 

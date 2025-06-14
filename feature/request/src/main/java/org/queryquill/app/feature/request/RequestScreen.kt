@@ -21,8 +21,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.LoadingIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,6 +47,7 @@ import org.queryquill.app.feature.request.query.queryScreen
 import org.queryquill.app.feature.request.utils.Constants
 
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun RequestScreen(
     modifier: Modifier,
@@ -62,7 +64,7 @@ fun RequestScreen(
     when (requestUiState) {
         RequestUiState.Loading -> {
             Box(modifier = modifier, contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
+                LoadingIndicator()
             }
         }
 

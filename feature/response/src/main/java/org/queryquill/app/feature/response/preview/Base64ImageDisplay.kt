@@ -19,7 +19,8 @@ package org.queryquill.app.feature.response.preview
 import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.LoadingIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +34,7 @@ import org.queryquill.app.core.model.CodeEditorState
 import org.queryquill.app.core.model.LanguageType
 import org.queryquill.app.feature.response.source.ResponseScreenSource
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 internal fun Base64ImageDisplay(
     fileUri: Uri, codeEditorState: CodeEditorState, fileLength: Long,
@@ -61,7 +63,7 @@ internal fun Base64ImageDisplay(
 
                 is AsyncImagePainter.State.Loading -> {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator()
+                        LoadingIndicator()
                     }
                 }
 

@@ -24,9 +24,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -51,6 +52,7 @@ fun CookieScreen(navigateUp: () -> Unit) {
     CookieScreen(cookieUiState, vm::onEvent, navigateUp, vm::saveCookie)
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 internal fun CookieScreen(
     uiState: CookieUiState,
@@ -90,7 +92,7 @@ internal fun CookieScreen(
                 when (uiState) {
                     CookieUiState.Loading -> {
                         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                            CircularProgressIndicator(
+                            LoadingIndicator(
                                 modifier = Modifier.testTag(TestTags.CookieScreen.LOADING_INDICATOR)
                             )
                         }
@@ -125,14 +127,14 @@ internal fun CookieScreen(
 private fun CookieScreenPreview() {
     CookieScreen(
         uiState = CookieUiState.Success(
-        listOf(
-            CookieModel(0, "cookie1"),
-            CookieModel(1, "cookie2"),
-            CookieModel(2, "cookie3"),
-            CookieModel(3, "cookie4"),
-            CookieModel(4, "cookie5"),
-        )
-    ), onEvent = {}, navigateUp = {}, saveCookieOnStop = {})
+            listOf(
+                CookieModel(0, "cookie1"),
+                CookieModel(1, "cookie2"),
+                CookieModel(2, "cookie3"),
+                CookieModel(3, "cookie4"),
+                CookieModel(4, "cookie5"),
+            )
+        ), onEvent = {}, navigateUp = {}, saveCookieOnStop = {})
 }
 
 @Preview(showBackground = true)

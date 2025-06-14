@@ -21,15 +21,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -184,24 +184,22 @@ internal fun TransactionScreen(
                                         }
 
                                         ScreenState.ROW_SCREEN -> {
-                                            Row(modifier = Modifier.testTag(TestTags.TransactionScreen.ROW_SCREEN)) {
-                                                navigateToRequestScreen(
-                                                    Modifier
-                                                        .fillMaxSize()
-                                                        .weight(1f),
-                                                    navigateToEditor
-                                                ) {}
-                                                Box(
-                                                    Modifier
-                                                        .fillMaxHeight()
-                                                        .width(1.dp)
-                                                        .background(MaterialTheme.colorScheme.outlineVariant)
-                                                )
-                                                goToResponseScreen(
-                                                    Modifier
-                                                        .fillMaxSize()
-                                                        .weight(1f)
-                                                )
+                                            Column {
+                                                HorizontalDivider()
+                                                Row(modifier = Modifier.testTag(TestTags.TransactionScreen.ROW_SCREEN)) {
+                                                    navigateToRequestScreen(
+                                                        Modifier
+                                                            .fillMaxSize()
+                                                            .weight(1f),
+                                                        navigateToEditor
+                                                    ) {}
+                                                    VerticalDivider()
+                                                    goToResponseScreen(
+                                                        Modifier
+                                                            .fillMaxSize()
+                                                            .weight(1f)
+                                                    )
+                                                }
                                             }
                                         }
 

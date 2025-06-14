@@ -22,7 +22,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.LoadingIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,6 +40,7 @@ import org.queryquill.app.core.model.CodeEditorState
 import org.queryquill.app.core.model.LanguageType
 
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun CodeEditor(
     modifier: Modifier = Modifier,
@@ -59,7 +61,7 @@ fun CodeEditor(
 
     if (isLoading) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
+            LoadingIndicator()
         }
     } else {
         AndroidView(factory = {

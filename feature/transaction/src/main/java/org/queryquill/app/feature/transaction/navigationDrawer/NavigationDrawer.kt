@@ -25,12 +25,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
@@ -62,6 +63,7 @@ import org.queryquill.app.core.utils.vibration
 import org.queryquill.app.feature.transaction.R
 import org.queryquill.app.feature.transaction.TransactionEvent
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 internal fun NavigationDrawer(
     transactions: TransactionsUiState,
@@ -174,7 +176,7 @@ internal fun NavigationDrawer(
                         Box(
                             modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
                         ) {
-                            CircularProgressIndicator()
+                            LoadingIndicator()
                         }
                     }
 

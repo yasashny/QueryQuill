@@ -18,9 +18,7 @@ package org.queryquill.app.feature.transaction
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
@@ -35,13 +33,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 internal fun PrimaryTextTabs(tabsScreenState: MutableState<TabsScreenState>) {
     val titles = listOf(stringResource(R.string.request), stringResource(R.string.response))
     Column {
         PrimaryTabRow(
-            selectedTabIndex = tabsScreenState.value.pageIndex,
-            containerColor = MaterialTheme.colorScheme.surfaceContainer
+            selectedTabIndex = tabsScreenState.value.pageIndex
         ) {
             titles.forEachIndexed { index, title ->
                 Tab(

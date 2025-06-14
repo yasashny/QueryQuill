@@ -16,29 +16,49 @@
 
 package org.queryquill.app.feature.response.components
 
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ButtonGroupDefaults
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Text
+import androidx.compose.material3.ToggleButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.dp
 import org.queryquill.app.core.model.ImmutableList
 import org.queryquill.app.feature.response.model.SegmentedButtonState
 
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 internal fun SegmentedButton(
     currentState: SegmentedButtonState,
     options: ImmutableList<SegmentedButtonState>,
     onClick: (SegmentedButtonState) -> Unit
 ) {
-    SingleChoiceSegmentedButtonRow {
-        options.list.forEachIndexed { index, chipState ->
-            SegmentedButton(
-                onClick = { onClick(chipState) },
-                label = { Text(chipState.title) },
-                selected = currentState == chipState,
-                shape = SegmentedButtonDefaults.itemShape(index = index, count = options.list.size)
-            )
+    Row(
+        Modifier.padding(horizontal = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
+    ) {
+        val modifiers = listOf(Modifier.weight(1f), Modifier.weight(1.5f), Modifier.weight(1f))
+
+        options.list.forEachIndexed { index, element ->
+            ToggleButton(
+                checked = currentState == element,
+                onCheckedChange = { onClick(element) },
+                modifier = modifiers[index].semantics { role = Role.RadioButton },
+                shapes = when (index) {
+                    0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
+                    options.list.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
+                    else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
+                }
+            ) {
+                Text(element.title)
+            }
         }
     }
 }

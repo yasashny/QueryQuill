@@ -44,6 +44,7 @@ internal fun Project.configureCompose(
         debugImplementation(libs.ui.tooling)
         implementation(libs.ui.tooling.preview)
         implementation(libs.material3)
+        implementation(libs.icons)
     }
     composeCompiler {
         metricsDestination = layout.buildDirectory.dir("compose_compiler")
