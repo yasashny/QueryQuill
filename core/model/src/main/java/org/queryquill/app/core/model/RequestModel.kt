@@ -16,7 +16,6 @@
 
 package org.queryquill.app.core.model
 
-
 data class RequestModel(
     val id: Long,
     val bodyState: BodyState,
@@ -25,21 +24,6 @@ data class RequestModel(
     val auth: AuthState,
     val type: HttpType,
     val url: String
-) {
-    companion object {
-        fun default(): RequestModel {
-            return RequestModel(
-                id = -1,
-                bodyState = BodyState.NoBody,
-                header = emptyList(),
-                query = emptyList(),
-                type = HttpType.GET,
-                url = "",
-                auth = AuthState.NoAuth
-            )
-        }
-    }
-
-}
+)
 
 

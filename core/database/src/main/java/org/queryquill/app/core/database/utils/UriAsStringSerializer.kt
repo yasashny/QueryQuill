@@ -23,6 +23,7 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import androidx.core.net.toUri
 
 internal object UriAsStringSerializer : KSerializer<Uri> {
     override val descriptor: SerialDescriptor =
@@ -31,6 +32,6 @@ internal object UriAsStringSerializer : KSerializer<Uri> {
     override fun serialize(encoder: Encoder, value: Uri) = encoder.encodeString(value.toString())
     override fun deserialize(decoder: Decoder): Uri {
         val resValue = decoder.decodeString().replace("\"", "")
-        return Uri.parse(resValue).normalizeScheme()
+        return resValue.toUri().normalizeScheme()
     }
 }

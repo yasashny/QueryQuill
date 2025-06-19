@@ -34,7 +34,7 @@ class CookieListItemTest {
         val testCookie = CookieModel("Test Cookie")
         composeTestRule.setContent {
             CookieListItem(
-                item = testCookie, index = 0, onEvent = {})
+                item = testCookie, onEvent = {})
         }
         composeTestRule.onNodeWithTag(TestTags.CookieList.COOKIE_INPUT).assertIsDisplayed()
     }
@@ -45,15 +45,14 @@ class CookieListItemTest {
         val testCookie = CookieModel("Initial Cookie")
         composeTestRule.setContent {
             CookieListItem(
-                item = testCookie, index = 0, onEvent = { event -> lastEvent = event })
+                item = testCookie, onEvent = { event -> lastEvent = event })
         }
         composeTestRule.onNodeWithTag(TestTags.CookieList.COOKIE_INPUT)
             .performTextReplacement("New Value")
         assert(lastEvent is UpdateCookie.Update)
         val updateEvent = lastEvent as UpdateCookie.Update
-        assert(updateEvent.id == 0)
-        assert(updateEvent.newCookieState.id == testCookie.id)
-        assert(updateEvent.newCookieState.cookie == "New Value")
+        assert(updateEvent.newState.id == testCookie.id)
+        assert(updateEvent.newState.cookie == "New Value")
     }
 
     @Test
@@ -62,12 +61,12 @@ class CookieListItemTest {
         val testCookie = CookieModel("Test Cookie")
         composeTestRule.setContent {
             CookieListItem(
-                item = testCookie, index = 0, onEvent = { event -> lastEvent = event })
+                item = testCookie, onEvent = { event -> lastEvent = event })
         }
         composeTestRule.onNodeWithTag(TestTags.CookieList.DELETE_COOKIE).performClick()
         assert(lastEvent is UpdateCookie.Delete)
         val deleteEvent = lastEvent as UpdateCookie.Delete
-        assert(deleteEvent.id == 0)
+        assert(deleteEvent.id == testCookie.id)
     }
 }
 

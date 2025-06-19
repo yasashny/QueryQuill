@@ -17,13 +17,12 @@
 package org.queryquill.app.core.database.utils
 
 import androidx.room.TypeConverter
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.queryquill.app.core.model.ContentType
 import org.queryquill.app.core.database.models.AuthStateDBO
 import org.queryquill.app.core.database.models.BodyStateDBO
 import org.queryquill.app.core.database.models.HttpTypeDBO
 import org.queryquill.app.core.database.models.KeyValueDBO
+import org.queryquill.app.core.model.ContentType
 
 internal class Converters {
 

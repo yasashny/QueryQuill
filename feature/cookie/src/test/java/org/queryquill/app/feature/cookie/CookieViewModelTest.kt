@@ -83,11 +83,11 @@ class CookieViewModelTest {
         backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.cookieState.collect() }
 
         cookieRepository.updateCookie(listOf("cookie1", "cookie2"))
-        viewModel.onEvent(UpdateCookie.Delete(0))
-
-        val currentState = viewModel.cookieState.value as CookieUiState.Success
-        assertEquals(1, currentState.list.size)
-        assertEquals("cookie2", currentState.list[0].cookie)
+        var state = viewModel.cookieState.value as CookieUiState.Success
+        viewModel.onEvent(UpdateCookie.Delete(state.list[0].id))
+        state = viewModel.cookieState.value as CookieUiState.Success
+        assertEquals(1, state.list.size)
+        assertEquals("cookie2", state.list[0].cookie)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -96,12 +96,12 @@ class CookieViewModelTest {
         backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.cookieState.collect() }
 
         cookieRepository.updateCookie(listOf("old_cookie"))
-        val newCookie = CookieModel("new_cookie")
-        viewModel.onEvent(UpdateCookie.Update(0, newCookie))
-
-        val currentState = viewModel.cookieState.value as CookieUiState.Success
-        assertEquals(1, currentState.list.size)
-        assertEquals("new_cookie", currentState.list[0].cookie)
+        var state = viewModel.cookieState.value as CookieUiState.Success
+        val updatedCookie = CookieModel("new_cookie", state.list[0].id)
+        viewModel.onEvent(UpdateCookie.Update(updatedCookie))
+        assertEquals(1, state.list.size)
+        state = viewModel.cookieState.value as CookieUiState.Success
+        assertEquals("new_cookie", state.list[0].cookie)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

@@ -39,7 +39,7 @@ import org.queryquill.app.feature.cookie.util.TestTags
 
 @Composable
 internal fun CookieListItem(
-    modifier: Modifier = Modifier, item: CookieModel, index: Int, onEvent: (UpdateCookie) -> Unit
+    modifier: Modifier = Modifier, item: CookieModel, onEvent: (UpdateCookie) -> Unit
 ) {
     OutlinedCard(modifier = modifier.animateContentSize()) {
         Row(
@@ -51,7 +51,7 @@ internal fun CookieListItem(
                 onValueChange = { newText ->
                     onEvent(
                         UpdateCookie.Update(
-                            index, CookieModel(item.id, newText)
+                            item.copy(cookie = newText)
                         )
                     )
                 },
@@ -62,7 +62,7 @@ internal fun CookieListItem(
                     .testTag(TestTags.CookieList.COOKIE_INPUT)
             )
             FilledTonalIconButton(
-                onClick = { onEvent(UpdateCookie.Delete(index)) },
+                onClick = { onEvent(UpdateCookie.Delete(item.id)) },
                 modifier = Modifier
                     .padding(start = 15.dp)
                     .testTag(TestTags.CookieList.DELETE_COOKIE)
@@ -81,6 +81,6 @@ internal fun CookieListItem(
 private fun PreviewCookieListItem() {
     QueryQuillTheme {
         CookieListItem(
-            item = CookieModel("Sample Cookie"), index = 0, onEvent = {})
+            item = CookieModel("Sample Cookie"), onEvent = {})
     }
 }

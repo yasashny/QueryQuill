@@ -56,21 +56,21 @@ internal class CookieViewModel(
         when (updateCookie) {
             UpdateCookie.Add -> {
                 updateState { list ->
-                     list + listOf(CookieModel(DEFAULT_COOKIE))
+                    list + listOf(CookieModel(DEFAULT_COOKIE))
                 }
             }
 
             is UpdateCookie.Delete -> {
                 updateState { list ->
-                    list.filterIndexed { index, _ -> index != updateCookie.id }
+                    list.filter { it.id != updateCookie.id }
                 }
 
             }
 
             is UpdateCookie.Update -> {
                 updateState { list ->
-                    list.mapIndexed { index, cookie ->
-                        if (index == updateCookie.id) updateCookie.newCookieState else cookie
+                    list.map { cookie ->
+                        if (cookie.id == updateCookie.newState.id) updateCookie.newState else cookie
                     }
                 }
             }

@@ -61,6 +61,7 @@ internal fun CookieScreen(
     navigateUp: () -> Unit,
     saveCookieOnStop: () -> Unit
 ) {
+    SaveDataOnStop { saveCookieOnStop() }
     Scaffold(topBar = {
         QueryQuillTopBar(title = {
             Text(
@@ -105,13 +106,13 @@ internal fun CookieScreen(
                                 InfoMessage()
                             }
                             itemsIndexed(
-                                uiState.list, key = { _, item -> item.id }) { index, item ->
+                                uiState.list, key = { _, item -> item.id }) { _, item ->
                                 CookieListItem(
                                     modifier = Modifier
                                         .padding(
                                             start = 15.dp, top = 15.dp, end = 15.dp
                                         )
-                                        .animateItem(), item, index, onEvent
+                                        .animateItem(), item, onEvent
                                 )
                             }
                             item("spacer") {
@@ -120,7 +121,6 @@ internal fun CookieScreen(
                         }
                     }
                 }
-                SaveDataOnStop { saveCookieOnStop() }
             }
         }
     }
@@ -131,14 +131,14 @@ internal fun CookieScreen(
 private fun CookieScreenPreview() {
     CookieScreen(
         uiState = CookieUiState.Success(
-            listOf(
-                CookieModel("cookie1"),
-                CookieModel("cookie2"),
-                CookieModel("cookie3"),
-                CookieModel("cookie4"),
-                CookieModel("cookie5"),
-            )
-        ), onEvent = {}, navigateUp = {}, saveCookieOnStop = {})
+        listOf(
+            CookieModel("cookie1"),
+            CookieModel("cookie2"),
+            CookieModel("cookie3"),
+            CookieModel("cookie4"),
+            CookieModel("cookie5"),
+        )
+    ), onEvent = {}, navigateUp = {}, saveCookieOnStop = {})
 }
 
 @Preview(showBackground = true)
