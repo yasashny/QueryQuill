@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="no_auth">No Auth</string>
+    <string name="basic">Basic</string>
+    <string name="no_body">No Body</string>
+    <string name="text">Text</string>
+    <string name="form_url_encoded">Form Url Encoded</string>
+    <string name="multipart_form">Multipart Form Data</string>
+    <string name="binary_file">Binary File</string>
+
+</resources>

@@ -19,8 +19,6 @@ package org.queryquill.app.core.database.mappers
 import org.queryquill.app.core.model.AuthState
 import org.queryquill.app.core.model.BodyState
 import org.queryquill.app.core.model.HttpType
-import org.queryquill.app.core.model.ImmutableList
-import org.queryquill.app.core.model.ImmutableUri
 import org.queryquill.app.core.model.KeyValue
 import org.queryquill.app.core.model.MultipartFormState
 import org.queryquill.app.core.model.RequestModel
@@ -41,8 +39,8 @@ internal fun RequestEntity.asExternalModel(): RequestModel {
     return RequestModel(
         id = id,
         bodyState = bodyState.asExternalModel(),
-        header = ImmutableList(list = header.map { it.asExternalModel() }),
-        query = ImmutableList(list = query.map { it.asExternalModel() }),
+        header = header.map { it.asExternalModel() },
+        query = query.map { it.asExternalModel() },
         auth = authState.asExternalModel(),
         type = type.asExternalModel(),
         url = url
@@ -57,7 +55,7 @@ internal fun ResponseEntity.asExternalModel(): ResponseModel {
         contentLength = contentLength,
         time = time,
         contentType = contentType,
-        headers = ImmutableList(headers.map { it.asExternalModel() })
+        headers = headers.map { it.asExternalModel() }
     )
 }
 
@@ -69,11 +67,11 @@ private fun BodyStateDBO.asExternalModel(): BodyState {
     return when (this) {
 
         is BodyStateDBO.BinaryFile -> BodyState.BinaryFile(
-            uri = ImmutableUri(uri), fileName = fileName
+            uri = uri, fileName = fileName
         )
 
-        is BodyStateDBO.FormUrlEncoded -> BodyState.FormUrlEncoded(list = ImmutableList(list.map { it.asExternalModel() }))
-        is BodyStateDBO.MultipartForm -> BodyState.MultipartForm(multipart = ImmutableList(multipart.map { it.asExternalModel() }))
+        is BodyStateDBO.FormUrlEncoded -> BodyState.FormUrlEncoded(list = list.map { it.asExternalModel() })
+        is BodyStateDBO.MultipartForm -> BodyState.MultipartForm(multipart = multipart.map { it.asExternalModel() })
         BodyStateDBO.NoBody -> BodyState.NoBody
         is BodyStateDBO.Text -> BodyState.Text(
             textFileName = textFileName, textType = textType.asExternalModel()
@@ -88,7 +86,7 @@ private fun KeyValueDBO.asExternalModel(): KeyValue {
 private fun MultipartFormStateDBO.asExternalModel(): MultipartFormState {
     return when (this) {
         is MultipartFormStateDBO.BinaryFile -> MultipartFormState.BinaryFile(
-            uri = ImmutableUri(uri), fileName = fileName, title = title
+            uri = uri, fileName = fileName, title = title
         )
 
         is MultipartFormStateDBO.Text -> MultipartFormState.Text(keyValue = keyValue.asExternalModel())

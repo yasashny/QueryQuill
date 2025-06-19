@@ -40,17 +40,21 @@ internal class ResponseViewModel(
     val responseModel = transactionsRepository.getCurrentResponseOrNull().map { responseOrNull ->
         responseOrNull ?: ResponseModel.default()
     }.onEach {
+        fileLength = null
+        viewModelScope.launch {
+            fileLength = fileRepository.getFileLength(it.fileName).getOrDefault(0)
+        }
         codeEditorState = CodeEditorState()
         codeEditorLoadingState = true
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), ResponseModel.default())
 
     var segmentedButtonState by mutableStateOf(SegmentedButtonState.PREVIEW)
 
+    var fileLength by mutableStateOf<Long?>(null)
+
     fun updateSegmentedButtonState(newState: SegmentedButtonState) {
         segmentedButtonState = newState
     }
-
-    fun getFileLength(fileName: String) = fileRepository.getFileLength(fileName).getOrDefault(0)
 
     fun getFileUri(fileName: String): Uri =
         fileRepository.getFileUri(fileName).getOrDefault(Uri.EMPTY)

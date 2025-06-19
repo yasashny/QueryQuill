@@ -45,7 +45,7 @@ class CookieScreenTest {
     @Test
     fun whenSuccessState_showsCookieList() {
         val cookies = listOf(
-            CookieModel(1, "cookie1"), CookieModel(2, "cookie2")
+            CookieModel("cookie1"), CookieModel("cookie2")
         )
         val uiState = CookieUiState.Success(cookies)
         composeTestRule.setContent {

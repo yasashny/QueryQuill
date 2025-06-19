@@ -45,18 +45,18 @@ fun ResponseScreen(
             },
             fileName = responseModel.fileName
         )
-
-        ScreenContent(
-            contentType = responseModel.contentType,
-            headers = responseModel.headers,
-            segmentedButtonState = vm.segmentedButtonState,
-            updateSegmentedButtonState = vm::updateSegmentedButtonState,
-            codeEditorState = vm.codeEditorState,
-            fileLength = vm.getFileLength(responseModel.fileName),
-            transferFileToCodeEditorState = { vm.transferFileToCodeEditorState(responseModel.fileName) },
-            codeEditorLoadingState = vm.codeEditorLoadingState,
-            fileUri = vm.getFileUri(responseModel.fileName)
-        )
-
+        if (vm.fileLength != null){
+            ScreenContent(
+                contentType = responseModel.contentType,
+                headers = responseModel.headers,
+                segmentedButtonState = vm.segmentedButtonState,
+                updateSegmentedButtonState = vm::updateSegmentedButtonState,
+                codeEditorState = vm.codeEditorState,
+                fileLength = vm.fileLength!!,
+                transferFileToCodeEditorState = { vm.transferFileToCodeEditorState(responseModel.fileName) },
+                codeEditorLoadingState = vm.codeEditorLoadingState,
+                fileUri = vm.getFileUri(responseModel.fileName)
+            )
+        }
     }
 }

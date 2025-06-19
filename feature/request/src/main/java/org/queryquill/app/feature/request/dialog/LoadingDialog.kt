@@ -14,7 +14,7 @@
  * If not, see https://www.gnu.org/licenses/.
  */
 
-package org.queryquill.app.feature.request.alertDialog
+package org.queryquill.app.feature.request.dialog
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -33,14 +33,17 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.queryquill.app.core.designsystem.QueryQuillTheme
 import org.queryquill.app.feature.request.R
+import org.queryquill.app.feature.request.utils.TestTags
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-internal fun LoadingAlertDialog(
+internal fun LoadingDialog(
     onDismiss: () -> Unit
 ) {
     BasicAlertDialog(onDismissRequest = {
@@ -58,10 +61,15 @@ internal fun LoadingAlertDialog(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                LoadingIndicator(modifier = Modifier.padding(16.dp))
-                TextButton(onClick = {
-                    onDismiss()
-                }) {
+                LoadingIndicator(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .testTag(TestTags.LoadingDialog.LOADING_INDICATOR)
+                )
+                TextButton(
+                    modifier = Modifier.testTag(TestTags.LoadingDialog.CANCEL_BUTTON), onClick = {
+                        onDismiss()
+                    }) {
                     Text(stringResource(id = R.string.cancel))
                 }
             }
@@ -73,5 +81,7 @@ internal fun LoadingAlertDialog(
 @Preview
 @Composable
 private fun PreviewLoadingAlertDialog() {
-    LoadingAlertDialog { }
+    QueryQuillTheme(dynamicColor = false) {
+        LoadingDialog { }
+    }
 }

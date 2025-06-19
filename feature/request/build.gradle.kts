@@ -1,3 +1,5 @@
+import org.queryquill.app.implementation
+
 /*
  * QueryQuill - Api client
  * Copyright (C) 2025 Max Yasashny
@@ -33,4 +35,8 @@ dependencies {
     implementation(projects.core.utils)
     implementation(projects.core.data)
     implementation(projects.core.designsystem)
+
+    testImplementation(projects.core.testing)
+    implementation(libs.androidx.lifecycle.runtime.testing)
+    androidTestImplementation(libs.bundles.androidx.compose.ui.test)
 }

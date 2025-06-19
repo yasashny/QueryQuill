@@ -23,7 +23,7 @@ data class ResponseModel(
     val contentLength: String,
     val time: String,
     val contentType: ContentType,
-    val headers: ImmutableList<KeyValue>
+    val headers: List<KeyValue>
 ) {
     companion object {
         const val DEFAULT_FILE_NAME = "default.txt"
@@ -36,7 +36,7 @@ data class ResponseModel(
                 "--",
                 "--",
                 ContentType.Text.PLAIN,
-                ImmutableList(emptyList())
+                emptyList()
             )
         }
     }

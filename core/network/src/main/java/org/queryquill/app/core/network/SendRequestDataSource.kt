@@ -27,7 +27,6 @@ import io.ktor.util.network.UnresolvedAddressException
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.readRemaining
 import kotlinx.io.readByteArray
-import org.queryquill.app.core.model.ImmutableList
 import org.queryquill.app.core.model.RequestModel
 import org.queryquill.app.core.model.ResponseModel
 import org.queryquill.app.core.network.prepareRequest.applyAuth
@@ -54,9 +53,9 @@ class SendRequestDataSource(
             val file = File(context.filesDir, "$fileNamePrefix.txt").apply { writeText("") }
             val request = client.prepareRequest(formatUrl(model.url)) {
 
-                applyUrlParameters(model.query.list)
+                applyUrlParameters(model.query)
                 applyMethod(model.type)
-                applyHeaders(model.header.list)
+                applyHeaders(model.header)
                 applyBody(model.bodyState, context)
                 applyAuth(model.auth)
                 val relCookie = CookieChecker.getRelevantCookies(formatUrl(model.url), cookies)
@@ -104,7 +103,7 @@ class SendRequestDataSource(
             contentLength = contentLength,
             time = elapsedTime,
             contentType = contentType,
-            headers = ImmutableList(headers)
+            headers = headers
         )
     }
 

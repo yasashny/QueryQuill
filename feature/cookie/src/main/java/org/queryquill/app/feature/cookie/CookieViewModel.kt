@@ -35,9 +35,6 @@ internal class CookieViewModel(
     val cookieState = _cookieState.onStart { loadData() }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), CookieUiState.Loading)
 
-    // For LazyColumn key
-    private var lastCookieId = 0
-
     companion object {
         private const val DEFAULT_COOKIE =
             "a=b; Expires=Mon, 1 Jan 2345 11:11:23 GMT; Domain=example.com; Path=/"
@@ -47,7 +44,9 @@ internal class CookieViewModel(
         viewModelScope.launch {
             repository.getCookies().collect { list ->
                 _cookieState.update {
-                    CookieUiState.Success(list.map { el -> CookieModel(lastCookieId++, el) })
+                    CookieUiState.Success(list.map { el ->
+                        CookieModel(el)
+                    })
                 }
             }
         }
@@ -57,7 +56,7 @@ internal class CookieViewModel(
         when (updateCookie) {
             UpdateCookie.Add -> {
                 updateState { list ->
-                    listOf(CookieModel(lastCookieId++, DEFAULT_COOKIE)) + list
+                     list + listOf(CookieModel(DEFAULT_COOKIE))
                 }
             }
 

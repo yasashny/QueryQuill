@@ -16,37 +16,52 @@
 
 package org.queryquill.app.feature.request.components
 
-import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.InputChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.queryquill.app.core.model.ImmutableList
+import org.queryquill.app.core.designsystem.QueryQuillTheme
+import org.queryquill.app.core.model.BodyState
+
 
 @Composable
 internal fun <T : Enum<T>> ChipGroup(
-    currentState: T, options: ImmutableList<T>, onClick: (T) -> Unit
+    current: T,
+    options: List<T>,
+    onSelect: (T) -> Unit,
+    modifier: Modifier = Modifier,
+    lazyListState: LazyListState = rememberLazyListState(),
+    labelMapper: @Composable (T) -> String = { it.name },
 ) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Row(
-            modifier = Modifier
-                .horizontalScroll(rememberScrollState())
-                .padding(start = 29.dp, end = 15.dp)
-        ) {
-            options.list.forEach { chipState ->
-                InputChip(
-                    modifier = Modifier.padding(horizontal = 4.dp),
-                    onClick = { onClick(chipState) },
-                    label = { Text(chipState.name) },
-                    selected = currentState == chipState
-                )
-            }
+    LazyRow(
+        state = lazyListState,
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(start = 29.dp, end = 15.dp)
+    ) {
+        items(options, key = { it }) { option ->
+            InputChip(
+                selected = option == current,
+                onClick = { onSelect(option) },
+                label = { Text(labelMapper(option)) },
+            )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ChipGroupPreview() {
+    QueryQuillTheme(dynamicColor = false) {
+        ChipGroup(
+            current = BodyState.Type.NoBody, options = BodyState.Type.entries, onSelect = {})
     }
 }

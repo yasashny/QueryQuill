@@ -14,40 +14,55 @@
  * If not, see https://www.gnu.org/licenses/.
  */
 
-package org.queryquill.app.feature.request.alertDialog
+package org.queryquill.app.feature.request.dialog
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import org.queryquill.app.core.designsystem.QueryQuillTheme
 import org.queryquill.app.feature.request.R
+import org.queryquill.app.feature.request.utils.TestTags
 
 @Composable
-internal fun ChangeContentTypeDialog(
-    newContentType: String, onDismiss: () -> Unit, onConfirm: () -> Unit
+internal fun ChangeTypeDialog(
+    title: String, onDismiss: () -> Unit, onConfirm: () -> Unit
 ) {
     AlertDialog(onDismissRequest = {
         onDismiss()
     }, title = {
-        Text(text = stringResource(R.string.change_content_type))
+        Text(text = stringResource(R.string.switch_type, title))
     }, text = {
         Text(
             text = stringResource(
-                R.string.do_you_want_set_the_content_type_header_to, newContentType
+                R.string.current_will_be_lost_are_you_sure_you_want_to_continue, title
             )
         )
     }, confirmButton = {
-        TextButton(onClick = {
-            onConfirm()
-        }) {
-            Text(stringResource(R.string.ok))
+        TextButton(
+            modifier = Modifier.testTag(TestTags.ChangeTypeDialog.CONFIRM_BUTTON), onClick = {
+                onConfirm()
+            }) {
+            Text(stringResource(id = R.string.ok))
         }
     }, dismissButton = {
-        TextButton(onClick = {
-            onDismiss()
-        }) {
-            Text(stringResource(R.string.cancel))
+        TextButton(
+            modifier = Modifier.testTag(TestTags.ChangeTypeDialog.DISMISS_BUTTON), onClick = {
+                onDismiss()
+            }) {
+            Text(stringResource(id = R.string.cancel))
         }
     })
+}
+
+@Preview
+@Composable
+private fun PreviewChangeTypeDialog() {
+    QueryQuillTheme(dynamicColor = false) {
+        ChangeTypeDialog(title = "body", onDismiss = {}, onConfirm = {})
+    }
 }

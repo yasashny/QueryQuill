@@ -29,7 +29,6 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import org.queryquill.app.core.model.ImmutableList
 import org.queryquill.app.feature.response.model.SegmentedButtonState
 
 
@@ -37,7 +36,7 @@ import org.queryquill.app.feature.response.model.SegmentedButtonState
 @Composable
 internal fun SegmentedButton(
     currentState: SegmentedButtonState,
-    options: ImmutableList<SegmentedButtonState>,
+    options: List<SegmentedButtonState>,
     onClick: (SegmentedButtonState) -> Unit
 ) {
     Row(
@@ -46,14 +45,14 @@ internal fun SegmentedButton(
     ) {
         val modifiers = listOf(Modifier.weight(1f), Modifier.weight(1.5f), Modifier.weight(1f))
 
-        options.list.forEachIndexed { index, element ->
+        options.forEachIndexed { index, element ->
             ToggleButton(
                 checked = currentState == element,
                 onCheckedChange = { onClick(element) },
                 modifier = modifiers[index].semantics { role = Role.RadioButton },
                 shapes = when (index) {
                     0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
-                    options.list.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
+                    options.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
                     else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
                 }
             ) {

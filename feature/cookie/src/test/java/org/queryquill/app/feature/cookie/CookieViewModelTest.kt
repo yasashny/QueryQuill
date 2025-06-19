@@ -96,7 +96,7 @@ class CookieViewModelTest {
         backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.cookieState.collect() }
 
         cookieRepository.updateCookie(listOf("old_cookie"))
-        val newCookie = CookieModel(0, "new_cookie")
+        val newCookie = CookieModel("new_cookie")
         viewModel.onEvent(UpdateCookie.Update(0, newCookie))
 
         val currentState = viewModel.cookieState.value as CookieUiState.Success

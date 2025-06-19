@@ -19,9 +19,9 @@ package org.queryquill.app.feature.request.components
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -29,20 +29,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import org.queryquill.app.core.model.ImmutableList
+import androidx.compose.ui.tooling.preview.Preview
+import org.queryquill.app.core.designsystem.QueryQuillTheme
+import org.queryquill.app.core.model.HttpType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun <T : Enum<T>> DynamicSelectTextField(
     selectedValue: T,
-    options: ImmutableList<T>,
+    options: List<T>,
     label: String,
-    modifier: Modifier,
-    onValueChangedEvent: (T) -> Unit
+    modifier: Modifier = Modifier,
+    onValueChange: (T) -> Unit
 ) {
-    var expanded by remember { mutableStateOf(false) }
+    var expanded by rememberSaveable { mutableStateOf(false) }
 
     ExposedDropdownMenuBox(
         expanded = expanded, onExpandedChange = { expanded = !expanded }, modifier = modifier
@@ -57,18 +60,33 @@ internal fun <T : Enum<T>> DynamicSelectTextField(
             },
             colors = OutlinedTextFieldDefaults.colors(),
             modifier = Modifier
-                .menuAnchor(MenuAnchorType.PrimaryEditable, true)
+                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable, true)
                 .fillMaxWidth()
         )
         ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            options.list.forEach { option ->
+            options.forEach { option ->
                 DropdownMenuItem(text = { Text(text = option.name) }, onClick = {
                     expanded = false
                     if (selectedValue != option) {
-                        onValueChangedEvent(option)
+                        onValueChange(option)
                     }
                 })
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun DynamicSelectTextFieldPreview() {
+    var value by remember { mutableStateOf(HttpType.GET) }
+    QueryQuillTheme {
+        DynamicSelectTextField(
+            selectedValue = value,
+            onValueChange = { value = it },
+            options = HttpType.entries,
+            label = "Type",
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }

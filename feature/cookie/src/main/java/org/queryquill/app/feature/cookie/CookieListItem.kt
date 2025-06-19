@@ -81,6 +81,6 @@ internal fun CookieListItem(
 private fun PreviewCookieListItem() {
     QueryQuillTheme {
         CookieListItem(
-            item = CookieModel(id = 1, cookie = "Sample Cookie"), index = 0, onEvent = {})
+            item = CookieModel("Sample Cookie"), index = 0, onEvent = {})
     }
 }

@@ -40,8 +40,15 @@ class FileRepository(private val context: Context, private val ioDispatcher: Cor
         }
     }
 
-    fun getFileLength(fileName: String): Result<Long> {
-        return runCatching {
+    suspend fun deleteFile(fileName: String) = withContext(ioDispatcher) {
+        runCatching {
+            val file = File(context.filesDir, fileName)
+            file.delete()
+        }
+    }
+
+    suspend fun getFileLength(fileName: String): Result<Long> = withContext(ioDispatcher) {
+        runCatching {
             val file = File(context.filesDir, fileName)
             if (!file.exists()) throw FileNotFoundException()
             file.length()

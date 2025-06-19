@@ -26,7 +26,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.queryquill.app.core.model.GetTransactionModel
-import org.queryquill.app.core.model.ImmutableList
 import org.queryquill.app.core.model.Transaction
 import org.queryquill.app.core.testing.repository.TestTransactionRepository
 import org.queryquill.app.core.testing.util.MainDispatcherRule
@@ -53,11 +52,10 @@ class TransactionViewModelTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `Emitting transactions updates UI state`() = runTest {
-        val testTransactions = ImmutableList(
-            listOf(
-                Transaction(id = 1, label = "Test 1"), Transaction(id = 2, label = "Test 2")
-            )
+        val testTransactions = listOf(
+            Transaction(id = 1, label = "Test 1"), Transaction(id = 2, label = "Test 2")
         )
+
         val model = GetTransactionModel(
             list = testTransactions, currentId = 1L
         )
@@ -66,7 +64,7 @@ class TransactionViewModelTest {
         }
         repository.emitTransactions(model)
         assertEquals(
-            TransactionsUiState.Success(testTransactions.list, 1L), viewModel.transactions.value
+            TransactionsUiState.Success(testTransactions, 1L), viewModel.transactions.value
         )
     }
 

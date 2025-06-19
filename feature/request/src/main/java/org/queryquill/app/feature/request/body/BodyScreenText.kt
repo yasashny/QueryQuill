@@ -14,60 +14,53 @@
  * If not, see https://www.gnu.org/licenses/.
  */
 
-package org.queryquill.app.feature.request.body.text
+package org.queryquill.app.feature.request.body
 
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.queryquill.app.core.designsystem.QueryQuillTheme
 import org.queryquill.app.core.model.BodyState
-import org.queryquill.app.core.model.ImmutableList
 import org.queryquill.app.core.model.TextType
 import org.queryquill.app.feature.request.R
 import org.queryquill.app.feature.request.components.ChipGroup
 
 @Composable
 internal fun BodyScreenText(
+    modifier: Modifier = Modifier,
     bodyState: BodyState.Text,
     updateTextType: (TextType) -> Unit,
     navigateToEditor: (fileName: String, textType: TextType) -> Unit
 ) {
-    Column {
-        Row {
-            Box(
-                contentAlignment = Alignment.CenterStart,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 15.dp, top = 15.dp)
-            ) {
-                ChipGroup(
-                    currentState = bodyState.textType, options = ImmutableList(
-                        listOf(
-                            TextType.JSON, TextType.XML, TextType.PLAIN, TextType.OTHER
-                        )
-                    )
-                ) { newState ->
-                    if (bodyState.textType != newState) {
-                        updateTextType(newState)
-                    }
-                }
-            }
-        }
+    val textTypeOptions = remember { TextType.entries }
+
+    Column(modifier = modifier) {
+        HorizontalDivider()
+        ChipGroup(
+            current = bodyState.textType, options = textTypeOptions, onSelect = { newState ->
+                if (bodyState.textType != newState) updateTextType(newState)
+            }, modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 10.dp)
+        )
 
         OutlinedCard(
             modifier = Modifier
@@ -91,4 +84,14 @@ internal fun BodyScreenText(
     }
 }
 
+@Preview(name = "BodyScreenText", showBackground = true)
+@Composable
+private fun PreviewBodyScreenText() {
+    QueryQuillTheme(dynamicColor = false) {
+        BodyScreenText(
+            bodyState = BodyState.Text(textFileName = "body.txt", textType = TextType.PLAIN),
+            updateTextType = {},
+            navigateToEditor = { _, _ -> })
+    }
+}
 

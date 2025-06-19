@@ -17,6 +17,7 @@
 package org.queryquill.app.feature.cookie
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
@@ -100,7 +101,7 @@ internal fun CookieScreen(
 
                     is CookieUiState.Success -> {
                         LazyColumn(modifier = Modifier.widthIn(max = 1000.dp)) {
-                            item {
+                            item("info_message") {
                                 InfoMessage()
                             }
                             itemsIndexed(
@@ -112,6 +113,9 @@ internal fun CookieScreen(
                                         )
                                         .animateItem(), item, index, onEvent
                                 )
+                            }
+                            item("spacer") {
+                                Spacer(Modifier.padding(50.dp))
                             }
                         }
                     }
@@ -128,11 +132,11 @@ private fun CookieScreenPreview() {
     CookieScreen(
         uiState = CookieUiState.Success(
             listOf(
-                CookieModel(0, "cookie1"),
-                CookieModel(1, "cookie2"),
-                CookieModel(2, "cookie3"),
-                CookieModel(3, "cookie4"),
-                CookieModel(4, "cookie5"),
+                CookieModel("cookie1"),
+                CookieModel("cookie2"),
+                CookieModel("cookie3"),
+                CookieModel("cookie4"),
+                CookieModel("cookie5"),
             )
         ), onEvent = {}, navigateUp = {}, saveCookieOnStop = {})
 }

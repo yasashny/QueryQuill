@@ -41,7 +41,6 @@ internal fun ResponseScreenSource(
     codeEditorLoadingState: Boolean,
 ) {
     val context = LocalContext.current
-
     if (fileLength > RestrictiveConstants.FILE_CANNOT_BE_OPENED) {
         FileCannotBeOpenedScreen()
     } else {

@@ -14,11 +14,19 @@
  * If not, see https://www.gnu.org/licenses/.
  */
 
-package org.queryquill.app.core.model
+package org.queryquill.app.feature.request.utils
 
-import androidx.compose.runtime.Stable
-
-@Stable
-interface BasicState {
-    val name: String
+object TestTags {
+    object LoadingDialog {
+        const val LOADING_INDICATOR = "loading_indicator"
+        const val CANCEL_BUTTON = "btn"
+    }
+    object ChangeContentTypeDialog {
+        const val CONFIRM_BUTTON = "confirm_button"
+        const val DISMISS_BUTTON = "dismiss_button"
+    }
+    object ChangeTypeDialog {
+        const val CONFIRM_BUTTON = "confirm_button"
+        const val DISMISS_BUTTON = "dismiss_button"
+    }
 }

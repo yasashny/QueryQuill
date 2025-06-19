@@ -16,4 +16,9 @@
 
 package org.queryquill.app.feature.cookie
 
-internal data class CookieModel(val id: Int, val cookie: String)
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
+
+internal data class CookieModel @OptIn(ExperimentalUuidApi::class) constructor(
+    val cookie: String, val id: String = Uuid.random().toString(),
+)

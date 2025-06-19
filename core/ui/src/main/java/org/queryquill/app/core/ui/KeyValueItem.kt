@@ -54,7 +54,7 @@ fun KeyValueItem(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 OutlinedTextField(
                     value = keyValue.key, onValueChange = {
-                    onTextChanged(KeyValue(it, keyValue.value))
+                    onTextChanged(keyValue.copy(key = it))
                 }, label = { Text(text = text1) }, modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f)
@@ -75,7 +75,7 @@ fun KeyValueItem(
             OutlinedTextField(
                 value = keyValue.value,
                 onValueChange = {
-                    onTextChanged(KeyValue(keyValue.key, it))
+                    onTextChanged(keyValue.copy(value = it))
                 },
                 label = { Text(text = text2) },
                 modifier = Modifier

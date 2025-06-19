@@ -18,12 +18,14 @@ package org.queryquill.app.feature.request.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ButtonGroupDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Text
 import androidx.compose.material3.ToggleButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
@@ -31,28 +33,32 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.queryquill.app.core.designsystem.QueryQuillTheme
-import org.queryquill.app.core.model.ImmutableList
 import org.queryquill.app.feature.request.ScreenState
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-internal fun SegmentedButton(
-    selectedIndex: ScreenState, options: ImmutableList<ScreenState>, onClick: (ScreenState) -> Unit
+internal fun GroupButtons(
+    screenState: ScreenState,
+    updateScreenState: (ScreenState) -> Unit,
+    modifier: Modifier = Modifier
 ) {
+    val options = remember { ScreenState.entries }
     Row(
-        Modifier.padding(horizontal = 8.dp),
+        modifier
+            .padding(horizontal = 8.dp)
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
     ) {
-        options.list.forEachIndexed { index, element ->
+        options.forEachIndexed { index, element ->
             ToggleButton(
-                checked = selectedIndex == element,
-                onCheckedChange = { onClick(element) },
+                checked = screenState == element,
+                onCheckedChange = { updateScreenState(element) },
                 modifier = Modifier
                     .weight(1f)
                     .semantics { role = Role.RadioButton },
                 shapes = when (index) {
                     0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
-                    options.list.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
+                    options.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
                     else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
                 }
             ) {
@@ -64,13 +70,10 @@ internal fun SegmentedButton(
 
 @Preview
 @Composable
-private fun PreviewSegmentedButton() {
+private fun PreviewGroupButtons() {
     QueryQuillTheme {
-        SegmentedButton(
-            selectedIndex = ScreenState.BODY, options = ImmutableList(
-                listOf(
-                    ScreenState.BODY, ScreenState.AUTH, ScreenState.HEADER, ScreenState.QUERY
-                )
-            ), onClick = {})
+        GroupButtons(
+            screenState = ScreenState.BODY, updateScreenState = {})
     }
 }
+

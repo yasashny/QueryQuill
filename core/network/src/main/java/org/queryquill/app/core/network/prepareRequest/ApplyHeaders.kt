@@ -23,7 +23,7 @@ import org.queryquill.app.core.model.KeyValue
 internal fun HttpRequestBuilder.applyHeaders(list: List<KeyValue>) {
     headers {
         list.forEach { keyValue ->
-            if (keyValue != KeyValue.empty()) {
+            if (keyValue.key.isNotEmpty() && keyValue.value.isNotEmpty()) {
                 append(keyValue.key, keyValue.value)
             }
         }

@@ -29,7 +29,6 @@ import org.queryquill.app.core.database.ResponseDataSource
 import org.queryquill.app.core.database.TransactionDataSource
 import org.queryquill.app.core.datastore.CurrentTransactionIdDataSource
 import org.queryquill.app.core.model.GetTransactionModel
-import org.queryquill.app.core.model.ImmutableList
 import org.queryquill.app.core.model.NewTransactionModel
 import org.queryquill.app.core.model.RequestModel
 import org.queryquill.app.core.model.ResponseModel
@@ -48,7 +47,7 @@ class TransactionRepositoryImpl internal constructor(
         return currentTransactionIdDataSource.getId().flowOn(ioDispatcher)
             .flatMapLatest { id ->
                 transactionDataSource.getTransactions().map { list ->
-                    GetTransactionModel(ImmutableList(list.map { it }), id)
+                    GetTransactionModel(list.map { it }, id)
                 }
             }
     }

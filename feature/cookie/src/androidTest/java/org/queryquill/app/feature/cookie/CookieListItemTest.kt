@@ -31,7 +31,7 @@ class CookieListItemTest {
 
     @Test
     fun cookieListItem_displaysInitialValue() {
-        val testCookie = CookieModel(1, "Test Cookie")
+        val testCookie = CookieModel("Test Cookie")
         composeTestRule.setContent {
             CookieListItem(
                 item = testCookie, index = 0, onEvent = {})
@@ -42,7 +42,7 @@ class CookieListItemTest {
     @Test
     fun cookieListItem_triggersUpdateEventOnTextChange() {
         var lastEvent: UpdateCookie? = null
-        val testCookie = CookieModel(1, "Initial Cookie")
+        val testCookie = CookieModel("Initial Cookie")
         composeTestRule.setContent {
             CookieListItem(
                 item = testCookie, index = 0, onEvent = { event -> lastEvent = event })
@@ -59,7 +59,7 @@ class CookieListItemTest {
     @Test
     fun cookieListItem_triggersDeleteEventOnButtonClick() {
         var lastEvent: UpdateCookie? = null
-        val testCookie = CookieModel(1, "Test Cookie")
+        val testCookie = CookieModel("Test Cookie")
         composeTestRule.setContent {
             CookieListItem(
                 item = testCookie, index = 0, onEvent = { event -> lastEvent = event })

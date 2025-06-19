@@ -39,8 +39,8 @@ internal fun RequestModel.asEntity(): RequestEntity {
     return RequestEntity(
         id = id,
         bodyState = bodyState.asDBO(),
-        header = header.list.map { it.asDBO() },
-        query = query.list.map { it.asDBO() },
+        header = header.map { it.asDBO() },
+        query = query.map { it.asDBO() },
         authState = auth.asDBO(),
         type = type.asDBO(),
         url = url
@@ -55,7 +55,7 @@ internal fun ResponseModel.asEntity(): ResponseEntity {
         contentLength = contentLength,
         time = time,
         contentType = contentType,
-        headers = headers.list.map { it.asDBO() }
+        headers = headers.map { it.asDBO() }
     )
 }
 
@@ -70,7 +70,7 @@ private fun KeyValue.asDBO(): KeyValueDBO {
 private fun MultipartFormState.asDBO(): MultipartFormStateDBO {
     return when (this) {
         is MultipartFormState.BinaryFile -> MultipartFormStateDBO.BinaryFile(
-            uri = uri.uri, fileName = fileName, title = title
+            uri = uri, fileName = fileName, title = title
         )
 
         is MultipartFormState.Text -> MultipartFormStateDBO.Text(keyValue = keyValue.asDBO())
@@ -79,9 +79,9 @@ private fun MultipartFormState.asDBO(): MultipartFormStateDBO {
 
 private fun BodyState.asDBO(): BodyStateDBO {
     return when (this) {
-        is BodyState.BinaryFile -> BodyStateDBO.BinaryFile(uri = uri.uri, fileName = fileName)
-        is BodyState.FormUrlEncoded -> BodyStateDBO.FormUrlEncoded(list = list.list.map { it.asDBO() })
-        is BodyState.MultipartForm -> BodyStateDBO.MultipartForm(multipart = multipart.list.map { it.asDBO() })
+        is BodyState.BinaryFile -> BodyStateDBO.BinaryFile(uri = uri, fileName = fileName)
+        is BodyState.FormUrlEncoded -> BodyStateDBO.FormUrlEncoded(list = list.map { it.asDBO() })
+        is BodyState.MultipartForm -> BodyStateDBO.MultipartForm(multipart = multipart.map { it.asDBO() })
         BodyState.NoBody -> BodyStateDBO.NoBody
         is BodyState.Text -> BodyStateDBO.Text(
             textFileName = textFileName,

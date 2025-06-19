@@ -14,21 +14,30 @@
  * If not, see https://www.gnu.org/licenses/.
  */
 
-package org.queryquill.app.feature.request.query
+package org.queryquill.app.feature.request
 
-import androidx.compose.foundation.lazy.LazyListScope
-import org.queryquill.app.core.model.ImmutableList
 import org.queryquill.app.core.model.KeyValue
-import org.queryquill.app.feature.request.components.editableList
 
+internal object KeyValueListUpdater {
+    fun update(
+        type: UpdateRequest.UpdateType, item: KeyValue, list: List<KeyValue>
+    ): List<KeyValue> {
+        val result = list.toMutableList()
+        when (type) {
+            UpdateRequest.UpdateType.DELETE -> {
+                result.removeAll { it.id == item.id }
+            }
 
-internal fun LazyListScope.queryScreen(
-    getQuery: () -> ImmutableList<KeyValue>,
-    getUrl: () -> String,
-    updateQuery: (List<KeyValue>) -> Unit
-) {
-    queryPreview(getUrl = getUrl, getQuery = getQuery)
-    editableList(items = getQuery().list) { keyValueList ->
-        updateQuery(keyValueList)
+            UpdateRequest.UpdateType.UPDATE -> {
+                val index = result.indexOfFirst { it.id == item.id }
+                if (index >= 0) {
+                    result[index] = item
+                    if (index == result.lastIndex) {
+                        result += KeyValue()
+                    }
+                }
+            }
+        }
+        return result.toList()
     }
 }

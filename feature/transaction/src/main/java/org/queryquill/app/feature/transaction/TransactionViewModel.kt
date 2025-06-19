@@ -30,7 +30,7 @@ internal class TransactionViewModel(
 ) : ViewModel() {
 
     val transactions = transactionRepository.getTransactions().map { getTransactionModel ->
-        TransactionsUiState.Success(getTransactionModel.list.list, getTransactionModel.currentId)
+        TransactionsUiState.Success(getTransactionModel.list, getTransactionModel.currentId)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), TransactionsUiState.Loading)
 
     fun onEvent(transactionEvent: TransactionEvent) {

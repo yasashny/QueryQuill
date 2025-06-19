@@ -39,15 +39,15 @@ import java.io.File
 internal fun HttpRequestBuilder.applyBody(bodyState: BodyState, context: Context) {
     when (bodyState) {
         is BodyState.BinaryFile -> {
-            handleBinaryFile(bodyState.uri.uri, context)
+            handleBinaryFile(bodyState.uri, context)
         }
 
         is BodyState.FormUrlEncoded -> {
-            handleFormUrlEncoded(bodyState.list.list)
+            handleFormUrlEncoded(bodyState.list)
         }
 
         is BodyState.MultipartForm -> {
-            handleMultipartForm(bodyState.multipart.list, context)
+            handleMultipartForm(bodyState.multipart, context)
         }
 
         BodyState.NoBody -> {}
@@ -70,7 +70,7 @@ private fun HttpRequestBuilder.handleBinaryFile(uri: Uri, context: Context) {
 private fun HttpRequestBuilder.handleFormUrlEncoded(list: List<KeyValue>) {
     body = FormDataContent(Parameters.build {
         list.forEach { keyValue ->
-            if (keyValue != KeyValue.empty()) {
+            if (keyValue.key.isNotEmpty() || keyValue.value.isNotEmpty()) {
                 append(keyValue.key, keyValue.value)
             }
         }
@@ -103,15 +103,15 @@ private const val BOUNDARY = "QUERY-QUILL-BOUNDARY"
 private fun FormBuilder.handleMultipartBinaryFile(
     multipartState: MultipartFormState.BinaryFile, context: Context
 ) {
-    if (multipartState.uri.uri != Uri.EMPTY) {
+    if (multipartState.uri != Uri.EMPTY) {
         append(multipartState.title,
-            fileFromContentUri(context = context, multipartState.uri.uri).readBytes(),
+            fileFromContentUri(context = context, multipartState.uri).readBytes(),
             Headers.build {
-                append(HttpHeaders.ContentType, getMIMEType(context, multipartState.uri.uri))
+                append(HttpHeaders.ContentType, getMIMEType(context, multipartState.uri))
                 append(
                     HttpHeaders.ContentDisposition, "filename=\"${
                         fileNameByUri(
-                            context.contentResolver, multipartState.uri.uri
+                            context.contentResolver, multipartState.uri
                         )
                     }\""
                 )
@@ -120,7 +120,7 @@ private fun FormBuilder.handleMultipartBinaryFile(
 }
 
 private fun FormBuilder.handleMultipartText(multipartState: MultipartFormState.Text) {
-    if (multipartState.keyValue != KeyValue.empty()) {
+    if (multipartState.keyValue.key.isNotEmpty() || multipartState.keyValue.value.isNotEmpty()) {
         append(
             multipartState.keyValue.key, multipartState.keyValue.value
         )

@@ -20,8 +20,8 @@ package org.queryquill.app.core.model
 data class RequestModel(
     val id: Long,
     val bodyState: BodyState,
-    val header: ImmutableList<KeyValue>,
-    val query: ImmutableList<KeyValue>,
+    val header: List<KeyValue>,
+    val query: List<KeyValue>,
     val auth: AuthState,
     val type: HttpType,
     val url: String
@@ -31,8 +31,8 @@ data class RequestModel(
             return RequestModel(
                 id = -1,
                 bodyState = BodyState.NoBody,
-                header = ImmutableList(emptyList()),
-                query = ImmutableList(emptyList()),
+                header = emptyList(),
+                query = emptyList(),
                 type = HttpType.GET,
                 url = "",
                 auth = AuthState.NoAuth

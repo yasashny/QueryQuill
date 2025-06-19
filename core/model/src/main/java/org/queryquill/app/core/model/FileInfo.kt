@@ -14,13 +14,11 @@
  * If not, see https://www.gnu.org/licenses/.
  */
 
-package org.queryquill.app.feature.request.auth
+package org.queryquill.app.core.model
 
-import org.queryquill.app.core.model.AuthState
+import android.net.Uri
 
-internal fun AuthState.toEnum(): EnumAuthState {
-    return when (this) {
-        is AuthState.Basic -> EnumAuthState.Basic
-        AuthState.NoAuth -> EnumAuthState.NoAuth
-    }
+interface FileInfo {
+    val uri: Uri
+    val fileName: String
 }

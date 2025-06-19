@@ -16,4 +16,4 @@
 
 package org.queryquill.app.core.model
 
-data class GetTransactionModel(val list: ImmutableList<Transaction>, val currentId: Long?)
+data class GetTransactionModel(val list: List<Transaction>, val currentId: Long?)

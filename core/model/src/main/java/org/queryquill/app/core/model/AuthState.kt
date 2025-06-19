@@ -16,31 +16,21 @@
 
 package org.queryquill.app.core.model
 
-sealed interface AuthState : BasicState {
-    override val name: String
+sealed interface AuthState {
 
+    enum class Type(override val labelRes: Int) : HasLabelRes {
+        NoAuth(R.string.no_auth), Basic(R.string.basic)
+    }
+
+    val type: Type
 
     data object NoAuth : AuthState {
-        override val name: String
-            get() = "No Auth"
+        override val type = Type.NoAuth
     }
 
-
-    data class Basic(val userName: String, val password: String) : AuthState {
-        override val name: String
-            get() = "Basic"
-
-        companion object {
-            fun default(): Basic {
-                return Basic("", "")
-            }
-        }
-    }
-
-    fun isDefault(): Boolean {
-        return when (this) {
-            is Basic -> this == Basic.default()
-            NoAuth -> true
-        }
+    data class Basic(
+        val userName: String = "", val password: String = ""
+    ) : AuthState {
+        override val type = Type.Basic
     }
 }

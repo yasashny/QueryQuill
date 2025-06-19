@@ -21,10 +21,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -32,25 +30,24 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.queryquill.app.core.data.FileRepository
 import org.queryquill.app.core.data.SendRequestRepository
 import org.queryquill.app.core.data.TransactionRepository
-import org.queryquill.app.core.model.AuthState
-import org.queryquill.app.core.model.BodyState
-import org.queryquill.app.core.model.ImmutableList
-import org.queryquill.app.core.model.ImmutableUri
+import org.queryquill.app.core.model.HttpType
 import org.queryquill.app.core.model.KeyValue
-import org.queryquill.app.feature.request.auth.EnumAuthState
-import org.queryquill.app.feature.request.body.EnumBodyState
-import org.queryquill.app.feature.request.utils.Constants
-import org.queryquill.app.feature.request.utils.toMimeType
+import org.queryquill.app.core.model.RequestModel
 
 internal class RequestViewModel(
     private val transactionRepository: TransactionRepository,
-    private val sendRequestRepository: SendRequestRepository
+    private val sendRequestRepository: SendRequestRepository,
+    private val fileRepository: FileRepository
 ) : ViewModel() {
     private val _requestState = MutableStateFlow<RequestUiState>(RequestUiState.Loading)
     val requestState = _requestState.onStart { loadData() }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), RequestUiState.Loading)
+
+    private val RequestUiState.requestOrNull: RequestModel?
+        get() = (this as? RequestUiState.Success)?.request
 
     private fun loadData() {
         viewModelScope.launch {
@@ -72,263 +69,27 @@ internal class RequestViewModel(
         }
     }
 
-    private var sendRequestScope: CoroutineScope? = null
+    private var currentSendJob: Job? = null
 
     fun sendRequest(onRequestSent: () -> Unit) {
-        when (val state = requestState.value) {
-            RequestUiState.Loading -> {}
-            is RequestUiState.Success -> {
-                sendRequestScope = CoroutineScope(Job() + Dispatchers.IO)
-                sendRequestScope?.launch {
-                    sendRequestRepository.sendRequest(state.request)
-                    onRequestSent()
-                }
+        requestState.value.requestOrNull?.let { state ->
+            currentSendJob?.cancel()
+            currentSendJob = viewModelScope.launch {
+                sendRequestRepository.sendRequest(state)
+                onRequestSent()
             }
         }
     }
 
     fun cancelRequest(onRequestSent: () -> Unit) {
-        sendRequestScope?.cancel()
+        currentSendJob?.cancel()
         onRequestSent()
     }
 
     fun saveRequest() {
         viewModelScope.launch(Dispatchers.IO) {
-            when (val state = requestState.value) {
-                RequestUiState.Loading -> {}
-                is RequestUiState.Success -> {
-                    transactionRepository.updateRequest(state.request)
-                }
-            }
-        }
-    }
-
-    fun updateRequest(updateRequestModel: UpdateRequestModel) {
-        when (val request = requestState.value) {
-            RequestUiState.Loading -> {}
-            is RequestUiState.Success -> {
-                when (updateRequestModel) {
-                    is UpdateRequestModel.Auth.Basic -> {
-                        _requestState.update {
-                            RequestUiState.Success(request.request.copy(auth = updateRequestModel.basicState))
-                        }
-                    }
-
-                    is UpdateRequestModel.Body.BinaryFile -> {
-                        if (updateRequestModel.isChangeContentType) {
-                            _requestState.update {
-                                RequestUiState.Success(
-                                    request.request.copy(
-                                        header = ImmutableList(
-                                            listOf(
-                                                KeyValue(
-                                                    Constants.CONTENT_TYPE,
-                                                    updateRequestModel.contentType
-                                                )
-                                            ) + request.request.header.list.filter { keyValue ->
-                                                keyValue.key != Constants.CONTENT_TYPE
-                                            }), bodyState = BodyState.BinaryFile(
-                                            ImmutableUri(updateRequestModel.uri),
-                                            updateRequestModel.fileName
-                                        )
-                                    )
-                                )
-                            }
-                        } else {
-                            _requestState.update {
-                                RequestUiState.Success(
-                                    request.request.copy(
-                                        bodyState = BodyState.BinaryFile(
-                                            ImmutableUri(updateRequestModel.uri),
-                                            updateRequestModel.fileName
-                                        )
-                                    )
-                                )
-                            }
-                        }
-                    }
-
-                    is UpdateRequestModel.Body.ChangeType -> {
-                        when (updateRequestModel.newState) {
-                            EnumBodyState.NoBody -> {
-                                _requestState.update {
-                                    RequestUiState.Success(
-                                        request.request.copy(
-                                            bodyState = BodyState.NoBody,
-                                            header = ImmutableList(request.request.header.list.filter { keyValue -> keyValue.key != Constants.CONTENT_TYPE })
-                                        )
-                                    )
-                                }
-                            }
-
-                            EnumBodyState.Text -> {
-                                _requestState.update {
-                                    RequestUiState.Success(
-                                        request.request.copy(
-                                            bodyState = BodyState.Text.default(
-                                                request.request.id
-                                            ), header = ImmutableList(
-                                                listOf(
-                                                    KeyValue(
-                                                        Constants.CONTENT_TYPE,
-                                                        BodyState.Text.default(request.request.id).textType.toMimeType()
-                                                    )
-                                                ) + request.request.header.list.filter { keyValue -> keyValue.key != Constants.CONTENT_TYPE })
-                                        )
-                                    )
-                                }
-                            }
-
-                            EnumBodyState.FormUrlEncoded -> {
-                                _requestState.update {
-                                    RequestUiState.Success(
-                                        request.request.copy(
-                                            bodyState = BodyState.FormUrlEncoded.default(),
-                                            header = ImmutableList(
-                                                listOf(
-                                                    KeyValue(
-                                                        Constants.CONTENT_TYPE,
-                                                        "application/x-www-form-urlencoded"
-                                                    )
-                                                ) + request.request.header.list.filter { keyValue -> keyValue.key != Constants.CONTENT_TYPE })
-                                        )
-                                    )
-                                }
-                            }
-
-                            EnumBodyState.MultipartForm -> {
-                                _requestState.update {
-                                    RequestUiState.Success(
-                                        request.request.copy(
-                                            bodyState = BodyState.MultipartForm.default(),
-                                            header = ImmutableList(
-                                                listOf(
-                                                    KeyValue(
-                                                        Constants.CONTENT_TYPE,
-                                                        "multipart/form-data"
-                                                    )
-                                                ) + request.request.header.list.filter { keyValue -> keyValue.key != Constants.CONTENT_TYPE })
-                                        )
-                                    )
-                                }
-                            }
-
-                            EnumBodyState.BinaryFile -> {
-                                _requestState.update {
-                                    RequestUiState.Success(
-                                        request.request.copy(
-                                            bodyState = BodyState.BinaryFile.default(),
-                                            header = ImmutableList(
-                                                listOf(
-                                                    KeyValue(
-                                                        Constants.CONTENT_TYPE,
-                                                        "application/octet-stream"
-                                                    )
-                                                ) + request.request.header.list.filter { keyValue -> keyValue.key != Constants.CONTENT_TYPE })
-                                        )
-                                    )
-                                }
-                            }
-                        }
-                    }
-
-                    is UpdateRequestModel.Auth.ChangeType -> {
-                        when (updateRequestModel.authState) {
-                            EnumAuthState.NoAuth -> {
-                                _requestState.update {
-                                    RequestUiState.Success(request.request.copy(auth = AuthState.NoAuth))
-                                }
-
-                            }
-
-                            EnumAuthState.Basic -> {
-                                _requestState.update {
-                                    RequestUiState.Success(request.request.copy(auth = AuthState.Basic.default()))
-                                }
-                            }
-                        }
-                    }
-
-                    is UpdateRequestModel.Type -> {
-                        _requestState.update {
-                            RequestUiState.Success(request.request.copy(type = updateRequestModel.type))
-                        }
-                    }
-
-                    is UpdateRequestModel.Url -> {
-                        _requestState.update {
-                            RequestUiState.Success(request.request.copy(url = updateRequestModel.url))
-                        }
-                    }
-
-                    is UpdateRequestModel.Body.FormUrlEncoded -> {
-                        _requestState.update {
-                            RequestUiState.Success(
-                                request.request.copy(
-                                    bodyState = BodyState.FormUrlEncoded(
-                                        list = ImmutableList(updateRequestModel.list)
-                                    )
-                                )
-                            )
-                        }
-                    }
-
-                    is UpdateRequestModel.Header -> {
-                        _requestState.update {
-                            RequestUiState.Success(
-                                request.request.copy(
-                                    header = ImmutableList(
-                                        updateRequestModel.list
-                                    )
-                                )
-                            )
-                        }
-                    }
-
-                    is UpdateRequestModel.Body.MultipartForm -> {
-                        _requestState.update {
-                            RequestUiState.Success(
-                                request.request.copy(
-                                    bodyState = BodyState.MultipartForm(
-                                        ImmutableList(updateRequestModel.list)
-                                    )
-                                )
-                            )
-                        }
-                    }
-
-                    is UpdateRequestModel.Query -> {
-                        _requestState.update {
-                            RequestUiState.Success(
-                                request.request.copy(
-                                    query = ImmutableList(
-                                        updateRequestModel.list
-                                    )
-                                )
-                            )
-                        }
-                    }
-
-                    is UpdateRequestModel.Body.UpdateTextType -> {
-                        ((requestState.value as? RequestUiState.Success)?.request?.bodyState as? BodyState.Text)?.let { textBodyState ->
-                            _requestState.update {
-                                RequestUiState.Success(
-                                    request.request.copy(
-                                        bodyState = textBodyState.copy(textType = updateRequestModel.textType),
-                                        header = ImmutableList(
-                                            listOf(
-                                                KeyValue(
-                                                    Constants.CONTENT_TYPE,
-                                                    updateRequestModel.textType.toMimeType()
-                                                )
-                                            ) + request.request.header.list.filter { keyValue -> keyValue.key != Constants.CONTENT_TYPE })
-                                    )
-                                )
-                            }
-                        }
-
-                    }
-                }
+            requestState.value.requestOrNull?.let { state ->
+                transactionRepository.updateRequest(state)
             }
         }
     }
@@ -339,8 +100,85 @@ internal class RequestViewModel(
         screenState = newScreenState
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        sendRequestScope?.cancel()
+    fun onEvent(updateRequest: UpdateRequest) {
+        when (updateRequest) {
+            is UpdateRequest.Auth -> updateAuth(updateRequest)
+            is UpdateRequest.Body -> updateBody(updateRequest)
+            is UpdateRequest.Headers -> updateHeader(updateRequest.updateType, updateRequest.item)
+            is UpdateRequest.Query -> updateQuery(updateRequest.updateType, updateRequest.item)
+            is UpdateRequest.Type -> updateType(updateRequest.httpType)
+            is UpdateRequest.Url -> updateUrl(updateRequest.url)
+        }
+    }
+
+    private fun updateHeader(updateType: UpdateRequest.UpdateType, item: KeyValue) {
+        requestState.value.requestOrNull?.let { state ->
+            _requestState.update {
+                RequestUiState.Success(
+                    state.copy(
+                        header = KeyValueListUpdater.update(updateType, item, state.header)
+                    )
+                )
+            }
+        }
+    }
+
+    private fun updateQuery(updateType: UpdateRequest.UpdateType, item: KeyValue) {
+        requestState.value.requestOrNull?.let { state ->
+            _requestState.update {
+                RequestUiState.Success(
+                    state.copy(
+                        query = KeyValueListUpdater.update(updateType, item, state.query)
+                    )
+                )
+            }
+        }
+    }
+
+    private fun updateUrl(url: String) {
+        requestState.value.requestOrNull?.let { state ->
+            _requestState.update {
+                RequestUiState.Success(
+                    state.copy(
+                        url = url
+                    )
+                )
+            }
+        }
+    }
+
+    private fun updateType(type: HttpType) {
+        requestState.value.requestOrNull?.let { state ->
+            _requestState.update {
+                RequestUiState.Success(
+                    state.copy(
+                        type = type
+                    )
+                )
+            }
+        }
+    }
+
+    private fun updateBody(updateBody: UpdateRequest.Body) {
+        viewModelScope.launch {
+            requestState.value.requestOrNull?.let { state ->
+                _requestState.update {
+                    BodyStateUpdater.updateBody(
+                        currentState = state,
+                        updateBody = updateBody,
+                        fileRepository::getFileLength,
+                        fileRepository::deleteFile
+                    ) ?: it
+                }
+            }
+        }
+    }
+
+    private fun updateAuth(updateAuth: UpdateRequest.Auth) {
+        requestState.value.requestOrNull?.let { state ->
+            _requestState.update {
+                AuthStateUpdater.updateAuth(currentState = state, updateAuth = updateAuth) ?: it
+            }
+        }
     }
 }

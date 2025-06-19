@@ -22,7 +22,7 @@ import org.queryquill.app.core.model.KeyValue
 internal fun HttpRequestBuilder.applyUrlParameters(list: List<KeyValue>) {
     url {
         list.forEach { keyValue ->
-            if (keyValue != KeyValue.empty()) {
+            if (keyValue.key.isNotEmpty()) {
                 parameters.append(keyValue.key, keyValue.value)
             }
         }

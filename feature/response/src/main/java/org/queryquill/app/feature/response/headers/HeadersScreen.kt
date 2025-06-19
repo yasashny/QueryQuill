@@ -32,14 +32,13 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.queryquill.app.core.model.ImmutableList
 import org.queryquill.app.core.model.KeyValue
 
 @Composable
-internal fun HeadersScreen(headers: ImmutableList<KeyValue>) {
+internal fun HeadersScreen(headers: List<KeyValue>) {
 
     LazyColumn {
-        items(headers.list) { item ->
+        items(headers) { item ->
             SelectionContainer {
                 Column {
                     HorizontalDivider()

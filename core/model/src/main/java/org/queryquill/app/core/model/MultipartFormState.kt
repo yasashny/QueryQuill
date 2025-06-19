@@ -14,37 +14,26 @@
  * If not, see https://www.gnu.org/licenses/.
  */
 
+@file:OptIn(ExperimentalUuidApi::class)
+
 package org.queryquill.app.core.model
 
 import android.net.Uri
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
+sealed interface MultipartFormState {
 
-sealed interface MultipartFormState : BasicState {
-    override val name: String
+    val id: String
 
-
-    data class Text(val keyValue: KeyValue) : MultipartFormState {
-        override val name: String
-            get() = "TEXT"
-
-        companion object {
-            fun default(): Text {
-                return Text(KeyValue.empty())
-            }
-        }
-    }
-
+    data class Text(
+        val keyValue: KeyValue = KeyValue(), override val id: String = Uuid.random().toString()
+    ) : MultipartFormState
 
     data class BinaryFile(
-        override val uri: ImmutableUri, val title: String, override val fileName: String
-    ) : MultipartFormState, BasicBinaryFile() {
-        override val name: String
-            get() = "FILE"
-
-        companion object {
-            fun default(): BinaryFile {
-                return BinaryFile(ImmutableUri(Uri.EMPTY), "", "")
-            }
-        }
-    }
+        override val uri: Uri = Uri.EMPTY,
+        val title: String = "",
+        override val fileName: String = "",
+        override val id: String = Uuid.random().toString()
+    ) : MultipartFormState, FileInfo
 }

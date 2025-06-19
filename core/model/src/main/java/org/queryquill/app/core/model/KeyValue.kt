@@ -16,9 +16,10 @@
 
 package org.queryquill.app.core.model
 
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
-data class KeyValue(val key: String, val value: String) {
-    companion object {
-        fun empty(): KeyValue = KeyValue("", "")
-    }
-}
+
+data class KeyValue @OptIn(ExperimentalUuidApi::class) constructor(
+    val key: String = "", val value: String = "", val id: String = Uuid.random().toString()
+)

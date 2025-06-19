@@ -36,7 +36,7 @@ class SendRequestRepository internal constructor(
             val cookie = cookieDataSource.getCookie().first()
             sendRequestDataSource.sendRequest(model, cookie).let { response ->
                 responseDataSource.update(response)
-                cookieDataSource.addNewCookie(response.headers.list.filter { keyValue -> keyValue.key == "Set-Cookie" }
+                cookieDataSource.addNewCookie(response.headers.filter { keyValue -> keyValue.key == "Set-Cookie" }
                     .map { it.value })
             }
         }
