@@ -38,6 +38,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.queryquill.app.core.designsystem.Dimens
 import org.queryquill.app.core.designsystem.QueryQuillTheme
 import org.queryquill.app.core.model.AuthState
 import org.queryquill.app.feature.request.R
@@ -61,10 +62,10 @@ internal fun AuthScreenBasic(
             },
             label = { Text(text = stringResource(R.string.user_name)) },
             modifier = Modifier
-                .padding(horizontal = 15.dp)
+                .padding(horizontal = Dimens.medium)
                 .fillMaxWidth()
         )
-        Spacer(modifier = Modifier.padding(vertical = 8.dp))
+        Spacer(modifier = Modifier.padding(vertical = Dimens.small))
         OutlinedTextField(
             value = authState.password,
             onValueChange = { onAuthChange(authState.copy(password = it)) },
@@ -77,14 +78,14 @@ internal fun AuthScreenBasic(
                 else painterResource(R.drawable.visibility)
 
                 IconButton(
-                    modifier = Modifier.padding(end = 5.dp),
+                    modifier = Modifier.padding(end = Dimens.small, top = 2.dp),
                     onClick = { passwordVisible = !passwordVisible }) {
                     Icon(painter = icon, contentDescription = null)
                 }
             },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             modifier = Modifier
-                .padding(horizontal = 15.dp)
+                .padding(horizontal = Dimens.medium)
                 .fillMaxWidth()
         )
     }

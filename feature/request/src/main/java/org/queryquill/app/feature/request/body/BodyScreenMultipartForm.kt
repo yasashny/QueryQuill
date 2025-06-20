@@ -29,7 +29,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import org.queryquill.app.core.designsystem.Dimens
 import org.queryquill.app.core.designsystem.QueryQuillTheme
 import org.queryquill.app.core.model.KeyValue
 import org.queryquill.app.core.model.MultipartFormState
@@ -45,12 +45,12 @@ internal fun LazyListScope.bodyScreenMultipartForm(
         MultipartFormListItem(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 15.dp)
+                .padding(horizontal = Dimens.medium)
                 .animateItem(fadeOutSpec = null),
             multipartFormState = item,
             onItemChange = updateMultipartForm,
             deleteButtonEnabled = { index != items.lastIndex })
-        Spacer(modifier = Modifier.height(15.dp))
+        Spacer(modifier = Modifier.height(Dimens.medium))
     }
 }
 
@@ -69,7 +69,7 @@ private fun PreviewMultipartFormScreen() {
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = Dimens.medium)
         ) {
             bodyScreenMultipartForm(items) { _, _ -> }
         }

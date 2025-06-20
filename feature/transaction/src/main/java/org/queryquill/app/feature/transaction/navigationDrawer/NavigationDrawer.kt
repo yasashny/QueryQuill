@@ -58,6 +58,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
+import org.queryquill.app.core.designsystem.Dimens
 import org.queryquill.app.core.model.Transaction
 import org.queryquill.app.core.utils.vibration
 import org.queryquill.app.feature.transaction.R
@@ -170,7 +171,7 @@ internal fun NavigationDrawer(
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
 
-                HorizontalDivider(Modifier.padding(horizontal = 30.dp, vertical = 16.dp))
+                HorizontalDivider(Modifier.padding(horizontal = 30.dp, vertical = Dimens.medium))
                 when (transactions) {
                     TransactionsUiState.Loading -> {
                         Box(
@@ -182,7 +183,7 @@ internal fun NavigationDrawer(
 
                     is TransactionsUiState.Success -> {
                         LazyColumn {
-                            items(transactions.list) { item ->
+                            items(transactions.list, key = { item -> item.id }) { item ->
                                 NavigationDrawerItem(
                                     label = { Text(item.label) },
                                     selected = transactions.currentId == item.id,

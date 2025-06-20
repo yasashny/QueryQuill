@@ -19,18 +19,18 @@ package org.queryquill.app.feature.response.source
 import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import org.queryquill.app.core.model.CodeEditorState
 import org.queryquill.app.core.model.LanguageType
 import org.queryquill.app.core.ui.CodeEditor
 import org.queryquill.app.feature.response.R
-import org.queryquill.app.feature.response.utils.RestrictiveConstants
 
 @Composable
 internal fun ResponseScreenSource(
@@ -38,40 +38,58 @@ internal fun ResponseScreenSource(
     state: CodeEditorState,
     fileLength: Long,
     transferFileToCodeEditorState: () -> Unit,
-    codeEditorLoadingState: Boolean,
+    isCodeEditorLoading: Boolean,
 ) {
     val context = LocalContext.current
     if (fileLength > RestrictiveConstants.FILE_CANNOT_BE_OPENED) {
         FileCannotBeOpenedScreen()
-    } else {
-
-        var confirmFileOpening by remember {
-            mutableStateOf(fileLength <= RestrictiveConstants.CONFIRM_FILE_OPENING)
+        return
+    }
+    var isConfirmed by remember {
+        mutableStateOf(fileLength <= RestrictiveConstants.CONFIRM_FILE_OPENING)
+    }
+    if (!isConfirmed) {
+        ConfirmFileOpeningScreen {
+            isConfirmed = true
         }
-
-        if (confirmFileOpening) {
-
-            CodeEditor(
-                state = state,
-                modifier = Modifier.fillMaxSize(),
-                isEditable = false,
-                languageType = languageType,
-                isBasicDisplayMode = true,
-                transferFileToCodeEditorState = transferFileToCodeEditorState,
-                isWordWrap = fileLength <= RestrictiveConstants.DISABLE_WORD_WRAP,
-                isLoading = codeEditorLoadingState
-            )
-            if (fileLength > RestrictiveConstants.DISABLE_WORD_WRAP) {
-                Toast.makeText(
-                    context,
-                    stringResource(R.string.the_file_is_too_big_wordwrap_is_disabled_for_performance_reasons),
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-        } else {
-            ConfirmFileOpeningScreen {
-                confirmFileOpening = true
-            }
+        return
+    }
+    val wordWrapEnabled = fileLength <= RestrictiveConstants.DISABLE_WORD_WRAP
+    CodeEditor(
+        state = state,
+        modifier = Modifier.fillMaxSize(),
+        isEditable = false,
+        languageType = languageType,
+        isBasicDisplayMode = true,
+        transferFileToCodeEditorState = transferFileToCodeEditorState,
+        isWordWrap = wordWrapEnabled,
+        isLoading = isCodeEditorLoading
+    )
+    if (!wordWrapEnabled) {
+        LaunchedEffect(Unit) {
+            Toast.makeText(
+                context,
+                context.getString(R.string.the_file_is_too_big_wordwrap_is_disabled_for_performance_reasons),
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
+}
+
+private object RestrictiveConstants {
+    const val FILE_CANNOT_BE_OPENED = 104857600
+    const val CONFIRM_FILE_OPENING = 5242880
+    const val DISABLE_WORD_WRAP = 52428800
+}
+
+@Preview
+@Composable
+private fun PreviewResponseScreenSource() {
+    ResponseScreenSource(
+        languageType = LanguageType.OTHER,
+        state = CodeEditorState(),
+        fileLength = 5000L,
+        transferFileToCodeEditorState = {},
+        isCodeEditorLoading = false
+    )
 }

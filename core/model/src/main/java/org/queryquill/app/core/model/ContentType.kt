@@ -25,69 +25,69 @@ sealed interface ContentType {
     val fileType: String
 
     @Serializable
-    data object Image {
+    sealed interface Image : ContentType {
         @Serializable
-        data object JPEG : ContentType {
+        data object JPEG : Image {
             override val fileType: String
                 get() = "jpeg"
         }
 
         @Serializable
-        data object PNG : ContentType {
+        data object PNG : Image {
             override val fileType: String
                 get() = "png"
         }
 
         @Serializable
-        data object WEBP : ContentType {
+        data object WEBP : Image {
             override val fileType: String
                 get() = "webp"
         }
 
         @Serializable
-        data object BMP : ContentType {
+        data object BMP : Image {
             override val fileType: String
                 get() = "bmp"
         }
 
         @Serializable
-        data object HEIF : ContentType {
+        data object HEIF : Image {
             override val fileType: String
                 get() = "heif"
         }
 
         @Serializable
-        data object HEIC : ContentType {
+        data object HEIC : Image {
             override val fileType: String
                 get() = "heic"
         }
     }
 
     @Serializable
-    data object Text {
+    sealed interface Text : ContentType {
         @Serializable
-        data object HTML : ContentType {
+        data object HTML : Text {
             override val fileType: String
                 get() = "html"
         }
 
         @Serializable
-        data object PLAIN : ContentType {
+        data object PLAIN : Text {
             override val fileType: String
                 get() = "txt"
         }
 
         @Serializable
-        data object XML : ContentType {
+        data object XML : Text {
             override val fileType: String
                 get() = "xml"
         }
     }
 
     @Serializable
-    data object Application {
+    sealed interface Application : ContentType {
         @Serializable
-        data object JSON : ContentType {
+        data object JSON : Application {
             override val fileType: String
                 get() = "json"
         }

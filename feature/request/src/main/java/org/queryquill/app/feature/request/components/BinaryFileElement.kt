@@ -43,6 +43,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.queryquill.app.core.designsystem.Dimens
 import org.queryquill.app.core.designsystem.QueryQuillTheme
 import org.queryquill.app.core.model.BodyState
 import org.queryquill.app.core.model.FileInfo
@@ -77,7 +78,7 @@ internal fun BinaryFileElement(
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 modifier = Modifier
-                    .padding(15.dp)
+                    .padding(Dimens.medium)
                     .weight(1f),
                 text = if (currentState.uri == Uri.EMPTY) {
                     stringResource(R.string.select_file)
@@ -122,7 +123,7 @@ private fun PreviewBinaryFileElement() {
         BinaryFileElement(
             currentState = dummyFileInfo,
             onFileChange = { _, _ -> },
-            modifier = Modifier.padding(15.dp)
+            modifier = Modifier.padding(Dimens.medium)
         )
     }
 }

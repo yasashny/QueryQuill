@@ -17,6 +17,7 @@
 package org.queryquill.app.feature.cookie
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -34,6 +35,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.queryquill.app.core.designsystem.Dimens
 import org.queryquill.app.core.designsystem.QueryQuillTheme
 import org.queryquill.app.feature.cookie.util.TestTags
 
@@ -44,7 +46,10 @@ internal fun CookieListItem(
     OutlinedCard(modifier = modifier.animateContentSize()) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(start = 15.dp, top = 12.dp, end = 15.dp, bottom = 15.dp)
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(
+                start = Dimens.medium, top = 11.dp, end = Dimens.medium, bottom = Dimens.medium
+            )
         ) {
             OutlinedTextField(
                 value = item.cookie,
@@ -64,7 +69,7 @@ internal fun CookieListItem(
             FilledTonalIconButton(
                 onClick = { onEvent(UpdateCookie.Delete(item.id)) },
                 modifier = Modifier
-                    .padding(start = 15.dp)
+                    .padding(start = Dimens.medium)
                     .testTag(TestTags.CookieList.DELETE_COOKIE)
 
             ) {

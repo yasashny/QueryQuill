@@ -28,19 +28,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.dp
-import org.queryquill.app.feature.response.model.SegmentedButtonState
+import androidx.compose.ui.tooling.preview.Preview
+import org.queryquill.app.core.designsystem.Dimens
+import org.queryquill.app.core.designsystem.QueryQuillTheme
+import org.queryquill.app.feature.response.model.GroupButtonsState
 
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-internal fun SegmentedButton(
-    currentState: SegmentedButtonState,
-    options: List<SegmentedButtonState>,
-    onClick: (SegmentedButtonState) -> Unit
+internal fun GroupButtons(
+    currentState: GroupButtonsState,
+    options: List<GroupButtonsState>,
+    onClick: (GroupButtonsState) -> Unit
 ) {
     Row(
-        Modifier.padding(horizontal = 8.dp),
+        Modifier.padding(horizontal = Dimens.small),
         horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
     ) {
         val modifiers = listOf(Modifier.weight(1f), Modifier.weight(1.5f), Modifier.weight(1f))
@@ -59,5 +61,16 @@ internal fun SegmentedButton(
                 Text(element.title)
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PreviewGroupButtons() {
+    QueryQuillTheme {
+        GroupButtons(
+            currentState = GroupButtonsState.SOURCE,
+            options = GroupButtonsState.entries,
+            onClick = {})
     }
 }

@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.queryquill.app.core.designsystem.Dimens
 import org.queryquill.app.core.designsystem.QueryQuillTheme
 import org.queryquill.app.core.model.BodyState
 import org.queryquill.app.core.model.TextType
@@ -59,14 +60,14 @@ internal fun BodyScreenText(
                 if (bodyState.textType != newState) updateTextType(newState)
             }, modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 10.dp)
+                .padding(vertical = Dimens.small)
         )
 
         OutlinedCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp)
-                .padding(horizontal = 15.dp)
+                .padding(horizontal = Dimens.medium)
                 .clickable {
                     navigateToEditor(bodyState.textFileName, bodyState.textType)
                 },
@@ -77,7 +78,7 @@ internal fun BodyScreenText(
                 Text(
                     text = stringResource(R.string.input_your_body_here),
                     fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                    modifier = Modifier.padding(start = 15.dp)
+                    modifier = Modifier.padding(start = Dimens.medium)
                 )
             }
         }

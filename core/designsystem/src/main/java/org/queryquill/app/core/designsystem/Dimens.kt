@@ -14,14 +14,11 @@
  * If not, see https://www.gnu.org/licenses/.
  */
 
-package org.queryquill.app.core.model
+package org.queryquill.app.core.designsystem
 
-data class ResponseModel(
-    val id: Long,
-    val status: String,
-    val fileName: String,
-    val contentLength: String,
-    val time: String,
-    val contentType: ContentType,
-    val headers: List<KeyValue>
-)
+import androidx.compose.ui.unit.dp
+
+object Dimens {
+    val small = 8.dp
+    val medium = 16.dp
+}

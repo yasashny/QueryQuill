@@ -25,7 +25,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
+import org.queryquill.app.core.designsystem.Dimens
+import org.queryquill.app.core.designsystem.QueryQuillTheme
 import org.queryquill.app.feature.response.R
 
 @Composable
@@ -33,8 +35,16 @@ internal fun FileCannotBeOpenedScreen() {
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text(
             text = stringResource(R.string.files_larger_than_100_megabytes_cannot_be_previewed_due_to_performance_reasons_you_can_download_the_file),
-            modifier = Modifier.padding(15.dp),
+            modifier = Modifier.padding(Dimens.medium),
             textAlign = TextAlign.Center
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PreviewFileCannotBeOpenedScreen() {
+    QueryQuillTheme {
+        FileCannotBeOpenedScreen()
     }
 }

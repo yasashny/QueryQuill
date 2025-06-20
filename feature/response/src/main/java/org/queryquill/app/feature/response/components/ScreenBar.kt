@@ -35,9 +35,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.queryquill.app.core.model.ResponseModel
+import org.queryquill.app.core.designsystem.Dimens
+import org.queryquill.app.core.designsystem.QueryQuillTheme
 import org.queryquill.app.feature.response.R
+import org.queryquill.app.feature.response.ResponseUiState
 
 @Composable
 internal fun ScreenBar(
@@ -46,7 +49,7 @@ internal fun ScreenBar(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 15.dp, top = 18.dp, end = 15.dp, bottom = 15.dp)
+            .padding(Dimens.medium)
             .height(56.dp)
             .border(
                 1.dp, MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(4.dp)
@@ -59,25 +62,25 @@ internal fun ScreenBar(
             Text(
                 text = status,
                 color = MaterialTheme.colorScheme.onSecondaryContainer,
-                modifier = Modifier.padding(vertical = 10.dp, horizontal = 15.dp)
+                modifier = Modifier.padding(vertical = Dimens.small, horizontal = Dimens.medium)
             )
             VerticalDivider(color = MaterialTheme.colorScheme.outline)
             Text(
                 text = stringResource(R.string.ms, time),
                 color = MaterialTheme.colorScheme.onSecondaryContainer,
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(Dimens.small)
             )
             VerticalDivider(color = MaterialTheme.colorScheme.outline)
             Text(
                 text = stringResource(R.string.bytes, contentLength),
                 color = MaterialTheme.colorScheme.onSecondaryContainer,
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(Dimens.small)
             )
             VerticalDivider(color = MaterialTheme.colorScheme.outline)
             Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                 IconButton(
                     onClick = { onSaveClick() },
-                    enabled = fileName != ResponseModel.DEFAULT_FILE_NAME
+                    enabled = fileName != ResponseUiState.DEFAULT_FILE_NAME
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.download),
@@ -87,5 +90,19 @@ internal fun ScreenBar(
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PreviewScreenBar() {
+    QueryQuillTheme {
+        ScreenBar(
+            status = "200 OK",
+            time = "123",
+            contentLength = "456",
+            onSaveClick = {},
+            fileName = "response.json"
+        )
     }
 }

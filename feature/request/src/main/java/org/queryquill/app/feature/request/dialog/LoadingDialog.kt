@@ -36,7 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import org.queryquill.app.core.designsystem.Dimens
 import org.queryquill.app.core.designsystem.QueryQuillTheme
 import org.queryquill.app.feature.request.R
 import org.queryquill.app.feature.request.utils.TestTags
@@ -57,13 +57,13 @@ internal fun LoadingDialog(
             tonalElevation = AlertDialogDefaults.TonalElevation
         ) {
             Column(
-                modifier = Modifier.padding(14.dp),
+                modifier = Modifier.padding(Dimens.medium),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 LoadingIndicator(
                     modifier = Modifier
-                        .padding(16.dp)
+                        .padding(Dimens.medium)
                         .testTag(TestTags.LoadingDialog.LOADING_INDICATOR)
                 )
                 TextButton(

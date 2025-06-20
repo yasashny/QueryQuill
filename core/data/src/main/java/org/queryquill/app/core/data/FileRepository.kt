@@ -55,13 +55,14 @@ class FileRepository(private val context: Context, private val ioDispatcher: Cor
         }
     }
 
-    fun getFileUri(fileName: String): Result<Uri> {
-        return runCatching {
+    suspend fun getFileUri(fileName: String): Result<Uri> = withContext(ioDispatcher) {
+        runCatching {
             val file = File(context.filesDir, fileName)
             if (!file.exists()) throw FileNotFoundException()
             file.toUri()
         }
     }
+
 
     private fun InputStream.readInChunks(chunkSize: Int = 10_000): Sequence<String> = sequence {
         val buffer = ByteArray(chunkSize)

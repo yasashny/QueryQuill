@@ -36,6 +36,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.queryquill.app.core.designsystem.Dimens
 import org.queryquill.app.core.designsystem.QueryQuillTheme
 import org.queryquill.app.core.utils.vibration
 
@@ -50,7 +51,7 @@ fun NewTransactionScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(Dimens.medium),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -60,15 +61,14 @@ fun NewTransactionScreen() {
             onClick = {
                 vibration(context)
                 openAddTransactionDialog = true
-            },
-            modifier = Modifier
+            }, modifier = Modifier
                 .padding(top = 50.dp)
                 .size(width = 229.dp, height = 53.dp)
         ) {
             Text(
                 text = stringResource(R.string.create_new_request),
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(horizontal = 15.dp)
+                modifier = Modifier.padding(horizontal = Dimens.medium)
             )
         }
     }

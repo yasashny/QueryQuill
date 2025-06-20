@@ -23,7 +23,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import org.queryquill.app.core.designsystem.Dimens
 import org.queryquill.app.core.designsystem.QueryQuillTheme
 import org.queryquill.app.core.model.KeyValue
 import org.queryquill.app.core.ui.KeyValueItem
@@ -45,7 +45,7 @@ internal fun LazyListScope.editableList(
             },
             deleteButtonEnabled = { items.lastIndex != index },
             modifier = Modifier
-                .padding(start = 15.dp, bottom = 15.dp, end = 15.dp)
+                .padding(start = Dimens.medium, bottom = Dimens.medium, end = Dimens.medium)
                 .animateItem(fadeOutSpec = null)
         )
     }

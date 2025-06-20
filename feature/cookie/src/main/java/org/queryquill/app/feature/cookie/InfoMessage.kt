@@ -35,16 +35,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.queryquill.app.core.designsystem.Dimens
 
 @Composable
 internal fun InfoMessage() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 15.dp, start = 15.dp, end = 15.dp)
+            .padding(top = Dimens.medium, start = Dimens.medium, end = Dimens.medium)
             .clip(RoundedCornerShape(8.dp))
             .background(MaterialTheme.colorScheme.secondaryContainer)
-            .padding(15.dp)
+            .padding(Dimens.medium)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
@@ -56,7 +57,7 @@ internal fun InfoMessage() {
                 text = stringResource(R.string.cookie_automatically_send_with_relevant_request),
                 color = MaterialTheme.colorScheme.onSecondaryContainer,
                 fontSize = 13.sp,
-                modifier = Modifier.padding(start = 15.dp)
+                modifier = Modifier.padding(start = Dimens.medium)
             )
         }
     }

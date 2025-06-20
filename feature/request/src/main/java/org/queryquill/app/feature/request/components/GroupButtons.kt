@@ -31,7 +31,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import org.queryquill.app.core.designsystem.Dimens
 import org.queryquill.app.core.designsystem.QueryQuillTheme
 import org.queryquill.app.feature.request.ScreenState
 
@@ -45,7 +45,7 @@ internal fun GroupButtons(
     val options = remember { ScreenState.entries }
     Row(
         modifier
-            .padding(horizontal = 8.dp)
+            .padding(horizontal = Dimens.small)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
     ) {

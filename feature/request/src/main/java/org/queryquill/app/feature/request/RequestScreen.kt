@@ -16,8 +16,13 @@
 
 package org.queryquill.app.feature.request
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -36,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
+import org.queryquill.app.core.designsystem.Dimens
 import org.queryquill.app.core.designsystem.QueryQuillTheme
 import org.queryquill.app.core.model.AuthState
 import org.queryquill.app.core.model.BodyState
@@ -90,109 +96,120 @@ private fun RequestScreen(
     onEvent: (UpdateRequest) -> Unit,
 
     ) {
-    when (requestUiState) {
-        RequestUiState.Loading -> {
-            Box(modifier = modifier, contentAlignment = Alignment.Center) {
-                LoadingIndicator()
-            }
-        }
-
-        is RequestUiState.Success -> {
-            var openLoadingDialog by remember {
-                mutableStateOf(false)
-            }
-            if (openLoadingDialog) {
-                LoadingDialog {
-                    cancelRequest(onRequestSent)
-                    openLoadingDialog = false
+    Box(modifier) {
+        AnimatedContent(
+            targetState = requestUiState,
+            contentKey = { state: RequestUiState -> state::class },
+            transitionSpec = { fadeIn() togetherWith fadeOut() },
+            label = "RequestScreen"
+        ) { state ->
+            when (state) {
+                RequestUiState.Loading -> {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        LoadingIndicator()
+                    }
                 }
-            }
-            Box(modifier = modifier) {
-                val requestModel = requestUiState.request
 
-                LazyColumn {
-                    item("screen_bar") {
-                        ScreenBar(
-                            modifier = Modifier.animateItem(fadeOutSpec = null),
-                            type = requestModel.type,
-                            url = requestModel.url,
-                            onTypeChange = {
-                                onEvent(
-                                    UpdateRequest.Type(it)
-                                )
-                            },
-                            onUrlChange = {
-                                onEvent(UpdateRequest.Url(it))
-                            }) {
-                            openLoadingDialog = true
-                            sendRequest {
-                                openLoadingDialog = false
-                                onRequestSent()
-                            }
+                is RequestUiState.Success -> {
+                    var openLoadingDialog by remember {
+                        mutableStateOf(false)
+                    }
+                    if (openLoadingDialog) {
+                        LoadingDialog {
+                            cancelRequest(onRequestSent)
+                            openLoadingDialog = false
                         }
                     }
-                    item("group_buttons") {
-                        GroupButtons(
-                            modifier = Modifier
-                                .padding(bottom = 15.dp)
-                                .animateItem(fadeOutSpec = null),
-                            screenState = screenState,
-                            updateScreenState = {
-                                updateScreenState(it)
-                            })
-                        HorizontalDivider()
-                    }
-                    when (screenState) {
-                        ScreenState.BODY -> bodyScreen(
-                            bodyState = requestModel.bodyState,
-                            navigateToEditor = navigateToEditor,
-                            onBodyEvent = onEvent
-                        )
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        val requestModel = state.request
 
-                        ScreenState.AUTH -> authScreen(
-                            state = requestModel.auth, onAuthEvent = onEvent
-                        )
-
-
-                        ScreenState.HEADER -> {
-                            item("header_spacer") {
-                                Spacer(Modifier.padding(8.dp))
-                            }
-                            editableList(
-                                items = requestModel.header, updateRequest = { updateType, item ->
-                                    onEvent(
-                                        UpdateRequest.Headers(updateType, item)
-                                    )
-                                })
-                        }
-
-                        ScreenState.QUERY -> {
-                            item("query_preview") {
-                                QueryPreview(
-                                    modifier = Modifier
-                                        .padding(
-                                            15.dp
-                                        )
-                                        .animateItem(fadeOutSpec = null),
+                        LazyColumn {
+                            item("screen_bar") {
+                                ScreenBar(
+                                    modifier = Modifier.animateItem(fadeOutSpec = null),
+                                    type = requestModel.type,
                                     url = requestModel.url,
-                                    query = requestModel.query
+                                    onTypeChange = {
+                                        onEvent(
+                                            UpdateRequest.Type(it)
+                                        )
+                                    },
+                                    onUrlChange = {
+                                        onEvent(UpdateRequest.Url(it))
+                                    }) {
+                                    openLoadingDialog = true
+                                    sendRequest {
+                                        openLoadingDialog = false
+                                        onRequestSent()
+                                    }
+                                }
+                            }
+                            item("group_buttons") {
+                                GroupButtons(
+                                    modifier = Modifier
+                                        .padding(bottom = Dimens.medium)
+                                        .animateItem(fadeOutSpec = null),
+                                    screenState = screenState,
+                                    updateScreenState = {
+                                        updateScreenState(it)
+                                    })
+                                HorizontalDivider()
+                            }
+                            when (screenState) {
+                                ScreenState.BODY -> bodyScreen(
+                                    bodyState = requestModel.bodyState,
+                                    navigateToEditor = navigateToEditor,
+                                    onBodyEvent = onEvent
+                                )
+
+                                ScreenState.AUTH -> authScreen(
+                                    state = requestModel.auth, onAuthEvent = onEvent
+                                )
+
+
+                                ScreenState.HEADER -> {
+                                    item("header_spacer") {
+                                        Spacer(Modifier.padding(Dimens.small))
+                                    }
+                                    editableList(
+                                        items = requestModel.header,
+                                        updateRequest = { updateType, item ->
+                                            onEvent(
+                                                UpdateRequest.Headers(updateType, item)
+                                            )
+                                        })
+                                }
+
+                                ScreenState.QUERY -> {
+                                    item("query_preview") {
+                                        QueryPreview(
+                                            modifier = Modifier
+                                                .padding(
+                                                    Dimens.medium
+                                                )
+                                                .animateItem(fadeOutSpec = null),
+                                            url = requestModel.url,
+                                            query = requestModel.query
+                                        )
+                                    }
+                                    editableList(
+                                        items = requestModel.query,
+                                        updateRequest = { updateType, item ->
+                                            onEvent(
+                                                UpdateRequest.Query(updateType, item)
+                                            )
+                                        })
+                                }
+                            }
+                            item("footer") {
+                                Spacer(
+                                    modifier = Modifier
+                                        .height(150.dp)
+                                        .fillMaxWidth()
+                                        .animateItem(fadeOutSpec = null)
                                 )
                             }
-                            editableList(
-                                items = requestModel.query, updateRequest = { updateType, item ->
-                                    onEvent(
-                                        UpdateRequest.Query(updateType, item)
-                                    )
-                                })
                         }
-                    }
-                    item("footer") {
-                        Spacer(
-                            modifier = Modifier
-                                .height(150.dp)
-                                .fillMaxWidth()
-                                .animateItem(fadeOutSpec = null)
-                        )
                     }
                 }
             }

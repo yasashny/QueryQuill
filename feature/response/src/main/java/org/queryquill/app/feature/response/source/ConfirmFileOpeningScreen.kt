@@ -27,23 +27,36 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
+import org.queryquill.app.core.designsystem.Dimens
+import org.queryquill.app.core.designsystem.QueryQuillTheme
 import org.queryquill.app.feature.response.R
 
 @Composable
 internal fun ConfirmFileOpeningScreen(onConfirm: () -> Unit) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column(Modifier.padding(15.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            Modifier.padding(Dimens.medium),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Text(
                 text = stringResource(R.string.a_file_larger_than_5_mb_is_hidden_for_performance_reasons),
-                Modifier.padding(15.dp),
+                Modifier.padding(Dimens.medium),
                 textAlign = TextAlign.Center
             )
             Button(
-                onClick = { onConfirm() }, modifier = Modifier.padding(top = 15.dp)
+                onClick = { onConfirm() }, modifier = Modifier.padding(top = Dimens.medium)
             ) {
                 Text(text = stringResource(R.string.show_anyway))
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PreviewConfirmFileOpeningScreen() {
+    QueryQuillTheme {
+        ConfirmFileOpeningScreen(onConfirm = {})
     }
 }

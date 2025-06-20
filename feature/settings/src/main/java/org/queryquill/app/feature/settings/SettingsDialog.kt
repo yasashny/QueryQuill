@@ -60,6 +60,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import org.koin.androidx.compose.koinViewModel
+import org.queryquill.app.core.designsystem.Dimens
 import org.queryquill.app.core.designsystem.QueryQuillTheme
 import org.queryquill.app.core.model.SettingsModel
 import org.queryquill.app.core.model.ThemeState
@@ -110,7 +111,7 @@ internal fun SettingsDialog(
                         ThemeSection(currentThemeState = settingsState.settingsModel.themeState) { newThemeState ->
                             updateModel(UpdateSettings.UpdateTheme(newThemeState))
                         }
-                        HorizontalDivider(Modifier.padding(top = 5.dp))
+                        HorizontalDivider(Modifier.padding(top = Dimens.small))
                         BottomButtonsSection()
                         FeedbackSection()
                         VersionSection()
@@ -189,7 +190,7 @@ private fun ThemeSection(currentThemeState: ThemeState, updateTheme: (ThemeState
     Text(
         text = stringResource(id = R.string.theme),
         style = MaterialTheme.typography.titleMedium,
-        modifier = Modifier.padding(top = 16.dp, bottom = 8.dp),
+        modifier = Modifier.padding(top = Dimens.medium, bottom = Dimens.small),
     )
     val radioOptions = listOf(ThemeState.SYSTEM, ThemeState.DARK, ThemeState.LIGHT)
     Column(
@@ -221,13 +222,13 @@ private fun ChooseRow(
                 role = Role.RadioButton,
                 onClick = onClick,
             )
-            .padding(12.dp),
+            .padding(Dimens.small),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         RadioButton(
             selected = selected, onClick = null
         )
-        Spacer(Modifier.width(8.dp))
+        Spacer(Modifier.width(Dimens.small))
         Text(text)
     }
 }

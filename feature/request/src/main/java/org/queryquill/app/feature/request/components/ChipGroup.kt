@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.queryquill.app.core.designsystem.Dimens
 import org.queryquill.app.core.designsystem.QueryQuillTheme
 import org.queryquill.app.core.model.BodyState
 
@@ -44,8 +45,8 @@ internal fun <T : Enum<T>> ChipGroup(
     LazyRow(
         state = lazyListState,
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = PaddingValues(start = 29.dp, end = 15.dp)
+        horizontalArrangement = Arrangement.spacedBy(Dimens.small),
+        contentPadding = PaddingValues(start = 29.dp, end = Dimens.medium)
     ) {
         items(options, key = { it }) { option ->
             InputChip(

@@ -14,8 +14,19 @@
  * If not, see https://www.gnu.org/licenses/.
  */
 
-package org.queryquill.app.feature.response.model
+package org.queryquill.app.feature.response.components
 
-internal enum class SegmentedButtonState(val title: String) {
-    PREVIEW("Preview"), SOURCE("Source"), HEADERS("Headers")
+import android.net.Uri
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.Composable
+
+@Composable
+internal fun saveFileLauncher(saveFile: (uri: Uri) -> Unit): ManagedActivityResultLauncher<String, Uri?> {
+    return rememberLauncherForActivityResult(contract = ActivityResultContracts.CreateDocument("*/*")) { uri: Uri? ->
+        uri?.let {
+            saveFile(uri)
+        }
+    }
 }

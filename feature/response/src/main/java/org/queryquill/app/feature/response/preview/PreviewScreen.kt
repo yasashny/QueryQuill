@@ -17,13 +17,13 @@
 package org.queryquill.app.feature.response.preview
 
 import android.net.Uri
-import android.os.Build
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
+import org.queryquill.app.core.designsystem.QueryQuillTheme
 import org.queryquill.app.core.model.CodeEditorState
 import org.queryquill.app.core.model.ContentType
-import org.queryquill.app.core.model.LanguageType
 import org.queryquill.app.feature.response.source.ResponseScreenSource
-
+import org.queryquill.app.feature.response.utils.toLanguageType
 
 @Composable
 internal fun PreviewScreen(
@@ -32,79 +32,44 @@ internal fun PreviewScreen(
     fileUri: Uri,
     codeEditorLoadingState: Boolean,
 ) {
-
     when (contentType) {
-        ContentType.Text.HTML -> WebViewPage(fileUri)
-        ContentType.Image.JPEG -> Base64ImageDisplay(
-            fileUri,
-            codeEditorState,
-            fileLength,
-            transferFileToCodeEditorState,
-            codeEditorLoadingState
-        )
+        ContentType.Text.HTML -> {
+            WebViewPage(fileUri)
+        }
 
-        ContentType.Application.JSON -> ResponseScreenSource(
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                LanguageType.JSON
-            } else {
-                LanguageType.OTHER
-            }, codeEditorState, fileLength, transferFileToCodeEditorState, codeEditorLoadingState
-        )
+        is ContentType.Image -> {
+            Base64ImageDisplay(
+                fileUri,
+                codeEditorState,
+                fileLength,
+                transferFileToCodeEditorState,
+                codeEditorLoadingState
+            )
+        }
 
-        ContentType.Text.PLAIN -> ResponseScreenSource(
-            LanguageType.PLAIN,
-            codeEditorState,
-            fileLength,
-            transferFileToCodeEditorState,
-            codeEditorLoadingState
-        )
+        is ContentType.Text, ContentType.Application.JSON -> {
+            ResponseScreenSource(
+                contentType.toLanguageType(),
+                codeEditorState,
+                fileLength,
+                transferFileToCodeEditorState,
+                codeEditorLoadingState
+            )
+        }
+    }
+}
 
-        ContentType.Image.PNG -> Base64ImageDisplay(
-            fileUri,
-            codeEditorState,
-            fileLength,
-            transferFileToCodeEditorState,
-            codeEditorLoadingState
-        )
-
-        ContentType.Image.WEBP -> Base64ImageDisplay(
-            fileUri,
-            codeEditorState,
-            fileLength,
-            transferFileToCodeEditorState,
-            codeEditorLoadingState
-        )
-
-        ContentType.Text.XML -> ResponseScreenSource(
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                LanguageType.XML
-            } else {
-                LanguageType.OTHER
-            }, codeEditorState, fileLength, transferFileToCodeEditorState, codeEditorLoadingState
-        )
-
-        ContentType.Image.BMP -> Base64ImageDisplay(
-            fileUri,
-            codeEditorState,
-            fileLength,
-            transferFileToCodeEditorState,
-            codeEditorLoadingState
-        )
-
-        ContentType.Image.HEIC -> Base64ImageDisplay(
-            fileUri,
-            codeEditorState,
-            fileLength,
-            transferFileToCodeEditorState,
-            codeEditorLoadingState
-        )
-
-        ContentType.Image.HEIF -> Base64ImageDisplay(
-            fileUri,
-            codeEditorState,
-            fileLength,
-            transferFileToCodeEditorState,
-            codeEditorLoadingState
+@Preview(showBackground = true)
+@Composable
+private fun PreviewPreviewScreen() {
+    QueryQuillTheme {
+        PreviewScreen(
+            contentType = ContentType.Text.PLAIN,
+            codeEditorState = CodeEditorState(),
+            fileLength = 1000L,
+            transferFileToCodeEditorState = {},
+            fileUri = Uri.EMPTY,
+            codeEditorLoadingState = false
         )
     }
 }

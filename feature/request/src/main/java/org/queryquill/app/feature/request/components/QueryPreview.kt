@@ -32,6 +32,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import org.queryquill.app.core.designsystem.Dimens
 import org.queryquill.app.core.designsystem.QueryQuillTheme
 import org.queryquill.app.core.model.KeyValue
 
@@ -45,7 +46,7 @@ fun QueryPreview(
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
             .background(MaterialTheme.colorScheme.secondaryContainer)
-            .padding(15.dp)
+            .padding(Dimens.medium)
     ) {
         Text(
             text = preview, color = MaterialTheme.colorScheme.onSecondaryContainer
@@ -73,7 +74,7 @@ private fun PreviewQueryPreview() {
         QueryPreview(
             url = "example.com", query = listOf(
                 KeyValue("param1", "value1"), KeyValue("param2", "value2")
-            ), modifier = Modifier.padding(15.dp)
+            ), modifier = Modifier.padding(Dimens.medium)
         )
     }
 }

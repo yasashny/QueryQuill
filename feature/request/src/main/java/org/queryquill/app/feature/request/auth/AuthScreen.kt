@@ -28,7 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import org.queryquill.app.core.designsystem.Dimens
 import org.queryquill.app.core.designsystem.QueryQuillTheme
 import org.queryquill.app.core.model.AuthState
 import org.queryquill.app.feature.request.R
@@ -56,7 +56,7 @@ internal fun LazyListScope.authScreen(
         ChipGroup(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 10.dp)
+                .padding(top = Dimens.small)
                 .animateItem(fadeOutSpec = null),
             current = state.type,
             options = AuthState.Type.entries,

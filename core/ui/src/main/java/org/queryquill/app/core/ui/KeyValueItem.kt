@@ -34,7 +34,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import org.queryquill.app.core.designsystem.Dimens
+import org.queryquill.app.core.designsystem.QueryQuillTheme
 import org.queryquill.app.core.model.KeyValue
 
 @Composable
@@ -50,7 +51,7 @@ fun KeyValueItem(
     text2: String = "Value"
 ) {
     OutlinedCard(modifier = modifier, colors = cardColors) {
-        Column(modifier = Modifier.padding(15.dp)) {
+        Column(modifier = Modifier.padding(Dimens.medium)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 OutlinedTextField(
                     value = keyValue.key, onValueChange = {
@@ -64,7 +65,7 @@ fun KeyValueItem(
                         onClick = { deleteItem() },
                         enabled = deleteButtonEnabled(),
                         modifier = Modifier
-                            .padding(start = 15.dp)
+                            .padding(start = Dimens.medium)
                             .testTag("Delete Button")
                     ) {
                         Icon(imageVector = Icons.Outlined.Delete, contentDescription = null)
@@ -80,7 +81,7 @@ fun KeyValueItem(
                 label = { Text(text = text2) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp)
+                    .padding(top = Dimens.small)
             )
         }
     }
@@ -89,8 +90,10 @@ fun KeyValueItem(
 @Composable
 @Preview
 private fun KeyValueItemPreview() {
-    KeyValueItem(
-        keyValue = KeyValue(key = "Sample Key", value = "Sample Value"),
-        onTextChanged = {},
-        deleteItem = {})
+    QueryQuillTheme {
+        KeyValueItem(
+            keyValue = KeyValue(key = "Sample Key", value = "Sample Value"),
+            onTextChanged = {},
+            deleteItem = {})
+    }
 }

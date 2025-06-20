@@ -38,6 +38,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.queryquill.app.core.designsystem.Dimens
 import org.queryquill.app.core.designsystem.QueryQuillTheme
 import org.queryquill.app.core.model.HttpType
 import org.queryquill.app.core.utils.vibration
@@ -55,7 +56,7 @@ internal fun ScreenBar(
     val context = LocalContext.current
     Column(modifier = modifier) {
         Row(
-            Modifier.padding(horizontal = 15.dp, vertical = 10.dp),
+            Modifier.padding(horizontal = Dimens.medium, vertical = Dimens.small),
             verticalAlignment = Alignment.CenterVertically
         ) {
             DynamicSelectTextField(
@@ -69,7 +70,7 @@ internal fun ScreenBar(
             Button(
                 modifier = Modifier
                     .width(140.dp)
-                    .padding(start = 15.dp, top = 7.dp)
+                    .padding(start = Dimens.medium, top = 7.dp)
                     .height(56.dp),
                 onClick = {
                     vibration(context)
@@ -84,7 +85,7 @@ internal fun ScreenBar(
                     Icon(
                         imageVector = Icons.AutoMirrored.Outlined.Send,
                         contentDescription = null,
-                        modifier = Modifier.padding(end = 10.dp)
+                        modifier = Modifier.padding(end = Dimens.small)
                     )
                     Text(stringResource(R.string.send), fontSize = 15.sp)
                 }
@@ -95,7 +96,9 @@ internal fun ScreenBar(
             onValueChange = { onUrlChange(it) },
             label = { Text(text = stringResource(R.string.url)) },
             modifier = Modifier
-                .padding(start = 15.dp, end = 15.dp, bottom = 15.dp)
+                .padding(
+                    start = Dimens.medium, end = Dimens.medium, bottom = Dimens.medium
+                )
                 .fillMaxWidth()
         )
     }

@@ -30,35 +30,29 @@ import kotlinx.coroutines.launch
 import org.queryquill.app.core.data.FileRepository
 import org.queryquill.app.core.data.TransactionRepository
 import org.queryquill.app.core.model.CodeEditorState
-import org.queryquill.app.core.model.ResponseModel
-import org.queryquill.app.feature.response.model.SegmentedButtonState
+import org.queryquill.app.feature.response.model.GroupButtonsState
 
 internal class ResponseViewModel(
     transactionsRepository: TransactionRepository, private val fileRepository: FileRepository
 ) : ViewModel() {
 
     val responseModel = transactionsRepository.getCurrentResponseOrNull().map { responseOrNull ->
-        responseOrNull ?: ResponseModel.default()
+        val responseModel = responseOrNull ?: ResponseUiState().model
+        ResponseUiState(
+            model = responseModel,
+            fileLength = fileRepository.getFileLength(responseModel.fileName).getOrDefault(0),
+            fileUri = fileRepository.getFileUri(responseModel.fileName).getOrDefault(Uri.EMPTY)
+        )
     }.onEach {
-        fileLength = null
-        viewModelScope.launch {
-            fileLength = fileRepository.getFileLength(it.fileName).getOrDefault(0)
-        }
         codeEditorState = CodeEditorState()
-        codeEditorLoadingState = true
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), ResponseModel.default())
+        isCodeEditorLoading = true
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), ResponseUiState())
 
-    var segmentedButtonState by mutableStateOf(SegmentedButtonState.PREVIEW)
+    var groupButtonsState by mutableStateOf(GroupButtonsState.PREVIEW)
 
-    var fileLength by mutableStateOf<Long?>(null)
-
-    fun updateSegmentedButtonState(newState: SegmentedButtonState) {
-        segmentedButtonState = newState
+    fun onGroupButtonsStateChange(newState: GroupButtonsState) {
+        groupButtonsState = newState
     }
-
-    fun getFileUri(fileName: String): Uri =
-        fileRepository.getFileUri(fileName).getOrDefault(Uri.EMPTY)
-
 
     fun transferFileToCodeEditorState(fileName: String) {
         viewModelScope.launch {
@@ -69,15 +63,15 @@ internal class ResponseViewModel(
                 newCodeEditorState.content.insert(line, column, it)
             }
             codeEditorState = newCodeEditorState
-            codeEditorLoadingState = false
+            isCodeEditorLoading = false
         }
     }
 
     var codeEditorState by mutableStateOf(CodeEditorState())
 
-    var codeEditorLoadingState by mutableStateOf(false)
+    var isCodeEditorLoading by mutableStateOf(false)
 
-    fun saveFileLauncher(fileName: String, uri: Uri) {
+    fun saveFile(fileName: String, uri: Uri) {
         viewModelScope.launch {
             fileRepository.saveFileLauncher(fileName, uri)
         }

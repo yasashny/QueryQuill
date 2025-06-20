@@ -26,7 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import org.queryquill.app.core.designsystem.Dimens
 import org.queryquill.app.core.designsystem.QueryQuillTheme
 import org.queryquill.app.core.model.BodyState
 import org.queryquill.app.core.model.FileInfo
@@ -52,7 +52,7 @@ internal fun BodyScreenBinaryFile(
         })
     }
     BinaryFileElement(
-        currentState = currentState, modifier = modifier.padding(horizontal = 15.dp)
+        currentState = currentState, modifier = modifier.padding(horizontal = Dimens.medium)
     ) { uri, fileName ->
         val contentType = getMIMEType(context, uri)
         if (uri != Uri.EMPTY) {

@@ -42,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
+import org.queryquill.app.core.designsystem.Dimens
 import org.queryquill.app.core.ui.QueryQuillTopBar
 import org.queryquill.app.core.ui.SaveDataOnStop
 import org.queryquill.app.feature.cookie.util.TestTags
@@ -110,7 +111,9 @@ internal fun CookieScreen(
                                 CookieListItem(
                                     modifier = Modifier
                                         .padding(
-                                            start = 15.dp, top = 15.dp, end = 15.dp
+                                            start = Dimens.medium,
+                                            top = Dimens.medium,
+                                            end = Dimens.medium
                                         )
                                         .animateItem(), item, onEvent
                                 )

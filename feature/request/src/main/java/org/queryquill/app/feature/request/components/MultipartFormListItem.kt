@@ -33,14 +33,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import org.queryquill.app.core.designsystem.Dimens
 import org.queryquill.app.core.designsystem.QueryQuillTheme
 import org.queryquill.app.core.model.KeyValue
 import org.queryquill.app.core.model.MultipartFormState
 import org.queryquill.app.core.model.MultipartFormType
 import org.queryquill.app.feature.request.R
 import org.queryquill.app.feature.request.UpdateRequest
-
 
 @Composable
 internal fun MultipartFormListItem(
@@ -57,7 +56,7 @@ internal fun MultipartFormListItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(15.dp),
+                .padding(Dimens.medium),
             verticalAlignment = Alignment.CenterVertically
         ) {
             DynamicSelectTextField(
@@ -79,7 +78,9 @@ internal fun MultipartFormListItem(
             FilledTonalIconButton(
                 onClick = {
                     onItemChange(UpdateRequest.UpdateType.DELETE, multipartFormState)
-                }, enabled = deleteButtonEnabled(), modifier = Modifier.padding(start = 15.dp)
+                },
+                enabled = deleteButtonEnabled(),
+                modifier = Modifier.padding(start = Dimens.medium)
             ) {
                 Icon(imageVector = Icons.Outlined.Delete, contentDescription = null)
             }
@@ -107,10 +108,10 @@ private fun BinaryFileContent(
         label = { Text(stringResource(R.string.name)) },
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 15.dp)
+            .padding(horizontal = Dimens.medium)
     )
     BinaryFileElement(
-        modifier = Modifier.padding(15.dp), currentState = state
+        modifier = Modifier.padding(Dimens.medium), currentState = state
     ) { uri, filename ->
         onItemChange(
             UpdateRequest.UpdateType.UPDATE, state.copy(uri = uri, fileName = filename)
@@ -134,7 +135,7 @@ private fun TextContent(
         label = { Text(stringResource(R.string.name)) },
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 15.dp)
+            .padding(horizontal = Dimens.medium)
     )
 
     OutlinedTextField(
@@ -148,7 +149,7 @@ private fun TextContent(
         label = { Text(stringResource(R.string.value)) },
         modifier = Modifier
             .fillMaxWidth()
-            .padding(15.dp)
+            .padding(Dimens.medium)
     )
 }
 
@@ -159,7 +160,7 @@ private fun PreviewMultipartFormListItemText() {
         MultipartFormListItem(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(15.dp),
+                .padding(Dimens.medium),
             multipartFormState = MultipartFormState.Text(KeyValue("key", "value")),
             onItemChange = { _, _ -> },
             deleteButtonEnabled = { true })
@@ -173,7 +174,7 @@ private fun PreviewMultipartFormListItemFile() {
         MultipartFormListItem(
             Modifier
                 .fillMaxWidth()
-                .padding(15.dp),
+                .padding(Dimens.medium),
             multipartFormState = MultipartFormState.BinaryFile(
                 uri = Uri.EMPTY, title = "Icon", fileName = "icon.png"
             ),

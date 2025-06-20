@@ -14,19 +14,18 @@
  * If not, see https://www.gnu.org/licenses/.
  */
 
-package org.queryquill.app.feature.response.preview
+package org.queryquill.app.feature.response
 
 import android.net.Uri
-import androidx.activity.compose.ManagedActivityResultLauncher
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.Composable
+import org.queryquill.app.core.model.ContentType
+import org.queryquill.app.core.model.ResponseModel
 
-@Composable
-internal fun saveFileLauncher(saveFile: (uri: Uri) -> Unit): ManagedActivityResultLauncher<String, Uri?> {
-    return rememberLauncherForActivityResult(contract = ActivityResultContracts.CreateDocument("*/*")) { uri: Uri? ->
-        uri?.let {
-            saveFile(uri)
-        }
+data class ResponseUiState(
+    val model: ResponseModel = ResponseModel(
+        -1, "--", DEFAULT_FILE_NAME, "--", "--", ContentType.Text.PLAIN, emptyList()
+    ), val fileLength: Long = 0, val fileUri: Uri = Uri.EMPTY
+) {
+    companion object {
+        const val DEFAULT_FILE_NAME = "default.txt"
     }
 }
