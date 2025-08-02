@@ -222,7 +222,7 @@ private fun ChooseRow(
                 role = Role.RadioButton,
                 onClick = onClick,
             )
-            .padding(Dimens.small),
+            .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         RadioButton(
