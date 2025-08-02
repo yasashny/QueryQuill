@@ -63,7 +63,7 @@ fun NewTransactionScreen() {
                 openAddTransactionDialog = true
             }, modifier = Modifier
                 .padding(top = 50.dp)
-                .size(width = 229.dp, height = 53.dp)
+                .size(width = 231.dp, height = 53.dp)
         ) {
             Text(
                 text = stringResource(R.string.create_new_request),
